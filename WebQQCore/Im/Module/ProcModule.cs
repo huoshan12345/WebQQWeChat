@@ -4,6 +4,7 @@ using iQQ.Net.WebQQCore.Im.Bean;
 using iQQ.Net.WebQQCore.Im.Core;
 using iQQ.Net.WebQQCore.Im.Event;
 using iQQ.Net.WebQQCore.Im.Event.Future;
+using iQQ.Net.WebQQCore.Util.Log;
 
 namespace iQQ.Net.WebQQCore.Im.Module
 {
@@ -164,12 +165,12 @@ namespace iQQ.Net.WebQQCore.Im.Module
             Context.Account.Status = status;
             Context.Session.State = QQSessionState.LOGINING;
             var login = Context.GetModule<LoginModule>(QQModuleType.LOGIN);
-            // LOG.info("iqq client Relogin...");
+            MyLogger.Default.Info("iqq client Relogin...");
             var future = login.ChannelLogin(status, (sender, Event) =>
             {
                 if (Event.Type == QQActionEventType.EVT_ERROR)
                 {
-                    // LOG.info("iqq client ReloginChannel fail!!! use Relogin.");
+                    MyLogger.Default.Info("iqq client ReloginChannel fail!!! use Relogin.");
                     Login(listener);
                 }
                 else
@@ -256,7 +257,7 @@ namespace iQQ.Net.WebQQCore.Im.Module
                 else if (Event.Type == QQActionEventType.EVT_RETRY)
                 {
                     // System.err.println("Poll Retry:" + this);
-                    // LOG.warn("poll msg error, retrying....", (QQException) Event.Target);
+                    MyLogger.Default.Info("poll msg error, retrying....", (QQException) Event.Target);
                 }
             });
         }
