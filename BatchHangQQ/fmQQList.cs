@@ -286,8 +286,8 @@ namespace iQQ.Net.BatchHangQQ
 
         private static readonly string[][] LoginStatus =
         {
-            new {"在线", "隐身", "离开", "隐身", "忙碌", "Q我吧", "请勿打扰"},
-            new {"online", "hidden", "away","hidden","busy","callme", "silent"}
+            new []{"在线", "隐身", "离开", "隐身", "忙碌", "Q我吧", "请勿打扰"},
+            new []{"online", "hidden", "away","hidden","busy","callme", "silent"}
         };
 
         private static readonly string[] LoginProtocol = { "WebQQ"};

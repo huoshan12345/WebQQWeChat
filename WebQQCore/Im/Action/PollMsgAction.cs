@@ -32,8 +32,8 @@ namespace iQQ.Net.WebQQCore.Im.Action
             req.AddPostValue("r", JsonConvert.SerializeObject(json));
             req.AddPostValue("clientid", session.ClientId + "");
             req.AddPostValue("psessionid", session.SessionId);
-            req.ReadTimeout = 5 * 1000;
-            req.ConnectTimeout = 3 * 1000;
+            req.ReadTimeout = 60 * 1000;
+            req.ConnectTimeout = 60 * 1000;
             req.AddHeader("Referer", QQConstants.REFFER);
 
             return req;
