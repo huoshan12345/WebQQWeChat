@@ -55,13 +55,13 @@ namespace iQQ.Net.WebQQCore.Im.Module
             {
                 if (Event.Type == QQActionEventType.EVT_OK)
                 {
-                    var verify = new QQNotifyEventArgs.ImageVerify();
-
-                    verify.Type = QQNotifyEventArgs.ImageVerify.VerifyType.LOGIN;
-                    verify.Image = (Image)Event.Target;
-                    verify.Reason = reason;
-                    verify.Future = future;
-
+                    var verify = new QQNotifyEventArgs.ImageVerify
+                    {
+                        Type = QQNotifyEventArgs.ImageVerify.VerifyType.LOGIN,
+                        Image = (Image) Event.Target,
+                        Reason = reason,
+                        Future = future
+                    };
                     Context.FireNotify(new QQNotifyEvent(QQNotifyEventType.CAPACHA_VERIFY, verify));
                 }
                 else if (Event.Type == QQActionEventType.EVT_ERROR)
@@ -86,13 +86,13 @@ namespace iQQ.Net.WebQQCore.Im.Module
                 {
                     var args = (QQActionEventArgs.CheckVerifyArgs)(Event.Target);
                     Context.Account.Uin = args.uin;
-                    Context.Session.CapCd = args.code;
                     if (args.result == 0)
                     {
                         DoWebLogin(args.code, future);
                     }
                     else
                     {
+                        Context.Session.CapCd = args.code;
                         DoGetVerify("为了保证您账号的安全，请输入验证码中字符继续登录。", future);
                     }
                 }

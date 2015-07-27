@@ -40,16 +40,18 @@ namespace iQQ.Net.WebQQCore.Im.Action
 
         public override void OnHttpStatusOK(QQHttpResponse response)
         {
-            Regex rex = new Regex(QQConstants.REGXP_CHECK_VERIFY);
-            Match m = rex.Match(response.GetResponseString());
+            var rex = new Regex(QQConstants.REGXP_CHECK_VERIFY);
+            var m = rex.Match(response.GetResponseString());
             if (m.Success)
             {
-                string qqHex = m.Groups[3].Value;
+                var qqHex = m.Groups[3].Value;
                 qqHex = Regex.Replace(qqHex, "\\\\x", "");
-                QQActionEventArgs.CheckVerifyArgs args = new QQActionEventArgs.CheckVerifyArgs();
-                args.result = int.Parse(m.Groups[1].Value);
-                args.code = m.Groups[2].Value;
-                args.uin = long.Parse(qqHex, NumberStyles.HexNumber);
+                var args = new QQActionEventArgs.CheckVerifyArgs
+                {
+                    result = int.Parse(m.Groups[1].Value),
+                    code = m.Groups[2].Value,
+                    uin = long.Parse(qqHex, NumberStyles.HexNumber)
+                };
                 NotifyActionEvent(QQActionEventType.EVT_OK, args);
             }
             else
