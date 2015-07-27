@@ -284,13 +284,13 @@ namespace iQQ.Net.BatchHangQQ
             }
         }
 
-        private static readonly string[][] LoginStatus = new string[][]
+        private static readonly string[][] LoginStatus =
         {
-            new string[]{"在线", "隐身", "离开", "隐身", "忙碌", "Q我吧", "请勿打扰"},
-            new string[]{"online", "hidden", "away","hidden","busy","callme", "silent"}
+            new {"在线", "隐身", "离开", "隐身", "忙碌", "Q我吧", "请勿打扰"},
+            new {"online", "hidden", "away","hidden","busy","callme", "silent"}
         };
 
-        private static readonly string[] LoginProtocol = { "WebQQ", "MobileQQ" };
+        private static readonly string[] LoginProtocol = { "WebQQ"};
         private static readonly string[] VerifyCodeDigit = { "4", "5" };
 
         private void btnAddQQ_Click(object sender, EventArgs e)
