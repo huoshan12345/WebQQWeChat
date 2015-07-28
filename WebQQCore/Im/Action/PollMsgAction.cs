@@ -5,6 +5,7 @@ using iQQ.Net.WebQQCore.Im.Core;
 using iQQ.Net.WebQQCore.Im.Event;
 using iQQ.Net.WebQQCore.Im.Http;
 using iQQ.Net.WebQQCore.Im.Module;
+using iQQ.Net.WebQQCore.Util.Log;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
@@ -21,14 +22,18 @@ namespace iQQ.Net.WebQQCore.Im.Action
 
         public override QQHttpRequest OnBuildRequest()
         {
-            QQSession session = Context.Session;
-            JObject json = new JObject();
-            json.Add("clientid", session.ClientId);
-            json.Add("psessionid", session.SessionId);
-            json.Add("key", 0); // 暂时不知道什么用的
-            json.Add("ids", new JArray()); // 同上
+            var session = Context.Session;
+            var json = new JObject
+            {
+                {"clientid", session.ClientId},
+                {"psessionid", session.SessionId},
+                {"key", 0},
+                {"ids", new JArray()}
+            };
+            // 暂时不知道什么用的
+            // 同上
 
-            QQHttpRequest req = CreateHttpRequest("POST", QQConstants.URL_POLL_MSG);
+            var req = CreateHttpRequest("POST", QQConstants.URL_POLL_MSG);
             req.AddPostValue("r", JsonConvert.SerializeObject(json));
             req.AddPostValue("clientid", session.ClientId + "");
             req.AddPostValue("psessionid", session.SessionId);
@@ -55,29 +60,29 @@ namespace iQQ.Net.WebQQCore.Im.Action
 
         public override void OnHttpStatusOK(QQHttpResponse response)
         {
-            QQStore store = Context.Store;
-            List<QQNotifyEvent> notifyEvents = new List<QQNotifyEvent>();
-            JObject json = JObject.Parse(response.GetResponseString());
-            int retcode = json["retcode"].ToObject<int>();
+            var store = Context.Store;
+            var notifyEvents = new List<QQNotifyEvent>();
+            var json = JObject.Parse(response.GetResponseString());
+            var retcode = json["retcode"].ToObject<int>();
             if (retcode == 0)
             {
                 //有可能为  {"retcode":0,"result":"ok"}
                 if (json["result"] is JArray)
                 {
-                    JArray results = json["result"].ToObject<JArray>();
+                    var results = json["result"].ToObject<JArray>();
                     // 消息下载来的列表中是倒过来的，那我直接倒过来取，编位回来
-                    for (int i = results.Count - 1; i >= 0; i--)
+                    for (var i = results.Count - 1; i >= 0; i--)
                     {
-                        JObject poll = results[i].ToObject<JObject>();
-                        string pollType = poll["poll_type"].ToString();
-                        JObject pollData = poll["value"].ToObject<JObject>();
+                        var poll = results[i].ToObject<JObject>();
+                        var pollType = poll["poll_type"].ToString();
+                        var pollData = poll["value"].ToObject<JObject>();
 
                         switch (pollType)
                         {
                             case "input_notify":
                             {
-                                long fromUin = pollData["from_uin"].ToObject<long>();
-                                QQBuddy qqBuddy = store.GetBuddyByUin(fromUin);
+                                var fromUin = pollData["from_uin"].ToObject<long>();
+                                var qqBuddy = store.GetBuddyByUin(fromUin);
                                 notifyEvents.Add(new QQNotifyEvent(QQNotifyEventType.BUDDY_INPUT, qqBuddy));
                                 break;
                             }
@@ -108,8 +113,8 @@ namespace iQQ.Net.WebQQCore.Im.Action
                             case "shake_message":
                             {
                                 // 窗口震动
-                                long fromUin = pollData["from_uin"].ToObject<long>();
-                                QQBuddy user = Context.Store.GetBuddyByUin(fromUin);
+                                var fromUin = pollData["from_uin"].ToObject<long>();
+                                var user = Context.Store.GetBuddyByUin(fromUin);
                                 notifyEvents.Add(new QQNotifyEvent(QQNotifyEventType.SHAKE_WINDOW, user));
                                 break;
                             }
@@ -130,7 +135,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
                             }
                             case "system_message"://好友添加
                             {
-                                QQNotifyEvent processSystemMessage = ProcessSystemMsg(pollData);
+                                var processSystemMessage = ProcessSystemMsg(pollData);
                                 if (processSystemMessage != null)
                                 {
                                     notifyEvents.Add(processSystemMessage);
@@ -139,7 +144,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
                             }
                             case "group_web_message"://发布了共享文件
                             {
-                                QQNotifyEvent processSystemMessage = ProcessGroupWebMsg(pollData);
+                                var processSystemMessage = ProcessGroupWebMsg(pollData);
                                 if (processSystemMessage != null)
                                 {
                                     notifyEvents.Add(processSystemMessage);
@@ -149,7 +154,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
                             }
                             case "sys_g_msg"://被踢出了群
                             {
-                                QQNotifyEvent processSystemMessage = ProcessSystemGroupMsg(pollData);
+                                var processSystemMessage = ProcessSystemGroupMsg(pollData);
                                 if (processSystemMessage != null)
                                 {
                                     notifyEvents.Add(processSystemMessage);
@@ -158,7 +163,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
                             }
                             default:
                             {
-                                QQException ex = new QQException(QQErrorCode.UNKNOWN_ERROR, "unknown pollType: " + pollType);
+                                var ex = new QQException(QQErrorCode.UNKNOWN_ERROR, "unknown pollType: " + pollType);
                                 NotifyActionEvent(QQActionEventType.EVT_ERROR, ex);
                                 break;
                             }
@@ -189,8 +194,9 @@ namespace iQQ.Net.WebQQCore.Im.Action
                 // 服务器需求重新认证
                 // {"retcode":121,"t":"0"}
                 /*			LOG.info("**** NEED_REAUTH retcode: " + retcode + " ****");*/
+                MyLogger.Default.Info($"**** NEED_REAUTH retcode: {retcode} ****");
                 Context.Session.State = QQSessionState.OFFLINE;
-                QQException ex = new QQException(QQErrorCode.INVALID_LOGIN_AUTH);
+                var ex = new QQException(QQErrorCode.INVALID_LOGIN_AUTH);
                 NotifyActionEvent(QQActionEventType.EVT_ERROR, ex);
                 return;
                 //notifyEvents.Add(new QQNotifyEvent(QQNotifyEventType.NEED_REAUTH, null));
@@ -213,14 +219,14 @@ namespace iQQ.Net.WebQQCore.Im.Action
         {
             try
             {
-                long uin = pollData["uin"].ToObject<long>();
-                QQBuddy buddy = Context.Store.GetBuddyByUin(uin);
+                var uin = pollData["uin"].ToObject<long>();
+                var buddy = Context.Store.GetBuddyByUin(uin);
                 if (buddy == null)
                 {
                     return new QQNotifyEvent(QQNotifyEventType.BUDDY_STATUS_CHANGE, null);
                 }
-                string status = pollData["status"].ToString();
-                int clientType = pollData["client_type"].ToObject<int>();
+                var status = pollData["status"].ToString();
+                var clientType = pollData["client_type"].ToObject<int>();
                 buddy.Status = QQStatus.ValueOfRaw(status);
                 buddy.ClientType = QQClientType.ValueOfRaw(clientType);
                 return new QQNotifyEvent(QQNotifyEventType.BUDDY_STATUS_CHANGE, buddy);
@@ -240,28 +246,29 @@ namespace iQQ.Net.WebQQCore.Im.Action
         {
             try
             {
-                QQStore store = Context.Store;
-                long fromUin = pollData["from_uin"].ToObject<long>();
-                QQMsg msg = new QQMsg();
-                msg.Id = pollData["msg_id"].ToObject<long>();
-                msg.Id2 = pollData["msg_id2"].ToObject<long>();
+                var store = Context.Store;
+                var fromUin = pollData["from_uin"].ToObject<long>();
+                var msg = new QQMsg
+                {
+                    Id = pollData["msg_id"].ToObject<long>(),
+                    Id2 = pollData["msg_id2"].ToObject<long>()
+                };
                 msg.ParseContentList(JsonConvert.SerializeObject(pollData["content"]));
                 msg.Type = QQMsgType.BUDDY_MSG;
                 msg.To = Context.Account;
                 msg.From = store.GetBuddyByUin(fromUin);
-                long ticks = pollData["time"].ToObject<long>() * 1000;
+                var ticks = pollData["time"].ToObject<long>() * 1000;
                 msg.Date = ticks > DateTime.MaxValue.Ticks ? DateTime.Now : new DateTime(ticks);
                 if (msg.From == null)
                 {
                     QQUser member = store.GetStrangerByUin(fromUin); // 搜索陌生人列表
                     if (member == null)
                     {
-                        member = new QQHalfStranger();
-                        member.Uin = fromUin;
+                        member = new QQHalfStranger { Uin = fromUin };
                         store.AddStranger((QQStranger)member);
 
                         // 获取用户信息
-                        UserModule userModule = Context.GetModule<UserModule>(QQModuleType.USER);
+                        var userModule = Context.GetModule<UserModule>(QQModuleType.USER);
                         userModule.GetUserInfo(member, null);
                     }
                     msg.From = member;
@@ -287,45 +294,48 @@ namespace iQQ.Net.WebQQCore.Im.Action
 
             try
             {
-                QQStore store = Context.Store;
-                QQMsg msg = new QQMsg();
-                msg.Id = pollData["msg_id"].ToObject<long>();
-                msg.Id2 = pollData["msg_id2"].ToObject<long>();
-                long fromUin = pollData["send_uin"].ToObject<long>();
-                long groupCode = pollData["group_code"].ToObject<long>();
-                long groupID = pollData["info_seq"].ToObject<long>(); // 真实群号码
-                QQGroup group = store.GetGroupByCode(groupCode);
+                var store = Context.Store;
+                var msg = new QQMsg
+                {
+                    Id = pollData["msg_id"].ToObject<long>(),
+                    Id2 = pollData["msg_id2"].ToObject<long>()
+                };
+                var fromUin = pollData["send_uin"].ToObject<long>();
+                var groupCode = pollData["group_code"].ToObject<long>();
+                var groupId = pollData["info_seq"].ToObject<long>(); // 真实群号码
+                var group = store.GetGroupByCode(groupCode);
                 if (group == null)
                 {
-                    GroupModule groupModule = Context.GetModule<GroupModule>(QQModuleType.GROUP);
-                    group = new QQGroup();
-                    group.Code = groupCode;
-                    group.Gid = groupID;
+                    var groupModule = Context.GetModule<GroupModule>(QQModuleType.GROUP);
+                    group = new QQGroup
+                    {
+                        Code = groupCode,
+                        Gid = groupId
+                    };
                     // put to store
                     store.AddGroup(group);
                     groupModule.GetGroupInfo(group, null);
                 }
                 if (group.Gid <= 0)
                 {
-                    group.Gid = groupID;
+                    group.Gid = groupId;
                 }
 
                 msg.ParseContentList(JsonConvert.SerializeObject(pollData["content"]));
                 msg.Type = QQMsgType.GROUP_MSG;
                 msg.To = Context.Account;
-                long ticks = pollData["time"].ToObject<long>() * 1000;
+                var ticks = pollData["time"].ToObject<long>() * 1000;
                 msg.Date = ticks > DateTime.MaxValue.Ticks ? DateTime.Now : new DateTime(ticks);
                 msg.Group = group;
                 msg.From = group.GetMemberByUin(fromUin);
 
                 if (msg.From == null)
                 {
-                    QQGroupMember member = new QQGroupMember();
-                    member.Uin = fromUin;
+                    var member = new QQGroupMember { Uin = fromUin };
                     msg.From = member;
                     group.Members.Add(member);
                     // 获取用户信息
-                    UserModule userModule = Context.GetModule<UserModule>(QQModuleType.USER);
+                    var userModule = Context.GetModule<UserModule>(QQModuleType.USER);
                     userModule.GetUserInfo(member, null);
                 }
                 return new QQNotifyEvent(QQNotifyEventType.CHAT_MSG, msg);
@@ -345,39 +355,38 @@ namespace iQQ.Net.WebQQCore.Im.Action
         {
             try
             {
-                QQStore store = Context.Store;
+                var store = Context.Store;
 
-                QQMsg msg = new QQMsg();
-                long fromUin = pollData["send_uin"].ToObject<long>();
-                long did = pollData["did"].ToObject<long>();
+                var msg = new QQMsg();
+                var fromUin = pollData["send_uin"].ToObject<long>();
+                var did = pollData["did"].ToObject<long>();
 
                 msg.ParseContentList(JsonConvert.SerializeObject(pollData["content"]));
                 msg.Type = QQMsgType.DISCUZ_MSG;
                 msg.Discuz = store.GetDiscuzByDid(did);
                 msg.To = Context.Account;
-                long ticks = pollData["time"].ToObject<long>() * 1000;
+                var ticks = pollData["time"].ToObject<long>() * 1000;
                 msg.Date = ticks > DateTime.MaxValue.Ticks ? DateTime.Now : new DateTime(ticks);
 
                 if (msg.Discuz == null)
                 {
-                    QQDiscuz discuz = new QQDiscuz();
+                    var discuz = new QQDiscuz();
                     discuz.Did = did;
                     store.AddDiscuz(discuz);
                     msg.Discuz = store.GetDiscuzByDid(did);
 
-                    DiscuzModule discuzModule = Context.GetModule<DiscuzModule>(QQModuleType.DISCUZ);
+                    var discuzModule = Context.GetModule<DiscuzModule>(QQModuleType.DISCUZ);
                     discuzModule.GetDiscuzInfo(discuz, null);
                 }
                 msg.From = msg.Discuz.GetMemberByUin(fromUin);
 
                 if (msg.From == null)
                 {
-                    QQDiscuzMember member = new QQDiscuzMember();
-                    member.Uin = fromUin;
+                    var member = new QQDiscuzMember { Uin = fromUin };
                     msg.From = member;
                     msg.Discuz.Members.Add(member);
                     // 获取用户信息
-                    UserModule userModule = Context.GetModule<UserModule>(QQModuleType.USER);
+                    var userModule = Context.GetModule<UserModule>(QQModuleType.USER);
                     userModule.GetUserInfo(member, null);
                 }
                 return new QQNotifyEvent(QQNotifyEventType.CHAT_MSG, msg);
@@ -400,17 +409,17 @@ namespace iQQ.Net.WebQQCore.Im.Action
             // "flags":{"text":1,"pic":1,"file":1,"audio":1,"video":1},"content":[["font",{"size":9,"color":"000000","style":[0,0,0],"name":"Tahoma"}],"2\u8F7D3 ",["face",1]," "]}}]}
             try
             {
-                QQStore store = Context.Store;
-                QQMsg msg = new QQMsg();
-                long fromUin = pollData["from_uin"].ToObject<long>();
-                long fromQQ = pollData["ruin"].ToObject<long>();// 真实QQ
-                int serviceType = pollData["service_type"].ToObject<int>(); // Group:0,Discuss:1
-                long typeId = pollData["id"].ToObject<long>(); // Group ID or Discuss ID
+                var store = Context.Store;
+                var msg = new QQMsg();
+                var fromUin = pollData["from_uin"].ToObject<long>();
+                var fromQQ = pollData["ruin"].ToObject<long>();// 真实QQ
+                var serviceType = pollData["service_type"].ToObject<int>(); // Group:0,Discuss:1
+                var typeId = pollData["id"].ToObject<long>(); // Group ID or Discuss ID
 
                 msg.ParseContentList(JsonConvert.SerializeObject(pollData["content"]));
                 msg.Type = QQMsgType.SESSION_MSG;
                 msg.To = Context.Account;
-                long ticks = pollData["time"].ToObject<long>() * 1000;
+                var ticks = pollData["time"].ToObject<long>() * 1000;
                 msg.Date = ticks > DateTime.MaxValue.Ticks ? DateTime.Now : new DateTime(ticks);
 
                 QQUser user = store.GetBuddyByUin(fromUin); // 首先看看是不是自己的好友
@@ -422,16 +431,16 @@ namespace iQQ.Net.WebQQCore.Im.Action
                 {
                     if (serviceType == 0)
                     { // 是群成员
-                        QQGroup group = store.GetGroupByCode(typeId);
+                        var group = store.GetGroupByCode(typeId);
                         if (group == null)
                         {
                             group = new QQGroup();
                             group.Code = typeId;
                             // 获取群信息
-                            GroupModule groupModule = Context.GetModule<GroupModule>(QQModuleType.GROUP);
+                            var groupModule = Context.GetModule<GroupModule>(QQModuleType.GROUP);
                             groupModule.GetGroupInfo(group, null);
                         }
-                        foreach (QQUser u in group.Members)
+                        foreach (QQGroupMember u in group.Members)
                         {
                             if (u.Uin == fromUin)
                             {
@@ -442,19 +451,18 @@ namespace iQQ.Net.WebQQCore.Im.Action
                     }
                     else if (serviceType == 1)
                     { // 是讨论组成员
-                        QQDiscuz discuz = store.GetDiscuzByDid(typeId);
+                        var discuz = store.GetDiscuzByDid(typeId);
                         if (discuz == null)
                         {
-                            discuz = new QQDiscuz();
-                            discuz.Did = typeId;
+                            discuz = new QQDiscuz { Did = typeId };
 
                             // 获取讨论组信息
-                            DiscuzModule discuzModule = Context.GetModule<DiscuzModule>(QQModuleType.DISCUZ);
+                            var discuzModule = Context.GetModule<DiscuzModule>(QQModuleType.DISCUZ);
                             discuzModule.GetDiscuzInfo(discuz, null);
                         }
 
 
-                        foreach (QQUser u in discuz.Members)
+                        foreach (QQDiscuzMember u in discuz.Members)
                         {
                             if (u.Uin == fromUin)
                             {
@@ -469,14 +477,16 @@ namespace iQQ.Net.WebQQCore.Im.Action
                     }
                     if (user == null)
                     { // 还没有就新建一个陌生人，原理来说不应该这样。后面我就不知道怎么回复这消息了，但是消息是不能丢失的
-                        user = new QQStranger();
-                        user.QQ = pollData["ruin"].ToObject<long>();
-                        user.Uin = fromUin;
-                        user.Nickname = pollData["ruin"] + "";
+                        user = new QQStranger
+                        {
+                            QQ = pollData["ruin"].ToObject<long>(),
+                            Uin = fromUin,
+                            Nickname = pollData["ruin"] + ""
+                        };
                         store.AddStranger((QQStranger)user);
 
                         // 获取用户信息
-                        UserModule userModule = Context.GetModule<UserModule>(QQModuleType.USER);
+                        var userModule = Context.GetModule<UserModule>(QQModuleType.USER);
                         userModule.GetStrangerInfo(user, null);
                     }
                 }
@@ -493,13 +503,18 @@ namespace iQQ.Net.WebQQCore.Im.Action
 
         public QQNotifyEvent ProcessSystemMsg(JObject pollData)
         {
-            string type = pollData["type"].ToString().ToLower();
+            var type = pollData["type"].ToString().ToLower();
             if (type == "verify_required")
             {	//好友请求
-                JObject target = new JObject();
-                target.Add("type", "verify_required");	//通知类型（好友请求）
-                target.Add("from_uin", pollData["from_uin"].ToString());	//哪个人请求
-                target.Add("msg", pollData["msg"].ToString());	//请求添加好友原因
+                var target = new JObject
+                {
+                    {"type", "verify_required"},                    // 通知类型（好友请求）
+                    {"from_uin", pollData["from_uin"].ToString()},// 哪个人请求
+                    {"msg", pollData["msg"].ToString()}             // 请求添加好友原因
+                };
+
+
+
                 return new QQNotifyEvent(QQNotifyEventType.BUDDY_NOTIFY, target.ToString());
             }
             return null;
@@ -513,10 +528,12 @@ namespace iQQ.Net.WebQQCore.Im.Action
         public QQNotifyEvent ProcessGroupWebMsg(JObject pollData)
         {
             //{"retcode":0,"result":[{"poll_type":"group_web_message","value":{"msg_id":25082,"from_uin":802292893,"to_uin":3087958343,"msg_id2":343597,"msg_type":45,"reply_ip":176756769,"group_code":898704454,"group_type":1,"ver":1,"send_uin":3014857601,"xml":"\u003c?xml version=\"1.0\" encoding=\"utf-8\"?\u003e\u003cd\u003e\u003cn t=\"h\" u=\"2519967390\"/\u003e\u003cn t=\"t\" s=\"\u5171\u4EAB\u6587\u4EF6\"/\u003e\u003cn t=\"b\"/\u003e\u003cn t=\"t\" s=\"IMG_1193.jpg\"/\u003e\u003c/d\u003e"}}]}
-            JObject target = new JObject();
-            target.Add("type", "share_file");	//通知类型（共享群文件消息）
-            target.Add("file", pollData["xml"].ToString());	//共享的文件信息
-            target.Add("sender", pollData["send_uin"].ToObject<long>());	//共享者
+            var target = new JObject
+            {
+                {"type", "share_file"},// 通知类型（共享群文件消息）
+                {"file", pollData["xml"].ToString()},// 共享的文件信息
+                {"sender", pollData["send_uin"].ToObject<long>()}// 共享者
+            };
             return new QQNotifyEvent(QQNotifyEventType.GROUP_NOTIFY, target.ToString());
         }
 
@@ -524,15 +541,17 @@ namespace iQQ.Net.WebQQCore.Im.Action
         public QQNotifyEvent ProcessSystemGroupMsg(JObject pollData)
         {
             //{"retcode":0,"result":[{"poll_type":"sys_g_msg","value":{"msg_id":39855,"from_uin":802292893,"to_uin":3087958343,"msg_id2":518208,"msg_type":34,"reply_ip":176757073,"type":"group_leave","gcode":898704454,"t_gcode":310070477,"op_type":3,"old_member":3087958343,"t_old_member":"","admin_uin":1089498579,"t_admin_uin":"","admin_nick":"\u521B\u5EFA\u8005"}}]}
-            string type = pollData["type"].ToString().ToLower();
+            var type = pollData["type"].ToString().ToLower();
             if (type == "group_leave")
             {
-                JObject target = new JObject();
-                target.Add("type", "group_leave");	//通知类型（离群消息）
-                target.Add("group_code", pollData["gcode"].ToObject<long>());	//从那个群（群临时编号）
-                target.Add("group_num", pollData["t_gcode"].ToObject<long>());	//从那个群（群号）
-                target.Add("admin_uin", pollData["admin_uin"].ToObject<long>());	//被哪个人踢
-                target.Add("admin_nick", pollData["admin_nick"].ToString());
+                var target = new JObject
+                {
+                    {"type", "group_leave"}, //通知类型（离群消息）
+                    {"group_code", pollData["gcode"].ToObject<long>()}, //从那个群（群临时编号）
+                    {"group_num", pollData["t_gcode"].ToObject<long>()},//从那个群（群号）
+                    {"admin_uin", pollData["admin_uin"].ToObject<long>()}, //被哪个人踢
+                    {"admin_nick", pollData["admin_nick"].ToString()}
+                };
                 return new QQNotifyEvent(QQNotifyEventType.GROUP_NOTIFY, target.ToString());
             }
             return null;
