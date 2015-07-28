@@ -67,10 +67,16 @@ namespace iQQ.Net.WebQQCore
         public static void Main(string[] args)
         {
             var threadActorDispatcher = new ThreadActorDispatcher();
+
+            Console.Write("请输入QQ号：");
+            var qqNum = Console.ReadLine();
+            Console.Write("请输入QQ密码：");
+            var qqPwd = Console.ReadLine();
+
             var qqList = new List<WebQQClient>()
             {
-                // 19FDCB35E0946A62E84C8C9B9B34DFF1
-                new WebQQClient("2027044668", "19FDCB35E0946A62E84C8C9B9B34DFF1", handler, threadActorDispatcher),
+                // new WebQQClient("2027044668", "19FDCB35E0946A62E84C8C9B9B34DFF1", handler, threadActorDispatcher),
+                new WebQQClient(qqNum, qqPwd, handler, threadActorDispatcher),
             };
 
             for (var i = 0; i < qqList.Count; ++i)
