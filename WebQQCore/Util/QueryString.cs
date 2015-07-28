@@ -8,12 +8,12 @@ namespace iQQ.Net.WebQQCore.Util
 {
     public static class QueryString
     {
-        public static string GetQueryString(string pageURL, string key)
+        public static string GetQueryString(string pageUrl, string key)
         {
-            Uri uri = new Uri(pageURL);
-            string queryString = uri.Query;
-            NameValueCollection col = GetQueryString(queryString, null, true);
-            string searchKey = col[key];
+            var uri = new Uri(pageUrl);
+            var queryString = uri.Query;
+            var col = GetQueryString(queryString, null, true);
+            var searchKey = col[key];
             return searchKey;
         }
 
@@ -37,17 +37,17 @@ namespace iQQ.Net.WebQQCore.Util
         public static NameValueCollection GetQueryString(string queryString, Encoding encoding, bool isEncoded)
         {
             queryString = queryString.Replace("?", "");
-            NameValueCollection result = new NameValueCollection(StringComparer.OrdinalIgnoreCase);
+            var result = new NameValueCollection(StringComparer.OrdinalIgnoreCase);
             if (!string.IsNullOrEmpty(queryString))
             {
-                int count = queryString.Length;
-                for (int i = 0; i < count; i++)
+                var count = queryString.Length;
+                for (var i = 0; i < count; i++)
                 {
-                    int startIndex = i;
-                    int index = -1;
+                    var startIndex = i;
+                    var index = -1;
                     while (i < count)
                     {
-                        char item = queryString[i];
+                        var item = queryString[i];
                         if (item == '=')
                         {
                             if (index < 0)
@@ -99,11 +99,11 @@ namespace iQQ.Net.WebQQCore.Util
         {
             if (encoding == null)
             {
-                Encoding utf8 = Encoding.UTF8;
+                var utf8 = Encoding.UTF8;
                 //首先用utf-8进行解码                      
-                string code = HttpUtility.UrlDecode(str.ToUpper(), utf8);
+                var code = HttpUtility.UrlDecode(str.ToUpper(), utf8);
                 //将已经解码的字符再次进行编码. 
-                string encode = HttpUtility.UrlEncode(code, utf8).ToUpper();
+                var encode = HttpUtility.UrlEncode(code, utf8).ToUpper();
                 if (str == encode)
                     encoding = Encoding.UTF8;
                 else
@@ -114,10 +114,10 @@ namespace iQQ.Net.WebQQCore.Util
 
         public static string ToQueryString(this List<KeyValuePair<string, string>> kvs)
         {
-            StringBuilder sb = new StringBuilder();
-            for (int i = 0; i < kvs.Count; i++)
+            var sb = new StringBuilder();
+            for (var i = 0; i < kvs.Count; i++)
             {
-                KeyValuePair<string, string> kv = kvs[i];
+                var kv = kvs[i];
                 if (i != 0)
                 {
                     sb.Append("&");

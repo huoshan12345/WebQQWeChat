@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Security.Cryptography;
@@ -23,6 +24,30 @@ namespace iQQ.Net.WebQQCore.Util
 
     public static class Extensions
     {
+        public static string ToString(this Stream stream, Encoding encoding)
+        {
+            using (var sr = new StreamReader(stream, encoding ?? Encoding.UTF8))
+            {
+                string text = sr.ReadToEnd();
+                return text;
+            }
+        }
+
+        public static byte[] ToBytes(this Stream stream)
+        {
+            var bytes = new byte[stream.Length];
+            stream.Read(bytes, 0, bytes.Length);
+            // 设置当前流的位置为流的开始
+            stream.Seek(0, SeekOrigin.Begin);
+            return bytes;
+        }
+
+        public static Stream ToStream(this byte[] bytes)
+        {
+            var stream = new MemoryStream(bytes);
+            return stream;
+        }
+
         public static void Add<TK, TV>(this Dictionary<TK, List<TV>> dic, TK key, TV value)
         {
             if (dic.ContainsKey(key))

@@ -109,8 +109,8 @@ namespace iQQ.Net.WebQQCore.Util
 
         private static string RsaQQ(long uin, string password, string verifyCode)
         {
-            var js = ResourceUtils.LoadResource("encrypt.js");
-            object[] args = { password, uin, verifyCode.ToUpper(), IsMd5(password).ToString().ToLower()};
+            var js = Resource.LoadLocalResource("encrypt.js", stream => stream.ToString(Encoding.UTF8));
+            object[] args = { password, uin, verifyCode.ToUpper(), IsMd5(password).ToString().ToLower() };
             var code = string.Format("getEncryption('{0}','{1}','{2}',{3})", args);
             var engine = new Jint.Engine();
             engine.Execute(js);
@@ -147,7 +147,7 @@ namespace iQQ.Net.WebQQCore.Util
         public static string GetHash(string uin, string ptwebqq)
         {
             var url = "https://raw.githubusercontent.com/im-qq/webqq-core/master/src/main/resources/hash.js";
-            var js = ResourceUtils.LoadResource("hash.js", url);
+            var js = Resource.LoadResource("hash.js", url, item => item.ToString(Encoding.UTF8));
             object[] args = { uin, ptwebqq };
             var code = string.Format("hash('{0}','{1}')", args);
             var engine = new Jint.Engine();

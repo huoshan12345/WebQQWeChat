@@ -59,7 +59,7 @@
   <ItemGroup>
     <Compile Include="Util\Log\MyLogger.cs" />
     <Compile Include="Util\QueryString.cs" />
-    <Compile Include="Util\ResourceUtils.cs" />
+    <Compile Include="Util\Resource.cs" />
     <Compile Include="Util\RobotType.cs" />
     <Compile Include="Im\Http\IHttpAction.cs" />
     <Compile Include="Im\Event\Future\HttpActionFuture.cs" />
