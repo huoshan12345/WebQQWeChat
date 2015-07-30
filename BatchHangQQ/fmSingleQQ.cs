@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Windows.Forms;
 
 //using System.Data;
@@ -12,10 +13,8 @@ namespace iQQ.Net.BatchHangQQ
         public fmSingleQQ()
         {
             InitializeComponent();
-            cboLoginProtocol.Items.AddRange(LoginProtocol);
+            cboLoginProtocol.Items.AddRange(LoginProtocol.Cast<object>().ToArray());
             cboLoginProtocol.SelectedIndex = 1;
-            tbQQNum.Text = "459734234";
-            tbQQPwd.Text = "lijing12345";
         }
 
         private void btnLogin_Click(object sender, EventArgs e)
