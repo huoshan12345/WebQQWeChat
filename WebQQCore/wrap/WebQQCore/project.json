@@ -1,0 +1,19 @@
+{
+  "version": "1.0.0-*",
+  "frameworks": {
+    "net45": {
+      "wrappedProject": "../../WebQQCore.csproj",
+      "bin": {
+        "assembly": "../../obj/{configuration}/WebQQCore.dll",
+        "pdb": "../../obj/{configuration}/WebQQCore.pdb"
+      },
+      "dependencies": {
+        "Jint": "2.5.0",
+        "Newtonsoft.Json": "7.0.1",
+        "NLog": "4.0.1",
+        "NLog.Config": "4.0.1",
+        "NLog.Schema": "4.0.1"
+      }
+    }
+  }
+}

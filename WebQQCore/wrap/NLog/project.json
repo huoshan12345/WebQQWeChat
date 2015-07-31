@@ -1,0 +1,10 @@
+{
+  "version": "1.0.0-*",
+  "frameworks": {
+    "net45": {
+      "bin": {
+        "assembly": "../../../packages/NLog.4.0.1/lib/net45/NLog.dll"
+      }
+    }
+  }
+}
