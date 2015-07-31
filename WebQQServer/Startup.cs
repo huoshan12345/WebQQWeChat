@@ -6,6 +6,7 @@ using Microsoft.AspNet.Builder;
 using Microsoft.AspNet.Diagnostics;
 using Microsoft.AspNet.Hosting;
 using Microsoft.AspNet.Http;
+using Microsoft.AspNet.RequestContainer;
 using Microsoft.AspNet.Routing;
 using Microsoft.Framework.DependencyInjection;
 using Microsoft.Framework.Logging;
@@ -57,9 +58,10 @@ namespace WebQQServer
             app.UseMvc(routes =>
             {
                 // Add the following route for porting Web API 2 controllers.
-                // routes.MapWebApiRoute("DefaultApi", "api/{controller}/{id?}");
+                routes.MapRoute("DefaultApi", "api/{controller}/{id?}");
             });
 
+            app.Use(nextApp => new ContainerMiddleware(nextApp, app.ApplicationServices).Invoke);
         }
     }
 }

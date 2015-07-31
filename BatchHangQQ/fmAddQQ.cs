@@ -7,8 +7,6 @@ namespace iQQ.Net.BatchHangQQ
 {
     public partial class fmAddQQ : Form
     {
-        private static readonly string[] LoginProtocol = { };
-
         public fmAddQQ()
         {
             InitializeComponent();
@@ -18,20 +16,20 @@ namespace iQQ.Net.BatchHangQQ
 
         public fmAddQQ(string qqNum, string qqPwd, string typeName):this()
         {
-            this.textBox_QQNum.Text = qqNum;
-            this.textBox2_QQPassword.Text = qqPwd;
+            textBox_QQNum.Text = qqNum;
+            textBox2_QQPassword.Text = qqPwd;
             cboLoginProtocol.SelectedIndex = cboLoginProtocol.FindStringExact(typeName);
         }
 
         private void btnCancel_Click(object sender, EventArgs e)
         {
-            this.Close();
+            Close();
         }
 
         private void btnConfirm_Click(object sender, EventArgs e)
         {
-            addQQ(this.textBox_QQNum.Text, this.textBox2_QQPassword.Text, cboLoginProtocol.Text);
-            this.Close();
+            addQQ(textBox_QQNum.Text, textBox2_QQPassword.Text, cboLoginProtocol.Text);
+            Close();
         }
 
         public delegate void AddQQ(string qqNum, string qqPassword, string clientType);

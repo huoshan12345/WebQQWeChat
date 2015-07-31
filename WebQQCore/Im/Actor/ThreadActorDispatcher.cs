@@ -54,10 +54,7 @@ namespace iQQ.Net.WebQQCore.Im.Actor
         /// <returns></returns>
         private bool DispatchAction(QQActor actor)
         {
-            if (actor == null)
-            {
-                return true;
-            }
+            if (actor == null) return true;
             actor.Execute();
             return !(actor is ExitActor);
         }
@@ -72,17 +69,6 @@ namespace iQQ.Net.WebQQCore.Im.Actor
             while (DispatchAction(_pollActorQueue.Take())) { };
         }
 
-/*
-        public void DoRobotReply()
-        {
-            try
-            {
-                while (DispatchAction(robotReplyActorQueue.Take())) { };
-            }
-            catch { }
-        }
- */
-
         public void Init(QQContext context)
         {
             if (_dispatchThread == null)
@@ -93,20 +79,14 @@ namespace iQQ.Net.WebQQCore.Im.Actor
             {
                 _pollDispatchThread = Task.Factory.StartNew(DoPoll);
             }
-/*
-            if (robotReplyDispatchThread == null)
-            {
-                robotReplyDispatchThread = Task.Factory.StartNew(DoRobotReply);
-            }
- */
         }
 
         public void Destroy()
         {
-            PushActor(new ExitActor());
             try
             {
-                _dispatchThread.Dispose();
+                PushActor(new ExitActor());
+                // _dispatchThread.Dispose();
             }
             catch (Exception e)
             {
@@ -124,16 +104,7 @@ namespace iQQ.Net.WebQQCore.Im.Actor
                 //do nothing
             }
 
-            public bool IsPollMsgActor
-            {
-                get { return false; }
-            }
-
-            public QQActorType Type
-            {
-                get { return QQActorType.SimpleActor; }
-            }
-
+            public QQActorType Type => QQActorType.SimpleActor;
 
             public Task ExecuteAsync()
             {

@@ -67,63 +67,61 @@ namespace iQQ.Net.WebQQCore
         public static void Main(string[] args)
         {
             var threadActorDispatcher = new ThreadActorDispatcher();
+            IQQClient client = null;
 
+start:
             Console.Write("请输入QQ号：");
-            var qqNum = Console.ReadLine();
+            var username = Console.ReadLine();
             Console.Write("请输入QQ密码：");
-            var qqPwd = Console.ReadLine();
+            var password = Console.ReadLine();
+            client = new WebQQClient(username, password, handler, threadActorDispatcher);
 
-            var qqList = new List<WebQQClient>()
+
+            //测试同步模式登录
+            var future = client.Login(QQStatus.ONLINE, null);
+            Console.WriteLine(client.Account.Username + "-登录中......");
+
+            var Event = future.WaitFinalEvent();
+            if (Event.Type == QQActionEventType.EVT_OK)
             {
-                // new WebQQClient("2027044668", "19FDCB35E0946A62E84C8C9B9B34DFF1", handler, threadActorDispatcher),
-                new WebQQClient(qqNum, qqPwd, handler, threadActorDispatcher),
-            };
+                Console.WriteLine(client.Account.Username + "-登录成功！！！！");
 
-            for (var i = 0; i < qqList.Count; ++i)
-            {
-                var client = qqList[i];
+                var getUserInfoEvent = client.GetUserInfo(client.Account, null).WaitFinalEvent();
 
-                //测试同步模式登录
-                var future = client.Login(QQStatus.ONLINE, null);
-                Console.WriteLine(client.Account.Username + "-登录中......");
-
-                var Event = future.WaitFinalEvent();
-                if (Event.Type == QQActionEventType.EVT_OK)
+                if (getUserInfoEvent.Type == QQActionEventType.EVT_OK)
                 {
-                    Console.WriteLine(client.Account.Username + "-登录成功！！！！");
+                    Console.WriteLine(client.Account.QQ + "-用户信息:" + getUserInfoEvent.Target);
 
-                    var getUserInfoEvent = client.GetUserInfo(client.Account, null).WaitFinalEvent();
 
-                    if (getUserInfoEvent.Type == QQActionEventType.EVT_OK)
+                    client.GetBuddyList(null).WaitFinalEvent();
+                    Console.WriteLine(client.Account.QQ + "-Buddy count: " + client.GetBuddyList().Count);
+
+                    foreach (var buddy in client.GetBuddyList())
                     {
-                        Console.WriteLine(client.Account.QQ + "-用户信息:" + getUserInfoEvent.Target);
-
-
-                        client.GetBuddyList(null).WaitFinalEvent();
-                        Console.WriteLine(client.Account.QQ + "-Buddy count: " + client.GetBuddyList().Count);
-
-                        foreach (var buddy in client.GetBuddyList())
-                        {
-                            var f = client.GetUserQQ(buddy, null);
-                            var e = f.WaitFinalEvent();
-                            var name = string.IsNullOrEmpty(buddy.MarkName) ? buddy.Nickname : buddy.MarkName;
-                            Console.WriteLine("{0}, {1}", buddy.QQ, name);
-                        }
+                        var f = client.GetUserQQ(buddy, null);
+                        var e = f.WaitFinalEvent();
+                        var name = string.IsNullOrEmpty(buddy.MarkName) ? buddy.Nickname : buddy.MarkName;
+                        Console.WriteLine("{0}, {1}", buddy.QQ, name);
                     }
-
-                    //所有的逻辑完了后，启动消息轮询
-                    client.BeginPollMsg();
                 }
-                else if (Event.Type == QQActionEventType.EVT_ERROR)
-                {
-                    var ex = (QQException)Event.Target;
-                    Console.WriteLine(ex.Message);
-                }
-                else
-                {
-                    Console.WriteLine(client.Account.Username + "-登录失败");
-                }
+                //所有的逻辑完了后，启动消息轮询
+                client.BeginPollMsg();
             }
+            else if (Event.Type == QQActionEventType.EVT_ERROR)
+            {
+                var ex = (QQException)Event.Target;
+                Console.WriteLine(ex.Message);
+                client.Destroy();
+                goto start;
+            }
+            else
+            {
+                Console.WriteLine(client.Account.Username + "-登录失败");
+                client.Destroy();
+                goto start;
+            }
+
+            Console.WriteLine("按任意键退出");
             Console.ReadLine();
         }
     }

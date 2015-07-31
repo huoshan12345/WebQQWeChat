@@ -103,7 +103,11 @@ namespace iQQ.Net.WebQQCore.Im.Action
             {
                 case QQActionEventType.EVT_ERROR:
                 var ex = (target as Exception) ?? new QQException(QQErrorCode.UNKNOWN_ERROR);
+#if DEBUG
                 MyLogger.Default.Error($"{GetType().Name} [type={type.GetDescription()}, exception={ex.Message}, stacktrace={ex.StackTrace}]",ex);
+#else
+                MyLogger.Default.Debug($"{GetType().Name} [type={type.GetDescription()}, exception={ex.Message}", ex);
+#endif
                 break;
 
                 case QQActionEventType.EVT_CANCELED:

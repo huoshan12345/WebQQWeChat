@@ -81,7 +81,9 @@ namespace iQQ.Net.BatchHangQQ
         private void fmQQList_Load(object sender, EventArgs e)
         {
             AfterInitialize();
+#if DEBUG
             AddQQToList("2027044668", "19FDCB35E0946A62E84C8C9B9B34DFF1");
+#endif
         }
 
         private void AfterInitialize()
@@ -290,7 +292,7 @@ namespace iQQ.Net.BatchHangQQ
             new []{"online", "hidden", "away","hidden","busy","callme", "silent"}
         };
 
-        private static readonly string[] LoginProtocol = { "WebQQ"};
+        private static readonly string[] LoginProtocol = { "WebQQ" };
         private static readonly string[] VerifyCodeDigit = { "4", "5" };
 
         private void btnAddQQ_Click(object sender, EventArgs e)
@@ -319,14 +321,18 @@ namespace iQQ.Net.BatchHangQQ
 
         private void RemoveSelectedQQFromList()
         {
-            if (lvQQList.SelectedIndices.Count > 0)
+            if (lvQQList.SelectedIndices.Count <= 0) return;
+
+            foreach (int index in lvQQList.SelectedIndices)
             {
-                foreach (int index in lvQQList.SelectedIndices)
+                var qqNum = lvQQList.Items[index].SubItems[1].Text;
+                try
                 {
-                    var qqNum = lvQQList.Items[index].SubItems[1].Text;
-                    _qqClients.Remove(qqNum);
-                    lvQQList.Items.RemoveAt(index);
+                    _qqClients[qqNum].Logout();
                 }
+                catch { }
+                if (_qqClients.ContainsKey(qqNum)) _qqClients.Remove(qqNum);
+                lvQQList.Items.RemoveAt(index);
             }
         }
 
@@ -558,16 +564,14 @@ namespace iQQ.Net.BatchHangQQ
         {
             var qqAccount = iqqClient.Account;
             var index = indexInLV >= 0 ? indexInLV : GetIndexInLV(qqAccount.Username);
-            if (index < 0)
-            {
-                return;
-            }
+            if (index < 0) return;
 
             if (lvQQList.InvokeRequired)
             {
                 lvQQList.Invoke(new MethodInvoker(() =>
                 {
                     var item = lvQQList.Items[index];
+                    item.SubItems[2].Text = iqqClient.Account.Password;
                     item.SubItems[3].Text = iqqClient.ClientType.Value;
                     item.SubItems[4].Text = qqAccount.Status.Description;
                     item.SubItems[5].Text = qqAccount.Level.Level.ToString();
@@ -577,6 +581,7 @@ namespace iQQ.Net.BatchHangQQ
             else
             {
                 var item = lvQQList.Items[index];
+                item.SubItems[2].Text = iqqClient.Account.Password;
                 item.SubItems[3].Text = iqqClient.ClientType.Value;
                 item.SubItems[4].Text = qqAccount.Status.Description;
                 item.SubItems[5].Text = qqAccount.Level.Level.ToString();

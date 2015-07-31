@@ -50,7 +50,7 @@ namespace iQQ.Net.WebQQCore.Util
         {
             try
             {
-                var resource = LoadLocalResource(url);
+                var resource = LoadLocalResource(name);
                 return func(resource);
             }
             catch (Exception ex)
