@@ -1,0 +1,26 @@
+﻿{
+  "version": "1.0.0-*",
+  "description": "iQQ.Net.WebQQCore Class Library",
+  "authors": [ "lijing" ],
+  "tags": [ "" ],
+  "projectUrl": "",
+  "licenseUrl": "",
+
+  "dependencies": {
+    "Newtonsoft.Json": "7.0.1",
+    "Microsoft.CSharp": "4.0.0-beta-23109",
+    "System.Data.Common": "4.0.0-beta-23109",
+    "System.IO": "4.0.0-beta-23109",
+    "System.Collections": "4.0.0-beta-23109",
+    "System.Collections.Concurrent": "4.0.0-beta-23109",
+    "System.Threading.Tasks": "4.0.0-beta-23109",
+    "System.Threading": "4.0.0-beta-23109",
+  },
+
+  "frameworks": {
+    "dotnet": {
+      //"mscorlib": "4.0.0-beta-23109",
+
+    }
+  }
+}
