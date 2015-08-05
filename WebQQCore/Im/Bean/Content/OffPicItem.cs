@@ -5,35 +5,15 @@ using Newtonsoft.Json.Linq;
 namespace iQQ.Net.WebQQCore.Im.Bean.Content
 {
     [Serializable]
-    public class OffPicItem : ContentItem
+    public class OffPicItem : IContentItem
     {
-        private bool isSuccess;
-        public bool IsSuccess
-        {
-            get { return isSuccess; }
-            set { isSuccess = value; }
-        }
+        public bool IsSuccess { get; set; }
 
-        private string filePath;
-        public string FilePath
-        {
-            get { return filePath; }
-            set { filePath = value; }
-        }
+        public string FilePath { get; set; }
 
-        private string fileName;
-        public string FileName
-        {
-            get { return fileName; }
-            set { fileName = value; }
-        }
+        public string FileName { get; set; }
 
-        private int fileSize;
-        public int FileSize
-        {
-            get { return fileSize; }
-            set { fileSize = value; }
-        }
+        public int FileSize { get; set; }
 
         public OffPicItem() { }
 
@@ -42,15 +22,12 @@ namespace iQQ.Net.WebQQCore.Im.Bean.Content
             FromJson(text);
         }
 
-        public ContentItemType Type
-        {
-            get { return ContentItemType.OFFPIC; }
-        }
+        public ContentItemType Type => ContentItemType.Offpic;
 
         public object ToJson()
         {
             // [\"offpic\",\"/27d736df-2a59-4007-8701-7218bc70898d\",\"Beaver.bmp\",14173]
-            JArray json = new JArray();
+            var json = new JArray();
             json.Add("offpic");
             json.Add(FilePath);
             json.Add(FileName);
@@ -63,8 +40,8 @@ namespace iQQ.Net.WebQQCore.Im.Bean.Content
             // ["offpic",{"success":1,"file_path":"/7acccf74-0fcd-4bbd-b885-03a5cc2f7507"}]
             try
             {
-                JArray json = JArray.Parse(text);
-                JObject pic = (JObject)json[1];
+                var json = JArray.Parse(text);
+                var pic = (JObject)json[1];
                 IsSuccess = int.Parse(pic["success"].ToString()) == 1 ? true : false;
                 FilePath = pic["file_path"].ToString();
             }

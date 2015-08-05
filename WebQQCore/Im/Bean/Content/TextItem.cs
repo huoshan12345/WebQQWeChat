@@ -3,14 +3,9 @@
 namespace iQQ.Net.WebQQCore.Im.Bean.Content
 {
     [Serializable]
-    public class TextItem : ContentItem
+    public class TextItem : IContentItem
     {
-        private string content;
-        public string Content
-        {
-            get { return content; }
-            set { content = value; }
-        }
+        public string Content { get; set; }
 
         public TextItem() { }
 
@@ -19,10 +14,7 @@ namespace iQQ.Net.WebQQCore.Im.Bean.Content
             FromJson(text);
         }
 
-        public ContentItemType Type
-        {
-            get { return ContentItemType.TEXT; }
-        }
+        public ContentItemType Type => ContentItemType.Text;
 
         public object ToJson()
         {

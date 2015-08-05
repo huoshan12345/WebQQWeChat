@@ -43,8 +43,8 @@ namespace iQQ.Net.WebQQCore.Im.Bean
 
         private QQStatus(string value, int status)
         {
-            this.Value = value;
-            this.Status = status;
+            Value = value;
+            Status = status;
         }
 
         public static QQStatus ValueOfRaw(string txt)

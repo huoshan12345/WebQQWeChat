@@ -6,7 +6,7 @@ namespace iQQ.Net.WebQQCore.Im.Bean
     {
         WebQQ,
         MobileQQ,
-        PCQQ,
+        PcQQ,
         PadQQ,
         Unknown
     }
@@ -17,21 +17,21 @@ namespace iQQ.Net.WebQQCore.Im.Bean
     public sealed class QQClientType
     {
         /// <summary>PC版QQ: [1,2,3,4,5,6,10,0x1E4]</summary>
-        public static readonly QQClientType PC = new QQClientType(QQClientTypeName.PCQQ);
+        public static readonly QQClientType Pc = new QQClientType(QQClientTypeName.PcQQ);
 
-        /// <summary>WEBQQ: [41]</summary>
-        public static readonly QQClientType WEBQQ = new QQClientType(QQClientTypeName.WebQQ);
+        /// <summary>WebQQ: [41]</summary>
+        public static readonly QQClientType WebQQ = new QQClientType(QQClientTypeName.WebQQ);
 
         /// <summary>手机QQ: [21,22,23,24]</summary>
-        public static readonly QQClientType MOBILE = new QQClientType(QQClientTypeName.MobileQQ);
+        public static readonly QQClientType Mobile = new QQClientType(QQClientTypeName.MobileQQ);
 
         /// <summary>平板QQ: [42] (Android还是IOS不知道是否可以区分)</summary>
-        public static readonly QQClientType PAD = new QQClientType(QQClientTypeName.PadQQ);
+        public static readonly QQClientType Pad = new QQClientType(QQClientTypeName.PadQQ);
 
         /// <summary> 其他值，待测试</summary>
-        public static readonly QQClientType UNKNOWN = new QQClientType(QQClientTypeName.Unknown);
+        public static readonly QQClientType Unknown = new QQClientType(QQClientTypeName.Unknown);
 
-        public static readonly QQClientType[] QQClientAllTypes = { WEBQQ, MOBILE, PC, PAD, UNKNOWN };
+        public static readonly QQClientType[] QQClientAllTypes = { WebQQ, Mobile, Pc, Pad, Unknown };
 
         private QQClientType(QQClientTypeName type)
         {
@@ -49,18 +49,18 @@ namespace iQQ.Net.WebQQCore.Im.Bean
             {
                 return ValueOfRaw(type);
             }
-            return UNKNOWN;
+            return Unknown;
         }
 
         public static QQClientType ValueOfRaw(QQClientTypeName value)
         {
             switch (value)
             {
-                case QQClientTypeName.PCQQ: return PC;
-                case QQClientTypeName.WebQQ: return WEBQQ;
-                case QQClientTypeName.MobileQQ: return MOBILE;
-                case QQClientTypeName.PadQQ: return PAD;
-                default: return UNKNOWN;
+                case QQClientTypeName.PcQQ: return Pc;
+                case QQClientTypeName.WebQQ: return WebQQ;
+                case QQClientTypeName.MobileQQ: return Mobile;
+                case QQClientTypeName.PadQQ: return Pad;
+                default: return Unknown;
             }
         }
 
@@ -76,18 +76,22 @@ namespace iQQ.Net.WebQQCore.Im.Bean
                 case 6:
                 case 10:
                 case 0x1E4:
-                return PC;
+                return Pc;
+
                 case 41:
-                return WEBQQ;
+                return WebQQ;
+
                 case 21:
                 case 22:
                 case 23:
                 case 24:
-                return MOBILE;
+                return Mobile;
+
                 case 42:
-                return PAD;
+                return Pad;
+
                 default:
-                return UNKNOWN;
+                return Unknown;
             }
         }
 

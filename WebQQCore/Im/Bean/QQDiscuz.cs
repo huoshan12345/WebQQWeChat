@@ -43,7 +43,7 @@ namespace iQQ.Net.WebQQCore.Im.Bean
         }
         public void AddMemeber(QQDiscuzMember user)
         {
-            this.Members.Add(user);
+            Members.Add(user);
         }
 
         public override int GetHashCode()
@@ -60,7 +60,7 @@ namespace iQQ.Net.WebQQCore.Im.Bean
                 return true;
             if (obj == null)
                 return false;
-            if (this.GetType() != obj.GetType())
+            if (GetType() != obj.GetType())
                 return false;
             QQDiscuz other = (QQDiscuz)obj;
             if (Did != other.Did)

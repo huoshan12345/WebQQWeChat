@@ -6,44 +6,19 @@ using Newtonsoft.Json.Linq;
 namespace iQQ.Net.WebQQCore.Im.Bean.Content
 {
     [Serializable]
-    public class FontItem : ContentItem
+    public class FontItem : IContentItem
     {
         private string name = "宋体";
 
-        private int size = 12;
-        public int Size
-        {
-            get { return size; }
-            set { size = value; }
-        }
+        public int Size { get; set; } = 12;
 
-        private bool bold;
-        public bool Bold
-        {
-            get { return bold; }
-            set { bold = value; }
-        }
+        public bool Bold { get; set; }
 
-        private bool underline;
-        public bool Underline
-        {
-            get { return underline; }
-            set { underline = value; }
-        }
+        public bool Underline { get; set; }
 
-        private bool italic;
-        public bool Italic
-        {
-            get { return italic; }
-            set { italic = value; }
-        }
+        public bool Italic { get; set; }
 
-        private int color = 0;
-        public int Color
-        {
-            get { return color; }
-            set { color = value; }
-        }
+        public int Color { get; set; } = 0;
 
         public FontItem() { }
 
@@ -52,25 +27,22 @@ namespace iQQ.Net.WebQQCore.Im.Bean.Content
             FromJson(text);
         }
 
-        public ContentItemType Type
-        {
-            get { return ContentItemType.FONT; }
-        }
+        public ContentItemType Type => ContentItemType.Font;
 
         public object ToJson()
         {
             // ["font",{"size":10,"color":"808080","style":[0,0,0],"name":"\u65B0\u5B8B\u4F53"}]
             try
             {
-                JArray json = new JArray();
+                var json = new JArray();
                 json.Add("font");
-                JObject font = new JObject();
-                font.Add("size", size);
-                font.Add("color", string.Format("%06x", color));
-                JArray style = new JArray();
-                style.Add(bold ? 1 : 0);
-                style.Add(italic ? 1 : 0);
-                style.Add(underline ? 1 : 0);
+                var font = new JObject();
+                font.Add("size", Size);
+                font.Add("color", string.Format("%06x", Color));
+                var style = new JArray();
+                style.Add(Bold ? 1 : 0);
+                style.Add(Italic ? 1 : 0);
+                style.Add(Underline ? 1 : 0);
                 font.Add("style", style);
                 font.Add("name", name);
                 json.Add(font);
@@ -86,15 +58,15 @@ namespace iQQ.Net.WebQQCore.Im.Bean.Content
         {
             try
             {
-                JArray json = JArray.Parse(text);
-                JObject font = json[1].ToObject<JObject>();
-                size = font["size"].ToObject<int>();
-                color = int.Parse(font["color"].ToString(), NumberStyles.HexNumber);
+                var json = JArray.Parse(text);
+                var font = json[1].ToObject<JObject>();
+                Size = font["size"].ToObject<int>();
+                Color = int.Parse(font["color"].ToString(), NumberStyles.HexNumber);
 
-                JArray style = font["style"].ToObject<JArray>();
-                bold = style[0].ToObject<int>() == 1 ? true : false;
-                italic = style[1].ToObject<int>() == 1 ? true : false;
-                underline = style[2].ToObject<int>() == 1 ? true : false;
+                var style = font["style"].ToObject<JArray>();
+                Bold = style[0].ToObject<int>() == 1 ? true : false;
+                Italic = style[1].ToObject<int>() == 1 ? true : false;
+                Underline = style[2].ToObject<int>() == 1 ? true : false;
                 name = font["name"].ToString();
             }
             catch (JsonException e)

@@ -17,7 +17,7 @@ namespace iQQ.Net.WebQQCore.Im.Core
         private readonly Dictionary<long, QQCategory> _categoryMap; // index => QQCategory
         private readonly Dictionary<long, QQDiscuz> _discuzMap;		// did = > QQDiscuz
         private readonly Dictionary<long, QQGroup> _groupMap; // code => QQGroup, 快速通过群ID查找群
-        private readonly List<ContentItem> _pictureItemList; // filename -> PicItem 上传图片列表
+        private readonly List<IContentItem> _pictureItemList; // filename -> PicItem 上传图片列表
 
         /**
          * <p>Constructor for QQStore.</p>
@@ -29,7 +29,7 @@ namespace iQQ.Net.WebQQCore.Im.Core
             this._categoryMap = new Dictionary<long, QQCategory>();
             this._groupMap = new Dictionary<long, QQGroup>();
             this._discuzMap = new Dictionary<long, QQDiscuz>();
-            this._pictureItemList = new List<ContentItem>();
+            this._pictureItemList = new List<IContentItem>();
         }
 
 
@@ -62,7 +62,7 @@ namespace iQQ.Net.WebQQCore.Im.Core
         }
 
 
-        public void AddPicItem(ContentItem pictureItem)
+        public void AddPicItem(IContentItem pictureItem)
         {
             _pictureItemList.Add(pictureItem);
         }
@@ -92,7 +92,7 @@ namespace iQQ.Net.WebQQCore.Im.Core
             _groupMap.Remove(group.Gin);
         }
 
-        public void DeletePicItem(ContentItem picItem)
+        public void DeletePicItem(IContentItem picItem)
         {
             _pictureItemList.Remove(picItem);
         }
@@ -167,7 +167,7 @@ namespace iQQ.Net.WebQQCore.Im.Core
             return (from buddy in _buddyMap where QQStatus.IsGeneralOnline(buddy.Value.Status) select buddy.Value).ToList();
         }
 
-        public List<ContentItem> GetPicItemList()
+        public List<IContentItem> GetPicItemList()
         {
             return _pictureItemList;
         }

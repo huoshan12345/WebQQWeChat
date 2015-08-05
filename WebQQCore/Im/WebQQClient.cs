@@ -106,7 +106,7 @@ namespace iQQ.Net.WebQQCore.Im
         }
 
 
-        public QQClientType ClientType => QQClientType.WEBQQ;
+        public QQClientType ClientType => QQClientType.WebQQ;
 
         /// <summary>
         /// 获取自己的账号实体
