@@ -144,14 +144,8 @@ namespace iQQ.Net.BatchHangQQ
                                         {
                                             var replyEvent = client.GetRobotReply(msg,
                                                 RobotType.Tuling).WaitFinalEvent(10000);
-                                            if (replyEvent.Type == QQActionEventType.EVT_OK)
-                                            {
-                                                text = new TextItem(replyEvent.Target as string);
-                                            }
-                                            else
-                                            {
-                                                text = new TextItem("这是自动回复");
-                                            }
+                                            text = replyEvent.Type == QQActionEventType.EVT_OK ? new TextItem(replyEvent.Target as string) 
+                                            : new TextItem("这是自动回复");
                                         }
                                         else
                                         {
@@ -216,7 +210,7 @@ namespace iQQ.Net.BatchHangQQ
                             {
                                 client.GetUserQQ(buddy, null);
                             }
-                            ShowMessage(string.Format("{0}：【{1}】发来抖动屏幕", client.Account.QQ, buddy.ShowName));
+                            ShowMessage(string.Format("{0}：【{1}】发来抖动屏幕", client.Account.QQ, buddy?.ShowName));
                             if (chkAutoReply.Checked)
                             {
                                 client.SendShake(buddy);
@@ -491,23 +485,15 @@ namespace iQQ.Net.BatchHangQQ
 
                     if (qqCount < 5)
                     {
-                        if (QQActionEventType.EVT_OK == client.GetBuddyList(_eventHandler).WaitFinalEvent().Type)
-                        {
-                            ShowMessage($"{client.Account.Username}-好友数量：{client.GetBuddyList().Count}");
-                        }
-                        else
-                        {
-                            ShowMessage(string.Format(client.Account.Username + "-获取好友列表失败"));
-                        }
+                        var actionEvent = await client.GetBuddyList(_eventHandler).WhenFinalEvent();
+                        ShowMessage(QQActionEventType.EVT_OK == actionEvent.Type
+                            ? $"{client.Account.Username}-好友数量：{client.GetBuddyList().Count}"
+                            : string.Format(client.Account.Username + "-获取好友列表失败"));
 
-                        if (QQActionEventType.EVT_OK == client.GetGroupList(_eventHandler).WaitFinalEvent().Type)
-                        {
-                            ShowMessage($"{client.Account.Username}-群数量：{client.GetGroupList().Count}");
-                        }
-                        else
-                        {
-                            ShowMessage(string.Format(client.Account.Username + "-获取群列表失败"));
-                        }
+                        actionEvent = await client.GetGroupList(_eventHandler).WhenFinalEvent();
+                        ShowMessage(QQActionEventType.EVT_OK == actionEvent.Type
+                            ? $"{client.Account.Username}-群数量：{client.GetGroupList().Count}"
+                            : string.Format(client.Account.Username + "-获取群列表失败"));
                     }
 
                     client.BeginPollMsg();
