@@ -9,6 +9,8 @@
         public const string USER_AGENT = "IQQ Client/1.2 dev";
         public const string URL_CHECK_VERIFY = "https://ssl.ptlogin2.qq.com/check";
         public const string URL_GET_CAPTCHA = "http://captcha.qq.com/getimage";
+        public const string URL_GET_QRCODE = "https://ssl.ptlogin2.qq.com/ptqrshow";
+        public const string URL_CHECK_QRCODE = "https://ssl.ptlogin2.qq.com/ptqrlogin";
         public const string REGXP_CHECK_VERIFY = "ptui_checkVC\\('(.*?)','(.*?)','(.*?)'(,\\s*'(.*?)')?\\)";
         public const string REGXP_LOGIN = "ptuiCB\\('(\\d+)','(\\d+)','(.*?)','(\\d+)','(.*?)', '(.*?)'\\)";
         public const string REGXP_JSON_SINGLE_RESULT = "\\{([\\s\\S]*)\\}";

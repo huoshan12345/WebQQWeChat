@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using iQQ.Net.WebQQCore.Im.Bean;
 using iQQ.Net.WebQQCore.Im.Core;
@@ -13,6 +14,25 @@ namespace iQQ.Net.WebQQCore.Im.Module
     /// </summary>
     public class ProcModule : AbstractModule
     {
+        public QQActionFuture CheckQRCode(QQActionEventHandler listener)
+        {
+            var future = new ProcActionFuture(listener, true);
+            var login = Context.GetModule<LoginModule>(QQModuleType.LOGIN);
+            login.CheckQRCode((sender, Event) =>
+            {
+                if (Event.Type == QQActionEventType.EVT_OK)
+                {
+                    DoCheckLoginSig(Event.Target as string, future);
+                }
+                else if (Event.Type == QQActionEventType.EVT_ERROR)
+                {
+                    future.NotifyActionEvent(QQActionEventType.EVT_ERROR, Event.Target);
+                }
+            });
+            return future;
+        }
+
+
         public QQActionFuture Login(QQActionEventHandler listener)
         {
             var future = new ProcActionFuture(listener, true);
@@ -58,7 +78,7 @@ namespace iQQ.Net.WebQQCore.Im.Module
                     var verify = new QQNotifyEventArgs.ImageVerify
                     {
                         Type = QQNotifyEventArgs.ImageVerify.VerifyType.LOGIN,
-                        Image = (Image) Event.Target,
+                        Image = (Image)Event.Target,
                         Reason = reason,
                         Future = future
                     };
@@ -257,7 +277,7 @@ namespace iQQ.Net.WebQQCore.Im.Module
                 else if (Event.Type == QQActionEventType.EVT_RETRY)
                 {
                     // System.err.println("Poll Retry:" + this);
-                    MyLogger.Default.Info("poll msg error, retrying....", (QQException) Event.Target);
+                    MyLogger.Default.Info("poll msg error, retrying....", (QQException)Event.Target);
                 }
             });
         }

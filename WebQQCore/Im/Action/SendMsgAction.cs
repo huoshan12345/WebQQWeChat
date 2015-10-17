@@ -2,6 +2,7 @@
 using iQQ.Net.WebQQCore.Im.Core;
 using iQQ.Net.WebQQCore.Im.Event;
 using iQQ.Net.WebQQCore.Im.Http;
+using iQQ.Net.WebQQCore.Util.Log;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
@@ -14,12 +15,11 @@ namespace iQQ.Net.WebQQCore.Im.Action
     /// </summary>
     public class SendMsgAction : AbstractHttpAction
     {
-        private QQMsg msg;
-
+        private readonly QQMsg msg;
+        private static long _msgId = 81690000;
         public SendMsgAction(QQContext context, QQActionEventHandler listener, QQMsg msg)
             : base(context, listener)
         {
-
             this.msg = msg;
         }
 
@@ -63,11 +63,11 @@ namespace iQQ.Net.WebQQCore.Im.Action
             }
             else
             {
-                // LOG.warn("unknown MsgType: " + msg.Type);
+                MyLogger.Default.Warn("unknown MsgType: " + msg.Type);
             }
 
             json.Add("content", msg.PackContentList());
-            json.Add("msg_id", 91310001 + "");
+            json.Add("msg_id", ++_msgId);
             json.Add("clientid", session.ClientId);
             json.Add("psessionid", session.SessionId);
 

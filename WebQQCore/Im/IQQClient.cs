@@ -25,10 +25,12 @@ namespace iQQ.Net.WebQQCore.Im
         /// </summary>
         QQClientType ClientType { get; }
 
-        /**
-         * <p>destroy.</p>
-         */
         void Destroy();
+
+
+        void GetQRCode(QQActionEventHandler qqActionListener);
+
+        void CheckQRCode(QQActionEventHandler qqActionListener);
 
         /// <summary>
         /// 登录

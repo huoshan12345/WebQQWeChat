@@ -10,6 +10,17 @@ namespace iQQ.Net.WebQQCore.Im.Module
     /// </summary>
     public class LoginModule : AbstractModule
     {
+
+        public QQActionFuture GetQRCode(QQActionEventHandler listener)
+        {
+            return PushHttpAction(new GetQRCodeAction(Context, listener));
+        }
+
+        public QQActionFuture CheckQRCode(QQActionEventHandler listener)
+        {
+            return PushHttpAction(new CheckQRCodeAction(Context, listener));
+        }
+
         public QQActionFuture CheckVerify(string qqAccount, QQActionEventHandler listener)
         {
             return PushHttpAction(new CheckVerifyAction(Context, listener, qqAccount));

@@ -223,7 +223,10 @@ namespace iQQ.Net.WebQQCore.Im.Action
                 var buddy = Context.Store.GetBuddyByUin(uin);
                 if (buddy == null)
                 {
-                    return new QQNotifyEvent(QQNotifyEventType.BUDDY_STATUS_CHANGE, null);
+                    buddy = new QQBuddy() {Uin = uin};
+                    Context.Store.AddBuddy(buddy);
+                    UserModule userModule = Context.GetModule<UserModule>(QQModuleType.USER);
+                    userModule.GetUserInfo(buddy, null);
                 }
                 var status = pollData["status"].ToString();
                 var clientType = pollData["client_type"].ToObject<int>();
@@ -261,16 +264,11 @@ namespace iQQ.Net.WebQQCore.Im.Action
                 msg.Date = ticks > DateTime.MaxValue.Ticks ? DateTime.Now : new DateTime(ticks);
                 if (msg.From == null)
                 {
-                    QQUser member = store.GetStrangerByUin(fromUin); // 搜索陌生人列表
-                    if (member == null)
-                    {
-                        member = new QQHalfStranger { Uin = fromUin };
-                        store.AddStranger((QQStranger)member);
-
-                        // 获取用户信息
-                        var userModule = Context.GetModule<UserModule>(QQModuleType.USER);
-                        userModule.GetUserInfo(member, null);
-                    }
+                    var member = new QQBuddy() { Uin = fromUin };
+                    store.AddBuddy(member);
+                    // 获取用户信息
+                    var userModule = Context.GetModule<UserModule>(QQModuleType.USER);
+                    userModule.GetUserInfo(member, null);
                     msg.From = member;
                 }
                 return new QQNotifyEvent(QQNotifyEventType.CHAT_MSG, msg);

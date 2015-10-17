@@ -756,5 +756,25 @@ namespace iQQ.Net.WebQQCore.Im
             var mod = GetModule<BuddyModule>(QQModuleType.BUDDY);
             mod.AddBuddy(listener, qq);
         }
+
+        /// <summary>
+        /// 获取登录二维码
+        /// </summary>
+        /// <param name="qqActionListener"></param>
+        public void GetQRCode(QQActionEventHandler qqActionListener)
+        {
+            LoginModule login = GetModule<LoginModule>(QQModuleType.LOGIN);
+            login.GetQRCode(qqActionListener);
+        }
+
+        /// <summary>
+        /// 检测登录二维码是否已经扫描
+        /// </summary>
+        /// <param name="qqActionListener"></param>
+        public void CheckQRCode(QQActionEventHandler qqActionListener)
+        {
+            ProcModule module = GetModule<ProcModule>(QQModuleType.PROC);
+            module.CheckQRCode(qqActionListener);
+        }
     }
 }
