@@ -81,7 +81,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
                     long uin = jsonFriend["uin"].ToObject<long>();
                     buddy.Uin = uin;
                     buddy.Status = QQStatus.OFFLINE;
-                    buddy.ClientType = QQClientType.UNKNOWN;
+                    buddy.ClientType = QQClientType.Unknown;
                     // 添加到列表中
                     int category = jsonFriend["categories"].ToObject<int>();
                     QQCategory qqCategory = store.GetCategoryByIndex(category);

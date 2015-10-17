@@ -5,15 +5,10 @@ using Newtonsoft.Json.Linq;
 namespace iQQ.Net.WebQQCore.Im.Bean.Content
 {
     [Serializable]
-    public class FaceItem : ContentItem
+    public class FaceItem : IContentItem
     {
         /**	 * 表情的ID	 */
-        private int id;
-        public int Id
-        {
-            get { return id; }
-            set { id = value; }
-        }
+        public int Id { get; set; }
 
         public FaceItem() { }
 
@@ -24,24 +19,24 @@ namespace iQQ.Net.WebQQCore.Im.Bean.Content
 
         public FaceItem(int id)
         {
-            this.id = id;
+            Id = id;
         }
 
-        public ContentItemType Type { get { return ContentItemType.FACE; } }
+        public ContentItemType Type => ContentItemType.Face;
 
         public object ToJson()
         {
-            JArray json = new JArray();
+            var json = new JArray();
             json.Add("face");
-            json.Add(id);
+            json.Add(Id);
             return json;
         }
         public void FromJson(string text)
         {
             try
             {
-                JArray json = JArray.Parse(text);
-                id = int.Parse(json[1].ToString());
+                var json = JArray.Parse(text);
+                Id = int.Parse(json[1].ToString());
             }
             catch (JsonException e)
             {

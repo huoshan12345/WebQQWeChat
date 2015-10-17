@@ -32,7 +32,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
                 foreach (QQGroupMember member in group.Members)
                 {
                     member.Status = QQStatus.OFFLINE;
-                    member.ClientType = QQClientType.UNKNOWN;
+                    member.ClientType = QQClientType.Unknown;
                 }
 
                 //result/stats

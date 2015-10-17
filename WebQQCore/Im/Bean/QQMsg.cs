@@ -58,13 +58,13 @@ namespace iQQ.Net.WebQQCore.Im.Bean
         /// <summary>
         /// 消息列表
         /// </summary>
-        public List<ContentItem> ContentList { get; set; } = new List<ContentItem>();
+        public List<IContentItem> ContentList { get; set; } = new List<IContentItem>();
 
         public string PackContentList()
         {
             // ["font",{"size":10,"color":"808080","style":[0,0,0],"name":"\u65B0\u5B8B\u4F53"}]
-            JArray json = new JArray();
-            foreach (ContentItem contentItem in ContentList)
+            var json = new JArray();
+            foreach (var contentItem in ContentList)
             {
                 json.Add(contentItem.ToJson());
             }
@@ -75,14 +75,14 @@ namespace iQQ.Net.WebQQCore.Im.Bean
         {
             try
             {
-                JArray json = JArray.Parse(text);
-                foreach (JToken t in json)
+                var json = JArray.Parse(text);
+                foreach (var t in json)
                 {
                     if (t is JArray)
                     {
-                        JArray items = t.ToObject<JArray>();
-                        ContentItemType contentItemType = ContentItemType.ValueOfRaw(items[0].ToString());
-                        string item = JsonConvert.SerializeObject(items);
+                        var items = t.ToObject<JArray>();
+                        var contentItemType = ContentItemType.ValueOfRaw(items[0].ToString());
+                        var item = JsonConvert.SerializeObject(items);
                         switch (contentItemType.Name.ToUpper())
                         {
                             case "FACE":
@@ -121,12 +121,12 @@ namespace iQQ.Net.WebQQCore.Im.Bean
             }
         }
 
-        public void AddContentItem(ContentItem contentItem)
+        public void AddContentItem(IContentItem contentItem)
         {
             ContentList.Add(contentItem);
         }
 
-        public void DeleteContentItem(ContentItem contentItem)
+        public void DeleteContentItem(IContentItem contentItem)
         {
             ContentList.Remove(contentItem);
         }
@@ -146,8 +146,8 @@ namespace iQQ.Net.WebQQCore.Im.Bean
 
         public string GetText()
         {
-            StringBuilder buffer = new StringBuilder();
-            foreach (ContentItem item in ContentList)
+            var buffer = new StringBuilder();
+            foreach (var item in ContentList)
             {
                 buffer.Append(item.ToText());
             }

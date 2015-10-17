@@ -3,7 +3,7 @@
     /// <summary>
     /// 对方设置的加好友策略
     /// </summary>
-    public enum QQAllow : int
+    public enum QQAllow
     {
         /// <summary>允许所有人添加</summary>
         ALLOW_ALL, // 0

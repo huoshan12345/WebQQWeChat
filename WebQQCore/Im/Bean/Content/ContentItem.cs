@@ -1,6 +1,6 @@
 ﻿namespace iQQ.Net.WebQQCore.Im.Bean.Content
 {
-    public interface ContentItem
+    public interface IContentItem
     {
         ContentItemType Type { get; }
         object ToJson();
@@ -11,45 +11,28 @@
     public sealed class ContentItemType
     {
         /** 字体 */
-        public static readonly ContentItemType FONT = new ContentItemType("font");
-        public static readonly ContentItemType TEXT = new ContentItemType("text");/** 文字 */
-        public static readonly ContentItemType FACE = new ContentItemType("face");/** 表情 */
-        public static readonly ContentItemType OFFPIC = new ContentItemType("offpic");/** 离线图片 */
-        public static readonly ContentItemType CFACE = new ContentItemType("cface");/** 群图片 */
+        public static readonly ContentItemType Font = new ContentItemType("font");
+        public static readonly ContentItemType Text = new ContentItemType("text");/** 文字 */
+        public static readonly ContentItemType Face = new ContentItemType("face");/** 表情 */
+        public static readonly ContentItemType Offpic = new ContentItemType("offpic");/** 离线图片 */
+        public static readonly ContentItemType Cface = new ContentItemType("cface");/** 群图片 */
 
-        private string name;
-        public string Name
-        {
-            get { return name; }
-            set { name = value; }
-        }
+        public string Name { get; set; }
 
         ContentItemType(string name)
         {
-            this.name = name;
+            Name = name;
         }
 
         public static ContentItemType ValueOfRaw(string txt)
         {
-            if (txt.Equals("font"))
+            switch (txt)
             {
-                return FONT;
-            }
-            else if (txt.Equals("face"))
-            {
-                return FACE;
-            }
-            else if (txt.Equals("offpic"))
-            {
-                return OFFPIC;
-            }
-            else if (txt.Equals("cface"))
-            {
-                return CFACE;
-            }
-            else
-            {
-                return TEXT;
+                case "font": return Font;
+                case "face": return Face;
+                case "offpic": return Offpic;
+                case "cface": return Cface;
+                default: return Text;
             }
         }
 
