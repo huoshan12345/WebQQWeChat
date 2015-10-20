@@ -12,9 +12,11 @@ namespace iQQ.Net.WebQQCore
         private readonly static QQNotifyHandler handler = (sender, Event) =>
         {
             var client = sender as IQQClient;
-            if (client != null)
+            if (client == null) return;
+
+            switch (Event.Type)
             {
-                if (Event.Type == QQNotifyEventType.CHAT_MSG)
+                case QQNotifyEventType.CHAT_MSG:
                 {
                     var msg = (QQMsg)Event.Target;
                     try
@@ -25,12 +27,14 @@ namespace iQQ.Net.WebQQCore
                     {
                         Console.WriteLine(client.Account.QQ + e.StackTrace);
                     }
+                    break;
                 }
-                else if (Event.Type == QQNotifyEventType.KICK_OFFLINE)
+                case QQNotifyEventType.KICK_OFFLINE:
                 {
                     Console.WriteLine(client.Account.QQ + "-被踢下线: " + (string)Event.Target);
+                    break;
                 }
-                else if (Event.Type == QQNotifyEventType.CAPACHA_VERIFY)
+                case QQNotifyEventType.CAPACHA_VERIFY:
                 {
                     try
                     {
@@ -46,20 +50,20 @@ namespace iQQ.Net.WebQQCore
                         // TODO Auto-generated catch block
                         Console.WriteLine(client.Account.QQ + e.StackTrace);
                     }
+                    break;
                 }
-                else if (Event.Type == QQNotifyEventType.NET_ERROR)
-                {
-                    Console.WriteLine(client.Account.QQ + "-出错：" + Event.Target.ToString());
-                }
-                else if (Event.Type == QQNotifyEventType.UNKNOWN_ERROR)
-                {
-                    Console.WriteLine(client.Account.QQ + "-出错：" + Event.Target.ToString());
-                }
-                else
-                {
-                    Console.WriteLine(client.Account.QQ + "-" + Event.Type + ", " + Event.Target);
-                }
+
+                case QQNotifyEventType.UNKNOWN_ERROR:
+                case QQNotifyEventType.NET_ERROR:
+                Console.WriteLine(client.Account.QQ + "-出错：" + Event.Target.ToString());
+                break;
+
+                default:
+                Console.WriteLine(client.Account.QQ + "-" + Event.Type + ", " + Event.Target);
+                break;
+
             }
+
         };
 
 
@@ -69,7 +73,7 @@ namespace iQQ.Net.WebQQCore
             var threadActorDispatcher = new ThreadActorDispatcher();
             IQQClient client = null;
 
-start:
+            start:
             Console.Write("请输入QQ号：");
             var username = Console.ReadLine();
             Console.Write("请输入QQ密码：");

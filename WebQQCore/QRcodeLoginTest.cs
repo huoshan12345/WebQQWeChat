@@ -37,7 +37,7 @@ namespace iQQ.Net.WebQQCore
 
           }, new ThreadActorDispatcher());
 
-        public static void Main(String[] args)
+        public static void Main(string[] args)
         {
             // 获取二维码
             mClient.GetQRCode((sender, Event) =>
