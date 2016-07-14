@@ -30,9 +30,9 @@ namespace iQQ.Net.WebQQCore
               switch (Event.Type)
               {
                   case QQNotifyEventType.CHAT_MSG:
-                  var revMsg = (QQMsg)Event.Target;
-                  SendMsg(revMsg.From);
-                  break;
+                      var revMsg = (QQMsg)Event.Target;
+                      SendMsg(revMsg.From);
+                      break;
               }
 
           }, new ThreadActorDispatcher());
@@ -64,35 +64,36 @@ namespace iQQ.Net.WebQQCore
             // 检查二维码状态
             mClient.CheckQRCode((sender, Event) =>
             {
-                start:
                 Console.WriteLine("checkQRCode " + Event);
                 switch (Event.Type)
                 {
                     case QQActionEventType.EVT_OK:
-                    {                  
-                        // 扫描通过,登录成功
-                        mClient.BeginPollMsg();
-                        break;
-                    }
+                        {
+                            // 扫描通过,登录成功
+                            mClient.BeginPollMsg();
+                            break;
+                        }
 
                     case QQActionEventType.EVT_ERROR:
-                    {
-                        var ex = (QQException)(Event.Target);
-                        var code = ex.ErrorCode;
-                        switch (code)
                         {
-                            // 二维码有效,等待用户扫描
-                            // 二维码已经扫描,等用户允许登录
-                            case QQErrorCode.QRCODE_OK:
-                            case QQErrorCode.QRCODE_AUTH:
-                            Thread.Sleep(3000);
-                            // 发现检查二维码状态
-                            goto start;
+                            var ex = (QQException)(Event.Target);
+                            var code = ex.ErrorCode;
+                            switch (code)
+                            {
+                                // 二维码有效,等待用户扫描
+                                // 二维码已经扫描,等用户允许登录
+                                case QQErrorCode.QRCODE_OK:
+                                case QQErrorCode.QRCODE_AUTH:
+                                    Thread.Sleep(5000);
+                                    break;
+                                    // 发现检查二维码状态
+                            }
+                            break;
                         }
-                        break;
-                    }
                 }
             });
+
+            Console.ReadKey();
         }
 
         public static void SendMsg(QQUser user)
