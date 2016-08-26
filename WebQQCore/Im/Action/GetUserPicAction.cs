@@ -17,7 +17,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
         private QQMsg msg;
         private Stream picOut;
 
-        public GetUserPicAction(QQContext context, QQActionEventHandler listener,
+        public GetUserPicAction(IQQContext context, QQActionEventHandler listener,
             CFaceItem cface, QQMsg msg, Stream picOut)
             : base(context, listener)
         {

@@ -14,7 +14,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
     /// </summary>
     public class GetCustomFaceSigAction : AbstractHttpAction
     {
-        public GetCustomFaceSigAction(QQContext context, QQActionEventHandler listener) : base(context, listener) { }
+        public GetCustomFaceSigAction(IQQContext context, QQActionEventHandler listener) : base(context, listener) { }
 
         public override QQHttpRequest OnBuildRequest()
         {

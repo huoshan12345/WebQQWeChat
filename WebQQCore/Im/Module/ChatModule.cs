@@ -2,6 +2,7 @@
 using iQQ.Net.WebQQCore.Im.Action;
 using iQQ.Net.WebQQCore.Im.Bean;
 using iQQ.Net.WebQQCore.Im.Bean.Content;
+using iQQ.Net.WebQQCore.Im.Core;
 using iQQ.Net.WebQQCore.Im.Event;
 using iQQ.Net.WebQQCore.Im.Event.Future;
 using iQQ.Net.WebQQCore.Util;
@@ -15,6 +16,11 @@ namespace iQQ.Net.WebQQCore.Im.Module
     /// </summary>
     public class ChatModule : AbstractModule
     {
+        public override QQModuleType GetModuleType()
+        {
+            return QQModuleType.CHAT;
+        }
+
         private QQActionFuture DoSendMsg(QQMsg msg, QQActionEventHandler listener)
         {
             return PushHttpAction(new SendMsgAction(Context, listener, msg));

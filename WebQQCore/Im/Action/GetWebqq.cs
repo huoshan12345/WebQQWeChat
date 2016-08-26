@@ -15,10 +15,10 @@ namespace iQQ.Net.WebQQCore.Im.Action
         /**
          * <p>Constructor for AbstractHttpAction.</p>
          *
-         * @param context  a {@link QQContext} object.
+         * @param context  a {@link IQQContext} object.
          * @param listener a {@link QQActionListener} object.
          */
-        public GetWebqq(QQContext context, QQActionEventHandler listener) : base(context, listener)
+        public GetWebqq(IQQContext context, QQActionEventHandler listener) : base(context, listener)
         {
 
         }

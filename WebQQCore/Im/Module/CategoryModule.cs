@@ -1,4 +1,5 @@
 ﻿using iQQ.Net.WebQQCore.Im.Action;
+using iQQ.Net.WebQQCore.Im.Core;
 using iQQ.Net.WebQQCore.Im.Event;
 
 namespace iQQ.Net.WebQQCore.Im.Module
@@ -12,6 +13,11 @@ namespace iQQ.Net.WebQQCore.Im.Module
         public QQActionFuture GetCategoryList(QQActionEventHandler listener)
         {
             return PushHttpAction(new GetBuddyListAction(this.Context, listener));
+        }
+
+        public override QQModuleType GetModuleType()
+        {
+            return QQModuleType.CATEGORY;
         }
     }
 }

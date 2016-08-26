@@ -15,7 +15,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
     {
         private readonly string _qqAccount;
 
-        public CheckVerifyAction(QQContext context, QQActionEventHandler listener, string qqAccount)
+        public CheckVerifyAction(IQQContext context, QQActionEventHandler listener, string qqAccount)
             : base(context, listener)
         {
             _qqAccount = qqAccount;

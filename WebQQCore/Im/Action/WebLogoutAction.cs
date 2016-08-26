@@ -13,7 +13,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
     /// </summary>
     public class WebLogoutAction : AbstractHttpAction
     {
-        public WebLogoutAction(QQContext context, QQActionEventHandler listener) : base(context, listener) { }
+        public WebLogoutAction(IQQContext context, QQActionEventHandler listener) : base(context, listener) { }
 
         public override QQHttpRequest OnBuildRequest()
         {

@@ -21,13 +21,13 @@ namespace iQQ.Net.WebQQCore.Im.Action
         /**
          * <p>Constructor for GetGroupPicAction.</p>
          *
-         * @param context a {@link iqq.im.core.QQContext} object.
+         * @param context a {@link iqq.im.core.IQQContext} object.
          * @param listener a {@link iqq.im.IQQActionListener} object.
          * @param cface a {@link iqq.im.bean.content.CFaceItem} object.
          * @param msg a {@link iqq.im.bean.QQMsg} object.
          * @param picOut a {@link java.io.OutputStream} object.
          */
-        public GetGroupPicAction(QQContext context, QQActionEventHandler listener,
+        public GetGroupPicAction(IQQContext context, QQActionEventHandler listener,
                                             CFaceItem cface, QQMsg msg, Stream picOut)
             : base(context, listener)
         {

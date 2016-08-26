@@ -17,7 +17,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
     {
         private readonly QQMsg msg;
         private static long _msgId = 81690000;
-        public SendMsgAction(QQContext context, QQActionEventHandler listener, QQMsg msg)
+        public SendMsgAction(IQQContext context, QQActionEventHandler listener, QQMsg msg)
             : base(context, listener)
         {
             this.msg = msg;

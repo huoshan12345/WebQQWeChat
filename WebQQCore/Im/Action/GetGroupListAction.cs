@@ -16,7 +16,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
     /// </summary>
     public class GetGroupListAction : AbstractHttpAction
     {
-        public GetGroupListAction(QQContext context, QQActionEventHandler listener) : base(context, listener) { }
+        public GetGroupListAction(IQQContext context, QQActionEventHandler listener) : base(context, listener) { }
 
         public override QQHttpRequest OnBuildRequest()
         {

@@ -14,7 +14,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
     /// </summary>
     public class GetOnlineFriendAction : AbstractHttpAction
     {
-        public GetOnlineFriendAction(QQContext context, QQActionEventHandler listener) : base(context, listener) { }
+        public GetOnlineFriendAction(IQQContext context, QQActionEventHandler listener) : base(context, listener) { }
 
         public override QQHttpRequest OnBuildRequest()
         {

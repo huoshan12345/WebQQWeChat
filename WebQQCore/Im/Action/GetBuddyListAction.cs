@@ -17,7 +17,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
     public class GetBuddyListAction : AbstractHttpAction
     {
  
-        public GetBuddyListAction(QQContext context, QQActionEventHandler listener) : base(context, listener) { }
+        public GetBuddyListAction(IQQContext context, QQActionEventHandler listener) : base(context, listener) { }
 
         public override QQHttpRequest OnBuildRequest()
         {

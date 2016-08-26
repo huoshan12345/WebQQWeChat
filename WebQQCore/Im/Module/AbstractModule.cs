@@ -10,11 +10,11 @@ namespace iQQ.Net.WebQQCore.Im.Module
     /// <para>基础模块</para>
     /// <para>@author solosky</para>
     /// </summary>
-    public class AbstractModule : IQQModule
+    public abstract class AbstractModule : IQQModule
     {
-        public QQContext Context { get; private set; }
+        public IQQContext Context { get; private set; }
 
-        public void Init(QQContext context)
+        public void Init(IQQContext context)
         {
             Context = context;
         }
@@ -30,5 +30,6 @@ namespace iQQ.Net.WebQQCore.Im.Module
             return future;
         }
 
+        public abstract QQModuleType GetModuleType();
     }
 }

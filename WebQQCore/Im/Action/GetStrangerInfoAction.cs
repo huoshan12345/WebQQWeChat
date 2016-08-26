@@ -19,7 +19,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
     {
         private QQUser user;
 
-        public GetStrangerInfoAction(QQContext context, QQActionEventHandler listener,
+        public GetStrangerInfoAction(IQQContext context, QQActionEventHandler listener,
                 QQUser user)
             : base(context, listener)
         {

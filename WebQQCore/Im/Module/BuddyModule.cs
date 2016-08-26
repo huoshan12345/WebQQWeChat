@@ -1,4 +1,5 @@
 ﻿using iQQ.Net.WebQQCore.Im.Action;
+using iQQ.Net.WebQQCore.Im.Core;
 using iQQ.Net.WebQQCore.Im.Event;
 
 namespace iQQ.Net.WebQQCore.Im.Module
@@ -22,6 +23,11 @@ namespace iQQ.Net.WebQQCore.Im.Module
         public QQActionFuture AddBuddy(QQActionEventHandler listener, string account)
         {
             return PushHttpAction(new AcceptBuddyAddAction(Context, listener, account));
+        }
+
+        public override QQModuleType GetModuleType()
+        {
+            return QQModuleType.BUDDY;
         }
     }
 

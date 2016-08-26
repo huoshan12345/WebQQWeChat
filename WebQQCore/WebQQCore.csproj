@@ -149,7 +149,7 @@
     <Compile Include="Im\Bean\QQStatus.cs" />
     <Compile Include="Im\Bean\QQStranger.cs" />
     <Compile Include="Im\Bean\QQUser.cs" />
-    <Compile Include="Im\Core\QQContext.cs" />
+    <Compile Include="Im\Core\IQQContext.cs" />
     <Compile Include="Im\Core\IQQLifeCycle.cs" />
     <Compile Include="Im\Core\IQQModule.cs" />
     <Compile Include="Im\Core\IQQService.cs" />

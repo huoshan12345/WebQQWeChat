@@ -69,7 +69,7 @@ namespace iQQ.Net.WebQQCore.Im.Actor
             while (DispatchAction(_pollActorQueue.Take())) { };
         }
 
-        public void Init(QQContext context)
+        public void Init(IQQContext context)
         {
             if (_dispatchThread == null)
             {

@@ -17,7 +17,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
 
         private QQUser buddy;
 
-        public GetFriendAccoutAction(QQContext context, QQActionEventHandler listener, QQUser buddy)
+        public GetFriendAccoutAction(IQQContext context, QQActionEventHandler listener, QQUser buddy)
             : base(context, listener)
         {
 

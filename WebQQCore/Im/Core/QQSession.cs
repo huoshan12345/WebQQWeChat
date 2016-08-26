@@ -30,7 +30,8 @@ namespace iQQ.Net.WebQQCore.Im.Core
             {
                 if (_clientId == 0)
                 {
-                    _clientId = _random.Next(); //random??
+                   // _clientId = new Random().Next(); //random??
+                    _clientId = 53999199;
                 }
                 return _clientId;
             }
@@ -48,8 +49,6 @@ namespace iQQ.Net.WebQQCore.Im.Core
         public int Port { get; set; }
         public int PollErrorCnt { get; set; }
         public string CapCd { get; set; }
-
-        private readonly Random _random = new Random();
         private long _clientId;
     }
 

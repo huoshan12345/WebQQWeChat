@@ -18,7 +18,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
     /// </summary>
     public class PollMsgAction : AbstractHttpAction
     {
-        public PollMsgAction(QQContext context, QQActionEventHandler listener) : base(context, listener) { }
+        public PollMsgAction(IQQContext context, QQActionEventHandler listener) : base(context, listener) { }
 
         public override QQHttpRequest OnBuildRequest()
         {
@@ -27,8 +27,8 @@ namespace iQQ.Net.WebQQCore.Im.Action
             {
                 {"clientid", session.ClientId},
                 {"psessionid", session.SessionId},
-                {"key", 0},
-                {"ids", new JArray()}
+                {"key", ""},
+                {"ptwebqq", session.Ptwebqq}
             };
             // 暂时不知道什么用的
             // 同上
@@ -40,22 +40,24 @@ namespace iQQ.Net.WebQQCore.Im.Action
             req.ReadTimeout = 60 * 1000;
             req.ConnectTimeout = 60 * 1000;
             req.AddHeader("Referer", QQConstants.REFFER);
-
+            req.AddHeader("Origin", QQConstants.ORIGIN);
             return req;
         }
 
         public override void OnHttpFinish(QQHttpResponse response)
         {
-            //如果返回的内容为空，认为这次PollMsg仍然成功
-            if (response.GetContentLength() == 0)
-            {
-                // LOG.debug("PollMsgAction: empty response!!!!");
-                NotifyActionEvent(QQActionEventType.EVT_OK, new List<QQNotifyEvent>());
-            }
-            else
-            {
-                base.OnHttpFinish(response);
-            }
+            ////如果返回的内容为空，认为这次PollMsg仍然成功
+            //if (response.GetContentLength() == 0)
+            //{
+            //    // LOG.debug("PollMsgAction: empty response!!!!");
+            //    NotifyActionEvent(QQActionEventType.EVT_OK, new List<QQNotifyEvent>());
+            //}
+            //else
+            //{
+            //    base.OnHttpFinish(response);
+            //}
+
+            base.OnHttpFinish(response);
         }
 
         public override void OnHttpStatusOK(QQHttpResponse response)
@@ -254,7 +256,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
                 var msg = new QQMsg
                 {
                     Id = pollData["msg_id"].ToObject<long>(),
-                    Id2 = pollData["msg_id2"].ToObject<long>()
+                    Id2 = pollData["msg_id2"]?.ToObject<long>() ?? 0
                 };
                 msg.ParseContentList(JsonConvert.SerializeObject(pollData["content"]));
                 msg.Type = QQMsgType.BUDDY_MSG;
@@ -296,11 +298,11 @@ namespace iQQ.Net.WebQQCore.Im.Action
                 var msg = new QQMsg
                 {
                     Id = pollData["msg_id"].ToObject<long>(),
-                    Id2 = pollData["msg_id2"].ToObject<long>()
+                    Id2 = pollData["msg_id2"]?.ToObject<long>() ?? 0
                 };
                 var fromUin = pollData["send_uin"].ToObject<long>();
                 var groupCode = pollData["group_code"].ToObject<long>();
-                var groupId = pollData["info_seq"].ToObject<long>(); // 真实群号码
+                // var groupId = pollData["info_seq"].ToObject<long>(); // 真实群号码
                 var group = store.GetGroupByCode(groupCode);
                 if (group == null)
                 {
@@ -308,16 +310,16 @@ namespace iQQ.Net.WebQQCore.Im.Action
                     group = new QQGroup
                     {
                         Code = groupCode,
-                        Gid = groupId
+                        // Gid = groupId
                     };
                     // put to store
                     store.AddGroup(group);
                     groupModule.GetGroupInfo(group, null);
                 }
-                if (group.Gid <= 0)
-                {
-                    group.Gid = groupId;
-                }
+                //if (group.Gid <= 0)
+                //{
+                //    group.Gid = groupId;
+                //}
 
                 msg.ParseContentList(JsonConvert.SerializeObject(pollData["content"]));
                 msg.Type = QQMsgType.GROUP_MSG;

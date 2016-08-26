@@ -14,7 +14,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
         private List<QQEmail> markList;
 
         public MarkEmailAction(bool status, List<QQEmail> markList,
-                QQContext context, QQActionEventHandler listener)
+                IQQContext context, QQActionEventHandler listener)
             : base(context, listener)
         {
             this.status = status;

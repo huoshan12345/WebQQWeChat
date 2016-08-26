@@ -1,5 +1,6 @@
 ﻿using iQQ.Net.WebQQCore.Im.Action;
 using iQQ.Net.WebQQCore.Im.Bean;
+using iQQ.Net.WebQQCore.Im.Core;
 using iQQ.Net.WebQQCore.Im.Event;
 
 namespace iQQ.Net.WebQQCore.Im.Module
@@ -10,6 +11,11 @@ namespace iQQ.Net.WebQQCore.Im.Module
     /// </summary>
     public class DiscuzModule : AbstractModule
     {
+        public override QQModuleType GetModuleType()
+        {
+            return QQModuleType.DISCUZ;
+        }
+
         public QQActionFuture GetDiscuzList(QQActionEventHandler listener)
         {
             return PushHttpAction(new GetDiscuzListAction(this.Context, listener));

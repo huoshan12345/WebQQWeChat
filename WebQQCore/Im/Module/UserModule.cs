@@ -1,5 +1,6 @@
 ﻿using iQQ.Net.WebQQCore.Im.Action;
 using iQQ.Net.WebQQCore.Im.Bean;
+using iQQ.Net.WebQQCore.Im.Core;
 using iQQ.Net.WebQQCore.Im.Event;
 
 namespace iQQ.Net.WebQQCore.Im.Module
@@ -9,6 +10,11 @@ namespace iQQ.Net.WebQQCore.Im.Module
     /// </summary>
     public class UserModule : AbstractModule
     {
+        public override QQModuleType GetModuleType()
+        {
+            return QQModuleType.USER;
+        }
+
         public QQActionFuture GetUserInfo(QQUser user, QQActionEventHandler listener)
         {
             return PushHttpAction(new GetFriendInfoAction(Context, listener, user));

@@ -15,7 +15,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
     {
         private QQDiscuz discuz;
  
-        public GetDiscuzInfoAction(QQContext context, QQActionEventHandler listener, QQDiscuz discuz)
+        public GetDiscuzInfoAction(IQQContext context, QQActionEventHandler listener, QQDiscuz discuz)
             : base(context, listener)
         {
 

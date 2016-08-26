@@ -145,7 +145,7 @@ namespace iQQ.Net.WebQQCore.Im.Service
             return qqHttpCookie;
         }
 
-        public override void Init(QQContext context)
+        public override void Init(IQQContext context)
         {
             base.Init(context);
             try

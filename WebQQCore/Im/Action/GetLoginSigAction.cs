@@ -12,7 +12,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
     /// </summary>
     public class GetLoginSigAction : AbstractHttpAction
     {
-        public GetLoginSigAction(QQContext context, QQActionEventHandler listener) : base(context, listener) { }
+        public GetLoginSigAction(IQQContext context, QQActionEventHandler listener) : base(context, listener) { }
 
         public override QQHttpRequest OnBuildRequest()
         {

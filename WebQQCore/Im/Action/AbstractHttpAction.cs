@@ -15,12 +15,12 @@ namespace iQQ.Net.WebQQCore.Im.Action
     public abstract class AbstractHttpAction : IHttpAction
     {
         private int _retryTimes;
-        public QQContext Context { get; }
+        public IQQContext Context { get; }
         public QQActionFuture ActionFuture { get; set; }
         public Task<QQHttpResponse> ResponseFuture { get; set; }
         public QQActionEventHandler Listener { get; set; }
 
-        protected AbstractHttpAction(QQContext context, QQActionEventHandler listener)
+        protected AbstractHttpAction(IQQContext context, QQActionEventHandler listener)
         {
             Context = context;
             Listener = listener;

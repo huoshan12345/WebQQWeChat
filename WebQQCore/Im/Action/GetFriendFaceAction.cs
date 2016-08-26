@@ -18,7 +18,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
 
         private QQUser user;
         
-        public GetFriendFaceAction(QQContext context, QQActionEventHandler listener,QQUser user)
+        public GetFriendFaceAction(IQQContext context, QQActionEventHandler listener,QQUser user)
             : base(context, listener)
         {
             this.user = user;

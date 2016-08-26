@@ -17,7 +17,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
 
         private QQGroup group;
 
-        public GetGroupAccoutAction(QQContext context, QQActionEventHandler listener, QQGroup group)
+        public GetGroupAccoutAction(IQQContext context, QQActionEventHandler listener, QQGroup group)
             : base(context, listener)
         {
             this.group = group;

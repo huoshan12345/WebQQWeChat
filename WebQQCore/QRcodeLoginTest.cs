@@ -23,7 +23,7 @@ namespace iQQ.Net.WebQQCore
     public class QRcodeLoginTest
     {
 
-        static IQQClient mClient = new WebQQClient("", "", (sender, Event) =>
+        static readonly IQQClient mClient = new WebQQClient("", "", (sender, Event) =>
           {
               Console.WriteLine(Event);
 

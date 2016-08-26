@@ -14,7 +14,7 @@ using iQQ.Net.WebQQCore.Util.Log;
 
 namespace iQQ.Net.WebQQCore.Im
 {
-    public class WebQQClient : IQQClient, QQContext
+    public class WebQQClient : IQQClient, IQQContext
     {
         private readonly Dictionary<QQServiceType, IQQService> _services;
         private readonly Dictionary<QQModuleType, IQQModule> _modules;

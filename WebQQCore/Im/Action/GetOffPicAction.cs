@@ -17,7 +17,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
         private QQMsg msg;
         private Stream picOut;
 
-        public GetOffPicAction(QQContext context, QQActionEventHandler listener,
+        public GetOffPicAction(IQQContext context, QQActionEventHandler listener,
             OffPicItem offpic, QQMsg msg, Stream picOut)
             : base(context, listener)
         {

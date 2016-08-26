@@ -15,7 +15,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
     {
         private QQUser user;
 
-        public SendInputNotifyAction(QQContext context, QQActionEventHandler listener, QQUser user)
+        public SendInputNotifyAction(IQQContext context, QQActionEventHandler listener, QQUser user)
             : base(context, listener)
         {
 

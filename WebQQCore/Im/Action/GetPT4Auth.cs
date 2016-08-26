@@ -14,7 +14,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
     /// </summary>
     public class GetPT4Auth : AbstractHttpAction
     {
-        public GetPT4Auth(QQContext context, QQActionEventHandler listener) : base(context, listener) { }
+        public GetPT4Auth(IQQContext context, QQActionEventHandler listener) : base(context, listener) { }
 
         public override QQHttpRequest OnBuildRequest()
         {

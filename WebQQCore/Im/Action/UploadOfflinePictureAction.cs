@@ -20,7 +20,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
         private string file;
         private QQUser user;
 
-        public UploadOfflinePictureAction(QQContext context,
+        public UploadOfflinePictureAction(IQQContext context,
                 QQActionEventHandler listener, QQUser user, string file)
             : base(context, listener)
         {

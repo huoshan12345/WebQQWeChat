@@ -13,7 +13,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
     /// </summary>
     public class GetDiscuzListAction : AbstractHttpAction
     {
-        public GetDiscuzListAction(QQContext context, QQActionEventHandler listener) : base(context, listener) { }
+        public GetDiscuzListAction(IQQContext context, QQActionEventHandler listener) : base(context, listener) { }
 
         public override QQHttpRequest OnBuildRequest()
         {

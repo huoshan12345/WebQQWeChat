@@ -12,7 +12,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
     {
         private readonly string _account;
 
-        public AcceptBuddyAddAction(QQContext context, QQActionEventHandler listener, string account)
+        public AcceptBuddyAddAction(IQQContext context, QQActionEventHandler listener, string account)
             : base(context, listener)
         {
             this._account = account;

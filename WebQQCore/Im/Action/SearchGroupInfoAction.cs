@@ -17,7 +17,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
 
         private QQGroupSearchList buddy;
   
-        public SearchGroupInfoAction(QQContext context, QQActionEventHandler listener, QQGroupSearchList buddy)
+        public SearchGroupInfoAction(IQQContext context, QQActionEventHandler listener, QQGroupSearchList buddy)
             : base(context, listener)
         {
 

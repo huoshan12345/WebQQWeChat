@@ -20,7 +20,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
 
         private string file;
 
-        public UploadCustomFaceAction(QQContext context, QQActionEventHandler listener, string file)
+        public UploadCustomFaceAction(IQQContext context, QQActionEventHandler listener, string file)
             : base(context, listener)
         {
 
