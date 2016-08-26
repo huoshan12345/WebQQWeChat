@@ -35,7 +35,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
 
             var req = CreateHttpRequest("POST", QQConstants.URL_POLL_MSG);
             req.AddPostValue("r", JsonConvert.SerializeObject(json));
-            req.AddPostValue("clientid", session.ClientId + "");
+            req.AddPostValue("clientid", session.ClientId);
             req.AddPostValue("psessionid", session.SessionId);
             req.ReadTimeout = 60 * 1000;
             req.ConnectTimeout = 60 * 1000;
@@ -303,7 +303,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
                 var fromUin = pollData["send_uin"].ToObject<long>();
                 var groupCode = pollData["group_code"].ToObject<long>();
                 // var groupId = pollData["info_seq"].ToObject<long>(); // 真实群号码
-                var group = store.GetGroupByCode(groupCode);
+                var group = store.GetGroupByGin(groupCode);
                 if (group == null)
                 {
                     var groupModule = Context.GetModule<GroupModule>(QQModuleType.GROUP);
@@ -481,7 +481,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
                         {
                             QQ = pollData["ruin"].ToObject<long>(),
                             Uin = fromUin,
-                            Nickname = pollData["ruin"] + ""
+                            Nickname = pollData["ruin"].ToString()
                         };
                         store.AddStranger((QQStranger)user);
 

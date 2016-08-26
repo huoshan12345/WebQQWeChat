@@ -36,7 +36,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
             {
                 if (g.Gin > 0)
                 {
-                    groupmask.Add(g.Gin + "", g.Mask + "");
+                    groupmask.Add(g.Gin.ToString(), g.Mask);
                 }
             }
             JObject itemlist = new JObject();

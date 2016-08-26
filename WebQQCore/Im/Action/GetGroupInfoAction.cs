@@ -25,11 +25,11 @@ namespace iQQ.Net.WebQQCore.Im.Action
         public override QQHttpRequest OnBuildRequest()
         {
             var req = CreateHttpRequest("GET", QQConstants.URL_GET_GROUP_INFO_EXT);
-            req.AddGetValue("gcode", _group.Code + "");
-            req.AddGetValue("vfwebqq", Context.Session.Vfwebqq);
-            req.AddGetValue("t", DateUtils.NowTimestamp() / 1000 + "");
+            req.AddGetValue("gcode", _group.Code);
+            req.AddGetValue("vfwebqq", Context.Account.Vfwebqq);
+            req.AddGetValue("t", DateTime.Now.CurrentTimeSeconds());
             req.AddHeader("Referer", QQConstants.REFERER_S);
-            req.AddHeader("Origin", QQConstants.ORIGIN_S);
+            // req.AddHeader("Origin", QQConstants.ORIGIN_S);
 
             return req;
         }

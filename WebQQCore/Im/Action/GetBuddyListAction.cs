@@ -24,16 +24,20 @@ namespace iQQ.Net.WebQQCore.Im.Action
             var session = Context.Session;
             var account = Context.Account;
             var httpService = Context.GetSerivce<IHttpService>(QQServiceType.HTTP);
-            var ptwebqq = httpService.GetCookie("ptwebqq", QQConstants.URL_GET_USER_CATEGORIES);
+            // var ptwebqq = httpService.GetCookie("ptwebqq", QQConstants.URL_GET_USER_CATEGORIES);
 
-            var json = new JObject();
-            json.Add("h", "hello");
-            json.Add("vfwebqq", session.Vfwebqq); // 同上
-            json.Add("hash", QQEncryptor.GetHash(account.Uin + "", ptwebqq.Value));
+            var json = new JObject
+            {
+                {"h", "hello"},
+                {"vfwebqq", session.Vfwebqq},
+                {"hash", QQEncryptor.GetHash(account.Uin.ToString(), session.Ptwebqq)}
+            };
+            // 同上
 
             var req = CreateHttpRequest("POST", QQConstants.URL_GET_USER_CATEGORIES);
             req.AddPostValue("r", JsonConvert.SerializeObject(json));
-            req.AddHeader("Referer", QQConstants.REFFER);
+            req.AddHeader("Referer", QQConstants.REFERER_S);
+            req.AddHeader("Origin", UrlUtils.GetOrigin(QQConstants.URL_GET_USER_CATEGORIES));
             return req;
         }
 

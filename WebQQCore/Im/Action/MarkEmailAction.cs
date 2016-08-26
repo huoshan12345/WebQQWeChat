@@ -30,7 +30,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
             req.AddPostValue("ef", "js");
             req.AddPostValue("folderkey", "1");
             req.AddPostValue("sid", Context.Session.EmailAuthKey);
-            req.AddPostValue("status", status + "");
+            req.AddPostValue("status", status);
             foreach (QQEmail mail in markList)
             {
                 req.AddPostValue("mailid", mail.Id);

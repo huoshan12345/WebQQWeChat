@@ -1,4 +1,5 @@
-﻿using iQQ.Net.WebQQCore.Im.Bean;
+﻿using System;
+using iQQ.Net.WebQQCore.Im.Bean;
 using iQQ.Net.WebQQCore.Im.Core;
 using iQQ.Net.WebQQCore.Im.Event;
 using iQQ.Net.WebQQCore.Im.Http;
@@ -30,11 +31,11 @@ namespace iQQ.Net.WebQQCore.Im.Action
             // tuin=4245757755&verifysession=&type=1&code=&vfwebqq=**&t=1361631644492
             QQHttpRequest req = CreateHttpRequest("GET",
                     QQConstants.URL_GET_USER_ACCOUNT);
-            req.AddGetValue("tuin", buddy.Uin + "");
+            req.AddGetValue("tuin", buddy.Uin);
             req.AddGetValue("vfwebqq", session.Vfwebqq);
-            req.AddGetValue("t", DateUtils.NowTimestamp() / 1000 + "");
+            req.AddGetValue("t", DateTime.Now.CurrentTimeSeconds());
             req.AddGetValue("verifysession", ""); // 验证码？？
-            req.AddGetValue("type", 1 + "");
+            req.AddGetValue("type", 1);
             req.AddGetValue("code", "");
 
             req.AddHeader("Referer", QQConstants.REFFER);

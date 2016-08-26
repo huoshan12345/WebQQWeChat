@@ -5,6 +5,7 @@ using iQQ.Net.WebQQCore.Im.Bean.Content;
 using iQQ.Net.WebQQCore.Im.Event;
 using iQQ.Net.WebQQCore.Im.Service;
 using iQQ.Net.WebQQCore.Util;
+using iQQ.Net.WebQQCore.Im.Core;
 
 namespace iQQ.Net.WebQQCore.Im
 {
@@ -27,6 +28,9 @@ namespace iQQ.Net.WebQQCore.Im
 
         void Destroy();
 
+        QQActionFuture GetSelfInfo(QQActionEventHandler listener);
+
+        void InitExtendQQModel(IQQModule qqModule);
 
         void GetQRCode(QQActionEventHandler qqActionListener);
 
@@ -76,7 +80,7 @@ namespace iQQ.Net.WebQQCore.Im
         /// </summary>
         /// <param name="listener"></param>
         /// <returns></returns>
-        QQActionFuture GetBuddyList(QQActionEventHandler listener = null);
+        QQActionFuture GetBuddyList(QQActionEventHandler listener);
 
         /// <summary>
         /// 获取在线好友列表
@@ -137,7 +141,7 @@ namespace iQQ.Net.WebQQCore.Im
         /// </summary>
         /// <param name="listener"></param>
         /// <returns></returns>
-        QQActionFuture GetGroupList(QQActionEventHandler listener = null);
+        QQActionFuture GetGroupList(QQActionEventHandler listener);
 
         /// <summary>
         /// 获取群列表
@@ -176,7 +180,7 @@ namespace iQQ.Net.WebQQCore.Im
         /// </summary>
         /// <param name="listener"></param>
         /// <returns></returns>
-        QQActionFuture GetDiscuzList(QQActionEventHandler listener = null);
+        QQActionFuture GetDiscuzList(QQActionEventHandler listener);
 
         /// <summary>
         /// 获取讨论组信息
@@ -321,27 +325,7 @@ namespace iQQ.Net.WebQQCore.Im
          * @param proxyAuthPassword a {@link java.lang.String} object.
          */
         void SetHttpProxy(ProxyType proxyType, string proxyHost, int proxyPort, string proxyAuthUser, string proxyAuthPassword);
-
-
-
-        /// <summary>
-        /// 获取好友列表，但必须已经使用接口获取过
-        /// </summary>
-        /// <returns></returns>
-        List<QQBuddy> GetBuddyList();
-
-        /// <summary>
-        /// 获取群列表，但必须已经使用接口获取过
-        /// </summary>
-        /// <returns></returns>
-        List<QQGroup> GetGroupList();
-
-        /// <summary>
-        /// 获取讨论组列表，但必须已经使用接口获取过
-        /// </summary>
-        /// <returns></returns>
-        List<QQDiscuz> GetDiscuzList();
-
+        
         /// <summary>
         /// 根据UIN获得好友
         /// </summary>
@@ -374,5 +358,23 @@ namespace iQQ.Net.WebQQCore.Im
         /// </summary>
         /// <returns></returns>
         QQActionFuture GetRobotReply(QQMsg input, RobotType robotType, QQActionEventHandler listener = null);
+
+        /// <summary>
+        /// 获取好友列表，但必须已经使用接口获取过
+        /// </summary>
+        /// <returns></returns>
+        List<QQBuddy> GetBuddyList();
+
+        /// <summary>
+        /// 获取群列表，但必须已经使用接口获取过
+        /// </summary>
+        /// <returns></returns>
+        List<QQGroup> GetGroupList();
+
+        /// <summary>
+        /// 获取讨论组列表，但必须已经使用接口获取过
+        /// </summary>
+        /// <returns></returns>
+        List<QQDiscuz> GetDiscuzList();
     }
 }

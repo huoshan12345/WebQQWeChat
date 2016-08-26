@@ -7,6 +7,7 @@ using iQQ.Net.WebQQCore.Im.Core;
 using iQQ.Net.WebQQCore.Im.Event;
 using iQQ.Net.WebQQCore.Im.Http;
 using iQQ.Net.WebQQCore.Im.Service;
+using iQQ.Net.WebQQCore.Util;
 using Newtonsoft.Json.Linq;
 
 namespace iQQ.Net.WebQQCore.Im.Action
@@ -34,9 +35,9 @@ namespace iQQ.Net.WebQQCore.Im.Action
 
             QQHttpRequest request = CreateHttpRequest("GET", url);
             request.AddGetValue("ptwebqq", httpService.GetCookie("ptwebqq", QQConstants.URL_CHANNEL_LOGIN).Value);
-            request.AddGetValue("clientid", session.ClientId + "");
+            request.AddGetValue("clientid", session.ClientId);
             request.AddGetValue("psessionid", "");
-            request.AddGetValue("t", DateTime.Now.Millisecond.ToString());
+            request.AddGetValue("t", DateTime.Now.CurrentTimeSeconds());
             return request;
         }
 

@@ -29,9 +29,9 @@ namespace iQQ.Net.WebQQCore.Im.Action
             QQHttpRequest req = CreateHttpRequest("GET",
                     QQConstants.URL_CHANGE_STATUS);
             req.AddGetValue("newstatus", _status.Value);
-            req.AddGetValue("clientid", session.ClientId + "");
+            req.AddGetValue("clientid", session.ClientId);
             req.AddGetValue("psessionid", session.SessionId);
-            req.AddGetValue("t", DateTime.Now.CurrentTimeMillis() / 1000 + "");
+            req.AddGetValue("t", DateTime.Now.CurrentTimeSeconds());
 
             req.AddHeader("Referer", QQConstants.REFFER);
             return req;

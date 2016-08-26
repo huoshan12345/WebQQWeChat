@@ -24,6 +24,7 @@ namespace iQQ.Net.WebQQCore.Im.Core
             set { _state = value; }
         }
 
+        private long _clientId;
         public long ClientId
         {
             get
@@ -49,7 +50,7 @@ namespace iQQ.Net.WebQQCore.Im.Core
         public int Port { get; set; }
         public int PollErrorCnt { get; set; }
         public string CapCd { get; set; }
-        private long _clientId;
+        public string Psessionid { get; set; }
     }
 
 }

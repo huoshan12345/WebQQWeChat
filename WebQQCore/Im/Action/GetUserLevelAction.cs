@@ -1,4 +1,5 @@
-﻿using iQQ.Net.WebQQCore.Im.Bean;
+﻿using System;
+using iQQ.Net.WebQQCore.Im.Bean;
 using iQQ.Net.WebQQCore.Im.Core;
 using iQQ.Net.WebQQCore.Im.Event;
 using iQQ.Net.WebQQCore.Im.Http;
@@ -24,11 +25,11 @@ namespace iQQ.Net.WebQQCore.Im.Action
 
         public override void OnHttpStatusOK(QQHttpResponse response)
         {
-            JObject json = JObject.Parse(response.GetResponseString());
+            var json = JObject.Parse(response.GetResponseString());
             if (json["retcode"].ToString() == "0")
             {
-                JObject result = json["result"].ToObject<JObject>();
-                QQLevel level = user.Level;
+                var result = json["result"].ToObject<JObject>();
+                var level = user.Level;
                 level.Level = result["level"].ToObject<int>();
                 level.Days = result["days"].ToObject<int>();
                 level.Hours = result["hours"].ToObject<int>();
@@ -44,10 +45,10 @@ namespace iQQ.Net.WebQQCore.Im.Action
 
         public override QQHttpRequest OnBuildRequest()
         {
-            QQHttpRequest req = CreateHttpRequest("GET", QQConstants.URL_GET_USER_LEVEL);
-            QQSession session = Context.Session;
-            req.AddGetValue("tuin", user.Uin + "");
-            req.AddGetValue("t", DateUtils.NowTimestamp() + "");
+            var req = CreateHttpRequest("GET", QQConstants.URL_GET_USER_LEVEL);
+            var session = Context.Session;
+            req.AddGetValue("tuin", user.Uin);
+            req.AddGetValue("t", DateTime.Now.CurrentTimeSeconds());
             req.AddGetValue("vfwebqq", session.Vfwebqq);
             return req;
         }

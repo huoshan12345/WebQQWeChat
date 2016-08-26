@@ -25,7 +25,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
 
         public override QQHttpRequest OnBuildRequest()
         {
-            QQHttpRequest req = CreateHttpRequest("GET", QQConstants.URL_GET_QRCODE);
+            var req = CreateHttpRequest("GET", QQConstants.URL_GET_QRCODE);
             req.AddGetValue("appid", "501004106");
             req.AddGetValue("e", "0");
             req.AddGetValue("l", "M");
@@ -40,7 +40,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
         {
             try
             {
-                MemoryStream ms = new MemoryStream(response.ResponseData);
+                var ms = new MemoryStream(response.ResponseData);
                 NotifyActionEvent(QQActionEventType.EVT_OK, Image.FromStream(ms));
             }
             catch (IOException e)

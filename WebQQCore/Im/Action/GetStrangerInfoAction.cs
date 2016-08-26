@@ -28,14 +28,14 @@ namespace iQQ.Net.WebQQCore.Im.Action
 
         public override QQHttpRequest OnBuildRequest()
         {
-            QQSession session = Context.Session;
-            QQHttpRequest req = CreateHttpRequest("GET", QQConstants.URL_GET_STRANGER_INFO);
-            req.AddGetValue("tuin", user.Uin + "");
+            var session = Context.Session;
+            var req = CreateHttpRequest("GET", QQConstants.URL_GET_STRANGER_INFO);
+            req.AddGetValue("tuin", user.Uin);
             req.AddGetValue("verifysession", "");	// ?
             req.AddGetValue("gid", "0");
             req.AddGetValue("code", "");
             req.AddGetValue("vfwebqq", session.Vfwebqq);
-            req.AddGetValue("t", DateUtils.NowTimestamp() / 1000 + "");
+            req.AddGetValue("t", DateTime.Now.CurrentTimeSeconds());
             return req;
         }
 
@@ -51,10 +51,10 @@ namespace iQQ.Net.WebQQCore.Im.Action
              */
             try
             {
-                JObject json = JObject.Parse(response.GetResponseString());
+                var json = JObject.Parse(response.GetResponseString());
                 if (json["retcode"].ToString() == "0")
                 {
-                    JObject obj = json["result"].ToObject<JObject>();
+                    var obj = json["result"].ToObject<JObject>();
                     try
                     {
                         user.Birthday = DateUtils.Parse(obj["birthday"].ToObject<JObject>());
@@ -62,7 +62,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
                     catch (FormatException e)
                     {
                         MyLogger.Default.Warn($"日期转换失败：{obj["birthday"]}", e);
-                        user.Birthday = default(DateTime);
+                        user.Birthday = null;
                     }
                     user.Occupation = obj["occupation"].ToString();
                     user.Phone = obj["phone"].ToString();

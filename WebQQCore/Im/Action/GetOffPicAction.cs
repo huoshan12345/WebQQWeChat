@@ -36,8 +36,8 @@ namespace iQQ.Net.WebQQCore.Im.Action
         {
             QQHttpRequest req = CreateHttpRequest("GET", QQConstants.URL_GET_OFFPIC);
             QQSession session = Context.Session;
-            req.AddGetValue("clientid", session.ClientId + "");
-            req.AddGetValue("f_uin", msg.From.Uin + "");
+            req.AddGetValue("clientid", session.ClientId);
+            req.AddGetValue("f_uin", msg.From.Uin);
             req.AddGetValue("file_path", offpic.FilePath);
             req.AddGetValue("psessionid", session.SessionId);
             req.OutputStream = picOut;

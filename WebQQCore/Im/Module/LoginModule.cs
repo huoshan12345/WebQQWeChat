@@ -11,6 +11,11 @@ namespace iQQ.Net.WebQQCore.Im.Module
     /// </summary>
     public class LoginModule : AbstractModule
     {
+        public QQActionFuture GetSelfInfo(QQActionEventHandler listener)
+        {
+            return PushHttpAction(new GetSelfInfoAction(Context, listener));
+        }
+
         public override QQModuleType GetModuleType()
         {
             return QQModuleType.LOGIN;

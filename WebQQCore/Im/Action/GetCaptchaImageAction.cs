@@ -40,7 +40,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
             QQHttpRequest req = CreateHttpRequest("GET", QQConstants.URL_GET_CAPTCHA);
             req.AddGetValue("aid", QQConstants.APPID);
             req.AddGetValue("r", new Random().NextDouble().ToString("f16"));
-            req.AddGetValue("uin", _uin + "");
+            req.AddGetValue("uin", _uin);
 
             // 20150724增加
             req.AddGetValue("cap_cd", Context.Session.CapCd);

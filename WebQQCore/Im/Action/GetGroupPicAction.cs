@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using iQQ.Net.WebQQCore.Im.Bean;
 using iQQ.Net.WebQQCore.Im.Bean.Content;
 using iQQ.Net.WebQQCore.Im.Core;
@@ -14,9 +15,9 @@ namespace iQQ.Net.WebQQCore.Im.Action
     /// </summary>
     public class GetGroupPicAction : AbstractHttpAction
     {
-        private CFaceItem cface;
-        private QQMsg msg;
-        private Stream picOut;
+        private readonly CFaceItem _cface;
+        private readonly QQMsg _msg;
+        private readonly Stream _picOut;
 
         /**
          * <p>Constructor for GetGroupPicAction.</p>
@@ -32,9 +33,9 @@ namespace iQQ.Net.WebQQCore.Im.Action
             : base(context, listener)
         {
 
-            this.cface = cface;
-            this.msg = msg;
-            this.picOut = picOut;
+            _cface = cface;
+            _msg = msg;
+            _picOut = picOut;
         }
 
         /* (non-Javadoc)
@@ -44,7 +45,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
 
         public override void OnHttpStatusOK(QQHttpResponse response)
         {
-            NotifyActionEvent(QQActionEventType.EVT_OK, cface);
+            NotifyActionEvent(QQActionEventType.EVT_OK, _cface);
         }
 
         /* (non-Javadoc)
@@ -54,7 +55,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
 
         public override QQHttpRequest OnBuildRequest()
         {
-            QQHttpRequest req = CreateHttpRequest("GET", QQConstants.URL_GET_GROUP_PIC);
+            var req = CreateHttpRequest("GET", QQConstants.URL_GET_GROUP_PIC);
 
             //		fid	3648788200
             //		gid	2890126166
@@ -73,20 +74,19 @@ namespace iQQ.Net.WebQQCore.Im.Action
             //            "server": "123.138.154.167:8000"
             //        }
 
-            QQSession session = Context.Session;
-            req.AddGetValue("fid", cface.FileId + "");
-            req.AddGetValue("gid", (msg.Group != null ?
-                            msg.Group.Code : msg.Discuz.Did) + "");
-            req.AddGetValue("pic", cface.FileName);
-            string[] parts = cface.Server.Split(':');
+            var session = Context.Session;
+            req.AddGetValue("fid", _cface.FileId);
+            req.AddGetValue("gid", _msg.Group?.Code ?? _msg.Discuz.Did);
+            req.AddGetValue("pic", _cface.FileName);
+            var parts = _cface.Server.Split(':');
             req.AddGetValue("rip", parts[0]);
             req.AddGetValue("rport", parts[1]);
-            req.AddGetValue("t", DateUtils.NowTimestamp() + "");
-            req.AddGetValue("type", msg.Group != null ? "0" : "1");
-            req.AddGetValue("uin", msg.From.Uin + "");
+            req.AddGetValue("t", DateTime.Now.CurrentTimeSeconds());
+            req.AddGetValue("type", _msg.Group != null ? "0" : "1");
+            req.AddGetValue("uin", _msg.From.Uin);
             req.AddGetValue("vfwebqq", session.Vfwebqq);
 
-            req.OutputStream = picOut;
+            req.OutputStream = _picOut;
             return req;
         }
 

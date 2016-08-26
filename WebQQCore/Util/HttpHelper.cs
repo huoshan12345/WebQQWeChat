@@ -43,8 +43,7 @@ namespace iQQ.Net.WebQQCore.Util
         public HttpResult GetHtml(HttpItem item)
         {
             //返回参数
-            HttpResult result = new HttpResult();
-            result.Success = false;
+            HttpResult result = new HttpResult {Success = false};
             try
             {
                 //准备参数

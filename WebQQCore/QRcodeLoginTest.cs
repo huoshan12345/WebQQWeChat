@@ -70,6 +70,29 @@ namespace iQQ.Net.WebQQCore
                     case QQActionEventType.EVT_OK:
                         {
                             // 扫描通过,登录成功
+                            // 
+                            mClient.GetBuddyList((s, e) =>
+                            {
+                                if (e.Type == QQActionEventType.EVT_OK)
+                                {
+                                    Console.WriteLine("加载好友列表成功");
+                                }
+                            });
+                            mClient.GetGroupList((s, e) =>
+                            {
+                                if (e.Type == QQActionEventType.EVT_OK)
+                                {
+                                    Console.WriteLine("加载群列表成功");
+                                }
+                            });
+                            mClient.GetSelfInfo((s, e) =>
+                            {
+                                if (e.Type == QQActionEventType.EVT_OK)
+                                {
+                                    Console.WriteLine("获取个人信息成功");
+                                }
+                            });
+
                             mClient.BeginPollMsg();
                             break;
                         }

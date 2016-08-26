@@ -45,12 +45,12 @@ namespace iQQ.Net.WebQQCore.Im.Action
             //		to=3559750777 //from_uin
 
             QQSession session = Context.Session;
-            req.AddGetValue("clientid", session.ClientId + "");
-            req.AddGetValue("to", msg.From.Uin + "");
+            req.AddGetValue("clientid", session.ClientId);
+            req.AddGetValue("to", msg.From.Uin);
             req.AddGetValue("guid", cface.FileName);
             req.AddGetValue("psessionid", session.SessionId);
             req.AddGetValue("count", "5");
-            req.AddGetValue("lcid", msg.Id + "");
+            req.AddGetValue("lcid", msg.Id);
             req.AddGetValue("time", "1");
             req.OutputStream = picOut;
             return req;

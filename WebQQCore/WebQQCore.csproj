@@ -59,6 +59,7 @@
   <ItemGroup>
     <Compile Include="Im\Action\CheckQRCodeAction.cs" />
     <Compile Include="Im\Action\GetQRCodeAction.cs" />
+    <Compile Include="Im\Action\GetSelfInfoAction.cs" />
     <Compile Include="Im\Action\GetVFWebqq.cs" />
     <Compile Include="Im\Action\GetWebqq.cs" />
     <Compile Include="QRcodeLoginTest.cs" />
@@ -191,6 +192,7 @@
     <Compile Include="Im\WebQQClient.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Test.cs" />
+    <Compile Include="Util\UrlUtils.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\hash.js" />

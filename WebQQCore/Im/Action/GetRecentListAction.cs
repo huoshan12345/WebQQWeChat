@@ -27,7 +27,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
 
             QQHttpRequest req = CreateHttpRequest("POST", QQConstants.URL_GET_RECENT_LIST);
             req.AddPostValue("r", JsonConvert.SerializeObject(json));
-            req.AddPostValue("clientid", session.ClientId + "");
+            req.AddPostValue("clientid", session.ClientId);
             req.AddPostValue("psessionid", session.SessionId);
 
             return req;

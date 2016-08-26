@@ -1,4 +1,5 @@
-﻿using iQQ.Net.WebQQCore.Im.Bean;
+﻿using System;
+using iQQ.Net.WebQQCore.Im.Bean;
 using iQQ.Net.WebQQCore.Im.Core;
 using iQQ.Net.WebQQCore.Im.Event;
 using iQQ.Net.WebQQCore.Im.Http;
@@ -15,23 +16,23 @@ namespace iQQ.Net.WebQQCore.Im.Action
     public class GetFriendSignAction : AbstractHttpAction
     {
 
-        private QQUser buddy;
+        private readonly QQUser _buddy;
 
         public GetFriendSignAction(IQQContext context, QQActionEventHandler listener,QQUser buddy)
             : base(context, listener)
         {
-            this.buddy = buddy;
+            this._buddy = buddy;
         }
 
         public override QQHttpRequest OnBuildRequest()
         {
-            QQSession session = Context.Session;
+            var session = Context.Session;
 
-            QQHttpRequest req = CreateHttpRequest("GET",
+            var req = CreateHttpRequest("GET",
                     QQConstants.URL_GET_USER_SIGN);
-            req.AddGetValue("tuin", buddy.Uin + "");
+            req.AddGetValue("tuin", _buddy.Uin);
             req.AddGetValue("vfwebqq", session.Vfwebqq);
-            req.AddGetValue("t", DateUtils.NowTimestamp() / 1000 + "");
+            req.AddGetValue("t", DateTime.Now.CurrentTimeSeconds());
 
             req.AddHeader("Referer", QQConstants.REFFER);
             return req;
@@ -39,15 +40,15 @@ namespace iQQ.Net.WebQQCore.Im.Action
 
         public override void OnHttpStatusOK(QQHttpResponse response)
         {
-            JObject json = JObject.Parse(response.GetResponseString());
+            var json = JObject.Parse(response.GetResponseString());
             if (json["retcode"].ToString() == "0")
             {
-                JArray result = json["result"].ToObject<JArray>();
-                JObject obj = result[0].ToObject<JObject>();
-                buddy.Sign = obj["lnick"].ToString();
+                var result = json["result"].ToObject<JArray>();
+                var obj = result[0].ToObject<JObject>();
+                _buddy.Sign = obj["lnick"].ToString();
             }
 
-            NotifyActionEvent(QQActionEventType.EVT_OK, buddy);
+            NotifyActionEvent(QQActionEventType.EVT_OK, _buddy);
         }
 
     }

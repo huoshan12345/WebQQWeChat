@@ -33,13 +33,14 @@ namespace iQQ.Net.WebQQCore.Im.Module
 
         public QQActionFuture SendMsg(QQMsg msg, QQActionEventHandler listener)
         {
+            var future = new ProcActionFuture(listener, true);
+
             if (msg.Type == QQMsgType.SESSION_MSG)
             {
-                ProcActionFuture future = new ProcActionFuture(listener, true);
-                QQStranger stranger = (QQStranger)msg.To;
+                var stranger = (QQStranger)msg.To;
                 if (string.IsNullOrEmpty(stranger.GroupSig))
                 {
-                    GetSessionMsgSig(stranger, new QQActionEventHandler((sender, Event) =>
+                    GetSessionMsgSig(stranger, (sender, Event) =>
                     {
                         if (Event.Type == QQActionEventType.EVT_OK)
                         {
@@ -52,30 +53,24 @@ namespace iQQ.Net.WebQQCore.Im.Module
                         {
                             future.NotifyActionEvent(Event.Type, Event.Target);
                         }
-                    }));
+                    });
                 }
                 return future;
             }
             else if (msg.Type == QQMsgType.GROUP_MSG || msg.Type == QQMsgType.DISCUZ_MSG)
             {
-                if (string.IsNullOrEmpty(this.Context.Session.CfaceKey))
+                if (msg.Type == QQMsgType.GROUP_MSG)
                 {
-                    ProcActionFuture future = new ProcActionFuture(listener, true);
-                    GetCFaceSig(new QQActionEventHandler((sender, Event) =>
+                    if (msg.Group.Gin == 0)
                     {
-                        if (Event.Type == QQActionEventType.EVT_OK)
+                        msg.Group = Context.Store.GetGroupByCode(msg.Group.Code);
+                        if (msg == null)
                         {
-                            if (!future.IsCanceled)
-                            {
-                                DoSendMsg(msg, future.Listener);
-                            }
+                            // update group list
+                            // sendMsg(msg, future);
                         }
-                        else if (Event.Type == QQActionEventType.EVT_ERROR)
-                        {
-                            future.NotifyActionEvent(Event.Type, Event.Target);
-                        }
-                    }));
-                    return future;
+                        return future;
+                    }
                 }
             }
             return DoSendMsg(msg, listener);

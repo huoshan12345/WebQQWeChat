@@ -63,6 +63,7 @@
         public const string URL_GET_WP_KEY = "http://mail.qq.com/cgi-bin/getwpkey";
         public const string URL_LOGIN_EMAIL = "http://mail.qq.com/cgi-bin/login?fun=passport&from=webqq";
         public const string URL_MARK_EMAIL = "http://mail.qq.com/cgi-bin/mail_mgr";
+        public const string URL_GET_SELF_INFO = "http://s.web2.qq.com/api/get_self_info2";
         public const string REGXP_EMAIL_AUTH = "ptui_auth_CB\\('(.*?)','(.*?)'\\)";
         public const string URL_ACCEPET_BUDDY_ADD = "http://s.web2.qq.com/api/allow_and_add2";
 

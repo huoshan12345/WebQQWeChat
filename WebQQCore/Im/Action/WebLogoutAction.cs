@@ -1,4 +1,5 @@
-﻿using iQQ.Net.WebQQCore.Im.Core;
+﻿using System;
+using iQQ.Net.WebQQCore.Im.Core;
 using iQQ.Net.WebQQCore.Im.Event;
 using iQQ.Net.WebQQCore.Im.Http;
 using iQQ.Net.WebQQCore.Util;
@@ -21,9 +22,9 @@ namespace iQQ.Net.WebQQCore.Im.Action
 
             QQHttpRequest req = CreateHttpRequest("GET", QQConstants.URL_LOGOUT);
             req.AddGetValue("ids", ""); // 产生过会话才出现ID，如何获取？？
-            req.AddGetValue("clientid", session.ClientId + "");
+            req.AddGetValue("clientid", session.ClientId);
             req.AddGetValue("psessionid", session.SessionId);
-            req.AddGetValue("t", DateUtils.NowTimestamp() / 1000 + "");
+            req.AddGetValue("t", DateTime.Now.CurrentTimeSeconds());
 
             req.AddHeader("Referer", QQConstants.REFFER);
             return req;

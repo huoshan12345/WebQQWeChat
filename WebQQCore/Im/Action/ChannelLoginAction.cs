@@ -35,7 +35,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
 
             var req = CreateHttpRequest("POST", QQConstants.URL_CHANNEL_LOGIN);
             req.AddPostValue("r", JsonConvert.SerializeObject(json));
-            //req.AddPostValue("clientid", session.ClientId + "");
+            //req.AddPostValue("clientid", session.ClientId);
             //req.AddPostValue("psessionid", session.SessionId ?? "null");
             req.AddHeader("Referer", QQConstants.REFFER);
             req.AddHeader("Origin", QQConstants.ORIGIN);
@@ -60,7 +60,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
                 account.Uin = ret["uin"].ToObject<long>();
                 account.QQ = ret["uin"].ToObject<long>();
                 session.SessionId = ret["psessionid"].ToString();
-                session.Vfwebqq = ret["vfwebqq"].ToString();
+                // session.Vfwebqq = ret["vfwebqq"].ToString();
                 account.Status = QQStatus.ValueOfRaw(ret["status"].ToString());
                 session.State = QQSessionState.ONLINE;
                 session.Index = ret["index"].ToObject<int>();

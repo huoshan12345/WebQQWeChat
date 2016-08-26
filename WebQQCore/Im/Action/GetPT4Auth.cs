@@ -23,7 +23,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
             req.AddGetValue("daid", "4");
             req.AddGetValue("appid", "1");
             req.AddGetValue("auth_token", QQEncryptor.Time33(httpService.GetCookie("supertoken",
-                QQConstants.URL_CHANNEL_LOGIN).Value) + "");
+                QQConstants.URL_CHANNEL_LOGIN).Value));
             return req;
         }
 

@@ -33,11 +33,11 @@ namespace iQQ.Net.WebQQCore.Im.Action
             QQSession session = Context.Session;
 
             QQHttpRequest req = CreateHttpRequest("POST", QQConstants.URL_UPLOAD_CUSTOM_FACE);
-            req.AddGetValue("time", DateUtils.NowTimestamp() / 1000 + "");
+            req.AddGetValue("time", DateTime.Now.CurrentTimeSeconds());
             req.AddPostValue("from", "control");
             req.AddPostValue("f", "EQQ.Model.ChatMsg.callbackSendPicGroup");
             req.AddPostValue("vfwebqq", session.Vfwebqq);
-            req.AddPostValue("fileid", Context.Store.GetPicItemListSize() + "");
+            req.AddPostValue("fileid", Context.Store.GetPicItemListSize());
             req.AddPostFile("custom_face", file);
 
             return req;
