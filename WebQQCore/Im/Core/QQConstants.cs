@@ -5,8 +5,8 @@
     {
         public const string APPID = "1003903";
         public const string JSVER = "10129";
-        public const string REFFER = "http://d.web2.qq.com/proxy.html?v=20140612002&callback=1&id=3";
-        public const string USER_AGENT = "IQQ Client/1.2 dev";
+        public const string REFFER = "http://d1.web2.qq.com/proxy.html?v=20151105001&callback=1&id=2";
+        public const string USER_AGENT = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/49.0.2623.110 Safari/537.36";
         public const string URL_CHECK_VERIFY = "https://ssl.ptlogin2.qq.com/check";
         public const string URL_GET_CAPTCHA = "http://captcha.qq.com/getimage";
         public const string URL_GET_QRCODE = "https://ssl.ptlogin2.qq.com/ptqrshow";
@@ -15,7 +15,7 @@
         public const string REGXP_LOGIN = "ptuiCB\\('(\\d+)','(\\d+)','(.*?)','(\\d+)','(.*?)', '(.*?)'\\)";
         public const string REGXP_JSON_SINGLE_RESULT = "\\{([\\s\\S]*)\\}";
         public const string URL_UI_LOGIN = "https://ssl.ptlogin2.qq.com/login";
-        public const string URL_CHANNEL_LOGIN = "http://d.web2.qq.com/channel/login2";
+        public const string URL_CHANNEL_LOGIN = "http://d1.web2.qq.com/channel/login2";
         public const string URL_GET_FRIEND_INFO = "http://s.web2.qq.com/api/get_friend_info2";
         public const string URL_GET_STRANGER_INFO = "http://s.web2.qq.com/api/get_stranger_info2";
         public const string URL_GET_IMAGE = "https://ssl.captcha.qq.com/getimage";

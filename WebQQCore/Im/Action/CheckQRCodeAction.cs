@@ -30,12 +30,12 @@ namespace iQQ.Net.WebQQCore.Im.Action
             req.AddGetValue("pttype", "1");
             req.AddGetValue("dumy", "");
             req.AddGetValue("fp", "loginerroralert");
-            req.AddGetValue("action", "0-0-4434");
+            req.AddGetValue("action", "0-0-205298");
             req.AddGetValue("mibao_css", "m_webqq");
             req.AddGetValue("t", "1");
             req.AddGetValue("g", "1");
             req.AddGetValue("js_type", "0");
-            req.AddGetValue("js_ver", "10135");
+            req.AddGetValue("js_ver", "10153");
             req.AddGetValue("login_sig", "");
             req.AddGetValue("pt_randsalt", "0");
             return req;

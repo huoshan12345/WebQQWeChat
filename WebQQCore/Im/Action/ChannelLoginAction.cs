@@ -38,8 +38,8 @@ namespace iQQ.Net.WebQQCore.Im.Action
             json.Add("passwd_sig", "");
             QQHttpRequest req = CreateHttpRequest("POST", QQConstants.URL_CHANNEL_LOGIN);
             req.AddPostValue("r", JsonConvert.SerializeObject(json));
-            req.AddPostValue("clientid", session.ClientId + "");
-            req.AddPostValue("psessionid", session.SessionId ?? "null");
+            //req.AddPostValue("clientid", session.ClientId + "");
+            //req.AddPostValue("psessionid", session.SessionId ?? "null");
             req.AddHeader("Referer", QQConstants.REFFER);
             return req;
         }
