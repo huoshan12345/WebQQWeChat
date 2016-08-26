@@ -39,10 +39,10 @@ namespace iQQ.Net.WebQQCore.Im.Http
         public QQHttpResponse(int responseCode, string responseMessage,
                 Dictionary<string, List<string>> headerFields, byte[] responseData)
         {
-            this._responseCode = responseCode;
-            this._responseMessage = responseMessage;
-            this._headers = headerFields;
-            this._responseData = responseData;
+            _responseCode = responseCode;
+            _responseMessage = responseMessage;
+            _headers = headerFields;
+            _responseData = responseData;
         }
 
         public QQHttpResponse()
@@ -81,15 +81,8 @@ namespace iQQ.Net.WebQQCore.Im.Http
         public string GetHeader(string name)
         {
             List<string> list = null;
-            this._headers.TryGetValue(name, out list);
-            if (list != null && list.Count > 0)
-            {
-                return list[0];
-            }
-            else
-            {
-                return null;
-            }
+            _headers.TryGetValue(name, out list);
+            return list != null && list.Count > 0 ? list[0] : null;
         }
 
         /// <summary>
@@ -99,12 +92,12 @@ namespace iQQ.Net.WebQQCore.Im.Http
         /// <returns></returns>
         public List<string> GetHeaders(string name)
         {
-            return this._headers[name];
+            return _headers[name];
         }
 
         public Stream GetInputStream()
         {
-            return new MemoryStream(this._responseData);
+            return new MemoryStream(_responseData);
         }
 
         /// <summary>
@@ -114,7 +107,7 @@ namespace iQQ.Net.WebQQCore.Im.Http
         /// <returns></returns>
         public string GetResponseString(string charset)
         {
-            return Encoding.GetEncoding(charset).GetString(this._responseData);
+            return Encoding.GetEncoding(charset).GetString(_responseData);
         }
 
         /// <summary>
@@ -123,7 +116,7 @@ namespace iQQ.Net.WebQQCore.Im.Http
         /// <returns></returns>
         public string GetResponseString()
         {
-            return this.GetResponseString("utf-8");
+            return GetResponseString("utf-8");
         }
 
         public override string ToString()

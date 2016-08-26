@@ -702,8 +702,7 @@ namespace iQQ.Net.WebQQCore.Im
         /// <param name="verifyEvent"></param>
         public void CancelVerify(QQNotifyEvent verifyEvent)
         {
-            var verify =
-                (QQNotifyEventArgs.ImageVerify)verifyEvent.Target;
+            var verify = (QQNotifyEventArgs.ImageVerify)verifyEvent.Target;
             verify.Future.Cancel();
         }
 

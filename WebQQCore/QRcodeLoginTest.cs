@@ -46,16 +46,17 @@ namespace iQQ.Net.WebQQCore
                 {
                     try
                     {
-                        var verify = (QQNotifyEventArgs.ImageVerify)Event.Target;
-                        verify.Image.Save("verify.png", System.Drawing.Imaging.ImageFormat.Png);
+                        var verify = (Image)Event.Target;
+                        verify.Save("verify.png", System.Drawing.Imaging.ImageFormat.Png);
                         Console.WriteLine("请扫描在项目根目录下qrcode.png图片");
                     }
                     catch (Exception e)
                     {
-                        Console.WriteLine(mClient.Account.QQ + e.StackTrace);
+                        Console.WriteLine(mClient.Account.QQ + e.Message);
+                        Console.WriteLine(e.StackTrace);
                     }
                 }
-                else
+                else if(Event.Type == QQActionEventType.EVT_ERROR)
                 {
                     Console.WriteLine("获取二维码失败");
                 }

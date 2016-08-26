@@ -51,7 +51,7 @@ namespace iQQ.Net.WebQQCore.Im.Service
                         Encoding = Encoding.UTF8,
                         Allowautoredirect = true,
                         Method = request.Method,
-                        URL = request.Url,
+                        Url = request.Url,
                         ReadWriteTimeout = (request.ReadTimeout > 0) ? request.ReadTimeout : 100000,
                         Timeout = (request.ConnectTimeout > 0) ? request.ConnectTimeout : 30000,
                         ResultType = ResultType.Byte,

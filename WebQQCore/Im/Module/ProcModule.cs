@@ -70,10 +70,8 @@ namespace iQQ.Net.WebQQCore.Im.Module
 
         private void DoGetVerify(string reason, ProcActionFuture future)
         {
-            if (future.IsCanceled)
-            {
-                return;
-            }
+            if (future.IsCanceled) return;
+
             var account = Context.Account;
             var login = Context.GetModule<LoginModule>(QQModuleType.LOGIN);
             login.GetCaptcha(account.Uin, (sender, Event) =>
