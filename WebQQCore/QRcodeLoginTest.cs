@@ -93,6 +93,7 @@ namespace iQQ.Net.WebQQCore
                     }
                 }
             });
+            Console.ReadKey();
         }
 
         public static void SendMsg(QQUser user)
