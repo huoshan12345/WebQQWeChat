@@ -17,15 +17,15 @@ namespace iQQ.Net.WebQQCore.Im.Action
         /**
          * <p>Constructor for AbstractHttpAction.</p>
          *
-         * @param context  a {@link QQContext} object.
+         * @param context  a {@link IQQContext} object.
          * @param listener a {@link QQActionListener} object.
          */
-        public GetQRCodeAction(QQContext context, QQActionEventHandler listener) : base(context, listener) { }
+        public GetQRCodeAction(IQQContext context, QQActionEventHandler listener) : base(context, listener) { }
 
 
         public override QQHttpRequest OnBuildRequest()
         {
-            QQHttpRequest req = CreateHttpRequest("GET", QQConstants.URL_GET_QRCODE);
+            var req = CreateHttpRequest("GET", QQConstants.URL_GET_QRCODE);
             req.AddGetValue("appid", "501004106");
             req.AddGetValue("e", "0");
             req.AddGetValue("l", "M");
@@ -40,10 +40,14 @@ namespace iQQ.Net.WebQQCore.Im.Action
         {
             try
             {
-                MemoryStream ms = new MemoryStream(response.ResponseData);
+                var ms = new MemoryStream(response.ResponseData);
                 NotifyActionEvent(QQActionEventType.EVT_OK, Image.FromStream(ms));
             }
             catch (IOException e)
+            {
+                NotifyActionEvent(QQActionEventType.EVT_ERROR, new QQException(QQErrorCode.IO_ERROR, e));
+            }
+            catch (Exception e)
             {
                 NotifyActionEvent(QQActionEventType.EVT_ERROR, new QQException(QQErrorCode.UNKNOWN_ERROR, e));
             }

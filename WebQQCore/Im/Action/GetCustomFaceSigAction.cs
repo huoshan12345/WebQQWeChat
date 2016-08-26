@@ -14,7 +14,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
     /// </summary>
     public class GetCustomFaceSigAction : AbstractHttpAction
     {
-        public GetCustomFaceSigAction(QQContext context, QQActionEventHandler listener) : base(context, listener) { }
+        public GetCustomFaceSigAction(IQQContext context, QQActionEventHandler listener) : base(context, listener) { }
 
         public override QQHttpRequest OnBuildRequest()
         {
@@ -22,9 +22,9 @@ namespace iQQ.Net.WebQQCore.Im.Action
 
             QQHttpRequest req = CreateHttpRequest("GET",
                     QQConstants.URL_CUSTOM_FACE_SIG);
-            req.AddGetValue("clientid", session.ClientId + "");
+            req.AddGetValue("clientid", session.ClientId);
             req.AddGetValue("psessionid", session.SessionId);
-            req.AddGetValue("t", DateTime.Now.CurrentTimeMillis() / 1000 + "");
+            req.AddGetValue("t", DateTime.Now.CurrentTimeSeconds());
 
             req.AddHeader("Referer", QQConstants.REFFER);
             return req;

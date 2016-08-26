@@ -1,5 +1,6 @@
 ﻿using iQQ.Net.WebQQCore.Im.Action;
 using iQQ.Net.WebQQCore.Im.Bean;
+using iQQ.Net.WebQQCore.Im.Core;
 using iQQ.Net.WebQQCore.Im.Event;
 
 namespace iQQ.Net.WebQQCore.Im.Module
@@ -10,6 +11,15 @@ namespace iQQ.Net.WebQQCore.Im.Module
     /// </summary>
     public class LoginModule : AbstractModule
     {
+        public QQActionFuture GetSelfInfo(QQActionEventHandler listener)
+        {
+            return PushHttpAction(new GetSelfInfoAction(Context, listener));
+        }
+
+        public override QQModuleType GetModuleType()
+        {
+            return QQModuleType.LOGIN;
+        }
 
         public QQActionFuture GetQRCode(QQActionEventHandler listener)
         {
@@ -60,6 +70,11 @@ namespace iQQ.Net.WebQQCore.Im.Module
         public QQActionFuture CheckLoginSig(string checkUrl, QQActionEventHandler listener)
         {
             return PushHttpAction(new CheckLoginSigAction(Context, listener, checkUrl));
+        }
+
+        public QQActionFuture GetVFWebqq(QQActionEventHandler listener)
+        {
+            return PushHttpAction(new GetVFWebqq(Context, listener));
         }
 
     }

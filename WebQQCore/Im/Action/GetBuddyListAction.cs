@@ -17,74 +17,78 @@ namespace iQQ.Net.WebQQCore.Im.Action
     public class GetBuddyListAction : AbstractHttpAction
     {
  
-        public GetBuddyListAction(QQContext context, QQActionEventHandler listener) : base(context, listener) { }
+        public GetBuddyListAction(IQQContext context, QQActionEventHandler listener) : base(context, listener) { }
 
         public override QQHttpRequest OnBuildRequest()
         {
-            QQSession session = Context.Session;
-            QQAccount account = Context.Account;
-            IHttpService httpService = Context.GetSerivce<IHttpService>(QQServiceType.HTTP);
-            QQHttpCookie ptwebqq = httpService.GetCookie("ptwebqq", QQConstants.URL_GET_USER_CATEGORIES);
+            var session = Context.Session;
+            var account = Context.Account;
+            var httpService = Context.GetSerivce<IHttpService>(QQServiceType.HTTP);
+            // var ptwebqq = httpService.GetCookie("ptwebqq", QQConstants.URL_GET_USER_CATEGORIES);
 
-            JObject json = new JObject();
-            json.Add("h", "hello");
-            json.Add("vfwebqq", session.Vfwebqq); // 同上
-            json.Add("hash", QQEncryptor.GetHash(account.Uin + "", ptwebqq.Value));
+            var json = new JObject
+            {
+                {"h", "hello"},
+                {"vfwebqq", session.Vfwebqq},
+                {"hash", QQEncryptor.GetHash(account.Uin.ToString(), session.Ptwebqq)}
+            };
+            // 同上
 
-            QQHttpRequest req = CreateHttpRequest("POST", QQConstants.URL_GET_USER_CATEGORIES);
+            var req = CreateHttpRequest("POST", QQConstants.URL_GET_USER_CATEGORIES);
             req.AddPostValue("r", JsonConvert.SerializeObject(json));
-            req.AddHeader("Referer", QQConstants.REFFER);
+            req.AddHeader("Referer", QQConstants.REFERER_S);
+            req.AddHeader("Origin", UrlUtils.GetOrigin(QQConstants.URL_GET_USER_CATEGORIES));
             return req;
         }
 
         public override void OnHttpStatusOK(QQHttpResponse response)
         {
-            JObject json = JObject.Parse(response.GetResponseString());
-            string str = JsonConvert.SerializeObject(json);
+            var json = JObject.Parse(response.GetResponseString());
+            var str = JsonConvert.SerializeObject(json);
 
 
-            int retcode = json["retcode"].ToObject<int>();
+            var retcode = json["retcode"].ToObject<int>();
             if (retcode == 0)
             {
-                QQStore store = Context.Store;
+                var store = Context.Store;
                 // 处理好友列表
-                JObject results = json["result"].ToObject<JObject>();
+                var results = json["result"].ToObject<JObject>();
                 // 获取JSON列表信息
-                JArray jsonCategories = results["categories"].ToObject<JArray>();
+                var jsonCategories = results["categories"].ToObject<JArray>();
                 // 获取JSON好友基本信息列表 flag/uin/categories
-                JArray jsonFriends = results["friends"].ToObject<JArray>();
+                var jsonFriends = results["friends"].ToObject<JArray>();
                 // face/flag/nick/uin
-                JArray jsonInfo = results["info"].ToObject<JArray>();
+                var jsonInfo = results["info"].ToObject<JArray>();
                 // uin/markname/
-                JArray jsonMarknames = results["marknames"].ToObject<JArray>();
+                var jsonMarknames = results["marknames"].ToObject<JArray>();
                 // vip_level/u/is_vip
-                JArray jsonVipinfo = results["vipinfo"].ToObject<JArray>();
+                var jsonVipinfo = results["vipinfo"].ToObject<JArray>();
 
                 // 默认好友列表
-                QQCategory c = new QQCategory() { Index = 0, Name = "我的好友", Sort = 0 };
+                var c = new QQCategory() { Index = 0, Name = "我的好友", Sort = 0 };
                 store.AddCategory(c);
                 // 初始化好友列表
-                foreach (JToken t in jsonCategories)
+                foreach (var t in jsonCategories)
                 {
-                    JObject jsonCategory = t.ToObject<JObject>();
-                    QQCategory qqc = new QQCategory();
+                    var jsonCategory = t.ToObject<JObject>();
+                    var qqc = new QQCategory();
                     qqc.Index = jsonCategory["index"].ToObject<int>();
                     qqc.Name = jsonCategory["name"].ToString();
                     qqc.Sort = jsonCategory["sort"].ToObject<int>();
                     store.AddCategory(qqc);
                 }
                 // 处理好友基本信息列表 flag/uin/categories
-                foreach (JToken t in jsonFriends)
+                foreach (var t in jsonFriends)
                 {
-                    QQBuddy buddy = new QQBuddy();
-                    JObject jsonFriend = t.ToObject<JObject>();
-                    long uin = jsonFriend["uin"].ToObject<long>();
+                    var buddy = new QQBuddy();
+                    var jsonFriend = t.ToObject<JObject>();
+                    var uin = jsonFriend["uin"].ToObject<long>();
                     buddy.Uin = uin;
                     buddy.Status = QQStatus.OFFLINE;
                     buddy.ClientType = QQClientType.Unknown;
                     // 添加到列表中
-                    int category = jsonFriend["categories"].ToObject<int>();
-                    QQCategory qqCategory = store.GetCategoryByIndex(category);
+                    var category = jsonFriend["categories"].ToObject<int>();
+                    var qqCategory = store.GetCategoryByIndex(category);
                     buddy.Category = qqCategory;
                     qqCategory.BuddyList.Add(buddy);
 
@@ -92,32 +96,32 @@ namespace iQQ.Net.WebQQCore.Im.Action
                     store.AddBuddy(buddy);
                 }
                 // face/flag/nick/uin
-                foreach (JToken t in jsonInfo)
+                foreach (var t in jsonInfo)
                 {
-                    JObject info = t.ToObject<JObject>();
-                    long uin = info["uin"].ToObject<long>();
-                    QQBuddy buddy = store.GetBuddyByUin(uin);
+                    var info = t.ToObject<JObject>();
+                    var uin = info["uin"].ToObject<long>();
+                    var buddy = store.GetBuddyByUin(uin);
                     buddy.Nickname = info["nick"].ToString();
                 }
                 // uin/markname
-                foreach (JToken t in jsonMarknames)
+                foreach (var t in jsonMarknames)
                 {
-                    JObject jsonMarkname = t.ToObject<JObject>();
-                    long uin = jsonMarkname["uin"].ToObject<long>();
-                    QQBuddy buddy = store.GetBuddyByUin(uin);
+                    var jsonMarkname = t.ToObject<JObject>();
+                    var uin = jsonMarkname["uin"].ToObject<long>();
+                    var buddy = store.GetBuddyByUin(uin);
                     if (buddy != null)
                     {
                         buddy.MarkName = jsonMarkname["markname"].ToString();
                     }
                 }
                 // vip_level/u/is_vip
-                foreach (JToken t in jsonVipinfo)
+                foreach (var t in jsonVipinfo)
                 {
-                    JObject vipInfo = t.ToObject<JObject>();
-                    long uin = vipInfo["u"].ToObject<long>();
-                    QQBuddy buddy = store.GetBuddyByUin(uin);
+                    var vipInfo = t.ToObject<JObject>();
+                    var uin = vipInfo["u"].ToObject<long>();
+                    var buddy = store.GetBuddyByUin(uin);
                     buddy.VipLevel = vipInfo["vip_level"].ToObject<int>();
-                    int isVip = vipInfo["is_vip"].ToObject<int>();
+                    var isVip = vipInfo["is_vip"].ToObject<int>();
                     if (isVip != 0)
                     {
                         buddy.IsVip = true;

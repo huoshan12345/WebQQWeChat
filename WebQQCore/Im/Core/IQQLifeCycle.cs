@@ -13,7 +13,7 @@
         /// 初始化，在使用之前调用
         /// </summary>
         /// <param name="context"></param>
-        void Init(QQContext context);
+        void Init(IQQContext context);
 
         /// <summary>
         /// 销毁，在使用完毕之后调用

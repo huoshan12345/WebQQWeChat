@@ -7,9 +7,9 @@ namespace iQQ.Net.WebQQCore.Im.Service
     /// </summary>
     public abstract class AbstractService : IQQService
     {
-        public QQContext Context { get; private set; }
+        public IQQContext Context { get; private set; }
 
-        public virtual void Init(QQContext context)
+        public virtual void Init(IQQContext context)
         {
             Context = context;
         }

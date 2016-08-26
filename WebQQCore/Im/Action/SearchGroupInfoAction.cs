@@ -1,4 +1,5 @@
-﻿using iQQ.Net.WebQQCore.Im.Bean;
+﻿using System;
+using iQQ.Net.WebQQCore.Im.Bean;
 using iQQ.Net.WebQQCore.Im.Core;
 using iQQ.Net.WebQQCore.Im.Event;
 using iQQ.Net.WebQQCore.Im.Http;
@@ -15,19 +16,19 @@ namespace iQQ.Net.WebQQCore.Im.Action
     public class SearchGroupInfoAction : AbstractHttpAction
     {
 
-        private QQGroupSearchList buddy;
+        private readonly QQGroupSearchList _buddy;
   
-        public SearchGroupInfoAction(QQContext context, QQActionEventHandler listener, QQGroupSearchList buddy)
+        public SearchGroupInfoAction(IQQContext context, QQActionEventHandler listener, QQGroupSearchList buddy)
             : base(context, listener)
         {
 
-            this.buddy = buddy;
+            _buddy = buddy;
         }
 
         public override QQHttpRequest OnBuildRequest()
         {
-            QQSession session = Context.Session;
-            QQHttpRequest req = CreateHttpRequest("GET",
+            var session = Context.Session;
+            var req = CreateHttpRequest("GET",
                     QQConstants.URL_SEARCH_GROUP_INFO);
 
             //我不知道以下4个参数干啥？但是一致！	
@@ -36,13 +37,13 @@ namespace iQQ.Net.WebQQCore.Im.Action
             req.AddGetValue("c3", "0");
             req.AddGetValue("st", "0");
 
-            req.AddGetValue("pg", buddy.CurrentPage + "");
-            req.AddGetValue("perpage", buddy.PageSize + "");
-            req.AddGetValue("all", buddy.KeyStr);
+            req.AddGetValue("pg", _buddy.CurrentPage);
+            req.AddGetValue("perpage", _buddy.PageSize);
+            req.AddGetValue("all", _buddy.KeyStr);
 
             req.AddGetValue("vfwebqq", session.Vfwebqq);
-            req.AddGetValue("t", DateUtils.NowTimestamp() / 1000 + "");
-            req.AddGetValue("type", 1 + "");
+            req.AddGetValue("t", DateTime.Now.CurrentTimeSeconds());
+            req.AddGetValue("type", 1);
             req.AddGetValue("vfcode", "");
 
             return req;
@@ -50,15 +51,15 @@ namespace iQQ.Net.WebQQCore.Im.Action
 
         public override void OnHttpStatusOK(QQHttpResponse response)
         {
-            JObject json = JObject.Parse(response.GetResponseString());
+            var json = JObject.Parse(response.GetResponseString());
 
             if (json["retcode"].ToString() == "0")
             {
-                JArray result = json["result"].ToObject<JArray>();
-                for (int index = 0; index < result.Count; index++)
+                var result = json["result"].ToObject<JArray>();
+                for (var index = 0; index < result.Count; index++)
                 {   //结果获取;
-                    QQGroupSearchInfo info = new QQGroupSearchInfo();
-                    JObject ret = result[index].ToObject<JObject>();
+                    var info = new QQGroupSearchInfo();
+                    var ret = result[index].ToObject<JObject>();
                     info.GroupId = ret["GE"].ToObject<long>();  //真实的QQ号
                     info.OwerId = ret["QQ"].ToObject<long>();
                     info.GroupName = ret["TI"].ToString();
@@ -68,10 +69,10 @@ namespace iQQ.Net.WebQQCore.Im.Action
             }
             if (json["retcode"].ToString() == "100110") //需要验证码
             {
-                this.buddy.NeedVfcode = true;
+                this._buddy.NeedVfcode = true;
 
             }
-            NotifyActionEvent(QQActionEventType.EVT_OK, buddy);
+            NotifyActionEvent(QQActionEventType.EVT_OK, _buddy);
         }
 
     }

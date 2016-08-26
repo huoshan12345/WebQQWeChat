@@ -14,6 +14,11 @@ namespace iQQ.Net.WebQQCore.Im.Module
     /// </summary>
     public class EmailModule : AbstractModule
     {
+        public override QQModuleType GetModuleType()
+        {
+            return QQModuleType.EMAIL;
+        }
+
         public int ErrorCount { get; set; }
 
         /// <summary>

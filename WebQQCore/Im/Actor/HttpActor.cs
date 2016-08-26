@@ -22,7 +22,7 @@ namespace iQQ.Net.WebQQCore.Im.Actor
     public class HttpActor : QQActor
     {
         private readonly HttpActorType _type;
-        private readonly QQContext _context;
+        private readonly IQQContext _context;
         private readonly IHttpAction _action;
         private readonly QQHttpResponse _response;
         private readonly Exception _throwable;
@@ -76,14 +76,14 @@ namespace iQQ.Net.WebQQCore.Im.Actor
             }
         }
 
-        public HttpActor(HttpActorType type, QQContext context, IHttpAction action)
+        public HttpActor(HttpActorType type, IQQContext context, IHttpAction action)
         {
             _type = type;
             _context = context;
             _action = action;
         }
 
-        public HttpActor(HttpActorType type, QQContext context, IHttpAction action, QQHttpResponse response)
+        public HttpActor(HttpActorType type, IQQContext context, IHttpAction action, QQHttpResponse response)
         {
             _type = type;
             _context = context;
@@ -91,7 +91,7 @@ namespace iQQ.Net.WebQQCore.Im.Actor
             _response = response;
         }
 
-        public HttpActor(HttpActorType type, QQContext context, IHttpAction action, Exception throwable)
+        public HttpActor(HttpActorType type, IQQContext context, IHttpAction action, Exception throwable)
         {
             _type = type;
             _context = context;
@@ -99,7 +99,7 @@ namespace iQQ.Net.WebQQCore.Im.Actor
             _throwable = throwable;
         }
 
-        public HttpActor(HttpActorType type, QQContext context, IHttpAction action, long current, long total)
+        public HttpActor(HttpActorType type, IQQContext context, IHttpAction action, long current, long total)
         {
             _type = type;
             _context = context;
@@ -111,10 +111,10 @@ namespace iQQ.Net.WebQQCore.Im.Actor
 
         public class HttpAdaptor : IQQHttpListener
         {
-            private readonly QQContext context;
+            private readonly IQQContext context;
             private readonly IHttpAction action;
 
-            public HttpAdaptor(QQContext context, IHttpAction action)
+            public HttpAdaptor(IQQContext context, IHttpAction action)
             {
                 this.context = context;
                 this.action = action;

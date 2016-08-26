@@ -7,7 +7,7 @@ namespace iQQ.Net.WebQQCore.Im.Core
     /// <summary>
     /// QQ环境上下文，所有的模块都是用QQContext来获取对象
     /// </summary>
-    public interface QQContext
+    public interface IQQContext
     {
         void PushActor(QQActor actor);
 

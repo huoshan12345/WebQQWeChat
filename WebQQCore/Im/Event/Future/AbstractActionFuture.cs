@@ -21,10 +21,7 @@ namespace iQQ.Net.WebQQCore.Im.Event.Future
             this._proxyListener = proxyListener;
             Listener = (sender, args) =>
             {
-                if (this._proxyListener != null)
-                {
-                    this._proxyListener(sender, args);
-                }
+                _proxyListener?.Invoke(sender, args);
                 _eventQueue.Add(args);         // 没问题
             };
             OnActionEvent += Listener;

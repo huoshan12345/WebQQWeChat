@@ -61,7 +61,7 @@ namespace iQQ.Net.WebQQCore.Im.Bean
         /// <summary>
         /// 出生日期
         /// </summary>
-        public DateTime Birthday { get; set; }
+        public DateTime? Birthday { get; set; }
 
         /// <summary>
         /// 电话
@@ -153,14 +153,14 @@ namespace iQQ.Net.WebQQCore.Im.Bean
         public int Cip { get; set; }
 
         [NonSerialized]
-        private Image face; // 头像,不能被序列化
+        private Image _face; // 头像,不能被序列化
         /// <summary>
         /// 头像
         /// </summary>
         public Image Face
         {
-            get { return face; }
-            set { face = value; }
+            get { return _face; }
+            set { _face = value; }
         }
 
         /// <summary>
@@ -216,7 +216,7 @@ namespace iQQ.Net.WebQQCore.Im.Bean
                 }
                 catch (Exception e)
                 {
-                    Birthday = default(DateTime);
+                    Birthday = null;
                     MyLogger.Default.Warn(e.Message, e);
                 }
             }

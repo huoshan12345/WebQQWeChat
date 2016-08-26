@@ -13,7 +13,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
     /// </summary>
     public class UpdateGroupMessageFilterAction : AbstractHttpAction
     {
-        public UpdateGroupMessageFilterAction(QQContext context, QQActionEventHandler listener) : base(context, listener) { }
+        public UpdateGroupMessageFilterAction(IQQContext context, QQActionEventHandler listener) : base(context, listener) { }
 
         public override QQHttpRequest OnBuildRequest()
         {
@@ -36,7 +36,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
             {
                 if (g.Gin > 0)
                 {
-                    groupmask.Add(g.Gin + "", g.Mask + "");
+                    groupmask.Add(g.Gin.ToString(), g.Mask);
                 }
             }
             JObject itemlist = new JObject();

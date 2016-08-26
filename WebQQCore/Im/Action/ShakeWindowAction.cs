@@ -1,4 +1,5 @@
-﻿using iQQ.Net.WebQQCore.Im.Bean;
+﻿using System;
+using iQQ.Net.WebQQCore.Im.Bean;
 using iQQ.Net.WebQQCore.Im.Core;
 using iQQ.Net.WebQQCore.Im.Event;
 using iQQ.Net.WebQQCore.Im.Http;
@@ -13,23 +14,23 @@ namespace iQQ.Net.WebQQCore.Im.Action
     /// </summary>
     public class ShakeWindowAction : AbstractHttpAction
     {
-        private QQUser user;
+        private readonly QQUser _user;
  
-        public ShakeWindowAction(QQContext context, QQActionEventHandler listener, QQUser user)
+        public ShakeWindowAction(IQQContext context, QQActionEventHandler listener, QQUser user)
             : base(context, listener)
         {
 
-            this.user = user;
+            _user = user;
         }
 
         public override QQHttpRequest OnBuildRequest()
         {
-            QQSession session = Context.Session;
-            QQHttpRequest req = CreateHttpRequest("GET", QQConstants.URL_SHAKE_WINDOW);
-            req.AddGetValue("to_uin", user.Uin + "");
+            var session = Context.Session;
+            var req = CreateHttpRequest("GET", QQConstants.URL_SHAKE_WINDOW);
+            req.AddGetValue("to_uin", _user.Uin);
             req.AddGetValue("psessionid", session.SessionId);
-            req.AddGetValue("clientid", session.ClientId + "");
-            req.AddGetValue("t", DateUtils.NowTimestamp() + "");
+            req.AddGetValue("clientid", session.ClientId);
+            req.AddGetValue("t", DateTime.Now.CurrentTimeSeconds());
 
             req.AddHeader("Referer", QQConstants.REFFER);
             return req;
@@ -37,10 +38,10 @@ namespace iQQ.Net.WebQQCore.Im.Action
 
         public override void OnHttpStatusOK(QQHttpResponse response)
         {
-            JObject json = JObject.Parse(response.GetResponseString());
+            var json = JObject.Parse(response.GetResponseString());
             if (json["retcode"].ToString() == "0")
             {
-                NotifyActionEvent(QQActionEventType.EVT_OK, user);
+                NotifyActionEvent(QQActionEventType.EVT_OK, _user);
             }
             else
             {

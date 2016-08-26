@@ -59,6 +59,9 @@
   <ItemGroup>
     <Compile Include="Im\Action\CheckQRCodeAction.cs" />
     <Compile Include="Im\Action\GetQRCodeAction.cs" />
+    <Compile Include="Im\Action\GetSelfInfoAction.cs" />
+    <Compile Include="Im\Action\GetVFWebqq.cs" />
+    <Compile Include="Im\Action\GetWebqq.cs" />
     <Compile Include="QRcodeLoginTest.cs" />
     <Compile Include="Util\Log\MyLogger.cs" />
     <Compile Include="Util\QueryString.cs" />
@@ -147,7 +150,7 @@
     <Compile Include="Im\Bean\QQStatus.cs" />
     <Compile Include="Im\Bean\QQStranger.cs" />
     <Compile Include="Im\Bean\QQUser.cs" />
-    <Compile Include="Im\Core\QQContext.cs" />
+    <Compile Include="Im\Core\IQQContext.cs" />
     <Compile Include="Im\Core\IQQLifeCycle.cs" />
     <Compile Include="Im\Core\IQQModule.cs" />
     <Compile Include="Im\Core\IQQService.cs" />
@@ -189,6 +192,7 @@
     <Compile Include="Im\WebQQClient.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Test.cs" />
+    <Compile Include="Util\UrlUtils.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\hash.js" />

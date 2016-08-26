@@ -14,7 +14,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
         private readonly List<QQEmail> _markList;
 
         public DeleteEmailAction(List<QQEmail> markList,
-                QQContext context, QQActionEventHandler listener)
+                IQQContext context, QQActionEventHandler listener)
             : base(context, listener)
         {
             this._markList = markList;

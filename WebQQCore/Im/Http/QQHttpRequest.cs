@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using iQQ.Net.WebQQCore.Util;
@@ -25,6 +26,7 @@ namespace iQQ.Net.WebQQCore.Im.Http
 
         private string _charset;
 
+
         public QQHttpRequest(string url, string method)
         {
             _url = url;
@@ -41,13 +43,13 @@ namespace iQQ.Net.WebQQCore.Im.Http
             {
                 if (_getMap.Count > 0)
                 {
-                    StringBuilder buffer = new StringBuilder(_url);
+                    var buffer = new StringBuilder(_url);
                     buffer.Append("?");
 
                     foreach (var it in _getMap)
                     {
-                        string key = it.Key;
-                        string value = it.Value;
+                        var key = it.Key;
+                        var value = it.Value;
                         key = StringHelper.UrlEncode(key);
                         value = StringHelper.UrlEncode(value ?? "");
                         buffer.Append(key);
@@ -68,6 +70,9 @@ namespace iQQ.Net.WebQQCore.Im.Http
         public string Method { get; set; }
 
         public int Timeout { get; set; }
+
+
+        public string PostBody { get; set; }
 
         public Dictionary<string, string> HeaderMap { get; set; }
 
@@ -119,7 +124,7 @@ namespace iQQ.Net.WebQQCore.Im.Http
                 else if (PostMap.Count > 0)
                 {
                     //AddHeader("Content-Type", "application/x-www-form-urlencoded");
-                    StringBuilder buffer = new StringBuilder();
+                    var buffer = new StringBuilder();
 
                     foreach (var post in PostMap)
                     {
@@ -127,8 +132,8 @@ namespace iQQ.Net.WebQQCore.Im.Http
                         {
                             buffer.Append("&");
                         }
-                        string key = post.Key;
-                        string value = post.Value;
+                        var key = post.Key;
+                        var value = post.Value;
                         key = StringHelper.UrlEncode(key);
                         value = StringHelper.UrlEncode(value ?? "");
                         buffer.Append(key);
@@ -196,40 +201,31 @@ namespace iQQ.Net.WebQQCore.Im.Http
             _inputStream = inputStream;
         }
 
-        /**
-         * 添加POST的值
-         *
-         * @param key a {@link java.lang.String} object.
-         * @param value a {@link java.lang.String} object.
-         */
+
         public void AddPostValue(string key, string value)
         {
-            PostMap.Add(key, value, AddChoice.Update);
+            PostMap.Add(key, value ?? string.Empty, AddChoice.Update);
         }
 
-        /**
-         * 添加POST文件
-         *
-         * @param key a {@link java.lang.String} object.
-         * @param file a {@link java.io.File} object.
-         */
+        public void AddPostValue(string key, object value)
+        {
+            AddPostValue(key, value?.ToString());
+        }
+
         public void AddPostFile(string key, string file)
         {
             FileMap.Add(key, file, AddChoice.Update);
         }
 
-        /**
-         * 添加POST的值
-         *
-         * @param key a {@link java.lang.String} object.
-         * @param value a {@link java.lang.String} object.
-         */
         public void AddGetValue(string key, string value)
         {
-            _getMap.Add(key, value, AddChoice.Update);
+            _getMap.Add(key, value ?? string.Empty, AddChoice.Update);
         }
 
-
+        public void AddGetValue(string key, object value)
+        {
+            AddGetValue(key, value?.ToString());
+        }
     }
 
 }

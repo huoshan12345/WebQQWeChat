@@ -19,7 +19,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
         private readonly long _uin;
         private readonly string _verifyCode;
 
-        public WebLoginAction(QQContext context, QQActionEventHandler listener, 
+        public WebLoginAction(IQQContext context, QQActionEventHandler listener, 
             string username, string password, long uin, string verifyCode)
             : base(context, listener)
         {

@@ -14,7 +14,7 @@ using iQQ.Net.WebQQCore.Util.Log;
 
 namespace iQQ.Net.WebQQCore.Im
 {
-    public class WebQQClient : IQQClient, QQContext
+    public class WebQQClient : IQQClient, IQQContext
     {
         private readonly Dictionary<QQServiceType, IQQService> _services;
         private readonly Dictionary<QQModuleType, IQQModule> _modules;
@@ -186,6 +186,17 @@ namespace iQQ.Net.WebQQCore.Im
             {
                 MyLogger.Default.Warn("销毁所有模块和服务失败", e);
             }
+        }
+
+        public QQActionFuture GetSelfInfo(QQActionEventHandler listener)
+        {
+            var mod = GetModule<LoginModule>(QQModuleType.LOGIN);
+            return mod.GetSelfInfo(listener);
+        }
+
+        public void InitExtendQQModel(IQQModule qqModule)
+        {
+            qqModule.Init(this);
         }
 
         /// <summary>
@@ -691,8 +702,7 @@ namespace iQQ.Net.WebQQCore.Im
         /// <param name="verifyEvent"></param>
         public void CancelVerify(QQNotifyEvent verifyEvent)
         {
-            var verify =
-                (QQNotifyEventArgs.ImageVerify)verifyEvent.Target;
+            var verify = (QQNotifyEventArgs.ImageVerify)verifyEvent.Target;
             verify.Future.Cancel();
         }
 
@@ -763,7 +773,7 @@ namespace iQQ.Net.WebQQCore.Im
         /// <param name="qqActionListener"></param>
         public void GetQRCode(QQActionEventHandler qqActionListener)
         {
-            LoginModule login = GetModule<LoginModule>(QQModuleType.LOGIN);
+            var login = GetModule<LoginModule>(QQModuleType.LOGIN);
             login.GetQRCode(qqActionListener);
         }
 
@@ -773,7 +783,7 @@ namespace iQQ.Net.WebQQCore.Im
         /// <param name="qqActionListener"></param>
         public void CheckQRCode(QQActionEventHandler qqActionListener)
         {
-            ProcModule module = GetModule<ProcModule>(QQModuleType.PROC);
+            var module = GetModule<ProcModule>(QQModuleType.PROC);
             module.CheckQRCode(qqActionListener);
         }
     }

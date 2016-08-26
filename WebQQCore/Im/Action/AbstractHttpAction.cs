@@ -15,12 +15,12 @@ namespace iQQ.Net.WebQQCore.Im.Action
     public abstract class AbstractHttpAction : IHttpAction
     {
         private int _retryTimes;
-        public QQContext Context { get; }
+        public IQQContext Context { get; }
         public QQActionFuture ActionFuture { get; set; }
         public Task<QQHttpResponse> ResponseFuture { get; set; }
         public QQActionEventHandler Listener { get; set; }
 
-        protected AbstractHttpAction(QQContext context, QQActionEventHandler listener)
+        protected AbstractHttpAction(IQQContext context, QQActionEventHandler listener)
         {
             Context = context;
             Listener = listener;
@@ -31,8 +31,8 @@ namespace iQQ.Net.WebQQCore.Im.Action
         {
             try
             {
-                string type = response.GetContentType() ?? "";
-                if ((type.StartsWith("application/x-javascript")
+                var type = response.GetContentType();
+                if (type != null && (type.StartsWith("application/x-javascript")
                         || type.StartsWith("application/json")
                         || type.Contains("text")
                         ) && response.GetContentLength() > 0)
@@ -102,21 +102,21 @@ namespace iQQ.Net.WebQQCore.Im.Action
             switch (type)
             {
                 case QQActionEventType.EVT_ERROR:
-                var ex = (target as Exception) ?? new QQException(QQErrorCode.UNKNOWN_ERROR);
+                    var ex = (target as Exception) ?? new QQException(QQErrorCode.UNKNOWN_ERROR);
 #if DEBUG
-                MyLogger.Default.Error($"{GetType().Name} [type={type.GetDescription()}, exception={ex.Message}, stacktrace={ex.StackTrace}]",ex);
+                    MyLogger.Default.Error($"{GetType().Name} [type={type.GetDescription()}, exception={ex.Message}, stacktrace={ex.StackTrace}]", ex);
 #else
                 MyLogger.Default.Debug($"{GetType().Name} [type={type.GetDescription()}, exception={ex.Message}", ex);
 #endif
-                break;
+                    break;
 
                 case QQActionEventType.EVT_CANCELED:
-                MyLogger.Default.Info($"{GetType().Name} [type={type.GetDescription()}, target={target}]");
-                break;
+                    MyLogger.Default.Info($"{GetType().Name} [type={type.GetDescription()}, target={target}]");
+                    break;
 
                 default:
-                MyLogger.Default.Debug($"{GetType().Name} [type={type.GetDescription()}, target={target}]");
-                break;
+                    MyLogger.Default.Debug($"{GetType().Name} [type={type.GetDescription()}, target={target}]");
+                    break;
             }
             Listener?.Invoke(ActionFuture, new QQActionEvent(type, target));
         }

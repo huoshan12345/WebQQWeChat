@@ -17,7 +17,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
     {
         private QQUser buddy;
 
-        public GetFriendInfoAction(QQContext context, QQActionEventHandler listener, QQUser buddy)
+        public GetFriendInfoAction(IQQContext context, QQActionEventHandler listener, QQUser buddy)
             : base(context, listener)
         {
             this.buddy = buddy;
@@ -32,13 +32,13 @@ namespace iQQ.Net.WebQQCore.Im.Action
                 vfwebqq	efa425e6afa21b3ca3ab8db97b65afa0535feb4af47a38cadcf1a4b1650169b4b4eee9955f843990
                 t	1346856270187                         
              */
-            QQSession session = Context.Session;
-            QQHttpRequest req = CreateHttpRequest("GET", QQConstants.URL_GET_FRIEND_INFO);
-            req.AddGetValue("tuin", buddy.Uin + "");
+            var session = Context.Session;
+            var req = CreateHttpRequest("GET", QQConstants.URL_GET_FRIEND_INFO);
+            req.AddGetValue("tuin", buddy.Uin);
             req.AddGetValue("verifysession", "");	//难道有验证码？？？
             req.AddGetValue("code", "");
             req.AddGetValue("vfwebqq", session.Vfwebqq);
-            req.AddGetValue("t", DateUtils.NowTimestamp() / 1000 + "");
+            req.AddGetValue("t", DateTime.Now.CurrentTimeSeconds());
 
             req.AddHeader("Referer", QQConstants.REFFER);
             return req;
@@ -46,10 +46,10 @@ namespace iQQ.Net.WebQQCore.Im.Action
 
         public override void OnHttpStatusOK(QQHttpResponse response)
         {
-            JObject json = JObject.Parse(response.GetResponseString());
+            var json = JObject.Parse(response.GetResponseString());
             if (json["retcode"].ToString() == "0")
             {
-                JObject obj = json["result"].ToObject<JObject>();
+                var obj = json["result"].ToObject<JObject>();
                 try
                 {
                     buddy.Birthday = DateUtils.Parse(obj["birthday"].ToObject<JObject>());
@@ -57,7 +57,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
                 catch (FormatException e)
                 {
                     MyLogger.Default.Warn($"日期转换失败：{obj["birthday"]}", e);
-                    buddy.Birthday = default(DateTime);
+                    buddy.Birthday = null;
                 }
                 buddy.Occupation = obj["occupation"].ToString();
                 buddy.Phone = obj["phone"].ToString();

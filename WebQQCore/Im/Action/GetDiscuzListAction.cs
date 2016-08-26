@@ -1,4 +1,5 @@
-﻿using iQQ.Net.WebQQCore.Im.Bean;
+﻿using System;
+using iQQ.Net.WebQQCore.Im.Bean;
 using iQQ.Net.WebQQCore.Im.Core;
 using iQQ.Net.WebQQCore.Im.Event;
 using iQQ.Net.WebQQCore.Im.Http;
@@ -13,16 +14,16 @@ namespace iQQ.Net.WebQQCore.Im.Action
     /// </summary>
     public class GetDiscuzListAction : AbstractHttpAction
     {
-        public GetDiscuzListAction(QQContext context, QQActionEventHandler listener) : base(context, listener) { }
+        public GetDiscuzListAction(IQQContext context, QQActionEventHandler listener) : base(context, listener) { }
 
         public override QQHttpRequest OnBuildRequest()
         {
             QQSession session = Context.Session;
             QQHttpRequest req = CreateHttpRequest("GET", QQConstants.URL_GET_DISCUZ_LIST);
-            req.AddGetValue("clientid", session.ClientId + "");
+            req.AddGetValue("clientid", session.ClientId);
             req.AddGetValue("psessionid", session.SessionId);
             req.AddGetValue("vfwebqq", session.Vfwebqq);
-            req.AddGetValue("t", DateUtils.NowTimestamp() + "");
+            req.AddGetValue("t", DateTime.Now.CurrentTimeSeconds());
             return req;
         }
 

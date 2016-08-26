@@ -33,7 +33,7 @@ namespace iQQ.Net.WebQQCore.Im.Core
         }
 
 
-        public void Init(QQContext context) { }
+        public void Init(IQQContext context) { }
 
 
         public void Destroy() { }

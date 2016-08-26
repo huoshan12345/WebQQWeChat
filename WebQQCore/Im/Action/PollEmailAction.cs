@@ -20,7 +20,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
         private string sid = "";
         private long t = 0;
 
-        public PollEmailAction(string sid, long t, QQContext context, QQActionEventHandler listener)
+        public PollEmailAction(string sid, long t, IQQContext context, QQActionEventHandler listener)
             : base(context, listener)
         {
             this.sid = sid;
@@ -30,13 +30,13 @@ namespace iQQ.Net.WebQQCore.Im.Action
         public override QQHttpRequest OnBuildRequest()
         {
             QQHttpRequest req = CreateHttpRequest("GET", QQConstants.URL_EMAIL_POLL);
-            req.AddGetValue("r", new Random().NextDouble() + "");
+            req.AddGetValue("r", new Random().NextDouble());
             req.AddGetValue("u", Context.Account.Username);
             req.AddGetValue("s", "7");
             req.AddGetValue("k", sid);
-            req.AddGetValue("t", t + "");
+            req.AddGetValue("t", t);
             req.AddGetValue("i", "30");
-            req.AddGetValue("r", new Random().NextDouble() + "");
+            req.AddGetValue("r", new Random().NextDouble());
             req.ReadTimeout = 70 * 1000;
             req.ConnectTimeout = 10 * 1000;
             req.AddHeader("Referer", "http://wp.mail.qq.com/ajax_proxy.html?mail.qq.com&v=110702");

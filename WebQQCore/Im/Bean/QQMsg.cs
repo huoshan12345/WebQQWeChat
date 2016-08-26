@@ -86,23 +86,23 @@ namespace iQQ.Net.WebQQCore.Im.Bean
                         switch (contentItemType.Name.ToUpper())
                         {
                             case "FACE":
-                            AddContentItem(new FaceItem(item));
-                            break;
+                                AddContentItem(new FaceItem(item));
+                                break;
 
                             case "FONT":
-                            AddContentItem(new FontItem(item));
-                            break;
+                                AddContentItem(new FontItem(item));
+                                break;
 
                             case "CFACE":
-                            AddContentItem(new CFaceItem(item));
-                            break;
+                                AddContentItem(new CFaceItem(item));
+                                break;
 
                             case "OFFPIC":
-                            AddContentItem(new OffPicItem(item));
-                            break;
+                                AddContentItem(new OffPicItem(item));
+                                break;
 
                             default:
-                            break;
+                                break;
                         }
                     }
                     else
@@ -152,6 +152,11 @@ namespace iQQ.Net.WebQQCore.Im.Bean
                 buffer.Append(item.ToText());
             }
             return buffer.ToString();
+        }
+
+        public void ClearContentItems()
+        {
+            ContentList.Clear();
         }
     }
 }

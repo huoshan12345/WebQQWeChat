@@ -1,4 +1,5 @@
-﻿using iQQ.Net.WebQQCore.Im.Bean;
+﻿using System;
+using iQQ.Net.WebQQCore.Im.Bean;
 using iQQ.Net.WebQQCore.Im.Core;
 using iQQ.Net.WebQQCore.Im.Event;
 using iQQ.Net.WebQQCore.Im.Http;
@@ -13,35 +14,35 @@ namespace iQQ.Net.WebQQCore.Im.Action
     /// </summary>
     public class GetGroupMemberStatusAction : AbstractHttpAction
     {
-        private QQGroup group;
+        private readonly QQGroup _group;
 
-        public GetGroupMemberStatusAction(QQContext context, QQActionEventHandler listener, QQGroup group)
+        public GetGroupMemberStatusAction(IQQContext context, QQActionEventHandler listener, QQGroup group)
             : base(context, listener)
         {
-            this.group = group;
+            _group = group;
         }
 
         public override void OnHttpStatusOK(QQHttpResponse response)
         {
-            JObject json = JObject.Parse(response.GetResponseString());
+            var json = JObject.Parse(response.GetResponseString());
             if (json["retcode"].ToString() == "0")
             {
                 json = json["result"].ToObject<JObject>();
 
                 // 消除所有成员状态，如果不在线的，webqq是不会返回的。
-                foreach (QQGroupMember member in group.Members)
+                foreach (var member in _group.Members)
                 {
                     member.Status = QQStatus.OFFLINE;
                     member.ClientType = QQClientType.Unknown;
                 }
 
                 //result/stats
-                JArray stats = json["stats"].ToObject<JArray>();
-                for (int i = 0; i < stats.Count; i++)
+                var stats = json["stats"].ToObject<JArray>();
+                for (var i = 0; i < stats.Count; i++)
                 {
                     // 下面重新设置最新状态
-                    JObject stat = stats[i].ToObject<JObject>();
-                    QQGroupMember member = group.GetMemberByUin(stat["uin"].ToObject<long>());
+                    var stat = stats[i].ToObject<JObject>();
+                    var member = _group.GetMemberByUin(stat["uin"].ToObject<long>());
                     if (member != null)
                     {
                         member.ClientType = QQClientType.ValueOfRaw(stat["client_type"].ToObject<int>());
@@ -49,7 +50,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
                     }
                 }
 
-                NotifyActionEvent(QQActionEventType.EVT_OK, group);
+                NotifyActionEvent(QQActionEventType.EVT_OK, _group);
             }
             else
             {
@@ -59,10 +60,10 @@ namespace iQQ.Net.WebQQCore.Im.Action
 
         public override QQHttpRequest OnBuildRequest()
         {
-            QQHttpRequest req = CreateHttpRequest("GET", QQConstants.URL_GET_GROUP_INFO_EXT);
-            req.AddGetValue("gcode", group.Code + "");
+            var req = CreateHttpRequest("GET", QQConstants.URL_GET_GROUP_INFO_EXT);
+            req.AddGetValue("gcode", _group.Code);
             req.AddGetValue("vfwebqq", Context.Session.Vfwebqq);
-            req.AddGetValue("t", DateUtils.NowTimestamp() / 1000 + "");
+            req.AddGetValue("t", DateTime.Now.CurrentTimeSeconds());
             return req;
         }
 

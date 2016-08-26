@@ -1,4 +1,5 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Drawing;
 using System.IO;
 using iQQ.Net.WebQQCore.Im.Bean;
 using iQQ.Net.WebQQCore.Im.Core;
@@ -16,24 +17,24 @@ namespace iQQ.Net.WebQQCore.Im.Action
     public class GetFriendFaceAction : AbstractHttpAction
     {
 
-        private QQUser user;
+        private readonly QQUser _user;
         
-        public GetFriendFaceAction(QQContext context, QQActionEventHandler listener,QQUser user)
+        public GetFriendFaceAction(IQQContext context, QQActionEventHandler listener,QQUser user)
             : base(context, listener)
         {
-            this.user = user;
+            this._user = user;
         }
 
         public override QQHttpRequest OnBuildRequest()
         {
             QQSession session = Context.Session;
             QQHttpRequest req = CreateHttpRequest("GET", QQConstants.URL_GET_USER_FACE);
-            req.AddGetValue("uin", user.Uin + "");
+            req.AddGetValue("uin", _user.Uin);
             req.AddGetValue("vfwebqq", session.Vfwebqq);
-            req.AddGetValue("t", DateUtils.NowTimestamp() / 1000 + "");
-            req.AddGetValue("cache", 0 + ""); // ??
-            req.AddGetValue("type", 1 + ""); // ??
-            req.AddGetValue("fid", 0 + ""); // ??
+            req.AddGetValue("t", DateTime.Now.CurrentTimeSeconds());
+            req.AddGetValue("cache", 0); // ??
+            req.AddGetValue("type", 1); // ??
+            req.AddGetValue("fid", 0); // ??
 
             req.AddHeader("Referer", QQConstants.REFFER);
             return req;
@@ -46,13 +47,13 @@ namespace iQQ.Net.WebQQCore.Im.Action
             try
             {
                 image = Image.FromStream(ms);
-                user.Face = image;
+                _user.Face = image;
             }
             catch (IOException e)
             {
                 throw new QQException(QQErrorCode.IO_ERROR, e);
             }
-            NotifyActionEvent(QQActionEventType.EVT_OK, user);
+            NotifyActionEvent(QQActionEventType.EVT_OK, _user);
         }
     }
 }

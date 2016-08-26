@@ -1,4 +1,6 @@
-﻿namespace iQQ.Net.WebQQCore.Im.Core
+﻿using System;
+
+namespace iQQ.Net.WebQQCore.Im.Core
 {
 
     public enum QQSessionState
@@ -22,7 +24,21 @@
             set { _state = value; }
         }
 
-        public long ClientId { get; set; }
+        private long _clientId;
+        public long ClientId
+        {
+            get
+            {
+                if (_clientId == 0)
+                {
+                   // _clientId = new Random().Next(); //random??
+                    _clientId = 53999199;
+                }
+                return _clientId;
+            }
+            set { _clientId = value; }
+        }
+
         public string SessionId { get; set; }
         public string Vfwebqq { get; set; }
         public string Ptwebqq { get; set; }
@@ -34,6 +50,7 @@
         public int Port { get; set; }
         public int PollErrorCnt { get; set; }
         public string CapCd { get; set; }
+        public string Psessionid { get; set; }
     }
 
 }

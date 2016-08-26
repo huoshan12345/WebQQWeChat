@@ -31,7 +31,7 @@ namespace iQQ.Net.WebQQCore.Im.Service
 
         public QQHttpRequest CreateHttpRequest(string method, string url)
         {
-            QQHttpRequest req = new QQHttpRequest(url, method);
+            var req = new QQHttpRequest(url, method);
             req.AddHeader("User-Agent", _userAgent ?? QQConstants.USER_AGENT);
             req.AddHeader("Referer", QQConstants.REFFER);
             return req;
@@ -51,7 +51,7 @@ namespace iQQ.Net.WebQQCore.Im.Service
                         Encoding = Encoding.UTF8,
                         Allowautoredirect = true,
                         Method = request.Method,
-                        URL = request.Url,
+                        Url = request.Url,
                         ReadWriteTimeout = (request.ReadTimeout > 0) ? request.ReadTimeout : 100000,
                         Timeout = (request.ConnectTimeout > 0) ? request.ConnectTimeout : 30000,
                         ResultType = ResultType.Byte,
@@ -86,6 +86,12 @@ namespace iQQ.Net.WebQQCore.Im.Service
                             httpItem.PostDataType = PostDataType.String;
                             httpItem.Postdata = request.InputString;
                         }
+                        else if(request.PostBody != null)
+                        {
+                            request.AddHeader("Content-Type", "application/json; charset=utf-8");
+                            httpItem.PostDataType = PostDataType.String;
+                            httpItem.Postdata = request.PostBody;
+                        }
                     }
                     else if (request.Method.Equals("GET"))
                     {
@@ -96,8 +102,8 @@ namespace iQQ.Net.WebQQCore.Im.Service
                         throw new QQException(QQErrorCode.IO_ERROR, "not support http method:" + request.Method);
                     }
 
-                    HttpResult result = new HttpHelper().GetHtml(httpItem);
-                    QQHttpResponse response = new QQHttpResponse()
+                    var result = new HttpHelper().GetHtml(httpItem);
+                    var response = new QQHttpResponse()
                     {
                         ResponseMessage = result.StatusDescription,
                         ResponseCode = (int)result.StatusCode,
@@ -139,13 +145,13 @@ namespace iQQ.Net.WebQQCore.Im.Service
         {
             var list = _cookieContainer.GetAllCookies().ToList();
             QQHttpCookie qqHttpCookie = null;
-            Cookie cookie = _cookieContainer.GetCookies(new Uri(url))[name] ?? _cookieContainer.GetCookies(name).FirstOrDefault();
+            var cookie = _cookieContainer.GetCookies(new Uri(url))[name] ?? _cookieContainer.GetCookies(name).FirstOrDefault();
             if (cookie != null) qqHttpCookie = new QQHttpCookie(cookie);
             else MyLogger.Default.Error($"获取cookie失败：{name}");
             return qqHttpCookie;
         }
 
-        public override void Init(QQContext context)
+        public override void Init(IQQContext context)
         {
             base.Init(context);
             try
@@ -199,16 +205,16 @@ namespace iQQ.Net.WebQQCore.Im.Service
         {
             if (string.IsNullOrWhiteSpace(fileName))
             {
-                string dir = @".\cookie\";
+                var dir = @".\cookie\";
                 if (!Directory.Exists(dir))
                 {
                     Directory.CreateDirectory(dir);
                 }
                 fileName = string.Format("{0}{1}{2}", dir, Context.Account.Username, ".txt");
             }
-            FileStream fs = File.Create(fileName);
-            StreamWriter sw = new StreamWriter(fs);
-            foreach (Cookie cookie in _cookieContainer.GetAllCookies())
+            var fs = File.Create(fileName);
+            var sw = new StreamWriter(fs);
+            foreach (var cookie in _cookieContainer.GetAllCookies())
             {
                 sw.WriteLine("{0};{1};{2};", cookie.Domain, cookie.Name, cookie.Value);
             }
@@ -220,7 +226,7 @@ namespace iQQ.Net.WebQQCore.Im.Service
         {
             if (string.IsNullOrEmpty(fileName))
             {
-                string dir = @".\cookie\";
+                var dir = @".\cookie\";
                 fileName = string.Format("{0}{1}{2}", dir, Context.Account.Username, ".txt");
             }
             if (!File.Exists(fileName))
@@ -228,13 +234,13 @@ namespace iQQ.Net.WebQQCore.Im.Service
                 return;
             }
 
-            FileStream fs = new FileStream(fileName, FileMode.Open, FileAccess.Read);
-            StreamReader sr = new StreamReader(fs);
-            string line = "";
+            var fs = new FileStream(fileName, FileMode.Open, FileAccess.Read);
+            var sr = new StreamReader(fs);
+            var line = "";
             while ((line = sr.ReadLine()) != null)
             {
-                string[] cc = line.Split(';');
-                Cookie ck = new Cookie()
+                var cc = line.Split(';');
+                var ck = new Cookie()
                 {
                     Discard = false,
                     Expired = false,

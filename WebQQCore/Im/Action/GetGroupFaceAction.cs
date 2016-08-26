@@ -1,4 +1,5 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Drawing;
 using System.IO;
 using iQQ.Net.WebQQCore.Im.Bean;
 using iQQ.Net.WebQQCore.Im.Core;
@@ -16,24 +17,24 @@ namespace iQQ.Net.WebQQCore.Im.Action
     public class GetGroupFaceAction : AbstractHttpAction
     {
 
-        private QQGroup group;
+        private readonly QQGroup _group;
 
-        public GetGroupFaceAction(QQContext context, QQActionEventHandler listener,
+        public GetGroupFaceAction(IQQContext context, QQActionEventHandler listener,
                 QQGroup group)
             : base(context, listener)
         {
 
-            this.group = group;
+            this._group = group;
         }
 
         public override QQHttpRequest OnBuildRequest()
         {
-            QQSession session = Context.Session;
-            QQHttpRequest req = CreateHttpRequest("GET",
+            var session = Context.Session;
+            var req = CreateHttpRequest("GET",
                     QQConstants.URL_GET_USER_FACE);
-            req.AddGetValue("uin", group.Code + "");
+            req.AddGetValue("uin", _group.Code);
             req.AddGetValue("vfwebqq", session.Vfwebqq);
-            req.AddGetValue("t", DateUtils.NowTimestamp() / 1000 + "");
+            req.AddGetValue("t", DateTime.Now.CurrentTimeSeconds());
             req.AddGetValue("cache", "0");
             req.AddGetValue("type", "4");
             req.AddGetValue("fid", "0");
@@ -42,18 +43,17 @@ namespace iQQ.Net.WebQQCore.Im.Action
 
         public override void OnHttpStatusOK(QQHttpResponse response)
         {
-            MemoryStream ms = new MemoryStream(response.ResponseData); // 输入流
-            Image image = null;
+            var ms = new MemoryStream(response.ResponseData); // 输入流
             try
             {
-                image = Image.FromStream(ms);
-                group.Face = image;
+                var image = Image.FromStream(ms);
+                _group.Face = image;
             }
             catch (IOException e)
             {
                 throw new QQException(QQErrorCode.IO_ERROR, e);
             }
-            NotifyActionEvent(QQActionEventType.EVT_OK, group);
+            NotifyActionEvent(QQActionEventType.EVT_OK, _group);
         }
     }
 }

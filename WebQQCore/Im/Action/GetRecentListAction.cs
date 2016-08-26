@@ -14,7 +14,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
     /// </summary>
     public class GetRecentListAction : AbstractHttpAction
     {
-        public GetRecentListAction(QQContext context, QQActionEventHandler listener) : base(context, listener) { }
+        public GetRecentListAction(IQQContext context, QQActionEventHandler listener) : base(context, listener) { }
 
         public override QQHttpRequest OnBuildRequest()
         {
@@ -27,7 +27,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
 
             QQHttpRequest req = CreateHttpRequest("POST", QQConstants.URL_GET_RECENT_LIST);
             req.AddPostValue("r", JsonConvert.SerializeObject(json));
-            req.AddPostValue("clientid", session.ClientId + "");
+            req.AddPostValue("clientid", session.ClientId);
             req.AddPostValue("psessionid", session.SessionId);
 
             return req;

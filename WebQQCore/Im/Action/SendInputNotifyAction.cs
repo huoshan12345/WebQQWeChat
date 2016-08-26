@@ -1,4 +1,5 @@
-﻿using iQQ.Net.WebQQCore.Im.Bean;
+﻿using System;
+using iQQ.Net.WebQQCore.Im.Bean;
 using iQQ.Net.WebQQCore.Im.Core;
 using iQQ.Net.WebQQCore.Im.Event;
 using iQQ.Net.WebQQCore.Im.Http;
@@ -15,7 +16,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
     {
         private QQUser user;
 
-        public SendInputNotifyAction(QQContext context, QQActionEventHandler listener, QQUser user)
+        public SendInputNotifyAction(IQQContext context, QQActionEventHandler listener, QQUser user)
             : base(context, listener)
         {
 
@@ -24,7 +25,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
 
         public override void OnHttpStatusOK(QQHttpResponse response)
         {
-            JObject json = JObject.Parse(response.GetResponseString());
+            var json = JObject.Parse(response.GetResponseString());
             if (json["retcode"].ToString() == "0")
             {
                 NotifyActionEvent(QQActionEventType.EVT_OK, user);
@@ -38,11 +39,11 @@ namespace iQQ.Net.WebQQCore.Im.Action
  
         public override QQHttpRequest OnBuildRequest()
         {
-            QQHttpRequest req = CreateHttpRequest("GET", QQConstants.URL_SEND_INPUT_NOTIFY);
-            QQSession session = Context.Session;
-            req.AddGetValue("clientid", session.ClientId + "");
-            req.AddGetValue("to_uin", user.Uin + "");
-            req.AddGetValue("t", DateUtils.NowTimestamp() + "");
+            var req = CreateHttpRequest("GET", QQConstants.URL_SEND_INPUT_NOTIFY);
+            var session = Context.Session;
+            req.AddGetValue("clientid", session.ClientId);
+            req.AddGetValue("to_uin", user.Uin);
+            req.AddGetValue("t", DateTime.Now.CurrentTimeSeconds());
             req.AddGetValue("psessionid", session.SessionId);
             return req;
         }
