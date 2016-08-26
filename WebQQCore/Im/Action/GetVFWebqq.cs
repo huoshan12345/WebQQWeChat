@@ -30,10 +30,9 @@ namespace iQQ.Net.WebQQCore.Im.Action
 
         public override QQHttpRequest BuildRequest()
         {
-            HttpService httpService = Context.GetSerivce<HttpService>(QQServiceType.HTTP);
-            QQSession session = Context.Session;
-
-            QQHttpRequest request = CreateHttpRequest("GET", url);
+            var httpService = Context.GetSerivce<HttpService>(QQServiceType.HTTP);
+            var session = Context.Session;
+            var request = CreateHttpRequest("GET", url);
             request.AddGetValue("ptwebqq", httpService.GetCookie("ptwebqq", QQConstants.URL_CHANNEL_LOGIN).Value);
             request.AddGetValue("clientid", session.ClientId);
             request.AddGetValue("psessionid", "");
@@ -44,12 +43,12 @@ namespace iQQ.Net.WebQQCore.Im.Action
 
         public override void OnHttpStatusOK(QQHttpResponse response)
         {
-            QQSession session = Context.Session;
+            var session = Context.Session;
 
-            JObject json = JObject.Parse(response.GetResponseString());
+            var json = JObject.Parse(response.GetResponseString());
             if (json["retcode"].ToString() == "0")
             {
-                JObject ret = json["result"].ToObject<JObject>();
+                var ret = json["result"].ToObject<JObject>();
                 session.Vfwebqq = ret["vfwebqq"].ToString();
                 NotifyActionEvent(QQActionEventType.EVT_OK, null);
             }

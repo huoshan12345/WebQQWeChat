@@ -48,7 +48,7 @@
 
         public override string ToString()
         {
-            return string.Format("QQNotifyEvent [type={0}, target={1}]", Type, Target ?? "未知事件");
+            return $"QQNotifyEvent [type={Type}, target={Target ?? "未知事件"}]";
         }
     }
 }

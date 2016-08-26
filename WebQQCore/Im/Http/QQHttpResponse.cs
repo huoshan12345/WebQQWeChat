@@ -10,25 +10,15 @@ namespace iQQ.Net.WebQQCore.Im.Http
     /// </summary>
     public class QQHttpResponse
     {
-        /** Constant <code>S_OK=200</code> */
         public const int S_OK = 200;
-        /** Constant <code>S_NOT_MODIFIED=304</code> */
         public const int S_NOT_MODIFIED = 304;
-        /** Constant <code>S_BAD_REQUEST=400</code> */
         public const int S_BAD_REQUEST = 400;
-        /** Constant <code>S_NOT_AUTHORIZED=401</code> */
         public const int S_NOT_AUTHORIZED = 401;
-        /** Constant <code>S_FORBIDDEN=403</code> */
         public const int S_FORBIDDEN = 403;
-        /** Constant <code>S_NOT_FOUND=404</code> */
         public const int S_NOT_FOUND = 404;
-        /** Constant <code>S_NOT_ACCEPTABLE=406</code> */
         public const int S_NOT_ACCEPTABLE = 406;
-        /** Constant <code>S_INTERNAL_SERVER_ERROR=500</code> */
         public const int S_INTERNAL_SERVER_ERROR = 500;
-        /** Constant <code>S_BAD_GATEWAY=502</code> */
         public const int S_BAD_GATEWAY = 502;
-        /** Constant <code>S_SERVICE_UNAVAILABLE=503</code> */
         public const int S_SERVICE_UNAVAILABLE = 503;
 
         private int _responseCode;// 状态码
@@ -128,13 +118,13 @@ namespace iQQ.Net.WebQQCore.Im.Http
 
         public long GetContentLength()
         {
-            string length = GetHeader("Content-Length");
+            var length = GetHeader(HttpConstants.ContentLength);
             return length != null ? long.Parse(length) : 0;
         }
 
         public string GetContentType()
         {
-            return GetHeader("Content-Type");
+            return GetHeader(HttpConstants.ContentType);
         }
     }
 }

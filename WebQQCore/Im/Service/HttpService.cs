@@ -17,11 +17,7 @@ namespace iQQ.Net.WebQQCore.Im.Service
     {
         private CookieContainer _cookieContainer;
 
-        private string _userAgent;
-        public string UserAgent
-        {
-            set { _userAgent = value; }
-        }
+        public string UserAgent { get; set; }
 
         public void SetHttpProxy(ProxyType proxyType, string proxyHost,
                 int proxyPort, string proxyAuthUser, string proxyAuthPassword)
@@ -32,9 +28,78 @@ namespace iQQ.Net.WebQQCore.Im.Service
         public QQHttpRequest CreateHttpRequest(string method, string url)
         {
             var req = new QQHttpRequest(url, method);
-            req.AddHeader("User-Agent", _userAgent ?? QQConstants.USER_AGENT);
-            req.AddHeader("Referer", QQConstants.REFFER);
+            req.AddHeader(HttpConstants.UserAgent, UserAgent ?? QQConstants.USER_AGENT);
+            req.AddHeader(HttpConstants.Referer, QQConstants.REFFER);
             return req;
+        }
+
+        private HttpItem GetHttpRequest(QQHttpRequest request)
+        {
+            var httpItem = new HttpItem()
+            {
+                KeepAlive = true,
+                ProtocolVersion = HttpVersion.Version10,
+                ContentType = "application/x-www-form-urlencoded; charset=UTF-8", // post方法的时候必须填写，要不然服务器无法解析
+                Encoding = Encoding.UTF8,
+                Allowautoredirect = true,
+                Method = request.Method,
+                Url = request.Url,
+                ReadWriteTimeout = (request.ReadTimeout > 0) ? request.ReadTimeout : 100000,
+                Timeout = (request.ConnectTimeout > 0) ? request.ConnectTimeout : 30000,
+                ResultType = ResultType.Byte,
+            };
+
+            if (request.HeaderMap.ContainsKey(HttpConstants.UserAgent))
+            {
+                httpItem.UserAgent = request.HeaderMap[HttpConstants.UserAgent];
+                request.HeaderMap.Remove(HttpConstants.UserAgent);
+            }
+            if (request.HeaderMap.ContainsKey(HttpConstants.Referer))
+            {
+                httpItem.Referer = request.HeaderMap[HttpConstants.Referer];
+                request.HeaderMap.Remove(HttpConstants.Referer);
+            }
+            if (request.HeaderMap.ContainsKey(HttpConstants.ContentType))
+            {
+                httpItem.ContentType = request.HeaderMap[HttpConstants.ContentType];
+                request.HeaderMap.Remove(HttpConstants.ContentType);
+            }
+
+            foreach (var header in request.HeaderMap)
+            {
+                httpItem.Header.Add(header.Key, header.Value);
+            }
+            httpItem.CookieContainer = _cookieContainer;
+
+            if (request.Method.Equals(HttpConstants.Post))
+            {
+                if (request.FileMap.Count > 0)
+                {
+                    httpItem.PostDataType = PostDataType.FilePath;
+                    httpItem.Postdata = "";
+                }
+                else if (request.PostMap.Count > 0)
+                {
+                    httpItem.PostDataType = PostDataType.String;
+                    httpItem.Postdata = request.InputString;
+                }
+                else if (request.PostBody != null)
+                {
+                    // request.AddHeader(HttpConstants.ContentType, "application/json; charset=utf-8");
+                    httpItem.ContentType = "application/json; charset=utf-8";
+                    httpItem.PostDataType = PostDataType.String;
+                    httpItem.Postdata = request.PostBody;
+                }
+            }
+            else if (request.Method.Equals(HttpConstants.Get))
+            {
+
+            }
+            else
+            {
+                throw new QQException(QQErrorCode.IO_ERROR, "not support http method:" + request.Method);
+            }
+            return httpItem;
         }
 
         public Task<QQHttpResponse> ExecuteHttpRequest(QQHttpRequest request, IQQHttpListener listener)
@@ -43,65 +108,7 @@ namespace iQQ.Net.WebQQCore.Im.Service
             {
                 try
                 {
-                    var httpItem = new HttpItem()
-                    {
-                        KeepAlive = true,
-                        ProtocolVersion = HttpVersion.Version10,
-                        ContentType = "application/x-www-form-urlencoded; charset=UTF-8", // post方法的时候必须填写，要不然服务器无法解析
-                        Encoding = Encoding.UTF8,
-                        Allowautoredirect = true,
-                        Method = request.Method,
-                        Url = request.Url,
-                        ReadWriteTimeout = (request.ReadTimeout > 0) ? request.ReadTimeout : 100000,
-                        Timeout = (request.ConnectTimeout > 0) ? request.ConnectTimeout : 30000,
-                        ResultType = ResultType.Byte,
-                    };
-
-                    if (request.HeaderMap.ContainsKey("User-Agent"))
-                    {
-                        httpItem.UserAgent = request.HeaderMap["User-Agent"];
-                        request.HeaderMap.Remove("User-Agent");
-                    }
-                    if (request.HeaderMap.ContainsKey("Referer"))
-                    {
-                        httpItem.Referer = request.HeaderMap["Referer"];
-                        request.HeaderMap.Remove("Referer");
-                    }
-
-                    foreach (var header in request.HeaderMap)
-                    {
-                        httpItem.Header.Add(header.Key, header.Value);
-                    }
-                    httpItem.CookieContainer = _cookieContainer;
-
-                    if (request.Method.Equals("POST"))
-                    {
-                        if (request.FileMap.Count > 0)
-                        {
-                            httpItem.PostDataType = PostDataType.FilePath;
-                            httpItem.Postdata = "";
-                        }
-                        else if (request.PostMap.Count > 0)
-                        {
-                            httpItem.PostDataType = PostDataType.String;
-                            httpItem.Postdata = request.InputString;
-                        }
-                        else if(request.PostBody != null)
-                        {
-                            request.AddHeader("Content-Type", "application/json; charset=utf-8");
-                            httpItem.PostDataType = PostDataType.String;
-                            httpItem.Postdata = request.PostBody;
-                        }
-                    }
-                    else if (request.Method.Equals("GET"))
-                    {
-
-                    }
-                    else
-                    {
-                        throw new QQException(QQErrorCode.IO_ERROR, "not support http method:" + request.Method);
-                    }
-
+                    var httpItem = GetHttpRequest(request);
                     var result = new HttpHelper().GetHtml(httpItem);
                     var response = new QQHttpResponse()
                     {
@@ -143,7 +150,7 @@ namespace iQQ.Net.WebQQCore.Im.Service
 
         public QQHttpCookie GetCookie(string name, string url)
         {
-            var list = _cookieContainer.GetAllCookies().ToList();
+            // var list = _cookieContainer.GetAllCookies().ToList();
             QQHttpCookie qqHttpCookie = null;
             var cookie = _cookieContainer.GetCookies(new Uri(url))[name] ?? _cookieContainer.GetCookies(name).FirstOrDefault();
             if (cookie != null) qqHttpCookie = new QQHttpCookie(cookie);
@@ -159,6 +166,14 @@ namespace iQQ.Net.WebQQCore.Im.Service
                 //                 cookieJar = new QQHttpCookieJar();
                 //                 cookieCollection = new CookieCollection();
                 _cookieContainer = new CookieContainer();
+
+                var cookieCollertion = new CookieCollection();
+                const string cookies = "pac_uid=1_89009143; eas_sid=01Z4p6L6k320B463T7K275P4M7; ETK=; superuin=o0089009143; superkey=B1XPeF3uz3WRLMkyBB6Q1VsN*lnmlzB-3*2HstMaaNk_; supertoken=4071070047; ptnick_89009143=e69c88e58589e58f8ce58880; u_89009143=@877pU8znY:1472214012:1472214012:e69c88e58589e58f8ce58880:1; ptcz=1152bd213f139ca8275d31b4ee844b6cd6a62ea2d545f4c278cf97612721d7d7; pt2gguin=o0089009143; uin=o0089009143; skey=@877pU8znY; ptisp=ctc; qv_swfrfh=pc.tgbus.com; qv_swfrfc=v20; qv_swfrfu=http://pc.tgbus.com/gta5/; pgv_info=ssid=s258984257; pgv_pvid=3275166312; o_cookie=89009143; pt_login_sig=BN4*30Tcie7*1GoNT8ndM4DSqxO7m2SX2U4XPnohmjRwWxA7mJV*MX66v1D-V*sJ; pt_clientip=21410ae510ab4ae6; pt_serverip=100a0aab3d2c384b; qrsig=gVnSoCxqYorDzZ4wytcigzOBlckpjAUbn-Uurkd6DG1CsacxbyXpoz0lZTmGl3t8";
+                foreach (var cookie in cookies.Split(';').Select(item => item.Split('=')).Where(item => item.Length == 2).Select(item => new Cookie(item[0].Trim(), item[1].Trim())))
+                {
+                    cookieCollertion.Add(cookie);
+                }
+                _cookieContainer.Add(new Uri("http://ssl.ptlogin2.qq.com/"), cookieCollertion);
             }
             catch (Exception e)
             {

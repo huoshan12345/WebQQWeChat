@@ -40,7 +40,11 @@ namespace iQQ.Net.WebQQCore.Im.Service
         /// <returns></returns>
         Task<QQHttpResponse> ExecuteHttpRequest(QQHttpRequest request, IQQHttpListener listener);
 
-
+        /// <summary>
+        /// 设置UA，每次在HTTP请求是会附带上
+        /// </summary>
+        string UserAgent { get; set; }
+        
         /// <summary>
         /// 获取一个cookie
         /// </summary>
@@ -49,13 +53,8 @@ namespace iQQ.Net.WebQQCore.Im.Service
         /// <returns></returns>
         QQHttpCookie GetCookie(string name, string url);
 
-        /// <summary>
-        /// 设置UA，每次在HTTP请求是会附带上
-        /// </summary>
-        string UserAgent { set; }
-
-
         void SaveCookie(string fileName = "");
+
         void ReadCookie(string fileName = "");
     }
 

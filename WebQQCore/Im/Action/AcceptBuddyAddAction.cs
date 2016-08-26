@@ -20,15 +20,15 @@ namespace iQQ.Net.WebQQCore.Im.Action
 
         public override QQHttpRequest OnBuildRequest()
         {
-            QQSession session = Context.Session;
-
-            QQHttpRequest req = CreateHttpRequest("POST", QQConstants.URL_ACCEPET_BUDDY_ADD);
-
-            JObject json = new JObject();
-            json.Add("account", _account);
-            json.Add("gid", "0");
-            json.Add("mname", "");
-            json.Add("vfwebqq", session.Vfwebqq);
+            var session = Context.Session;
+            var req = CreateHttpRequest("POST", QQConstants.URL_ACCEPET_BUDDY_ADD);
+            var json = new JObject
+            {
+                {"account", _account},
+                {"gid", "0"},
+                {"mname", ""},
+                {"vfwebqq", session.Vfwebqq}
+            };
             req.AddPostValue("r", json.ToString());
             req.AddHeader("Referer", QQConstants.REFFER);
             return req;
@@ -36,7 +36,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
 
         public override void OnHttpStatusOK(QQHttpResponse response)
         {
-            JObject json = JObject.Parse(response.GetResponseString());
+            var json = JObject.Parse(response.GetResponseString());
             if (json["retcode"].ToString() == "0")
             {
                 NotifyActionEvent(QQActionEventType.EVT_OK, json);

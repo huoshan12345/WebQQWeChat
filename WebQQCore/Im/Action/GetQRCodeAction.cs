@@ -26,13 +26,15 @@ namespace iQQ.Net.WebQQCore.Im.Action
         public override QQHttpRequest OnBuildRequest()
         {
             var req = CreateHttpRequest("GET", QQConstants.URL_GET_QRCODE);
-            req.AddGetValue("appid", "501004106");
+            req.AddGetValue("appid", QQConstants.APPID);
             req.AddGetValue("e", "0");
             req.AddGetValue("l", "M");
             req.AddGetValue("s", "5");
             req.AddGetValue("d", "72");
             req.AddGetValue("v", "4");
-            req.AddGetValue("4", new Random().Next().ToString());
+            req.AddGetValue("t", new Random().NextDouble());
+            req.AddRefer(QQConstants.URL_LOGIN_PAGE);
+            req.AddHeader(HttpConstants.SetCookie, "qrsig=dG0lVGD8IhpDl1cMsy4qgghLk24rOwSK9YVq2YlWAjBzJ69tIE-9sFkMttULkrww; PATH=/; DOMAIN=ptlogin2.qq.com;");
             return req;
         }
 

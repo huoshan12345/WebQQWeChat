@@ -103,11 +103,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
             {
                 case QQActionEventType.EVT_ERROR:
                     var ex = (target as Exception) ?? new QQException(QQErrorCode.UNKNOWN_ERROR);
-#if DEBUG
-                    MyLogger.Default.Error($"{GetType().Name} [type={type.GetDescription()}, exception={ex.Message}, stacktrace={ex.StackTrace}]", ex);
-#else
-                MyLogger.Default.Debug($"{GetType().Name} [type={type.GetDescription()}, exception={ex.Message}", ex);
-#endif
+                    MyLogger.Default.Error($"{GetType().Name} [type={type.GetDescription()}, exception={ex.Message}]", ex);
                     break;
 
                 case QQActionEventType.EVT_CANCELED:
@@ -149,8 +145,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
 
         public virtual void OnHttpStatusError(QQHttpResponse response)
         {
-            if (!DoRetryIt(QQErrorCode.ERROR_HTTP_STATUS,
-                new QQException(QQErrorCode.ERROR_HTTP_STATUS, response.ResponseMessage)))
+            if (!DoRetryIt(new QQException(QQErrorCode.ERROR_HTTP_STATUS, response.ResponseMessage)))
             {
                 throw new QQException(QQErrorCode.ERROR_HTTP_STATUS, response.ResponseMessage);
             }
@@ -179,13 +174,18 @@ namespace iQQ.Net.WebQQCore.Im.Action
             return false;
         }
 
-        private bool DoRetryIt(QQErrorCode code, Exception t)
+        private bool DoRetryIt(QQErrorCode code, Exception ex)
+        {
+            return DoRetryIt(new QQException(code, ex));
+        }
+
+        private bool DoRetryIt(QQException ex)
         {
             if (ActionFuture.IsCanceled) return true;
             ++_retryTimes;
             if (_retryTimes < QQConstants.MAX_RETRY_TIMES)
             {
-                NotifyActionEvent(QQActionEventType.EVT_RETRY, new QQException(code, t));
+                NotifyActionEvent(QQActionEventType.EVT_RETRY, ex);
                 Thread.Sleep(1000);
                 Context.PushActor(new HttpActor(HttpActorType.BUILD_REQUEST, Context, this));
                 return true;

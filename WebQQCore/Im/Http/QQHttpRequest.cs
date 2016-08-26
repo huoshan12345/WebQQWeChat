@@ -170,32 +170,16 @@ namespace iQQ.Net.WebQQCore.Im.Http
             set { _inputBytes = value; }
         }
 
-        /**
-         * 添加请求头
-         *
-         * @param key a {@link java.lang.String} object.
-         * @param value a {@link java.lang.String} object.
-         */
         public void AddHeader(string key, string value)
         {
             HeaderMap.Add(key, value, AddChoice.Update);
         }
 
-        /**
-         * 以key=&gt;value的方式设置请求体，仅在方法为POST的方式下有用，默认为utf8编码
-         *
-         * @param keymap a {@link java.util.Map} object.
-         */
         public void SetBody(Dictionary<string, string> keymap)
         {
             PostMap = keymap;
         }
 
-        /**
-         * 设置请求的数据流
-         *
-         * @param inputStream a {@link java.io.InputStream} object.
-         */
         public void SetBody(Stream inputStream)
         {
             _inputStream = inputStream;
@@ -225,6 +209,11 @@ namespace iQQ.Net.WebQQCore.Im.Http
         public void AddGetValue(string key, object value)
         {
             AddGetValue(key, value?.ToString());
+        }
+
+        public void AddRefer(string refer)
+        {
+            AddHeader(HttpConstants.Referer, refer);
         }
     }
 

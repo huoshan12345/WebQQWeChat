@@ -62,6 +62,7 @@
     <Compile Include="Im\Action\GetSelfInfoAction.cs" />
     <Compile Include="Im\Action\GetVFWebqq.cs" />
     <Compile Include="Im\Action\GetWebqq.cs" />
+    <Compile Include="Im\Http\HttpConstants.cs" />
     <Compile Include="QRcodeLoginTest.cs" />
     <Compile Include="Util\Log\MyLogger.cs" />
     <Compile Include="Util\QueryString.cs" />

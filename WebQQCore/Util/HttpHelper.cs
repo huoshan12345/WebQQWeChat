@@ -145,7 +145,7 @@ namespace iQQ.Net.WebQQCore.Util
             {
                 var meta = Regex.Match(Encoding.Default.GetString(responseByte), "<meta[^<]*charset=([^<]*)[\"']", RegexOptions.IgnoreCase);
                 var c = string.Empty;
-                if (meta != null && meta.Groups.Count > 0)
+                if (meta.Groups.Count > 0)
                 {
                     c = meta.Groups[1].Value.ToLower().Trim();
                 }
@@ -190,7 +190,7 @@ namespace iQQ.Net.WebQQCore.Util
             using (var stream = new MemoryStream())
             {
                 //GZIIP处理
-                if (_response.ContentEncoding != null && _response.ContentEncoding.Equals("gzip", StringComparison.InvariantCultureIgnoreCase))
+                if (_response.ContentEncoding.Equals("gzip", StringComparison.InvariantCultureIgnoreCase))
                 {
                     //开始读取流并设置编码方式
                     new GZipStream(_response.GetResponseStream(), CompressionMode.Decompress).CopyTo(stream, 10240);

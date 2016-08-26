@@ -10,7 +10,7 @@ namespace iQQ.Net.WebQQCore.Util
     /// </summary>
     public static class QQEncryptor
     {
-        private static readonly Regex RegMd5 = new Regex(@"^([a-fA-F0-9]{32})$");
+        private static readonly Regex _regMd5 = new Regex(@"^([a-fA-F0-9]{32})$");
         /// <summary>
         /// 连接两个字节数组
         /// </summary>
@@ -67,7 +67,7 @@ namespace iQQ.Net.WebQQCore.Util
         /// 对QQ信息进行加密
         /// </summary>
         /// <param name="uin">QQ号</param>
-        /// <param name="password">密码的md5数组</param>
+        /// <param name="md5Pwd"></param>
         /// <param name="verifyCode">验证码</param>
         /// <returns></returns>
         private static string Md5QQ(long uin, byte[] md5Pwd, string verifyCode)
@@ -104,7 +104,7 @@ namespace iQQ.Net.WebQQCore.Util
         /// <returns></returns>
         private static bool IsMd5(string input)
         {
-            return RegMd5.IsMatch(input);
+            return _regMd5.IsMatch(input);
         }
 
         private static string RsaQQ(long uin, string password, string verifyCode)

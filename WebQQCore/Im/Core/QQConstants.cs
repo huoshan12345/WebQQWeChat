@@ -3,8 +3,8 @@
 
     public abstract class QQConstants
     {
-        public const string APPID = "1003903";
-        public const string JSVER = "10129";
+        public const string APPID = "501004106";
+        public const string JSVER = "10173";
         public const string REFFER = "http://d1.web2.qq.com/proxy.html?v=20151105001&callback=1&id=2";
         public const string REFERER_S = "http://s.web2.qq.com/proxy.html?v=20130916001&callback=1&id=1";
         public const string ORIGIN = "http://d1.web2.qq.com";
@@ -55,7 +55,7 @@
         public const string URL_ADD_NO_VERIFY2 = "http://s.web2.qq.com/api/add_no_verify2";
         public const string URL_ADD_NEED_VERIFY2 = "http://s.web2.qq.com/api/add_need_verify2";
         public const string URL_ADD_ANSWER_AND_ADD = "http://s.web2.qq.com/api/answer_and_add2";
-        public const string URL_LOGIN_PAGE = "https://ui.ptlogin2.qq.com/cgi-bin/login?daid=164&target=self&style=5&mibao_css=m_webqq&appid=" + APPID + "&enable_qlogin=0&no_verifyimg=1&s_url=http%3A%2F%2Fweb2.qq.com%2Floginproxy.html&f_url=loginerroralert&strong_login=1&login_state=10&t=20140612002";
+        public const string URL_LOGIN_PAGE = "https://ui.ptlogin2.qq.com/cgi-bin/login?daid=164&target=self&style=16&mibao_css=m_webqq&appid=" + APPID + "&enable_qlogin=0&no_verifyimg=1&s_url=http%3A%2F%2Fw.qq.com%2Fproxy.html&f_url=loginerroralert&strong_login=1&login_state=10&t=20131024001";
         public const string URL_SEARCH_GROUP_INFO = "http://cgi.web2.qq.com/keycgi/qqweb/group/search.do";
         public const string REGXP_LOGIN_SIG = "var g_login_sig=encodeURIComponent\\(\"(.*?)\"\\);";
         public const string URL_EMAIL_POLL = "http://wp.mail.qq.com/poll";
