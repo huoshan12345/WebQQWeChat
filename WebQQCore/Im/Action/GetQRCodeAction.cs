@@ -33,8 +33,8 @@ namespace iQQ.Net.WebQQCore.Im.Action
             req.AddGetValue("d", "72");
             req.AddGetValue("v", "4");
             req.AddGetValue("t", new Random().NextDouble());
-            req.AddRefer(QQConstants.URL_LOGIN_PAGE);
-            req.AddHeader(HttpConstants.SetCookie, "qrsig=dG0lVGD8IhpDl1cMsy4qgghLk24rOwSK9YVq2YlWAjBzJ69tIE-9sFkMttULkrww; PATH=/; DOMAIN=ptlogin2.qq.com;");
+            //req.AddRefer(QQConstants.URL_LOGIN_PAGE);
+            //req.AddHeader(HttpConstants.SetCookie, "qrsig=dG0lVGD8IhpDl1cMsy4qgghLk24rOwSK9YVq2YlWAjBzJ69tIE-9sFkMttULkrww; PATH=/; DOMAIN=ptlogin2.qq.com;");
             return req;
         }
 

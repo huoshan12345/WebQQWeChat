@@ -9,7 +9,7 @@ namespace iQQ.Net.WebQQCore
 {
     class Test
     {
-        private readonly static QQNotifyHandler handler = (sender, Event) =>
+        private static readonly QQNotifyHandler handler = (sender, Event) =>
         {
             var client = sender as IQQClient;
             if (client == null) return;

@@ -68,7 +68,7 @@
         public const string URL_ACCEPET_BUDDY_ADD = "http://s.web2.qq.com/api/allow_and_add2";
 
         public const int MAX_POLL_ERR_CNT = 10;
-        public const int MAX_RETRY_TIMES = 5;
+        public const int MAX_RETRY_TIMES = 1;
         public const int HTTP_TIME_OUT = 80000;
 
         public const string URL_ROBOT_TULING = "http://www.tuling123.com/openapi/api";

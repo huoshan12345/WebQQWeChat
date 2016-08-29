@@ -16,24 +16,24 @@ namespace iQQ.Net.WebQQCore.Im.Event.Future
      */
     public class HttpActionFuture : AbstractActionFuture
     {
-        private IHttpAction httpAction;
+        private readonly IHttpAction _httpAction;
 
         public HttpActionFuture(IHttpAction action)
             : base(action.Listener)
         {
-            this.httpAction = action;
-            this.httpAction.Listener = this.Listener;
-            this.httpAction.ActionFuture = this;
+            _httpAction = action;
+            _httpAction.Listener = Listener;
+            _httpAction.ActionFuture = this;
         }
 
         public override bool IsCancelable()
         {
-            return httpAction.IsCancelable();
+            return _httpAction.IsCancelable();
         }
 
         public override void Cancel()
         {
-            httpAction.CancelRequest();
+            _httpAction.CancelRequest();
         }
     }
 

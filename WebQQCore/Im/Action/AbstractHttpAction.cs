@@ -49,26 +49,30 @@ namespace iQQ.Net.WebQQCore.Im.Action
                     OnHttpStatusError(response);
                 }
             }
-            catch (QQException e)
+            catch (QQException ex)
             {
-                NotifyActionEvent(QQActionEventType.EVT_ERROR, e);
+                NotifyActionEvent(QQActionEventType.EVT_ERROR, ex);
+                // throw;
             }
-            catch (JsonException e)
+            catch (JsonException ex)
             {
-                NotifyActionEvent(QQActionEventType.EVT_ERROR, new QQException(QQErrorCode.JSON_ERROR, e));
+                NotifyActionEvent(QQActionEventType.EVT_ERROR, new QQException(QQErrorCode.JSON_ERROR, ex));
+                // throw new QQException(QQErrorCode.JSON_ERROR, e);
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                NotifyActionEvent(QQActionEventType.EVT_ERROR, new QQException(QQErrorCode.UNKNOWN_ERROR, e));
+                NotifyActionEvent(QQActionEventType.EVT_ERROR, new QQException(QQErrorCode.UNKNOWN_ERROR, ex));
+                // throw new QQException(QQErrorCode.UNKNOWN_ERROR, e);
             }
         }
 
-        public virtual void OnHttpError(Exception t)
+        public virtual void OnHttpError(Exception ex)
         {
             _retryTimes = 0;
-            if (!DoRetryIt(GetErrorCode(t), t))
+            var qqEx = ex as QQException ?? new QQException(ex);
+            if (!DoRetryIt(qqEx))
             {
-                NotifyActionEvent(QQActionEventType.EVT_ERROR, new QQException(GetErrorCode(t), t));
+                NotifyActionEvent(QQActionEventType.EVT_ERROR, qqEx);
             }
         }
 
@@ -103,7 +107,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
             {
                 case QQActionEventType.EVT_ERROR:
                     var ex = (target as Exception) ?? new QQException(QQErrorCode.UNKNOWN_ERROR);
-                    MyLogger.Default.Error($"{GetType().Name} [type={type.GetDescription()}, exception={ex.Message}]", ex);
+                    MyLogger.Default.Error($"{GetType().Name} [type={type.GetDescription()}, exception={ex}]", ex);
                     break;
 
                 case QQActionEventType.EVT_CANCELED:
@@ -145,9 +149,11 @@ namespace iQQ.Net.WebQQCore.Im.Action
 
         public virtual void OnHttpStatusError(QQHttpResponse response)
         {
-            if (!DoRetryIt(new QQException(QQErrorCode.ERROR_HTTP_STATUS, response.ResponseMessage)))
+            var ex = new QQException(QQErrorCode.ERROR_HTTP_STATUS, response.ResponseMessage);
+            if (!DoRetryIt(ex))
             {
-                throw new QQException(QQErrorCode.ERROR_HTTP_STATUS, response.ResponseMessage);
+                // throw ex;
+                NotifyActionEvent(QQActionEventType.EVT_ERROR, ex);
             }
         }
 
@@ -193,20 +199,6 @@ namespace iQQ.Net.WebQQCore.Im.Action
             return false;
         }
 
-        private QQErrorCode GetErrorCode(Exception e)
-        {
-            if (e is TimeoutException)
-            {
-                return QQErrorCode.IO_TIMEOUT;
-            }
-            else if (e is IOException)
-            {
-                return QQErrorCode.IO_ERROR;
-            }
-            else
-            {
-                return QQErrorCode.UNKNOWN_ERROR;
-            }
-        }
+
     }
 }

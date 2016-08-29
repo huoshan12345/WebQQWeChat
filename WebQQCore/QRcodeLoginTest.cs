@@ -24,18 +24,16 @@ namespace iQQ.Net.WebQQCore
     {
 
         static readonly IQQClient mClient = new WebQQClient("", "", (sender, Event) =>
-          {
-              Console.WriteLine(Event);
+        {
+            switch (Event.Type)
+            {
+                case QQNotifyEventType.CHAT_MSG:
+                    var revMsg = (QQMsg)Event.Target;
+                    SendMsg(revMsg.From);
+                    break;
+            }
 
-              switch (Event.Type)
-              {
-                  case QQNotifyEventType.CHAT_MSG:
-                      var revMsg = (QQMsg)Event.Target;
-                      SendMsg(revMsg.From);
-                      break;
-              }
-
-          }, new ThreadActorDispatcher());
+        }, new ThreadActorDispatcher());
 
         public static void Main(string[] args)
         {
@@ -52,8 +50,8 @@ namespace iQQ.Net.WebQQCore
                     }
                     catch (Exception e)
                     {
-                        Console.WriteLine(mClient.Account.QQ + e.Message);
-                        Console.WriteLine(e.StackTrace);
+                        // Console.WriteLine(mClient.Account.QQ + e.Message);
+                        // Console.WriteLine(e.StackTrace);
                     }
                 }
                 else if(Event.Type == QQActionEventType.EVT_ERROR)
@@ -65,7 +63,6 @@ namespace iQQ.Net.WebQQCore
             // 检查二维码状态
             mClient.CheckQRCode((sender, Event) =>
             {
-                Console.WriteLine("checkQRCode " + Event);
                 switch (Event.Type)
                 {
                     case QQActionEventType.EVT_OK:

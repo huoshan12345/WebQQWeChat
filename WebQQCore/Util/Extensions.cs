@@ -6,6 +6,7 @@ using System.Linq;
 using System.Net;
 using System.Security.Cryptography;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace iQQ.Net.WebQQCore.Util
 {
@@ -137,6 +138,31 @@ namespace iQQ.Net.WebQQCore.Util
                 builder.Append(buffer[i].ToString("X2"));
             }
             return builder.ToString();
+        }
+
+        public static bool IsNullOrEmpty(this string str)
+        {
+            return string.IsNullOrEmpty(str);
+        }
+
+        public static bool IsNullOrWhiteSpace(this string str)
+        {
+            return string.IsNullOrWhiteSpace(str);
+        }
+
+        public static string RegexReplace(this string str, string rex, string replacement)
+        {
+            return Regex.Replace(str, rex, replacement);
+        }
+
+        public static bool IsNullOrEmpty(this ICollection col)
+        {
+            return col == null || col.Count == 0;
+        }
+
+        public static bool IsNullOrEmpty<T>(this ICollection<T> col)
+        {
+            return col == null || col.Count == 0;
         }
     }
 }

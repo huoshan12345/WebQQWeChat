@@ -1,4 +1,6 @@
-﻿using System;
+﻿using iQQ.Net.WebQQCore.Util;
+using System;
+using System.IO;
 
 namespace iQQ.Net.WebQQCore.Im
 {
@@ -35,24 +37,46 @@ namespace iQQ.Net.WebQQCore.Im
 
     public class QQException : Exception
     {
+        private QQErrorCode GetErrorCode(Exception e)
+        {
+            if (e is TimeoutException) return QQErrorCode.IO_TIMEOUT;
+            if (e is IOException) return QQErrorCode.IO_ERROR;
+            if (e is ArgumentException) return QQErrorCode.INVALID_PARAMETER;
+
+            return QQErrorCode.UNKNOWN_ERROR;
+        }
+
         public QQErrorCode ErrorCode { get; set; }
 
-        public QQException(QQErrorCode errorCode)
-            : base(errorCode.ToString())
+        public QQException(QQErrorCode errorCode) : base(errorCode.ToString())
         {
             ErrorCode = errorCode;
         }
 
-        public QQException(QQErrorCode errorCode, string msg)
-            : base(msg)
+        public QQException(QQErrorCode errorCode, string msg) : base(msg)
         {
             ErrorCode = errorCode;
         }
 
-        public QQException(QQErrorCode errorCode, Exception e)
-            : base(e.Message, e)
+        public QQException(Exception e) : base(e.Message, e)
+        {
+            ErrorCode = GetErrorCode(e);
+        }
+
+        public QQException(QQErrorCode errorCode, Exception e) : base(e.Message, e)
         {
             ErrorCode = errorCode;
+        }
+
+        public override string Message => base.Message.RegexReplace(@"[\r\n]+", string.Empty);
+
+        public override string ToString()
+        {
+#if DEBUG
+            return base.ToString();
+#else
+            return Message;
+#endif
         }
     }
 }

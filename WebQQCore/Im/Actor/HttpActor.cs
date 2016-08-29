@@ -29,48 +29,44 @@ namespace iQQ.Net.WebQQCore.Im.Actor
         private readonly long _current;
         private readonly long _total;
 
-        public void Execute()
+        public async void Execute()
         {
             try
             {
                 switch (_type)
                 {
                     case HttpActorType.BUILD_REQUEST:
-                    {
                         var service = _context.GetSerivce<IHttpService>(QQServiceType.HTTP);
                         var request = _action.BuildRequest();
-                        var future = service.ExecuteHttpRequest(request, new HttpAdaptor(_context, _action));
-                        _action.ResponseFuture = future; // 为了取消任务的时候使用
-                    }
-                    break;
+                        await service.ExecuteHttpRequestAsync(request, new HttpAdaptor(_context, _action));
+                        break;
 
                     case HttpActorType.CANCEL_REQUEST:
-                    _action.CancelRequest();
-                    break;
+                        _action.CancelRequest();
+                        break;
 
                     case HttpActorType.ON_HTTP_ERROR:
-                    _action.OnHttpError(_throwable);
-                    break;
+                        _action.OnHttpError(_throwable);
+                        break;
 
                     case HttpActorType.ON_HTTP_FINISH:
-                    _action.OnHttpFinish(_response);
-                    break;
+                        _action.OnHttpFinish(_response);
+                        break;
 
                     case HttpActorType.ON_HTTP_HEADER:
-                    _action.OnHttpHeader(_response);
-                    break;
+                        _action.OnHttpHeader(_response);
+                        break;
 
                     case HttpActorType.ON_HTTP_READ:
-                    _action.OnHttpRead(_current, _total);
-                    break;
+                        _action.OnHttpRead(_current, _total);
+                        break;
 
                     case HttpActorType.ON_HTTP_WRITE:
-                    _action.OnHttpWrite(_current, _total);
-                    break;
-
+                        _action.OnHttpWrite(_current, _total);
+                        break;
                 }
             }
-            catch (QQException e)
+            catch (Exception e)
             {
                 _action.NotifyActionEvent(QQActionEventType.EVT_ERROR, e);
             }
@@ -175,7 +171,7 @@ namespace iQQ.Net.WebQQCore.Im.Actor
                 }
             }
         }
-        
+
         public Task ExecuteAsync()
         {
             throw new NotImplementedException();

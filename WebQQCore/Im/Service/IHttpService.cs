@@ -38,7 +38,8 @@ namespace iQQ.Net.WebQQCore.Im.Service
         /// <param name="request"></param>
         /// <param name="listener"></param>
         /// <returns></returns>
-        Task<QQHttpResponse> ExecuteHttpRequest(QQHttpRequest request, IQQHttpListener listener);
+        QQHttpResponse ExecuteHttpRequest(QQHttpRequest request, IQQHttpListener listener);
+        Task<QQHttpResponse> ExecuteHttpRequestAsync(QQHttpRequest request, IQQHttpListener listener);
 
         /// <summary>
         /// 设置UA，每次在HTTP请求是会附带上

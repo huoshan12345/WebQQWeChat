@@ -47,7 +47,7 @@ namespace iQQ.Net.WebQQCore.Util
             catch (Exception ex)
             {
                 //配置参数时出错
-                return new HttpResult() { Exception = ex, Cookie = string.Empty, Header = null, Html = string.Empty, StatusDescription = "配置参数时出错：" + ex.Message };
+                return new HttpResult() { Exception = ex, Cookie = null, Header = null, Html = string.Empty, StatusDescription = "配置参数时出错：" + ex.Message };
             }
             try
             {
@@ -103,11 +103,11 @@ namespace iQQ.Net.WebQQCore.Util
             //获取Headers
             result.Header = _response.Headers;
             //获取最后访问的URl
-            result.ResponseUri = _response.ResponseUri.ToString();
+            result.ResponseUri = _response.ResponseUri;
             //获取CookieCollection
-            if (_response.Cookies != null) result.CookieCollection = _response.Cookies;
+            result.CookieCollection = _response.Cookies;
             //获取set-cookie
-            if (_response.Headers["set-cookie"] != null) result.Cookie = _response.Headers["set-cookie"];
+            result.Cookie = _response.Headers["set-cookie"];
             #endregion
 
             #region byte
@@ -260,7 +260,7 @@ namespace iQQ.Net.WebQQCore.Util
             //来源地址
             _request.Referer = item.Referer;
             //是否执行跳转功能
-            _request.AllowAutoRedirect = item.Allowautoredirect;
+            _request.AllowAutoRedirect = item.AllowAutoRedirect;
             if (item.MaximumAutomaticRedirections > 0)
             {
                 _request.MaximumAutomaticRedirections = item.MaximumAutomaticRedirections;
@@ -533,7 +533,7 @@ namespace iQQ.Net.WebQQCore.Util
         /// <summary>
         /// 支持跳转页面，查询结果将是跳转后的页面，默认是不跳转
         /// </summary>
-        public bool Allowautoredirect { get; set; } = false;
+        public bool AllowAutoRedirect { get; set; } = false;
 
         /// <summary>
         /// 最大连接数
@@ -655,7 +655,7 @@ namespace iQQ.Net.WebQQCore.Util
         /// <summary>
         /// 最后访问的URl
         /// </summary>
-        public string ResponseUri { get; set; }
+        public Uri ResponseUri { get; set; }
         /// <summary>
         /// 获取重定向的URl
         /// </summary>
@@ -676,7 +676,7 @@ namespace iQQ.Net.WebQQCore.Util
                                 var b = locationurl.StartsWith("http://") || locationurl.StartsWith("https://");
                                 if (!b)
                                 {
-                                    locationurl = new Uri(new Uri(ResponseUri), locationurl).AbsoluteUri;
+                                    locationurl = new Uri(ResponseUri, locationurl).AbsoluteUri;
                                 }
                             }
                             return locationurl;
