@@ -34,7 +34,7 @@ namespace iQQ.Net.WebQQCore.Im
 
         QQActionFuture GetQRCode(QQActionEventHandler qqActionListener);
 
-        QQActionFuture CheckQRCode(QQActionEventHandler qqActionListener);
+        //QQActionFuture CheckQRCode(QQActionEventHandler qqActionListener);
 
         /// <summary>
         /// 登录

@@ -46,11 +46,11 @@ namespace iQQ.Net.WebQQCore.Im.Action
             {
                 var qqHex = m.Groups[3].Value;
                 qqHex = Regex.Replace(qqHex, "\\\\x", "");
-                var args = new QQActionEventArgs.CheckVerifyArgs
+                var args = new CheckVerifyArgs
                 {
-                    result = int.Parse(m.Groups[1].Value),
-                    code = m.Groups[2].Value,
-                    uin = long.Parse(qqHex, NumberStyles.HexNumber)
+                    Result = int.Parse(m.Groups[1].Value),
+                    Code = m.Groups[2].Value,
+                    Uin = long.Parse(qqHex, NumberStyles.HexNumber)
                 };
                 NotifyActionEvent(QQActionEventType.EVT_OK, args);
             }

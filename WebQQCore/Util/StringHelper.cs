@@ -104,13 +104,6 @@ namespace iQQ.Net.WebQQCore.Util
             return html;
         }
 
-
-        /**
-         * 编码URL
-         *
-         * @param url 需要进行编码的URL
-         * @return 编码后的URL
-         */
         public static string UrlEncode(this string url)
         {
             return HttpUtility.UrlEncode(url, Encoding.UTF8);

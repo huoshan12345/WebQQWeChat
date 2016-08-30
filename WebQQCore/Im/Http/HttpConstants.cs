@@ -15,6 +15,6 @@ namespace iQQ.Net.WebQQCore.Im.Http
         public const string ContentType = "Content-Type";
         public const string ContentLength = "Content-Length";
         public const string SetCookie = "Set-Cookie";
-
+        public const string Origin = "Origin";
     }
 }

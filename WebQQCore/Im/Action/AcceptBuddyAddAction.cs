@@ -36,15 +36,15 @@ namespace iQQ.Net.WebQQCore.Im.Action
 
         public override void OnHttpStatusOK(QQHttpResponse response)
         {
-            var json = JObject.Parse(response.GetResponseString());
+            var str = response.GetResponseString();
+            var json = JObject.Parse(str);
             if (json["retcode"].ToString() == "0")
             {
                 NotifyActionEvent(QQActionEventType.EVT_OK, json);
             }
             else
             {
-                NotifyActionEvent(QQActionEventType.EVT_ERROR,
-                    new QQException(QQErrorCode.UNEXPECTED_RESPONSE, response.GetResponseString()));
+                throw new QQException(QQErrorCode.UNEXPECTED_RESPONSE, str);
             }
         }
 

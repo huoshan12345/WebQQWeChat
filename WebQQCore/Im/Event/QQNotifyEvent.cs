@@ -33,6 +33,16 @@
         CAPACHA_VERIFY,
         /** 新邮件通知 */
         EMAIL_NOTIFY,
+
+        /// <summary>
+        /// 二维码已就绪
+        /// </summary>
+        QRCODE_READY,
+
+        /// <summary>
+        /// 二维码失效
+        /// </summary>
+        QRCODE_INVALID
     }
 
     public class QQNotifyEvent : QQEvent

@@ -37,8 +37,6 @@ namespace iQQ.Net.WebQQCore.Im.Action
             req.AddGetValue("js_ver", QQConstants.JSVER);
             req.AddGetValue("login_sig", "");
             req.AddGetValue("pt_randsalt", "0");
-            //req.AddHeader(HttpConstants.Referer, QQConstants.URL_LOGIN_PAGE);
-            //req.AddHeader(HttpConstants.ContentType, "application/x-javascript; charset=utf-8");
             return req;
         }
 
@@ -51,9 +49,14 @@ namespace iQQ.Net.WebQQCore.Im.Action
                 var ret = m.Groups[1].Value;
                 switch (ret)
                 {
-                    case "0": NotifyActionEvent(QQActionEventType.EVT_OK, m.Groups[3].Value); break;
-                    case "66": throw new QQException(QQErrorCode.QRCODE_OK, m.Groups[5].Value);
-                    case "67": throw new QQException(QQErrorCode.QRCODE_AUTH, m.Groups[5].Value);
+                    //case "0": NotifyActionEvent(QQActionEventType.EVT_OK, m.Groups[3].Value); break;
+                    //case "66": throw new QQException(QQErrorCode.QRCODE_OK, m.Groups[5].Value);
+                    //case "67": throw new QQException(QQErrorCode.QRCODE_AUTH, m.Groups[5].Value);
+                    case "0": NotifyActionEvent(QQActionEventType.EVT_OK, new CheckQRCodeArgs(QRCodeStatus.QRCODE_OK, m.Groups[3].Value)); break;
+                    case "66": NotifyActionEvent(QQActionEventType.EVT_OK, new CheckQRCodeArgs(QRCodeStatus.QRCODE_VALID, m.Groups[5].Value)); break;
+                    case "67": NotifyActionEvent(QQActionEventType.EVT_OK, new CheckQRCodeArgs(QRCodeStatus.QRCODE_AUTH, m.Groups[5].Value)); break;
+                    case "65":NotifyActionEvent(QQActionEventType.EVT_OK, new CheckQRCodeArgs(QRCodeStatus.QRCODE_INVALID, m.Groups[5].Value)); break;
+
                     default: throw new QQException(QQErrorCode.INVALID_USER, m.Groups[5].Value);
                 }
             }

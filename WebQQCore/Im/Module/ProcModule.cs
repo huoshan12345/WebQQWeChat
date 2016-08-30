@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Threading;
 using iQQ.Net.WebQQCore.Im.Bean;
 using iQQ.Net.WebQQCore.Im.Core;
 using iQQ.Net.WebQQCore.Im.Event;
@@ -19,22 +20,61 @@ namespace iQQ.Net.WebQQCore.Im.Module
             return QQModuleType.PROC;
         }
 
-        public QQActionFuture CheckQRCode(QQActionEventHandler listener)
+        public QQActionFuture GetQRCode(QQActionEventHandler listener)
         {
             var future = new ProcActionFuture(listener, true);
             var login = Context.GetModule<LoginModule>(QQModuleType.LOGIN);
-            login.CheckQRCode((sender, Event) =>
+            login.GetQRCode((sender, @event) =>
+            {
+                if (@event.Type == QQActionEventType.EVT_OK)
+                {
+                    var verify = (Image)@event.Target;
+                    Context.FireNotify(new QQNotifyEvent(QQNotifyEventType.QRCODE_READY, verify));
+                    CheckQRCode(future);
+                }
+                else if (@event.Type == QQActionEventType.EVT_ERROR)
+                {
+                    future.NotifyActionEvent(QQActionEventType.EVT_ERROR, "获取二维码失败");
+                }
+            });
+            return future;
+        }
+
+        private void CheckQRCode(ProcActionFuture future)
+        {
+            var login = Context.GetModule<LoginModule>(QQModuleType.LOGIN);
+            QQActionEventHandler handler = null;
+            handler = (sender, Event) =>
             {
                 if (Event.Type == QQActionEventType.EVT_OK)
                 {
-                    DoCheckLoginSig(Event.Target as string, future);
+                    var eventArgs = (CheckQRCodeArgs) Event.Target;
+                    switch (eventArgs.Status)
+                    {
+                        case QRCodeStatus.QRCODE_OK:
+                            DoCheckLoginSig(eventArgs.Msg, future);
+                            break;
+
+                        case QRCodeStatus.QRCODE_VALID:
+                        case QRCodeStatus.QRCODE_AUTH:
+                            Thread.Sleep(3000);
+                            login.CheckQRCode(handler);
+                            break;
+
+                        case QRCodeStatus.QRCODE_INVALID:
+                            Context.FireNotify(new QQNotifyEvent(QQNotifyEventType.QRCODE_INVALID, eventArgs.Msg));
+                            break;
+
+                        default:
+                            throw new ArgumentOutOfRangeException();
+                    }
                 }
                 else if (Event.Type == QQActionEventType.EVT_ERROR)
                 {
                     future.NotifyActionEvent(QQActionEventType.EVT_ERROR, Event.Target);
                 }
-            });
-            return future;
+            };
+            login.CheckQRCode(handler);
         }
 
 
@@ -107,15 +147,15 @@ namespace iQQ.Net.WebQQCore.Im.Module
             {
                 if (Event.Type == QQActionEventType.EVT_OK)
                 {
-                    var args = (QQActionEventArgs.CheckVerifyArgs)(Event.Target);
-                    Context.Account.Uin = args.uin;
-                    if (args.result == 0)
+                    var args = (CheckVerifyArgs)(Event.Target);
+                    Context.Account.Uin = args.Uin;
+                    if (args.Result == 0)
                     {
-                        DoWebLogin(args.code, future);
+                        DoWebLogin(args.Code, future);
                     }
                     else
                     {
-                        Context.Session.CapCd = args.code;
+                        Context.Session.CapCd = args.Code;
                         DoGetVerify("为了保证您账号的安全，请输入验证码中字符继续登录。", future);
                     }
                 }
@@ -186,6 +226,8 @@ namespace iQQ.Net.WebQQCore.Im.Module
         private void DoChannelLogin(ProcActionFuture future)
         {
             var login = Context.GetModule<LoginModule>(QQModuleType.LOGIN);
+            if(Context.Account.Status == QQStatus.OFFLINE) Context.Account.Status = QQStatus.ONLINE;
+
             login.ChannelLogin(Context.Account.Status, (sender, Event) =>
             {
                 if (Event.Type == QQActionEventType.EVT_OK)

@@ -72,11 +72,7 @@ namespace iQQ.Net.WebQQCore.Im
 
         public override string ToString()
         {
-#if DEBUG
-            return base.ToString();
-#else
             return Message;
-#endif
         }
     }
 }

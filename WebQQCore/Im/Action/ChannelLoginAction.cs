@@ -26,21 +26,18 @@ namespace iQQ.Net.WebQQCore.Im.Action
             session.Ptwebqq = httpService.GetCookie("ptwebqq", QQConstants.URL_CHANNEL_LOGIN).Value;
             var json = new JObject
             {
+                {"status", _status.Value},
                 {"ptwebqq", httpService.GetCookie("ptwebqq", QQConstants.URL_CHANNEL_LOGIN).Value},
                 {"clientid", session.ClientId.ToString()},
-                {"psessionid", session.SessionId},
-                {"status", _status.Value},
-                {"passwd_sig", ""}
+                {"psessionid", ""}
             };
 
             var req = CreateHttpRequest("POST", QQConstants.URL_CHANNEL_LOGIN);
             req.AddPostValue("r", JsonConvert.SerializeObject(json));
-            //req.AddPostValue("clientid", session.ClientId);
-            //req.AddPostValue("psessionid", session.SessionId ?? "null");
-            req.AddHeader("Referer", QQConstants.REFFER);
-            req.AddHeader("Origin", QQConstants.ORIGIN);
-            req.AddHeader("Connection", "Keep-Alive");
+            req.AddHeader(HttpConstants.Referer, QQConstants.REFFER);
+            req.AddHeader(HttpConstants.Origin, QQConstants.ORIGIN);
 
+            // req.AddHeader("Connection", "Keep-Alive");
             return req;
         }
 
@@ -54,7 +51,8 @@ namespace iQQ.Net.WebQQCore.Im.Action
             var json = JObject.Parse(str);
             var session = Context.Session;
             var account = Context.Account;
-            if (json["retcode"].ToString() == "0")
+            var retcode = json["retcode"].ToString();
+            if (retcode == "0")
             {
                 var ret = json["result"].ToObject<JObject>();
                 account.Uin = ret["uin"].ToObject<long>();
@@ -69,7 +67,9 @@ namespace iQQ.Net.WebQQCore.Im.Action
             }
             else
             {
-                NotifyActionEvent(QQActionEventType.EVT_ERROR, new QQException(QQErrorCode.INVALID_RESPONSE));	//TODO ..
+                //var msg = $"errmsg: {json["errmsg"] ?? ""}, retcode: {retcode}";
+                //NotifyActionEvent(QQActionEventType.EVT_ERROR, new QQException(QQErrorCode.INVALID_RESPONSE, msg));	//TODO ..
+                throw new QQException(QQErrorCode.UNEXPECTED_RESPONSE, str);
             }
         }
 

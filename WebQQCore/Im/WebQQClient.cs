@@ -773,7 +773,7 @@ namespace iQQ.Net.WebQQCore.Im
         /// <param name="qqActionListener"></param>
         public QQActionFuture GetQRCode(QQActionEventHandler qqActionListener)
         {
-            var login = GetModule<LoginModule>(QQModuleType.LOGIN);
+            var login = GetModule<ProcModule>(QQModuleType.PROC);
             return login.GetQRCode(qqActionListener);
         }
 
@@ -781,10 +781,10 @@ namespace iQQ.Net.WebQQCore.Im
         /// 检测登录二维码是否已经扫描
         /// </summary>
         /// <param name="qqActionListener"></param>
-        public QQActionFuture CheckQRCode(QQActionEventHandler qqActionListener)
-        {
-            var module = GetModule<ProcModule>(QQModuleType.PROC);
-            return module.CheckQRCode(qqActionListener);
-        }
+        //public QQActionFuture CheckQRCode(QQActionEventHandler qqActionListener)
+        //{
+        //    var module = GetModule<ProcModule>(QQModuleType.PROC);
+        //    return module.CheckQRCode(qqActionListener);
+        //}
     }
 }

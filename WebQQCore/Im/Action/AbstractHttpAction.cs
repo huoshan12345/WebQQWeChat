@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using iQQ.Net.WebQQCore.Im.Actor;
@@ -72,26 +73,27 @@ namespace iQQ.Net.WebQQCore.Im.Action
             var qqEx = ex as QQException ?? new QQException(ex);
             if (!DoRetryIt(qqEx))
             {
-                NotifyActionEvent(QQActionEventType.EVT_ERROR, qqEx);
+                // NotifyActionEvent(QQActionEventType.EVT_ERROR, qqEx);
+                throw qqEx;
             }
         }
 
         public virtual void OnHttpWrite(long current, long total)
         {
-            QQActionEventArgs.ProgressArgs progress = new QQActionEventArgs.ProgressArgs
+            var progress = new ProgressArgs
             {
-                total = total,
-                current = current
+                Total = total,
+                Current = current
             };
             NotifyActionEvent(QQActionEventType.EVT_WRITE, progress);
         }
 
         public virtual void OnHttpRead(long current, long total)
         {
-            QQActionEventArgs.ProgressArgs progress = new QQActionEventArgs.ProgressArgs
+            var progress = new ProgressArgs
             {
-                total = total,
-                current = current
+                Total = total,
+                Current = current
             };
             NotifyActionEvent(QQActionEventType.EVT_READ, progress);
         }
@@ -111,7 +113,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
             {
                 case QQActionEventType.EVT_ERROR:
                     var ex = target as QQException ?? (target is Exception ? new QQException((Exception)target) : new QQException(QQErrorCode.UNKNOWN_ERROR));
-                    MyLogger.Default.Error($"{GetType().Name} [type={type.GetDescription()}, exception={ex}]", ex);
+                    MyLogger.Default.Error($"{GetType().Name} [type={type.GetDescription()}, errorcode={ex.ErrorCode}, exception={ex}]{Environment.NewLine}{ex.StackTrace}", ex);
                     break;
 
                 case QQActionEventType.EVT_CANCELED:
@@ -141,8 +143,8 @@ namespace iQQ.Net.WebQQCore.Im.Action
             var ex = new QQException(QQErrorCode.ERROR_HTTP_STATUS, response.ResponseMessage);
             if (!DoRetryIt(ex))
             {
-                // throw ex;
-                NotifyActionEvent(QQActionEventType.EVT_ERROR, ex);
+                // NotifyActionEvent(QQActionEventType.EVT_ERROR, ex);
+                throw ex;
             }
         }
 

@@ -40,9 +40,9 @@ namespace iQQ.Net.WebQQCore.Im.Service
             {
                 KeepAlive = true,
                 ProtocolVersion = HttpVersion.Version11,
-                ContentType = "application/x-javascript; charset=utf-8", // post方法的时候必须填写，要不然服务器无法解析
+                ContentType = "application/json; charset=utf-8", // post方法的时候必须填写，要不然服务器无法解析
                 Encoding = Encoding.UTF8,
-                AllowAutoRedirect = false,
+                AllowAutoRedirect = true,
                 Method = request.Method,
                 Url = uri.AbsoluteUri,
                 Host = uri.Host,
@@ -118,9 +118,12 @@ namespace iQQ.Net.WebQQCore.Im.Service
                     Headers = new Dictionary<string, List<string>>(),
                 };
 
-                foreach (string header in result.Header)
+                if (!result.Header.IsNullOrEmpty())
                 {
-                    response.Headers.Add(header, result.Header[header]);
+                    foreach (string header in result.Header)
+                    {
+                        response.Headers.Add(header, result.Header[header]);
+                    }
                 }
 
                 if (!result.Cookie.IsNullOrEmpty())
@@ -133,21 +136,23 @@ namespace iQQ.Net.WebQQCore.Im.Service
                     }
                 }
 
-                _cookieContainer.Add(result.CookieCollection);
-
-                if (listener != null)
-                {
-                    listener.OnHttpHeader(response);
-                    listener.OnHttpRead(0, response.GetContentLength());
-                    listener.OnHttpFinish(response);
-                }
+                if (!result.CookieCollection.IsNullOrEmpty()) _cookieContainer.Add(result.CookieCollection);
 
                 if (!result.RedirectUrl.IsNullOrEmpty())
                 {
                     request.Url = result.RedirectUrl;
                     return ExecuteHttpRequest(request, listener);
                 }
-                else return response;
+                else
+                {
+                    if (listener != null)
+                    {
+                        listener.OnHttpHeader(response);
+                        listener.OnHttpRead(0, response.GetContentLength());
+                        listener.OnHttpFinish(response);
+                    }
+                    return response;
+                }
             }
             catch (Exception ex)
             {
@@ -163,7 +168,8 @@ namespace iQQ.Net.WebQQCore.Im.Service
 
         private IEnumerable<Cookie> GetCookiesFromHeader(string header)
         {
-            return header.Split(';').Select(item => item.Split('=')).Where(item => item.Length == 2).Select(item => new Cookie(item[0].Trim(), item[1].Trim()));
+            return header.Split(';').Select(item => item.Split('=')).Where(item => item.Length == 2)
+                .Select(item => new Cookie(item[0].Trim().UrlEncode(), item[1].Trim().UrlEncode()));
         }
 
         public QQHttpCookie GetCookie(string name, string url)
