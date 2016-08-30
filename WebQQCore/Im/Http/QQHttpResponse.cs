@@ -21,47 +21,26 @@ namespace iQQ.Net.WebQQCore.Im.Http
         public const int S_BAD_GATEWAY = 502;
         public const int S_SERVICE_UNAVAILABLE = 503;
 
-        private int _responseCode;// 状态码
-        private string _responseMessage;// 状态消息
-        private Dictionary<string, List<string>> _headers;//回复头
-        private byte[] _responseData;//数据流
-
         public QQHttpResponse(int responseCode, string responseMessage,
                 Dictionary<string, List<string>> headerFields, byte[] responseData)
         {
-            _responseCode = responseCode;
-            _responseMessage = responseMessage;
-            _headers = headerFields;
-            _responseData = responseData;
+            ResponseCode = responseCode;
+            ResponseMessage = responseMessage;
+            Headers = headerFields;
+            ResponseData = responseData;
         }
 
         public QQHttpResponse()
         {
         }
 
-        public int ResponseCode
-        {
-            set { _responseCode = value; }
-            get { return _responseCode; }
-        }
+        public int ResponseCode { set; get; }
 
-        public string ResponseMessage
-        {
-            set { _responseMessage = value; }
-            get { return _responseMessage; }
-        }
+        public string ResponseMessage { set; get; }
 
-        public Dictionary<string, List<string>> Headers
-        {
-            set { _headers = value; }
-            get { return _headers; }
-        }
+        public Dictionary<string, List<string>> Headers { set; get; }
 
-        public byte[] ResponseData
-        {
-            set { _responseData = value; }
-            get { return _responseData; }
-        }
+        public byte[] ResponseData { set; get; }
 
         /// <summary>
         /// 返回指定名字的回复头的值 可能有多个返回值时，默认返回第一个值
@@ -71,7 +50,7 @@ namespace iQQ.Net.WebQQCore.Im.Http
         public string GetHeader(string name)
         {
             List<string> list = null;
-            _headers.TryGetValue(name, out list);
+            Headers.TryGetValue(name, out list);
             return list != null && list.Count > 0 ? list[0] : null;
         }
 
@@ -82,12 +61,12 @@ namespace iQQ.Net.WebQQCore.Im.Http
         /// <returns></returns>
         public List<string> GetHeaders(string name)
         {
-            return _headers[name];
+            return Headers[name];
         }
 
         public Stream GetInputStream()
         {
-            return new MemoryStream(_responseData);
+            return ResponseData == null ? new MemoryStream() : new MemoryStream(ResponseData);
         }
 
         /// <summary>
@@ -97,7 +76,7 @@ namespace iQQ.Net.WebQQCore.Im.Http
         /// <returns></returns>
         public string GetResponseString(string charset)
         {
-            return Encoding.GetEncoding(charset).GetString(_responseData);
+            return ResponseData == null ? string.Empty : Encoding.GetEncoding(charset).GetString(ResponseData);
         }
 
         /// <summary>
@@ -111,8 +90,8 @@ namespace iQQ.Net.WebQQCore.Im.Http
 
         public override string ToString()
         {
-            return "HttpResponse [responseCode=" + _responseCode
-                    + ", responseMessage=" + _responseMessage
+            return "HttpResponse [responseCode=" + ResponseCode
+                    + ", responseMessage=" + ResponseMessage
                     + ", GetResponseString()=" + GetResponseString() + "]";
         }
 

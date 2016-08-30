@@ -38,7 +38,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
                         || type.Contains("text")
                         ) && response.GetContentLength() > 0)
                 {
-                    MyLogger.Default.Debug(response.GetResponseString());
+                    // MyLogger.Default.Debug(response.GetResponseString());
                 }
 
                 if (response.ResponseCode == QQHttpResponse.S_OK)
@@ -50,20 +50,20 @@ namespace iQQ.Net.WebQQCore.Im.Action
                     OnHttpStatusError(response);
                 }
             }
-            catch (QQException ex)
+            catch (QQException)
             {
-                NotifyActionEvent(QQActionEventType.EVT_ERROR, ex);
-                // throw;
+                // NotifyActionEvent(QQActionEventType.EVT_ERROR, ex);
+                throw; 
             }
             catch (JsonException ex)
             {
-                NotifyActionEvent(QQActionEventType.EVT_ERROR, new QQException(QQErrorCode.JSON_ERROR, ex));
-                // throw new QQException(QQErrorCode.JSON_ERROR, e);
+                // NotifyActionEvent(QQActionEventType.EVT_ERROR, new QQException(QQErrorCode.JSON_ERROR, ex));
+                throw new QQException(QQErrorCode.JSON_ERROR, ex);
             }
             catch (Exception ex)
             {
-                NotifyActionEvent(QQActionEventType.EVT_ERROR, new QQException(QQErrorCode.UNKNOWN_ERROR, ex));
-                // throw new QQException(QQErrorCode.UNKNOWN_ERROR, e);
+                // NotifyActionEvent(QQActionEventType.EVT_ERROR, new QQException(QQErrorCode.UNKNOWN_ERROR, ex));
+                throw new QQException(QQErrorCode.UNKNOWN_ERROR, ex);
             }
         }
 

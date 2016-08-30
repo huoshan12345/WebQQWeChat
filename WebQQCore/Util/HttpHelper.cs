@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
@@ -10,6 +11,7 @@ using System.Text.RegularExpressions;
 
 namespace iQQ.Net.WebQQCore.Util
 {
+
     /// <summary>
     /// Http连接操作帮助类
     /// </summary>
@@ -47,7 +49,7 @@ namespace iQQ.Net.WebQQCore.Util
             catch (Exception ex)
             {
                 //配置参数时出错
-                return new HttpResult() { Exception = ex, Cookie = null, Header = null, Html = string.Empty, StatusDescription = "配置参数时出错：" + ex.Message };
+                return new HttpResult() { Exception = ex, Header = null, Html = string.Empty, StatusDescription = "配置参数时出错：" + ex.Message };
             }
             try
             {
@@ -104,10 +106,14 @@ namespace iQQ.Net.WebQQCore.Util
             result.Header = _response.Headers;
             //获取最后访问的URl
             result.ResponseUri = _response.ResponseUri;
+
+            // 添加header中的cookie
+            FixCookies(_request, _response);
+
             //获取CookieCollection
             result.CookieCollection = _response.Cookies;
             //获取set-cookie
-            result.Cookie = _response.Headers["set-cookie"];
+            // result.Cookie = _response.Headers["set-cookie"];
             #endregion
 
             #region byte
@@ -426,6 +432,83 @@ namespace iQQ.Net.WebQQCore.Util
             return _ipEndPoint;//端口号
         }
         #endregion
+
+        private static void FixCookies(HttpWebRequest request, HttpWebResponse response)
+        {
+            for (var i = 0; i < response.Headers.Count; i++)
+            {
+                var name = response.Headers.GetKey(i);
+                if (name != "Set-Cookie")
+                    continue;
+                var value = response.Headers.Get(i);
+                var cookieCollection = ParseCookieString(value, () => request.Host.Split(':')[0]);
+                response.Cookies.Add(cookieCollection);
+            }
+        }
+
+        private static CookieCollection ParseCookieString(string cookieString, Func<string> getCookieDomainIfItIsMissingInCookie)
+        {
+            var secure = false;
+            var httpOnly = false;
+
+            string domainFromCookie = null;
+            string path = null;
+            string expiresString = null;
+
+            var cookiesValues = new Dictionary<string, string>();
+
+            var cookieValuePairsStrings = cookieString.Split(';');
+            foreach (var cookieValuePairString in cookieValuePairsStrings)
+            {
+                var pairArr = cookieValuePairString.Split('=');
+                var pairArrLength = pairArr.Length;
+                for (var i = 0; i < pairArrLength; i++)
+                {
+                    pairArr[i] = pairArr[i].Trim();
+                }
+                var propertyName = pairArr[0];
+                if (pairArrLength == 1)
+                {
+                    if (propertyName.Equals("httponly", StringComparison.OrdinalIgnoreCase))
+                        httpOnly = true;
+                    else if (propertyName.Equals("secure", StringComparison.OrdinalIgnoreCase))
+                        secure = true;
+                    else
+                        // throw new InvalidOperationException(string.Format("Unknown cookie property \"{0}\". All cookie is \"{1}\"", propertyName, cookieString));
+                        continue;
+                }
+
+                var propertyValue = pairArr[1];
+                if (propertyName.Equals("expires", StringComparison.OrdinalIgnoreCase))
+                    expiresString = propertyValue;
+                else if (propertyName.Equals("domain", StringComparison.OrdinalIgnoreCase))
+                    domainFromCookie = propertyValue;
+                else if (propertyName.Equals("path", StringComparison.OrdinalIgnoreCase))
+                    path = propertyValue;
+                else
+                    cookiesValues.Add(propertyName, propertyValue);
+            }
+
+            var expiresDateTime = expiresString != null ? DateTime.Parse(expiresString) : DateTime.MinValue;
+            if (string.IsNullOrEmpty(domainFromCookie))
+            {
+                domainFromCookie = getCookieDomainIfItIsMissingInCookie();
+            }
+
+            var cookieCollection = new CookieCollection();
+            foreach (var pair in cookiesValues)
+            {
+                var cookie = new Cookie(pair.Key, pair.Value, path, domainFromCookie)
+                {
+                    Secure = secure,
+                    HttpOnly = httpOnly,
+                    Expires = expiresDateTime
+                };
+
+                cookieCollection.Add(cookie);
+            }
+            return cookieCollection;
+        }
     }
 
     #region public calss
@@ -615,7 +698,7 @@ namespace iQQ.Net.WebQQCore.Util
         /// <summary>
         /// Http请求返回的Cookie
         /// </summary>
-        public string Cookie { get; set; }
+        // public string Cookie { get; set; }
         /// <summary>
         /// Cookie对象集合
         /// </summary>

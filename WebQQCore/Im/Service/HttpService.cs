@@ -126,15 +126,15 @@ namespace iQQ.Net.WebQQCore.Im.Service
                     }
                 }
 
-                if (!result.Cookie.IsNullOrEmpty())
-                {
-                    var cookies = GetCookiesFromHeader(result.Cookie);
-                    foreach (var cookie in cookies)
-                    {
-                        cookie.Domain = result.ResponseUri.Host;
-                        result.CookieCollection.Add(cookie);
-                    }
-                }
+                //if (!result.Cookie.IsNullOrEmpty())
+                //{
+                //    var cookies = GetCookiesFromHeader(result.Cookie);
+                //    foreach (var cookie in cookies)
+                //    {
+                //        cookie.Domain = result.ResponseUri.Host;
+                //        result.CookieCollection.Add(cookie);
+                //    }
+                //}
 
                 if (!result.CookieCollection.IsNullOrEmpty()) _cookieContainer.Add(result.CookieCollection);
 
