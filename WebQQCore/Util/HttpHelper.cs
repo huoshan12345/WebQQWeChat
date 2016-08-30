@@ -315,16 +315,9 @@ namespace iQQ.Net.WebQQCore.Util
         {
             if (!string.IsNullOrEmpty(item.Cookie)) _request.Headers[HttpRequestHeader.Cookie] = item.Cookie;
             //设置CookieCollection
-            if (item.ResultCookieType == ResultCookieType.CookieCollection)
-            {
-                _request.CookieContainer = new CookieContainer();
-                if (item.CookieCollection != null && item.CookieCollection.Count > 0)
-                    _request.CookieContainer.Add(item.CookieCollection);
-            }
-            else if (item.ResultCookieType == ResultCookieType.CookieContainer)
-            {
-                _request.CookieContainer = item.CookieContainer ?? new CookieContainer();
-            }
+            _request.CookieContainer = item.CookieContainer ?? new CookieContainer();
+            if (item.CookieCollection != null && item.CookieCollection.Count > 0)
+                _request.CookieContainer.Add(item.CookieCollection);
         }
         /// <summary>
         /// 设置Post数据
@@ -380,9 +373,11 @@ namespace iQQ.Net.WebQQCore.Util
                 if (item.ProxyIp.Contains(":"))
                 {
                     var plist = item.ProxyIp.Split(':');
-                    var myProxy = new WebProxy(plist[0].Trim(), Convert.ToInt32(plist[1].Trim()));
+                    var myProxy = new WebProxy(plist[0].Trim(), Convert.ToInt32(plist[1].Trim()))
+                    {
+                        Credentials = new NetworkCredential(item.ProxyUserName, item.ProxyPwd)
+                    };
                     //建议连接
-                    myProxy.Credentials = new NetworkCredential(item.ProxyUserName, item.ProxyPwd);
                     //给当前请求对象
                     _request.Proxy = myProxy;
                 }
@@ -581,11 +576,6 @@ namespace iQQ.Net.WebQQCore.Util
         /// 设置或获取Post参数编码,默认的为Default编码
         /// </summary>
         public Encoding PostEncoding { get; set; }
-
-        /// <summary>
-        /// Cookie返回类型,默认的是只返回字符串类型
-        /// </summary>
-        public ResultCookieType ResultCookieType { get; set; } = ResultCookieType.String;
 
         /// <summary>
         /// 获取或设置请求的身份验证信息。

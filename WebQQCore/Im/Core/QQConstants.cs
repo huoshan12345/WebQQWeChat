@@ -4,7 +4,7 @@
     public abstract class QQConstants
     {
         public const string APPID = "501004106";
-        public const string JSVER = "10173";
+        public const string JSVER = "10153";
         public const string REFFER = "http://d1.web2.qq.com/proxy.html?v=20151105001&callback=1&id=2";
         public const string REFERER_S = "http://s.web2.qq.com/proxy.html?v=20130916001&callback=1&id=1";
         public const string ORIGIN = "http://d1.web2.qq.com";

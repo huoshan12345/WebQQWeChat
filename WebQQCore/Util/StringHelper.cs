@@ -11,7 +11,7 @@ namespace iQQ.Net.WebQQCore.Util
      *
      * @author solosky
      */
-    public class StringHelper
+    public static class StringHelper
     {
         public static Dictionary<string, string> QueryStringToDict(string queryString)
         {
@@ -111,12 +111,12 @@ namespace iQQ.Net.WebQQCore.Util
          * @param url 需要进行编码的URL
          * @return 编码后的URL
          */
-        public static string UrlEncode(string url)
+        public static string UrlEncode(this string url)
         {
             return HttpUtility.UrlEncode(url, Encoding.UTF8);
         }
 
-        public static string UrlEncode(string url, string encoding)
+        public static string UrlEncode(this string url, string encoding)
         {
             return HttpUtility.UrlEncode(url, Encoding.GetEncoding(encoding));
         }

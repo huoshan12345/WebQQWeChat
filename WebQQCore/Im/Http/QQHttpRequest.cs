@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 using iQQ.Net.WebQQCore.Util;
 
@@ -43,21 +44,20 @@ namespace iQQ.Net.WebQQCore.Im.Http
             {
                 if (_getMap.Count > 0)
                 {
-                    var buffer = new StringBuilder(_url);
-                    buffer.Append("?");
-
-                    foreach (var it in _getMap)
-                    {
-                        var key = it.Key;
-                        var value = it.Value;
-                        key = StringHelper.UrlEncode(key);
-                        value = StringHelper.UrlEncode(value ?? "");
-                        buffer.Append(key);
-                        buffer.Append("=");
-                        buffer.Append(value);
-                        buffer.Append("&");
-                    }
-                    return buffer.ToString();
+                    //var buffer = new StringBuilder(_url);
+                    //buffer.Append("?");
+                    //foreach (var it in _getMap)
+                    //{
+                    //    var key = it.Key.UrlEncode();
+                    //    var value = it.Value.UrlEncode();
+                    //    buffer.Append(key);
+                    //    buffer.Append("=");
+                    //    buffer.Append(value);
+                    //    buffer.Append("&");
+                    //}
+                    //return buffer.ToString();
+                    var query = string.Join("&", _getMap.Select(item => $"{item.Key.UrlEncode()}={item.Value.UrlEncode()}"));
+                    return $"{_url}?{query}";
                 }
                 else
                 {
@@ -124,23 +124,24 @@ namespace iQQ.Net.WebQQCore.Im.Http
                 else if (PostMap.Count > 0)
                 {
                     //AddHeader("Content-Type", "application/x-www-form-urlencoded");
-                    var buffer = new StringBuilder();
+                    //var buffer = new StringBuilder();
 
-                    foreach (var post in PostMap)
-                    {
-                        if (buffer.Length != 0)
-                        {
-                            buffer.Append("&");
-                        }
-                        var key = post.Key;
-                        var value = post.Value;
-                        key = StringHelper.UrlEncode(key);
-                        value = StringHelper.UrlEncode(value ?? "");
-                        buffer.Append(key);
-                        buffer.Append("=");
-                        buffer.Append(value);
-                    }
-                    return buffer.ToString();
+                    //foreach (var post in PostMap)
+                    //{
+                    //    if (buffer.Length != 0)
+                    //    {
+                    //        buffer.Append("&");
+                    //    }
+                    //    var key = post.Key;
+                    //    var value = post.Value;
+                    //    key = key.UrlEncode();
+                    //    value = (value ?? "").UrlEncode();
+                    //    buffer.Append(key);
+                    //    buffer.Append("=");
+                    //    buffer.Append(value);
+                    //}
+                    //return buffer.ToString();
+                    return string.Join("&", PostMap.Select(item => $"{item.Key.UrlEncode()}={item.Value.UrlEncode()}"));
                 }
                 else
                 {

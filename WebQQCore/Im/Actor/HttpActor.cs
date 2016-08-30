@@ -38,7 +38,7 @@ namespace iQQ.Net.WebQQCore.Im.Actor
                     case HttpActorType.BUILD_REQUEST:
                         var service = _context.GetSerivce<IHttpService>(QQServiceType.HTTP);
                         var request = _action.BuildRequest();
-                       service.ExecuteHttpRequest(request, new HttpAdaptor(_context, _action));
+                        service.ExecuteHttpRequest(request, new HttpAdaptor(_context, _action));
                         break;
 
                     case HttpActorType.CANCEL_REQUEST:

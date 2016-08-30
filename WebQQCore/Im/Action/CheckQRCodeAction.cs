@@ -29,16 +29,16 @@ namespace iQQ.Net.WebQQCore.Im.Action
             req.AddGetValue("pttype", "1");
             req.AddGetValue("dumy", "");
             req.AddGetValue("fp", "loginerroralert");
-            req.AddGetValue("action", "0-0-118087");
+            req.AddGetValue("action", "0-0-205298");
             req.AddGetValue("mibao_css", "m_webqq");
-            req.AddGetValue("t", "undefined");
+            req.AddGetValue("t", "1");
             req.AddGetValue("g", "1");
             req.AddGetValue("js_type", "0");
             req.AddGetValue("js_ver", QQConstants.JSVER);
             req.AddGetValue("login_sig", "");
             req.AddGetValue("pt_randsalt", "0");
-            req.AddHeader(HttpConstants.Referer, QQConstants.URL_LOGIN_PAGE);
-            req.AddHeader(HttpConstants.ContentType, "application/x-javascript; charset=utf-8");
+            //req.AddHeader(HttpConstants.Referer, QQConstants.URL_LOGIN_PAGE);
+            //req.AddHeader(HttpConstants.ContentType, "application/x-javascript; charset=utf-8");
             return req;
         }
 
