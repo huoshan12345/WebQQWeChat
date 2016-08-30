@@ -32,9 +32,9 @@ namespace iQQ.Net.WebQQCore.Im
 
         void InitExtendQQModel(IQQModule qqModule);
 
-        void GetQRCode(QQActionEventHandler qqActionListener);
+        QQActionFuture GetQRCode(QQActionEventHandler qqActionListener);
 
-        void CheckQRCode(QQActionEventHandler qqActionListener);
+        QQActionFuture CheckQRCode(QQActionEventHandler qqActionListener);
 
         /// <summary>
         /// 登录

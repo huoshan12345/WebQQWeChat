@@ -47,7 +47,7 @@ namespace iQQ.Net.WebQQCore.Im.Event.Future
             }
             try
             {
-                QQActionEvent Event = _eventQueue.Take();
+                var Event = _eventQueue.Take();
                 _hasEvent = !IsFinalEvent(Event);
                 return Event;
             }
@@ -102,10 +102,10 @@ namespace iQQ.Net.WebQQCore.Im.Event.Future
         public QQActionEvent WaitFinalEvent(long timeoutMs)
         {
             QQActionEvent Event = null;
-            long start = DateTime.Now.CurrentTimeMillis();
+            var start = DateTime.Now.CurrentTimeMillis();
             while ((Event = WaitEvent(timeoutMs)) != null)
             {
-                long end = DateTime.Now.CurrentTimeMillis();
+                var end = DateTime.Now.CurrentTimeMillis();
                 if (IsFinalEvent(Event))
                 {
                     return Event;
@@ -198,7 +198,7 @@ namespace iQQ.Net.WebQQCore.Im.Event.Future
 
         private bool IsFinalEvent(QQActionEvent Event)
         {
-            QQActionEventType type = Event.Type;
+            var type = Event.Type;
             return type == QQActionEventType.EVT_CANCELED
                     || type == QQActionEventType.EVT_ERROR
                     || type == QQActionEventType.EVT_OK;

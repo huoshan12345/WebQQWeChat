@@ -50,8 +50,8 @@ namespace iQQ.Net.WebQQCore
                     }
                     catch (Exception e)
                     {
-                        // Console.WriteLine(mClient.Account.QQ + e.Message);
-                        // Console.WriteLine(e.StackTrace);
+                        Console.WriteLine(mClient.Account.QQ + e.Message);
+                        Console.WriteLine(e.StackTrace);
                     }
                 }
                 else if(Event.Type == QQActionEventType.EVT_ERROR)

@@ -13,8 +13,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
     public class CheckQRCodeAction : AbstractHttpAction
     {
         public CheckQRCodeAction(IQQContext context, QQActionEventHandler listener) : base(context, listener) { }
-
-
+        
         public override QQHttpRequest OnBuildRequest()
         {
             var req = CreateHttpRequest("GET", QQConstants.URL_CHECK_QRCODE);

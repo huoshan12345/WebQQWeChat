@@ -24,7 +24,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
          */
         public GetVFWebqq(IQQContext context, QQActionEventHandler listener) : base(context, listener)
         {
-            ;
+            
         }
 
 

@@ -78,17 +78,21 @@ namespace iQQ.Net.WebQQCore.Im.Action
 
         public virtual void OnHttpWrite(long current, long total)
         {
-            QQActionEventArgs.ProgressArgs progress = new QQActionEventArgs.ProgressArgs();
-            progress.total = total;
-            progress.current = current;
+            QQActionEventArgs.ProgressArgs progress = new QQActionEventArgs.ProgressArgs
+            {
+                total = total,
+                current = current
+            };
             NotifyActionEvent(QQActionEventType.EVT_WRITE, progress);
         }
 
         public virtual void OnHttpRead(long current, long total)
         {
-            QQActionEventArgs.ProgressArgs progress = new QQActionEventArgs.ProgressArgs();
-            progress.total = total;
-            progress.current = current;
+            QQActionEventArgs.ProgressArgs progress = new QQActionEventArgs.ProgressArgs
+            {
+                total = total,
+                current = current
+            };
             NotifyActionEvent(QQActionEventType.EVT_READ, progress);
         }
 
@@ -106,7 +110,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
             switch (type)
             {
                 case QQActionEventType.EVT_ERROR:
-                    var ex = (target as Exception) ?? new QQException(QQErrorCode.UNKNOWN_ERROR);
+                    var ex = target as QQException ?? (target is Exception ? new QQException((Exception)target) : new QQException(QQErrorCode.UNKNOWN_ERROR));
                     MyLogger.Default.Error($"{GetType().Name} [type={type.GetDescription()}, exception={ex}]", ex);
                     break;
 
@@ -123,22 +127,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
 
         public virtual QQHttpRequest BuildRequest()
         {
-            try
-            {
-                return OnBuildRequest();
-            }
-            catch (JsonException e)
-            {
-                throw new QQException(QQErrorCode.JSON_ERROR, e);
-            }
-            catch (QQException e)
-            {
-                throw new QQException(e.ErrorCode, e);
-            }
-            catch (Exception e)
-            {
-                throw new QQException(QQErrorCode.UNKNOWN_ERROR, e);
-            }
+            return OnBuildRequest();
         }
 
         public virtual QQHttpRequest CreateHttpRequest(string method, string url)
@@ -163,7 +152,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
         /// <param name="response"></param>
         public virtual void OnHttpStatusOK(QQHttpResponse response)
         {
-            NotifyActionEvent(QQActionEventType.EVT_OK, null);
+            NotifyActionEvent(QQActionEventType.EVT_OK, response);
         }
 
         /// <summary>
