@@ -4,7 +4,6 @@ using iQQ.Net.WebQQCore.Im.Event;
 using iQQ.Net.WebQQCore.Im.Http;
 using iQQ.Net.WebQQCore.Im.Service;
 using iQQ.Net.WebQQCore.Util;
-using iQQ.Net.WebQQCore.Util.Log;
 
 namespace iQQ.Net.WebQQCore.Im.Action
 {

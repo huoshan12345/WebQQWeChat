@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using iQQ.Net.WebQQCore.Im.Core;
 using iQQ.Net.WebQQCore.Util;
+using iQQ.Net.WebQQCore.Util.Extensions;
 
 namespace iQQ.Net.WebQQCore.Im.Http
 {
@@ -92,7 +93,7 @@ namespace iQQ.Net.WebQQCore.Im.Http
 
         public void AddHeader(string key, string value)
         {
-            HeaderMap.Add(key, value, AddChoice.Update);
+            HeaderMap[key] = value;
         }
 
         public void SetBody(Stream inputStream)
@@ -108,7 +109,6 @@ namespace iQQ.Net.WebQQCore.Im.Http
         public void AddPostFile(string key, string file)
         {
             FileMap[key] = file;
-            FileMap.Add(key, file, AddChoice.Update);
         }
 
         public void AddGetValue(string key, object value)

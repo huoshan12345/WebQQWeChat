@@ -3,6 +3,7 @@ using System.Linq;
 using iQQ.Net.WebQQCore.Im.Bean;
 using iQQ.Net.WebQQCore.Im.Bean.Content;
 using iQQ.Net.WebQQCore.Util;
+using iQQ.Net.WebQQCore.Util.Extensions;
 
 namespace iQQ.Net.WebQQCore.Im.Core
 {
@@ -41,26 +42,25 @@ namespace iQQ.Net.WebQQCore.Im.Core
 
         public void AddBuddy(QQBuddy buddy)
         {
-            _buddyMap.Add(buddy.Uin, buddy, AddChoice.Update);
+            _buddyMap[buddy.Uin] = buddy;
         }
 
 
         public void AddStranger(QQStranger stranger)
         {
-            _strangerMap.Add(stranger.Uin, stranger, AddChoice.Update);
+            _strangerMap[stranger.Uin] = stranger;
         }
 
 
         public void AddCategory(QQCategory category)
         {
-            _categoryMap.Add(category.Index, category, AddChoice.Update);
+            _categoryMap[category.Index] = category;
         }
 
         public void AddGroup(QQGroup group)
         {
-            _groupMap.Add(group.Code, group, AddChoice.Update);
+            _groupMap[group.Code] = group;
         }
-
 
         public void AddPicItem(IContentItem pictureItem)
         {
@@ -69,7 +69,7 @@ namespace iQQ.Net.WebQQCore.Im.Core
 
         public void AddDiscuz(QQDiscuz discuz)
         {
-            _discuzMap.Add(discuz.Did, discuz, AddChoice.Update);
+            _discuzMap[discuz.Did] = discuz;
         }
 
         public void DeleteBuddy(QQBuddy buddy)

@@ -8,7 +8,7 @@ using iQQ.Net.WebQQCore.Im.Core;
 using iQQ.Net.WebQQCore.Im.Event;
 using iQQ.Net.WebQQCore.Im.Http;
 using iQQ.Net.WebQQCore.Im.Service;
-using iQQ.Net.WebQQCore.Util.Log;
+using iQQ.Net.WebQQCore.Util;
 using Newtonsoft.Json;
 
 namespace iQQ.Net.WebQQCore.Im.Action
@@ -95,11 +95,11 @@ namespace iQQ.Net.WebQQCore.Im.Action
             {
                 case QQActionEventType.EVT_ERROR:
                     var ex = target as QQException ?? (target is Exception ? new QQException((Exception)target) : new QQException(QQErrorCode.UNKNOWN_ERROR));
-                    MyLogger.Default.Error($"{GetType().Name} [type={type.GetDescription()}, errorcode={ex.ErrorCode}, exception={ex}]{Environment.NewLine}{ex.StackTrace}", ex);
+                    MyLogger.Default.Error($"{GetType().Name} [type={EnumExt.GetDescription(type)}, errorcode={ex.ErrorCode}, exception={ex}]{Environment.NewLine}{ex.StackTrace}", ex);
                     break;
 
                 case QQActionEventType.EVT_CANCELED:
-                    MyLogger.Default.Info($"{GetType().Name} [type={type.GetDescription()}, target={target}]");
+                    MyLogger.Default.Info($"{GetType().Name} [type={EnumExt.GetDescription(type)}, target={target}]");
                     break;
 
                 case QQActionEventType.EVT_OK:
@@ -107,7 +107,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
                 case QQActionEventType.EVT_READ:
                 case QQActionEventType.EVT_RETRY:
                 default:
-                    MyLogger.Default.Debug($"{GetType().Name} [type={type.GetDescription()}, target={target}]");
+                    MyLogger.Default.Debug($"{GetType().Name} [type={EnumExt.GetDescription(type)}, target={target}]");
                     break;
             }
             Listener?.Invoke(ActionFuture, new QQActionEvent(type, target));

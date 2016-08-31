@@ -10,7 +10,6 @@ using iQQ.Net.WebQQCore.Im.Event.Future;
 using iQQ.Net.WebQQCore.Im.Module;
 using iQQ.Net.WebQQCore.Im.Service;
 using iQQ.Net.WebQQCore.Util;
-using iQQ.Net.WebQQCore.Util.Log;
 
 namespace iQQ.Net.WebQQCore.Im
 {

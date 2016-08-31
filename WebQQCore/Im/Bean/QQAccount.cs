@@ -1,5 +1,6 @@
 ﻿using System;
 using iQQ.Net.WebQQCore.Util;
+using iQQ.Net.WebQQCore.Util.Extensions;
 
 namespace iQQ.Net.WebQQCore.Im.Bean
 {

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Drawing;
 using iQQ.Net.WebQQCore.Util;
-using iQQ.Net.WebQQCore.Util.Log;
 using Newtonsoft.Json.Linq;
 
 namespace iQQ.Net.WebQQCore.Im.Bean

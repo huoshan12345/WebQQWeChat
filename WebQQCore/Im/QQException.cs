@@ -1,6 +1,7 @@
 ﻿using iQQ.Net.WebQQCore.Util;
 using System;
 using System.IO;
+using iQQ.Net.WebQQCore.Util.Extensions;
 using Newtonsoft.Json;
 
 namespace iQQ.Net.WebQQCore.Im

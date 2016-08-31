@@ -5,7 +5,7 @@ using iQQ.Net.WebQQCore.Im.Core;
 using iQQ.Net.WebQQCore.Im.Event;
 using iQQ.Net.WebQQCore.Im.Http;
 using iQQ.Net.WebQQCore.Im.Module;
-using iQQ.Net.WebQQCore.Util.Log;
+using iQQ.Net.WebQQCore.Util;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 

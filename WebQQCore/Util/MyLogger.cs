@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace iQQ.Net.WebQQCore.Util.Log
+namespace iQQ.Net.WebQQCore.Util
 {
     internal class MyLogger
     {

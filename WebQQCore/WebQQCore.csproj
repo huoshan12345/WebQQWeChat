@@ -64,7 +64,12 @@
     <Compile Include="Im\Action\GetWebqq.cs" />
     <Compile Include="QRcodeLoginTest.cs" />
     <Compile Include="Util\EnumExtensions.cs" />
-    <Compile Include="Util\Log\MyLogger.cs" />
+    <Compile Include="Util\Extensions\CollectionExtensions.cs" />
+    <Compile Include="Util\Extensions\DictionaryExtensions.cs" />
+    <Compile Include="Util\Extensions\HttpExtensions.cs" />
+    <Compile Include="Util\Extensions\StreamExtensions.cs" />
+    <Compile Include="Util\Extensions\StringExtensions.cs" />
+    <Compile Include="Util\MyLogger.cs" />
     <Compile Include="Util\QueryString.cs" />
     <Compile Include="Util\Resource.cs" />
     <Compile Include="Util\RobotType.cs" />
@@ -185,7 +190,6 @@
     <Compile Include="Im\Service\HttpService.cs" />
     <Compile Include="Im\Service\IHttpService.cs" />
     <Compile Include="Util\DateUtils.cs" />
-    <Compile Include="Util\Extensions.cs" />
     <Compile Include="Util\HttpHelper.cs" />
     <Compile Include="Util\MimeMapping.cs" />
     <Compile Include="Util\QQEncryptor.cs" />

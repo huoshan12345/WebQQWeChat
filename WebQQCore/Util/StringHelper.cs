@@ -104,15 +104,6 @@ namespace iQQ.Net.WebQQCore.Util
             return html;
         }
 
-        public static string UrlEncode(this string url)
-        {
-            return HttpUtility.UrlEncode(url, Encoding.UTF8);
-        }
-
-        public static string UrlEncode(this string url, string encoding)
-        {
-            return HttpUtility.UrlEncode(url, Encoding.GetEncoding(encoding));
-        }
     }
 
 }

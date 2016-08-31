@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using iQQ.Net.WebQQCore.Im.Core;
 using iQQ.Net.WebQQCore.Im.Http;
 using iQQ.Net.WebQQCore.Util;
-using iQQ.Net.WebQQCore.Util.Log;
+using iQQ.Net.WebQQCore.Util.Extensions;
 
 namespace iQQ.Net.WebQQCore.Im.Service
 {
@@ -44,6 +44,7 @@ namespace iQQ.Net.WebQQCore.Im.Service
                 ContentType = request.ContentType, // post方法的时候必须填写，要不然服务器无法解析
                 Method = request.Method,
                 UserAgent = request.UserAgent,
+                Referer = request.Refer,
                 ReadWriteTimeout = request.ReadTimeout,
                 Timeout = request.ConnectTimeout,
                 KeepAlive = true,
@@ -97,16 +98,22 @@ namespace iQQ.Net.WebQQCore.Im.Service
 
                 var httpItem = GetHttpRequest(request);
 #if DEBUG
-                var cookieList = _cookieContainer.GetAllCookies();
-                if (request.RawUrl == QQConstants.URL_GET_VFWEBQQ)
+                if (request.RawUrl == QQConstants.URL_CHANNEL_LOGIN)
                 {
+                    var cookieList = _cookieContainer.GetAllCookies();
                     var cookieStr = $"Cookie: {string.Join("; ", cookieList)}";
                     var count = cookieStr.Length;
                 }
 #endif
                 var result = new HttpHelper().GetHtml(httpItem);
+
 #if DEBUG
-                var cookieListNew = _cookieContainer.GetAllCookies().ToList();
+                if (request.RawUrl == QQConstants.URL_CHANNEL_LOGIN)
+                {
+                    var cookieList = _cookieContainer.GetAllCookies();
+                    var cookieStr = $"Cookie: {string.Join("; ", cookieList)}";
+                    var count = cookieStr.Length;
+                }
 #endif
 
                 if (result.HasError)

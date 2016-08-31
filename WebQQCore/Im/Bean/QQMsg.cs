@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using iQQ.Net.WebQQCore.Im.Bean.Content;
-using iQQ.Net.WebQQCore.Util.Log;
+using iQQ.Net.WebQQCore.Util;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
