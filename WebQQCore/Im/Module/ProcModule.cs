@@ -266,6 +266,7 @@ namespace iQQ.Net.WebQQCore.Im.Module
 
         public void Relogin()
         {
+            MyLogger.Default.Info("Relogin...");
             var session = Context.Session;
             if (session.State == QQSessionState.LOGINING) return;
             // 登录失效，重新登录
@@ -288,6 +289,7 @@ namespace iQQ.Net.WebQQCore.Im.Module
         /// </summary>
         public void DoPollMsg()
         {
+            MyLogger.Default.Info("polling...");
             var login = Context.GetModule<LoginModule>(QQModuleType.LOGIN);
             login.PollMsg((sender, Event) =>
             {
@@ -305,21 +307,30 @@ namespace iQQ.Net.WebQQCore.Im.Module
                     if (session.State == QQSessionState.ONLINE)
                     {
                         DoPollMsg();
+                        return;
                     }
                     else if (session.State != QQSessionState.KICKED)
                     {
                         Relogin();
+                        return;
                     }
                 }
                 else if (Event.Type == QQActionEventType.EVT_ERROR)
                 {
+                    //因为自带了错误重试机制，如果出现了错误回调，表明已经超时多次均失败，这里直接返回网络错误的异常
+                    var ex = (QQException)Event.Target;
+                    var code = ex.ErrorCode;
+                    if (code == QQErrorCode.IO_TIMEOUT)
+                    {
+                        DoPollMsg();
+                        return; // 心跳超时是正常的
+                    }
+
                     var session = Context.Session;
                     var account = Context.Account;
                     session.State = QQSessionState.OFFLINE;
 
-                    //因为自带了错误重试机制，如果出现了错误回调，表明已经超时多次均失败，这里直接返回网络错误的异常
-                    var ex = (QQException)Event.Target;
-                    var code = ex.ErrorCode;
+
                     if (code == QQErrorCode.INVALID_LOGIN_AUTH)
                     {
                         Relogin();
@@ -332,9 +343,10 @@ namespace iQQ.Net.WebQQCore.Im.Module
                     }
                     else
                     {
-                        // LOG.warn("poll msg unexpected error, ignore it ...", ex);
+                        MyLogger.Default.Info("poll msg unexpected error, ignore it ...", ex);
                         Relogin();
                         DoPollMsg();
+                        return;
                     }
                 }
                 else if (Event.Type == QQActionEventType.EVT_RETRY)

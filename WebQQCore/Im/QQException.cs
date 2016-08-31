@@ -1,6 +1,7 @@
 ﻿using iQQ.Net.WebQQCore.Util;
 using System;
 using System.IO;
+using System.Net;
 using iQQ.Net.WebQQCore.Util.Extensions;
 using Newtonsoft.Json;
 
@@ -8,10 +9,7 @@ namespace iQQ.Net.WebQQCore.Im
 {
     public enum QQErrorCode
     {
-        QRCODE_OK,              // 二维码未失效 
-        QRCODE_INVALID,         // 二维码失效
-        QRCODE_AUTH,            // 二维码认证中
-        INVALID_LOGIN_AUTH,     // 登录凭证实效
+        INVALID_LOGIN_AUTH,     // 登录凭证失效
         INVALID_PARAMETER,      // 参数无效
         UNEXPECTED_RESPONSE,    // 获取好友头像失败
         INVALID_USER,           // 无效的用户
@@ -44,7 +42,56 @@ namespace iQQ.Net.WebQQCore.Im
             if (e is TimeoutException) return QQErrorCode.IO_TIMEOUT;
             if (e is IOException) return QQErrorCode.IO_ERROR;
             if (e is ArgumentException) return QQErrorCode.INVALID_PARAMETER;
-            if(e is JsonException) return QQErrorCode.JSON_ERROR;
+            if (e is JsonException) return QQErrorCode.JSON_ERROR;
+
+            var webEx = e as WebException;
+            if (webEx != null)
+            {
+                switch (webEx.Status)
+                {
+                    case WebExceptionStatus.Success: break;
+
+                    case WebExceptionStatus.NameResolutionFailure: return QQErrorCode.INVALID_PARAMETER;
+
+                    case WebExceptionStatus.ConnectFailure:
+                    case WebExceptionStatus.ReceiveFailure:
+                    case WebExceptionStatus.SendFailure:
+                    case WebExceptionStatus.PipelineFailure:
+                        return QQErrorCode.IO_ERROR;
+
+                    case WebExceptionStatus.RequestCanceled:
+                        break;
+                    case WebExceptionStatus.ProtocolError:
+                        break;
+                    case WebExceptionStatus.ConnectionClosed:
+                        break;
+                    case WebExceptionStatus.TrustFailure:
+                        break;
+                    case WebExceptionStatus.SecureChannelFailure:
+                        break;
+                    case WebExceptionStatus.ServerProtocolViolation:
+                        break;
+                    case WebExceptionStatus.KeepAliveFailure:
+                        break;
+                    case WebExceptionStatus.Pending:
+                        break;
+                    case WebExceptionStatus.Timeout: return QQErrorCode.IO_TIMEOUT;
+
+                    case WebExceptionStatus.ProxyNameResolutionFailure:
+                        break;
+                    case WebExceptionStatus.UnknownError: return QQErrorCode.UNKNOWN_ERROR;
+                    case WebExceptionStatus.MessageLengthLimitExceeded:
+                        break;
+                    case WebExceptionStatus.CacheEntryNotFound:
+                        break;
+                    case WebExceptionStatus.RequestProhibitedByCachePolicy:
+                        break;
+                    case WebExceptionStatus.RequestProhibitedByProxy:
+                        break;
+                    default:
+                        break;
+                }
+            }
 
             return QQErrorCode.UNKNOWN_ERROR;
         }
@@ -70,6 +117,8 @@ namespace iQQ.Net.WebQQCore.Im
         {
             ErrorCode = errorCode;
         }
+
+        public override string StackTrace => base.StackTrace ?? InnerException?.StackTrace ?? string.Empty;
 
         public override string Message => base.Message.RegexReplace(@"[\r\n]+", string.Empty);
 

@@ -12,7 +12,7 @@ namespace iQQ.Net.WebQQCore.Im.Bean
         public long Gin { get; set; }
         public long Code { get; set; }
         public int Clazz { get; set; }
-        public int Flag { get; set; }
+        public long Flag { get; set; }
         public int Level { get; set; }
         public int Mask { get; set; }
         public string Name { get; set; }
@@ -21,11 +21,11 @@ namespace iQQ.Net.WebQQCore.Im.Bean
         public DateTime CreateTime { get; set; }
 
         [NonSerialized]
-        private Image face; // 头像
+        private Image _face; // 头像
         public Image Face
         {
-            get { return face; }
-            set { face = value; }
+            get { return _face; }
+            set { _face = value; }
         }
 
         public List<QQGroupMember> Members { get; set; } = new List<QQGroupMember>();
@@ -44,7 +44,7 @@ namespace iQQ.Net.WebQQCore.Im.Bean
         {
             if (obj == null || this == obj) return false;
             var g = obj as QQGroup;
-            return g?.Code == this.Code;
+            return g?.Code == Code;
         }
 
         public override string ToString()

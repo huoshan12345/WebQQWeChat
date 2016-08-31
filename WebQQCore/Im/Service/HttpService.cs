@@ -97,29 +97,9 @@ namespace iQQ.Net.WebQQCore.Im.Service
             {
 
                 var httpItem = GetHttpRequest(request);
-#if DEBUG
-                if (request.RawUrl == QQConstants.URL_CHANNEL_LOGIN)
-                {
-                    var body = httpItem.GetRequestHeader();
-                    var count = body.Length;
-                }
-#endif
                 var result = new HttpHelper().GetHtml(httpItem);
 
-#if DEBUG
-                if (request.RawUrl == QQConstants.URL_CHANNEL_LOGIN)
-                {
-                    var cookieList = _cookieContainer.GetAllCookies();
-                    var cookieStr = $"Cookie: {string.Join("; ", cookieList)}";
-                    var count = cookieStr.Length;
-                }
-#endif
-
-                if (result.HasError)
-                {
-                    listener?.OnHttpError(result.Exception);
-                    throw result.Exception;
-                }
+                if (result.HasError) throw result.Exception; // 会到下面的catch中
 
                 var response = new QQHttpResponse
                 {
@@ -136,19 +116,6 @@ namespace iQQ.Net.WebQQCore.Im.Service
                         response.Headers.Add(header, result.Header[header]);
                     }
                 }
-
-                //if (!result.Cookie.IsNullOrEmpty())
-                //{
-                //    var cookies = GetCookiesFromHeader(result.Cookie);
-                //    foreach (var cookie in cookies)
-                //    {
-                //        cookie.Domain = result.ResponseUri.Host;
-                //        result.CookieCollection.Add(cookie);
-                //    }
-                //}
-
-                // if (!result.CookieCollection.IsNullOrEmpty()) _cookieContainer.Add(result.CookieCollection);
-
 
                 if (!result.RedirectUrl.IsNullOrEmpty())
                 {
@@ -168,9 +135,9 @@ namespace iQQ.Net.WebQQCore.Im.Service
             }
             catch (Exception ex)
             {
-                // 此处不抛出
+                var qqEx = new QQException(ex);
                 listener?.OnHttpError(ex);
-                throw;
+                throw qqEx;
             }
         }
 

@@ -68,9 +68,10 @@ namespace iQQ.Net.WebQQCore.Im.Actor
                 }
             }
             // 统一异常处理
-            catch (Exception e)
+            catch (Exception ex)
             {
-                _action.NotifyActionEvent(QQActionEventType.EVT_ERROR, e);
+                var qqEx = ex as QQException ?? new QQException(ex);
+                _action.NotifyActionEvent(QQActionEventType.EVT_ERROR, qqEx);
             }
         }
 

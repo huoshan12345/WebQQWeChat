@@ -44,8 +44,8 @@ namespace iQQ.Net.WebQQCore.Im.Action
             var store = Context.Store;
             var json = JObject.Parse(response.GetResponseString());
 
-            var retcode = json["retcode"].ToObject<int>();
-            if (retcode == 0)
+            var retcode = json["retcode"].ToString();
+            if (retcode == "0")
             {
                 // 处理好友列表
                 var results = json["result"].ToObject<JObject>();
@@ -61,7 +61,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
                     group.Gin = groupJson["gid"].ToObject<long>();
                     group.Gid = group.Gin;
                     group.Code = groupJson["code"].ToObject<long>();
-                    group.Flag = groupJson["flag"].ToObject<int>();
+                    group.Flag = groupJson["flag"].ToObject<long>();
                     group.Name = groupJson["name"].ToString();
                     //添加到Store
                     store.AddGroup(group);

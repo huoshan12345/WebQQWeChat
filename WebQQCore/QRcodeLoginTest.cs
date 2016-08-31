@@ -23,9 +23,7 @@ namespace iQQ.Net.WebQQCore
      */
     public class QRcodeLoginTest
     {
-        private static Process QRcodeProcess = null;
-
-        static readonly IQQClient mClient = new WebQQClient("", "", (sender, Event) =>
+        private static readonly IQQClient _mClient = new WebQQClient("", "", (sender, Event) =>
         {
             switch (Event.Type)
             {
@@ -44,14 +42,12 @@ namespace iQQ.Net.WebQQCore
                         const string path = "verify.png";
                         verify.Save(path, System.Drawing.Imaging.ImageFormat.Png);
                         Console.WriteLine("请扫描在项目根目录下qrcode.png图片");
-                        QRcodeProcess = Process.Start(path);
+                        Process.Start(path);
                         break;
                     }
-
-                case QQNotifyEventType.QRCODE_SUCCESS:
+                    
                 case QQNotifyEventType.QRCODE_INVALID:
-                    Console.WriteLine(Event);
-                    QRcodeProcess?.Kill();
+                    Console.WriteLine("二维码已失效");
                     break;
             }
 
@@ -60,21 +56,23 @@ namespace iQQ.Net.WebQQCore
         public static void Main(string[] args)
         {
             // 获取二维码
-            mClient.LoginWithQRCode().WaitFinalEvent();
-            mClient.GetBuddyList((s, e) =>
+            var loginResult = _mClient.LoginWithQRCode().WaitFinalEvent();
+            if (loginResult.Type == QQActionEventType.EVT_OK)
             {
-                if (e.Type == QQActionEventType.EVT_OK) Console.WriteLine("加载好友列表成功");
-            });
-            mClient.GetGroupList((s, e) =>
-            {
-                if (e.Type == QQActionEventType.EVT_OK) Console.WriteLine("加载群列表成功");
-            });
-            mClient.GetSelfInfo((s, e) =>
-            {
-                if (e.Type == QQActionEventType.EVT_OK) Console.WriteLine("获取个人信息成功");
-            });
-            mClient.BeginPollMsg();
-
+                _mClient.GetBuddyList((s, e) =>
+                {
+                    if (e.Type == QQActionEventType.EVT_OK) Console.WriteLine("加载好友列表成功");
+                });
+                _mClient.GetGroupList((s, e) =>
+                {
+                    if (e.Type == QQActionEventType.EVT_OK) Console.WriteLine("加载群列表成功");
+                });
+                _mClient.GetSelfInfo((s, e) =>
+                {
+                    if (e.Type == QQActionEventType.EVT_OK) Console.WriteLine("获取个人信息成功");
+                });
+                _mClient.BeginPollMsg();
+            }
             Console.ReadKey();
         }
 
@@ -91,7 +89,7 @@ namespace iQQ.Net.WebQQCore
             sendMsg.AddContentItem(new TextItem("hello from iqq")); // 添加文本内容
             sendMsg.AddContentItem(new FaceItem(0));            // QQ id为0的表情
             sendMsg.AddContentItem(new FontItem());             // 使用默认字体
-            mClient.SendMsg(sendMsg, null);                     // 调用接口发送消息
+            _mClient.SendMsg(sendMsg);                     // 调用接口发送消息
         }
     }
 }
