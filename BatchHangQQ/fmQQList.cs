@@ -310,7 +310,7 @@ namespace iQQ.Net.BatchHangQQ
                 iqqClient = new WebQQClient(qqNum, qqPassword, _notifyHandler, _threadActorDispatcher);
                 break;
             }
-            _qqClients.Add(qqNum, iqqClient, AddChoice.Update);
+            _qqClients[qqNum] = iqqClient;
             AddQQInfo(iqqClient);
         }
 
