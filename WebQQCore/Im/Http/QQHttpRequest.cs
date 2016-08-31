@@ -21,9 +21,9 @@ namespace iQQ.Net.WebQQCore.Im.Http
 
         private Stream _inputStream;
 
-        public QQHttpRequest(string url, string method)
+        public QQHttpRequest(string rawUrl, string method)
         {
-            _url = url;
+            RawUrl = rawUrl;
             Method = method.ToUpper();
             HeaderMap = new Dictionary<string, string>();
             PostMap = new Dictionary<string, string>();
@@ -34,7 +34,8 @@ namespace iQQ.Net.WebQQCore.Im.Http
             HeaderMap[HttpConstants.Referer] = QQConstants.REFFER;
         }
 
-        private string _url;
+        public string RawUrl { get; private set; }
+
         public string Url
         {
             get
@@ -42,14 +43,14 @@ namespace iQQ.Net.WebQQCore.Im.Http
                 if (GetMap.Count > 0)
                 {
                     var query = string.Join("&", GetMap.Select(item => $"{item.Key.UrlEncode()}={item.Value.UrlEncode()}"));
-                    return $"{_url}?{query}";
+                    return $"{RawUrl}?{query}";
                 }
                 else
                 {
-                    return _url;
+                    return RawUrl;
                 }
             }
-            set { _url = value; }
+            set { RawUrl = value; }
         }
 
         public string Method { get; set; }
@@ -62,9 +63,9 @@ namespace iQQ.Net.WebQQCore.Im.Http
 
         public string Charset { get; set; } = "utf-8";
 
-        public int ConnectTimeout { get; set; } = 10 * 10000;
+        public int ConnectTimeout { get; set; } = 10 * 1000;
 
-        public int ReadTimeout { get; set; } = 20 * 10000;
+        public int ReadTimeout { get; set; } = 20 * 1000;
 
         public Dictionary<string, string> GetMap { get; }
 

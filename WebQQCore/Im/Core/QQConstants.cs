@@ -66,6 +66,8 @@
         public const string URL_GET_SELF_INFO = "http://s.web2.qq.com/api/get_self_info2";
         public const string REGXP_EMAIL_AUTH = "ptui_auth_CB\\('(.*?)','(.*?)'\\)";
         public const string URL_ACCEPET_BUDDY_ADD = "http://s.web2.qq.com/api/allow_and_add2";
+        public const string URL_GET_VFWEBQQ = "http://s.web2.qq.com/api/getvfwebqq";
+
 
         public const int MAX_POLL_ERR_CNT = 10;
         public const int MAX_RETRY_TIMES = 1;

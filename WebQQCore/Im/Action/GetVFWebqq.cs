@@ -10,25 +10,15 @@ namespace iQQ.Net.WebQQCore.Im.Action
 {
     public class GetVFWebqq : AbstractHttpAction
     {
-        const string url = "http://s.web2.qq.com/api/getvfwebqq";
-
-        /**
-         * <p>Constructor for AbstractHttpAction.</p>
-         *
-         * @param context  a {@link IQQContext} object.
-         * @param listener a {@link QQActionListener} object.
-         */
         public GetVFWebqq(IQQContext context, QQActionEventHandler listener) : base(context, listener)
         {
-            
         }
-
 
         public override QQHttpRequest BuildRequest()
         {
             var httpService = Context.GetSerivce<HttpService>(QQServiceType.HTTP);
             var session = Context.Session;
-            var request = CreateHttpRequest(HttpConstants.Get, url);
+            var request = CreateHttpRequest(HttpConstants.Get, QQConstants.URL_GET_VFWEBQQ);
             request.AddGetValue("ptwebqq", httpService.GetCookie("ptwebqq", QQConstants.URL_CHANNEL_LOGIN).Value);
             request.AddGetValue("clientid", session.ClientId);
             request.AddGetValue("psessionid", "");
@@ -39,19 +29,18 @@ namespace iQQ.Net.WebQQCore.Im.Action
 
         public override void OnHttpStatusOK(QQHttpResponse response)
         {
-            var session = Context.Session;
-
-            var json = JObject.Parse(response.GetResponseString());
+            var str = response.GetResponseString();
+            var json = JObject.Parse(str);
             if (json["retcode"].ToString() == "0")
             {
                 var ret = json["result"].ToObject<JObject>();
-                session.Vfwebqq = ret["vfwebqq"].ToString();
+                Context.Session.Vfwebqq = ret["vfwebqq"].ToString();
                 NotifyActionEvent(QQActionEventType.EVT_OK, null);
             }
             else
             {
                 // NotifyActionEvent(QQActionEventType.EVT_ERROR, new QQException(QQErrorCode.INVALID_RESPONSE));    //TODO ..
-                throw new QQException(QQErrorCode.INVALID_RESPONSE);
+                throw new QQException(QQErrorCode.INVALID_RESPONSE, str);
             }
         }
     }

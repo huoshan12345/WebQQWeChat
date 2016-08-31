@@ -241,7 +241,7 @@ namespace iQQ.Net.WebQQCore.Util
             {
                 _ipEndPoint = item.IpEndPoint;
                 //设置本地的出口ip和端口
-                _request.ServicePoint.BindIPEndPointDelegate = new BindIPEndPoint(BindIpEndPointCallback);
+                _request.ServicePoint.BindIPEndPointDelegate = BindIpEndPointCallback;
             }
             //设置Header参数
             if (item.Header != null && item.Header.Count > 0) foreach (var key in item.Header.AllKeys)
@@ -257,10 +257,7 @@ namespace iQQ.Net.WebQQCore.Util
             _request.Timeout = item.Timeout;
             _request.KeepAlive = item.KeepAlive;
             _request.ReadWriteTimeout = item.ReadWriteTimeout;
-            if (!string.IsNullOrWhiteSpace(item.Host))
-            {
-                _request.Host = item.Host;
-            }
+            if (!string.IsNullOrWhiteSpace(item.Host)) _request.Host = item.Host;
             if (item.IfModifiedSince != null) _request.IfModifiedSince = Convert.ToDateTime(item.IfModifiedSince);
             //Accept
             _request.Accept = item.Accept;
@@ -296,7 +293,7 @@ namespace iQQ.Net.WebQQCore.Util
             if (!string.IsNullOrWhiteSpace(item.CerPath))
             {
                 //这一句一定要写在创建连接的前面。使用回调的方法进行证书验证。
-                ServicePointManager.ServerCertificateValidationCallback = new System.Net.Security.RemoteCertificateValidationCallback(CheckValidationResult);
+                ServicePointManager.ServerCertificateValidationCallback = CheckValidationResult;
                 //初始化对像，并设置请求的URL地址
                 _request = (HttpWebRequest)WebRequest.Create(item.Url);
                 SetCerList(item);
@@ -343,12 +340,9 @@ namespace iQQ.Net.WebQQCore.Util
         private void SetPostData(HttpItem item)
         {
             //验证在得到结果时是否有传入数据
-            if (!_request.Method.Trim().ToLower().Contains(HttpConstants.Get))
+            if (!_request.Method.Trim().ToLower().Contains("get"))
             {
-                if (item.PostEncoding != null)
-                {
-                    _postencoding = item.PostEncoding;
-                }
+                if (item.PostEncoding != null) _postencoding = item.PostEncoding;
                 byte[] buffer = null;
                 //写入Byte类型
                 if (item.PostDataType == PostDataType.Byte && item.PostdataByte != null && item.PostdataByte.Length > 0)

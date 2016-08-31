@@ -30,7 +30,7 @@ namespace iQQ.Net.WebQQCore.Im.Service
         public QQHttpRequest CreateHttpRequest(string method, string url)
         {
             var req = new QQHttpRequest(url, method);
-            req.AddHeader(HttpConstants.UserAgent, UserAgent ?? QQConstants.USER_AGENT);
+            if (UserAgent != null) req.AddHeader(HttpConstants.UserAgent, UserAgent);
             return req;
         }
 
@@ -39,17 +39,17 @@ namespace iQQ.Net.WebQQCore.Im.Service
             var uri = new Uri(request.Url);
             var httpItem = new HttpItem()
             {
-                KeepAlive = true,
-                ProtocolVersion = HttpVersion.Version11,
-                ContentType = request.ContentType, // post方法的时候必须填写，要不然服务器无法解析
-                Encoding = Encoding.UTF8,
-                AllowAutoRedirect = true,
-                Method = request.Method,
-                Url = uri.AbsoluteUri,
                 Host = uri.Host,
+                Url = uri.AbsoluteUri,
+                ContentType = request.ContentType, // post方法的时候必须填写，要不然服务器无法解析
+                Method = request.Method,
                 UserAgent = request.UserAgent,
                 ReadWriteTimeout = request.ReadTimeout,
                 Timeout = request.ConnectTimeout,
+                KeepAlive = true,
+                ProtocolVersion = HttpVersion.Version11,
+                Encoding = Encoding.UTF8,
+                AllowAutoRedirect = false,
                 ResultType = ResultType.Byte,
                 CookieContainer = _cookieContainer,
             };
@@ -94,8 +94,27 @@ namespace iQQ.Net.WebQQCore.Im.Service
         {
             try
             {
+
                 var httpItem = GetHttpRequest(request);
+#if DEBUG
+                var cookieList = _cookieContainer.GetAllCookies();
+                if (request.RawUrl == QQConstants.URL_GET_VFWEBQQ)
+                {
+                    var cookieStr = $"Cookie: {string.Join("; ", cookieList)}";
+                    var count = cookieStr.Length;
+                }
+#endif
                 var result = new HttpHelper().GetHtml(httpItem);
+#if DEBUG
+                var cookieListNew = _cookieContainer.GetAllCookies().ToList();
+#endif
+
+                if (result.HasError)
+                {
+                    listener?.OnHttpError(result.Exception);
+                    throw result.Exception;
+                }
+
                 var response = new QQHttpResponse
                 {
                     ResponseMessage = result.StatusDescription,
@@ -124,15 +143,6 @@ namespace iQQ.Net.WebQQCore.Im.Service
 
                 // if (!result.CookieCollection.IsNullOrEmpty()) _cookieContainer.Add(result.CookieCollection);
 
-#if DEBUG
-                if (request.Url == QQConstants.URL_CHANNEL_LOGIN)
-                {
-                    var cookieList = _cookieContainer.GetAllCookies().Select(item => $"name={item.Name}, value={item.Value}, domain={item.Domain}").ToList();
-                    var count = cookieList.Count;
-                }
-#endif
-
-
 
                 if (!result.RedirectUrl.IsNullOrEmpty())
                 {
@@ -152,8 +162,9 @@ namespace iQQ.Net.WebQQCore.Im.Service
             }
             catch (Exception ex)
             {
+                // 此处不抛出
                 listener?.OnHttpError(ex);
-                return null;
+                throw;
             }
         }
 

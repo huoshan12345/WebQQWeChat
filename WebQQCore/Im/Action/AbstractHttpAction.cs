@@ -102,6 +102,10 @@ namespace iQQ.Net.WebQQCore.Im.Action
                     MyLogger.Default.Info($"{GetType().Name} [type={type.GetDescription()}, target={target}]");
                     break;
 
+                case QQActionEventType.EVT_OK:
+                case QQActionEventType.EVT_WRITE:
+                case QQActionEventType.EVT_READ:
+                case QQActionEventType.EVT_RETRY:
                 default:
                     MyLogger.Default.Debug($"{GetType().Name} [type={type.GetDescription()}, target={target}]");
                     break;

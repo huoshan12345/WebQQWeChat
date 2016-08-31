@@ -16,7 +16,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
         public CheckLoginSigAction(IQQContext context, QQActionEventHandler listener, string checkSigUrl)
             : base(context, listener)
         {
-            this._checkSigUrl = checkSigUrl;
+            _checkSigUrl = checkSigUrl;
         }
 
         public override void OnHttpStatusOK(QQHttpResponse response)

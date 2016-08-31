@@ -37,8 +37,9 @@ namespace iQQ.Net.WebQQCore.Im.Actor
                 {
                     case HttpActorType.BUILD_REQUEST:
                         var service = _context.GetSerivce<IHttpService>(QQServiceType.HTTP);
+                        var adaptor = new HttpAdaptor(_context, _action);
                         var request = _action.BuildRequest();
-                        service.ExecuteHttpRequest(request, new HttpAdaptor(_context, _action));
+                        service.ExecuteHttpRequest(request, adaptor);
                         break;
 
                     case HttpActorType.CANCEL_REQUEST:
@@ -108,44 +109,38 @@ namespace iQQ.Net.WebQQCore.Im.Actor
 
         public class HttpAdaptor : IQQHttpListener
         {
-            private readonly IQQContext context;
-            private readonly IHttpAction action;
+            private readonly IQQContext _context;
+            private readonly IHttpAction _action;
 
             public HttpAdaptor(IQQContext context, IHttpAction action)
             {
-                this.context = context;
-                this.action = action;
+                _context = context;
+                _action = action;
             }
-
 
             public void OnHttpFinish(QQHttpResponse response)
             {
-                context.PushActor(new HttpActor(HttpActorType.ON_HTTP_FINISH, context, action, response));
+                _context.PushActor(new HttpActor(HttpActorType.ON_HTTP_FINISH, _context, _action, response));
             }
-
 
             public void OnHttpError(Exception t)
             {
-                context.PushActor(new HttpActor(HttpActorType.ON_HTTP_ERROR, context, action, t));
+                _context.PushActor(new HttpActor(HttpActorType.ON_HTTP_ERROR, _context, _action, t));
             }
-
 
             public void OnHttpHeader(QQHttpResponse response)
             {
-                context.PushActor(new HttpActor(HttpActorType.ON_HTTP_HEADER, context, action, response));
-
+                _context.PushActor(new HttpActor(HttpActorType.ON_HTTP_HEADER, _context, _action, response));
             }
-
 
             public void OnHttpWrite(long current, long total)
             {
-                context.PushActor(new HttpActor(HttpActorType.ON_HTTP_WRITE, context, action, current, total));
+                _context.PushActor(new HttpActor(HttpActorType.ON_HTTP_WRITE, _context, _action, current, total));
             }
-
 
             public void OnHttpRead(long current, long total)
             {
-                context.PushActor(new HttpActor(HttpActorType.ON_HTTP_READ, context, action, current, total));
+                _context.PushActor(new HttpActor(HttpActorType.ON_HTTP_READ, _context, _action, current, total));
             }
         }
 
