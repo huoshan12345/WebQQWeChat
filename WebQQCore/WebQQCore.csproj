@@ -67,7 +67,9 @@
     <Compile Include="Util\Extensions\CollectionExtensions.cs" />
     <Compile Include="Util\Extensions\DictionaryExtensions.cs" />
     <Compile Include="Util\Extensions\HttpExtensions.cs" />
+    <Compile Include="Util\Extensions\ObjectExtensions.cs" />
     <Compile Include="Util\Extensions\StreamExtensions.cs" />
+    <Compile Include="Util\Extensions\StringBuilderExtensions.cs" />
     <Compile Include="Util\Extensions\StringExtensions.cs" />
     <Compile Include="Util\MyLogger.cs" />
     <Compile Include="Util\QueryString.cs" />

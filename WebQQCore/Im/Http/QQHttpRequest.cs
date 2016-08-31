@@ -18,7 +18,7 @@ namespace iQQ.Net.WebQQCore.Im.Http
     public class QQHttpRequest
     {
         private const string DefaultGetContentType = "application/json; charset=utf-8";
-        private const string DefaultPostContentType = "text/plain; charset=UTF-8";
+        private const string DefaultPostContentType = "application/x-www-form-urlencoded";
 
         private Stream _inputStream;
 

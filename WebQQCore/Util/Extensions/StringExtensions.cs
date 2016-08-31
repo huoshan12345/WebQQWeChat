@@ -62,5 +62,10 @@ namespace iQQ.Net.WebQQCore.Util.Extensions
         {
             return Regex.Replace(str, rex, replacement);
         }
+
+        public static string GetOrEmpty(this string str)
+        {
+            return str ?? "";
+        }
     }
 }

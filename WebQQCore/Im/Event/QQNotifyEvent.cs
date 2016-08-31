@@ -5,6 +5,10 @@ namespace iQQ.Net.WebQQCore.Im.Event
 
     public enum QQNotifyEventType
     {
+        /// <summary>
+        /// 登录成功
+        /// </summary>
+        LOGIN_SUCCESS,
         /** 重新登录成功 **/
         RELOGIN_SUCCESS,
         /** 网络连接出错，客户端已经掉线 */

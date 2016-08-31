@@ -29,6 +29,10 @@ namespace iQQ.Net.WebQQCore
         {
             switch (Event.Type)
             {
+                case QQNotifyEventType.LOGIN_SUCCESS:
+                    Console.WriteLine("登录成功");
+                    break;
+
                 case QQNotifyEventType.CHAT_MSG:
                     var revMsg = (QQMsg)Event.Target;
                     SendMsg(revMsg.From);
@@ -56,64 +60,20 @@ namespace iQQ.Net.WebQQCore
         public static void Main(string[] args)
         {
             // 获取二维码
-            mClient.GetQRCode((sender, @event) =>
+            mClient.LoginWithQRCode().WaitFinalEvent();
+            mClient.GetBuddyList((s, e) =>
             {
-                
+                if (e.Type == QQActionEventType.EVT_OK) Console.WriteLine("加载好友列表成功");
             });
-
-            //// 检查二维码状态
-            //mClient.CheckQRCode((sender, Event) =>
-            //{
-            //    switch (Event.Type)
-            //    {
-            //        case QQActionEventType.EVT_OK:
-            //            {
-            //                // 扫描通过,登录成功
-            //                // 
-            //                mClient.GetBuddyList((s, e) =>
-            //                {
-            //                    if (e.Type == QQActionEventType.EVT_OK)
-            //                    {
-            //                        Console.WriteLine("加载好友列表成功");
-            //                    }
-            //                });
-            //                mClient.GetGroupList((s, e) =>
-            //                {
-            //                    if (e.Type == QQActionEventType.EVT_OK)
-            //                    {
-            //                        Console.WriteLine("加载群列表成功");
-            //                    }
-            //                });
-            //                mClient.GetSelfInfo((s, e) =>
-            //                {
-            //                    if (e.Type == QQActionEventType.EVT_OK)
-            //                    {
-            //                        Console.WriteLine("获取个人信息成功");
-            //                    }
-            //                });
-
-            //                mClient.BeginPollMsg();
-            //                break;
-            //            }
-
-            //        case QQActionEventType.EVT_ERROR:
-            //            {
-            //                var ex = (QQException)(Event.Target);
-            //                var code = ex.ErrorCode;
-            //                switch (code)
-            //                {
-            //                    // 二维码有效,等待用户扫描
-            //                    // 二维码已经扫描,等用户允许登录
-            //                    case QQErrorCode.QRCODE_OK:
-            //                    case QQErrorCode.QRCODE_AUTH:
-            //                        Thread.Sleep(5000);
-            //                        break;
-            //                        // 发现检查二维码状态
-            //                }
-            //                break;
-            //            }
-            //    }
-            //});
+            mClient.GetGroupList((s, e) =>
+            {
+                if (e.Type == QQActionEventType.EVT_OK) Console.WriteLine("加载群列表成功");
+            });
+            mClient.GetSelfInfo((s, e) =>
+            {
+                if (e.Type == QQActionEventType.EVT_OK) Console.WriteLine("获取个人信息成功");
+            });
+            mClient.BeginPollMsg();
 
             Console.ReadKey();
         }

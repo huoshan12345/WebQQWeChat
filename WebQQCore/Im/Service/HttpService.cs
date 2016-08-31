@@ -100,9 +100,8 @@ namespace iQQ.Net.WebQQCore.Im.Service
 #if DEBUG
                 if (request.RawUrl == QQConstants.URL_CHANNEL_LOGIN)
                 {
-                    var cookieList = _cookieContainer.GetAllCookies();
-                    var cookieStr = $"Cookie: {string.Join("; ", cookieList)}";
-                    var count = cookieStr.Length;
+                    var body = httpItem.GetRequestHeader();
+                    var count = body.Length;
                 }
 #endif
                 var result = new HttpHelper().GetHtml(httpItem);

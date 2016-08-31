@@ -24,17 +24,18 @@ namespace iQQ.Net.WebQQCore.Im.Action
         {
             var httpService = Context.GetSerivce<IHttpService>(QQServiceType.HTTP);
             var session = Context.Session;
-            session.Ptwebqq = httpService.GetCookie("ptwebqq", QQConstants.URL_CHANNEL_LOGIN).Value;
+            var ptwebqq = httpService.GetCookie("ptwebqq", QQConstants.URL_CHANNEL_LOGIN).Value;
+            session.Ptwebqq = ptwebqq;
             var json = new JObject
             {
                 {"status", _status.Value},
-                {"ptwebqq", httpService.GetCookie("ptwebqq", QQConstants.URL_CHANNEL_LOGIN).Value},
-                {"clientid", session.ClientId.ToString()},
+                {"ptwebqq", ptwebqq},
+                {"clientid", session.ClientId},
                 {"psessionid", ""}
-            };
+            }.ToString(Formatting.None);
 
             var req = CreateHttpRequest("POST", QQConstants.URL_CHANNEL_LOGIN);
-            req.AddPostValue("r", JsonConvert.SerializeObject(json));
+            req.AddPostValue("r", json);
             req.AddHeader(HttpConstants.Referer, QQConstants.REFFER);
             req.AddHeader(HttpConstants.Origin, QQConstants.ORIGIN);
 

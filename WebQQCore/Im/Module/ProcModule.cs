@@ -20,7 +20,7 @@ namespace iQQ.Net.WebQQCore.Im.Module
             return QQModuleType.PROC;
         }
 
-        public IQQActionFuture GetQRCode(QQActionEventHandler listener)
+        public IQQActionFuture LoginWithQRCode(QQActionEventHandler listener)
         {
             var future = new ProcActionFuture(listener, true);
             var login = Context.GetModule<LoginModule>(QQModuleType.LOGIN);
@@ -234,6 +234,7 @@ namespace iQQ.Net.WebQQCore.Im.Module
                 if (Event.Type == QQActionEventType.EVT_OK)
                 {
                     future.NotifyActionEvent(QQActionEventType.EVT_OK, null);
+                    Context.FireNotify(new QQNotifyEvent(QQNotifyEventType.LOGIN_SUCCESS));
                 }
                 else if (Event.Type == QQActionEventType.EVT_ERROR)
                 {

@@ -30,11 +30,8 @@ namespace iQQ.Net.WebQQCore.Im.Action
                 {"vfwebqq", session.Vfwebqq},
                 {"hash", QQEncryptor.GetHash(account.Uin.ToString(), ptwebqq.Value)}
             };
-
-            var req = CreateHttpRequest("POST",
-                    QQConstants.URL_GET_GROUP_NAME_LIST);
-            req.AddPostValue("r", JsonConvert.SerializeObject(json));
-
+            var req = CreateHttpRequest("POST", QQConstants.URL_GET_GROUP_NAME_LIST);
+            req.AddPostValue("r", json.ToString(Formatting.None));
             req.AddHeader("Referer", QQConstants.REFFER);
 
             return req;
@@ -88,7 +85,8 @@ namespace iQQ.Net.WebQQCore.Im.Action
             else
             {
                 // LOG.warn("unknown retcode: " + retcode);
-                NotifyActionEvent(QQActionEventType.EVT_ERROR, null);
+                // NotifyActionEvent(QQActionEventType.EVT_ERROR, null);
+                throw new QQException(QQErrorCode.INVALID_RESPONSE, $"unknown retcode: {retcode}");
             }
 
         }

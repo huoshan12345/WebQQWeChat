@@ -32,9 +32,26 @@ namespace iQQ.Net.WebQQCore.Util.Extensions
             }
         }
 
+
         public static IEnumerable<Cookie> GetCookies(this CookieContainer cc, string name)
         {
             return GetAllCookies(cc).Where(item => string.Compare(item.Name, name, StringComparison.OrdinalIgnoreCase) == 0);
+        }
+        
+
+        public static string GetRequestHeader(this HttpItem request)
+        {
+            var sb = new StringBuilder();
+            sb.AppendLineIf($"{HttpConstants.Referer}: {request.Referer}", !request.Referer.IsNullOrEmpty());
+            sb.AppendLineIf($"{HttpConstants.UserAgent}: {request.UserAgent}", !request.UserAgent.IsNullOrEmpty());
+            sb.AppendLineIf($"{HttpConstants.ContentType}: {request.ContentType}", !request.ContentType.IsNullOrEmpty());
+            sb.AppendLineIf($"{HttpConstants.Cookie}: {string.Join("; ", request.CookieContainer.GetAllCookies())}", !request.CookieContainer.IsNullOrEmpty());
+            return sb.ToString();
+        }
+
+        public static bool IsNullOrEmpty(this CookieContainer col)
+        {
+            return col == null || col.Count == 0;
         }
     }
 }

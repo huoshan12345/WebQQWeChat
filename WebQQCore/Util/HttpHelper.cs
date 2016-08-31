@@ -21,6 +21,7 @@ namespace iQQ.Net.WebQQCore.Util
         public const string ContentLength = "Content-Length";
         public const string SetCookie = "Set-Cookie";
         public const string Origin = "Origin";
+        public const string Cookie = "Cookie";
     }
 
     /// <summary>
