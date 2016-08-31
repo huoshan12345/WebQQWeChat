@@ -4,6 +4,7 @@ using iQQ.Net.WebQQCore.Im.Bean.Content;
 using iQQ.Net.WebQQCore.Im.Core;
 using iQQ.Net.WebQQCore.Im.Event;
 using iQQ.Net.WebQQCore.Im.Http;
+using iQQ.Net.WebQQCore.Util;
 
 namespace iQQ.Net.WebQQCore.Im.Action
 {
@@ -34,7 +35,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
 
         public override QQHttpRequest OnBuildRequest()
         {
-            QQHttpRequest req = CreateHttpRequest("GET", QQConstants.URL_GET_CFACE2);
+            var req = CreateHttpRequest(HttpConstants.Get, QQConstants.URL_GET_CFACE2);
 
             //		clientid=12202920
             //		count=5
@@ -44,7 +45,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
             //		time=1
             //		to=3559750777 //from_uin
 
-            QQSession session = Context.Session;
+            var session = Context.Session;
             req.AddGetValue("clientid", session.ClientId);
             req.AddGetValue("to", msg.From.Uin);
             req.AddGetValue("guid", cface.FileName);

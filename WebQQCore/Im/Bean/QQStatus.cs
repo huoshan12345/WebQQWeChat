@@ -49,7 +49,7 @@ namespace iQQ.Net.WebQQCore.Im.Bean
 
         public static QQStatus ValueOfRaw(string txt)
         {
-            foreach (QQStatus s in qqStatus)
+            foreach (var s in qqStatus)
             {
                 if (s.Value.Equals(txt))
                 {
@@ -61,7 +61,7 @@ namespace iQQ.Net.WebQQCore.Im.Bean
 
         public static QQStatus ValueOfRaw(int status)
         {
-            foreach (QQStatus s in qqStatus)
+            foreach (var s in qqStatus)
             {
                 if (s.Status == status)
                 {

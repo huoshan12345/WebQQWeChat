@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using iQQ.Net.WebQQCore.Im.Core;
 using iQQ.Net.WebQQCore.Im.Event;
 using iQQ.Net.WebQQCore.Im.Http;
@@ -32,7 +28,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
         {
             var httpService = Context.GetSerivce<HttpService>(QQServiceType.HTTP);
             var session = Context.Session;
-            var request = CreateHttpRequest("GET", url);
+            var request = CreateHttpRequest(HttpConstants.Get, url);
             request.AddGetValue("ptwebqq", httpService.GetCookie("ptwebqq", QQConstants.URL_CHANNEL_LOGIN).Value);
             request.AddGetValue("clientid", session.ClientId);
             request.AddGetValue("psessionid", "");
@@ -54,7 +50,8 @@ namespace iQQ.Net.WebQQCore.Im.Action
             }
             else
             {
-                NotifyActionEvent(QQActionEventType.EVT_ERROR, new QQException(QQErrorCode.INVALID_RESPONSE));    //TODO ..
+                // NotifyActionEvent(QQActionEventType.EVT_ERROR, new QQException(QQErrorCode.INVALID_RESPONSE));    //TODO ..
+                throw new QQException(QQErrorCode.INVALID_RESPONSE);
             }
         }
     }

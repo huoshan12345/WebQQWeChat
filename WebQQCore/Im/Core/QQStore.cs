@@ -184,7 +184,7 @@ namespace iQQ.Net.WebQQCore.Im.Core
         /// <returns></returns>
         public QQUser SearchUserByUin(long uin)
         {
-            QQUser user = GetBuddyByUin(uin) ?? (QQUser)GetStrangerByUin(uin);
+            var user = GetBuddyByUin(uin) ?? (QQUser)GetStrangerByUin(uin);
             if (user == null)
             {
                 foreach (var group in _groupMap.Values)

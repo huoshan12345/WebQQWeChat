@@ -15,37 +15,37 @@ namespace iQQ.Net.WebQQCore.Im.Module
             return QQModuleType.USER;
         }
 
-        public QQActionFuture GetUserInfo(QQUser user, QQActionEventHandler listener)
+        public IQQActionFuture GetUserInfo(QQUser user, QQActionEventHandler listener)
         {
             return PushHttpAction(new GetFriendInfoAction(Context, listener, user));
         }
 
-        public QQActionFuture GetUserFace(QQUser user, QQActionEventHandler listener)
+        public IQQActionFuture GetUserFace(QQUser user, QQActionEventHandler listener)
         {
             return PushHttpAction(new GetFriendFaceAction(Context, listener, user));
         }
         
-        public QQActionFuture GetUserAccount(QQUser user, QQActionEventHandler listener)
+        public IQQActionFuture GetUserAccount(QQUser user, QQActionEventHandler listener)
         {
             return PushHttpAction(new GetFriendAccoutAction(Context, listener, user));
         }
 
-        public QQActionFuture GetUserSign(QQUser user, QQActionEventHandler listener)
+        public IQQActionFuture GetUserSign(QQUser user, QQActionEventHandler listener)
         {
             return PushHttpAction(new GetFriendSignAction(Context, listener, user));
         }
 
-        public QQActionFuture GetUserLevel(QQUser user, QQActionEventHandler listener)
+        public IQQActionFuture GetUserLevel(QQUser user, QQActionEventHandler listener)
         {
             return PushHttpAction(new GetUserLevelAction(Context, listener, user));
         }
 
-        public QQActionFuture ChangeStatus(QQStatus status, QQActionEventHandler listener)
+        public IQQActionFuture ChangeStatus(QQStatus status, QQActionEventHandler listener)
         {
             return PushHttpAction(new ChangeStatusAction(Context, listener, status));
         }
 
-        public QQActionFuture GetStrangerInfo(QQUser user, QQActionEventHandler listener)
+        public IQQActionFuture GetStrangerInfo(QQUser user, QQActionEventHandler listener)
         {
             return PushHttpAction(new GetStrangerInfoAction(Context, listener, user));
         }

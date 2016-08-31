@@ -122,14 +122,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
                     var buddy = store.GetBuddyByUin(uin);
                     buddy.VipLevel = vipInfo["vip_level"].ToObject<int>();
                     var isVip = vipInfo["is_vip"].ToObject<int>();
-                    if (isVip != 0)
-                    {
-                        buddy.IsVip = true;
-                    }
-                    else
-                    {
-                        buddy.IsVip = false;
-                    }
+                    buddy.IsVip = isVip != 0;
                 }
 
                 NotifyActionEvent(QQActionEventType.EVT_OK, store.GetCategoryList());

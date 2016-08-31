@@ -30,7 +30,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
         public override QQHttpRequest OnBuildRequest()
         {
             var session = Context.Session;
-            var req = CreateHttpRequest("GET",
+            var req = CreateHttpRequest(HttpConstants.Get,
                     QQConstants.URL_GET_USER_FACE);
             req.AddGetValue("uin", _group.Code);
             req.AddGetValue("vfwebqq", session.Vfwebqq);

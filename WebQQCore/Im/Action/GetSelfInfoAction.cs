@@ -24,7 +24,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
 
         public override QQHttpRequest OnBuildRequest()
         {
-            QQHttpRequest req = CreateHttpRequest("GET", QQConstants.URL_GET_SELF_INFO);
+            var req = CreateHttpRequest(HttpConstants.Get, QQConstants.URL_GET_SELF_INFO);
             req.AddGetValue("t", (DateUtils.NowTimestamp() / 1000).ToString());
             req.AddHeader("Referer", QQConstants.REFERER_S);
             return req;
@@ -35,7 +35,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
         public override void OnHttpStatusOK(QQHttpResponse response)
         {
             var json = JObject.Parse(response.GetResponseString());
-            QQAccount account = Context.Account;
+            var account = Context.Account;
             if (json["retcode"].ToString() == "0")
             {
                 var obj = json["result"].ToObject<JObject>();

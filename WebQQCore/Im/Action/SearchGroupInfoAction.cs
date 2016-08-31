@@ -28,7 +28,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
         public override QQHttpRequest OnBuildRequest()
         {
             var session = Context.Session;
-            var req = CreateHttpRequest("GET",
+            var req = CreateHttpRequest(HttpConstants.Get,
                     QQConstants.URL_SEARCH_GROUP_INFO);
 
             //我不知道以下4个参数干啥？但是一致！	

@@ -4,6 +4,7 @@ using System.Text.RegularExpressions;
 using iQQ.Net.WebQQCore.Im.Core;
 using iQQ.Net.WebQQCore.Im.Event;
 using iQQ.Net.WebQQCore.Im.Http;
+using iQQ.Net.WebQQCore.Util;
 
 namespace iQQ.Net.WebQQCore.Im.Action
 {
@@ -25,7 +26,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
         {
             // "https://ssl.ptlogin2.qq.com/check?pt_tea=1&uin={0}&appid=" + APPID + "&js_ver=" + JSVER + "&js_type=0&login_sig={1}&u1=http%3A%2F%2Fweb2.qq.com%2Floginproxy.html&r={2}"
 
-            var req = CreateHttpRequest("GET", QQConstants.URL_CHECK_VERIFY);
+            var req = CreateHttpRequest(HttpConstants.Get, QQConstants.URL_CHECK_VERIFY);
             req.AddGetValue("pt_tea", "1");
             req.AddGetValue("uin", _qqAccount);
             req.AddGetValue("appid", QQConstants.APPID);

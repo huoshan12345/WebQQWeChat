@@ -55,7 +55,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
 
         public override QQHttpRequest OnBuildRequest()
         {
-            var req = CreateHttpRequest("GET", QQConstants.URL_GET_GROUP_PIC);
+            var req = CreateHttpRequest(HttpConstants.Get, QQConstants.URL_GET_GROUP_PIC);
 
             //		fid	3648788200
             //		gid	2890126166

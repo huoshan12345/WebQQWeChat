@@ -14,8 +14,8 @@ namespace iQQ.Net.WebQQCore.Util
         public static DateTime Parse(JObject jsonobj)
         {
             const string format = "yyyy-M-d";
-            string dateString = jsonobj["year"] + "-" + jsonobj["month"] + "-" + jsonobj["day"];
-            DateTime dt = DateTime.ParseExact(dateString, format, CultureInfo.CurrentCulture);
+            var dateString = jsonobj["year"] + "-" + jsonobj["month"] + "-" + jsonobj["day"];
+            var dt = DateTime.ParseExact(dateString, format, CultureInfo.CurrentCulture);
             return dt;
         }
 

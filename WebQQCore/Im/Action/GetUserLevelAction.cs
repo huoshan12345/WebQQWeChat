@@ -45,7 +45,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
 
         public override QQHttpRequest OnBuildRequest()
         {
-            var req = CreateHttpRequest("GET", QQConstants.URL_GET_USER_LEVEL);
+            var req = CreateHttpRequest(HttpConstants.Get, QQConstants.URL_GET_USER_LEVEL);
             var session = Context.Session;
             req.AddGetValue("tuin", user.Uin);
             req.AddGetValue("t", DateTime.Now.CurrentTimeSeconds());

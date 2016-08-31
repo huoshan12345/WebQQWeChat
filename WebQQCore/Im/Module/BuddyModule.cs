@@ -10,17 +10,17 @@ namespace iQQ.Net.WebQQCore.Im.Module
     /// </summary>
     public class BuddyModule : AbstractModule
     {
-        public QQActionFuture GetOnlineBuddy(QQActionEventHandler listener)
+        public IQQActionFuture GetOnlineBuddy(QQActionEventHandler listener)
         {
             return PushHttpAction(new GetOnlineFriendAction(this.Context, listener));
         }
 
-        public QQActionFuture GetRecentList(QQActionEventHandler listener)
+        public IQQActionFuture GetRecentList(QQActionEventHandler listener)
         {
             return PushHttpAction(new GetRecentListAction(this.Context, listener));
         }
 
-        public QQActionFuture AddBuddy(QQActionEventHandler listener, string account)
+        public IQQActionFuture AddBuddy(QQActionEventHandler listener, string account)
         {
             return PushHttpAction(new AcceptBuddyAddAction(Context, listener, account));
         }

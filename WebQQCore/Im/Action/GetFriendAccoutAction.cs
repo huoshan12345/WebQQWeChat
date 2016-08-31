@@ -27,9 +27,9 @@ namespace iQQ.Net.WebQQCore.Im.Action
 
         public override QQHttpRequest OnBuildRequest()
         {
-            QQSession session = Context.Session;
+            var session = Context.Session;
             // tuin=4245757755&verifysession=&type=1&code=&vfwebqq=**&t=1361631644492
-            QQHttpRequest req = CreateHttpRequest("GET",
+            var req = CreateHttpRequest(HttpConstants.Get,
                     QQConstants.URL_GET_USER_ACCOUNT);
             req.AddGetValue("tuin", buddy.Uin);
             req.AddGetValue("vfwebqq", session.Vfwebqq);
@@ -44,10 +44,10 @@ namespace iQQ.Net.WebQQCore.Im.Action
 
         public override void OnHttpStatusOK(QQHttpResponse response)
         {
-            JObject json = JObject.Parse(response.GetResponseString());
+            var json = JObject.Parse(response.GetResponseString());
             if (json["retcode"].ToString() == "0")
             {
-                JObject obj = json["result"].ToObject<JObject>();
+                var obj = json["result"].ToObject<JObject>();
                 buddy.QQ = obj["account"].ToObject<long>();
             }
 

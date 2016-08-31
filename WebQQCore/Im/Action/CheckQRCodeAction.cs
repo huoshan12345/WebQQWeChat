@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using iQQ.Net.WebQQCore.Im.Core;
 using iQQ.Net.WebQQCore.Im.Event;
 using iQQ.Net.WebQQCore.Im.Http;
+using iQQ.Net.WebQQCore.Util;
 
 namespace iQQ.Net.WebQQCore.Im.Action
 {
@@ -16,7 +17,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
         
         public override QQHttpRequest OnBuildRequest()
         {
-            var req = CreateHttpRequest("GET", QQConstants.URL_CHECK_QRCODE);
+            var req = CreateHttpRequest(HttpConstants.Get, QQConstants.URL_CHECK_QRCODE);
             req.AddGetValue("webqq_type", "10");
             req.AddGetValue("remember_uin", "1");
             req.AddGetValue("login2qq", "1");

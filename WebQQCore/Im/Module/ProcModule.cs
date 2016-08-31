@@ -20,7 +20,7 @@ namespace iQQ.Net.WebQQCore.Im.Module
             return QQModuleType.PROC;
         }
 
-        public QQActionFuture GetQRCode(QQActionEventHandler listener)
+        public IQQActionFuture GetQRCode(QQActionEventHandler listener)
         {
             var future = new ProcActionFuture(listener, true);
             var login = Context.GetModule<LoginModule>(QQModuleType.LOGIN);
@@ -52,6 +52,7 @@ namespace iQQ.Net.WebQQCore.Im.Module
                     switch (eventArgs.Status)
                     {
                         case QRCodeStatus.QRCODE_OK:
+                            Context.FireNotify(new QQNotifyEvent(QQNotifyEventType.QRCODE_SUCCESS));
                             DoCheckLoginSig(eventArgs.Msg, future);
                             break;
 
@@ -78,7 +79,7 @@ namespace iQQ.Net.WebQQCore.Im.Module
         }
 
 
-        public QQActionFuture Login(QQActionEventHandler listener)
+        public IQQActionFuture Login(QQActionEventHandler listener)
         {
             var future = new ProcActionFuture(listener, true);
             // DoGetLoginSig(future); // 这里可以直接替换成 DoCheckVerify(future);
@@ -86,7 +87,7 @@ namespace iQQ.Net.WebQQCore.Im.Module
             return future;
         }
 
-        public QQActionFuture LoginWithVerify(string verifyCode, ProcActionFuture future)
+        public IQQActionFuture LoginWithVerify(string verifyCode, ProcActionFuture future)
         {
             DoWebLogin(verifyCode, future);
             return future;
@@ -118,9 +119,9 @@ namespace iQQ.Net.WebQQCore.Im.Module
             {
                 if (Event.Type == QQActionEventType.EVT_OK)
                 {
-                    var verify = new QQNotifyEventArgs.ImageVerify
+                    var verify = new ImageVerify
                     {
-                        Type = QQNotifyEventArgs.ImageVerify.VerifyType.LOGIN,
+                        Type = ImageVerify.VerifyType.LOGIN,
                         Image = (Image)Event.Target,
                         Reason = reason,
                         Future = future
@@ -241,7 +242,7 @@ namespace iQQ.Net.WebQQCore.Im.Module
             });
         }
 
-        public QQActionFuture Relogin(QQStatus status, QQActionEventHandler listener)
+        public IQQActionFuture Relogin(QQStatus status, QQActionEventHandler listener)
         {
             Context.Account.Status = status;
             Context.Session.State = QQSessionState.LOGINING;
@@ -348,7 +349,7 @@ namespace iQQ.Net.WebQQCore.Im.Module
         /// </summary>
         /// <param name="listener"></param>
         /// <returns></returns>
-        public QQActionFuture DoLogout(QQActionEventHandler listener)
+        public IQQActionFuture DoLogout(QQActionEventHandler listener)
         {
             var login = Context.GetModule<LoginModule>(QQModuleType.LOGIN);
             return login.Logout(listener);

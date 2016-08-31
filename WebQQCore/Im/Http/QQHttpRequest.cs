@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using iQQ.Net.WebQQCore.Im.Core;
 using iQQ.Net.WebQQCore.Util;
 
 namespace iQQ.Net.WebQQCore.Im.Http
@@ -15,36 +16,32 @@ namespace iQQ.Net.WebQQCore.Im.Http
      */
     public class QQHttpRequest
     {
-        private string _url;
-
-        private readonly Dictionary<string, string> _getMap;
+        private const string DefaultGetContentType = "application/json; charset=utf-8";
+        private const string DefaultPostContentType = "text/plain; charset=UTF-8";
 
         private Stream _inputStream;
-
-        private byte[] _inputBytes;
-
-        private string _inputString;
-
-        private string _charset;
-
 
         public QQHttpRequest(string url, string method)
         {
             _url = url;
-            Method = method;
+            Method = method.ToUpper();
             HeaderMap = new Dictionary<string, string>();
             PostMap = new Dictionary<string, string>();
-            _getMap = new Dictionary<string, string>();
+            GetMap = new Dictionary<string, string>();
             FileMap = new Dictionary<string, string>();
+            HeaderMap[HttpConstants.ContentType] = Method == HttpConstants.Post ? DefaultPostContentType : DefaultGetContentType;
+            HeaderMap[HttpConstants.UserAgent] = QQConstants.USER_AGENT;
+            HeaderMap[HttpConstants.Referer] = QQConstants.REFFER;
         }
 
+        private string _url;
         public string Url
         {
             get
             {
-                if (_getMap.Count > 0)
+                if (GetMap.Count > 0)
                 {
-                    var query = string.Join("&", _getMap.Select(item => $"{item.Key.UrlEncode()}={item.Value.UrlEncode()}"));
+                    var query = string.Join("&", GetMap.Select(item => $"{item.Key.UrlEncode()}={item.Value.UrlEncode()}"));
                     return $"{_url}?{query}";
                 }
                 else
@@ -59,86 +56,37 @@ namespace iQQ.Net.WebQQCore.Im.Http
 
         public int Timeout { get; set; }
 
-
         public string PostBody { get; set; }
-
-        public Dictionary<string, string> HeaderMap { get; set; }
-
-        public Stream InputStream
-        {
-            get
-            {
-                if (_inputStream != null)
-                {
-                    return _inputStream;
-                }
-                else if (PostMap.Count > 0)
-                {
-                    return new MemoryStream(Encoding.GetEncoding(Charset).GetBytes(InputString));
-                }
-                else
-                {
-                    return null;
-                }
-            }
-
-            set { _inputStream = value; }
-        }
 
         public Stream OutputStream { get; set; }
 
-        public string Charset
-        {
-            get { return _charset ?? "utf-8"; }
-            set { _charset = value; }
-        }
+        public string Charset { get; set; } = "utf-8";
 
-        public int ConnectTimeout { get; set; }
+        public int ConnectTimeout { get; set; } = 10 * 10000;
 
-        public int ReadTimeout { get; set; }
+        public int ReadTimeout { get; set; } = 20 * 10000;
 
-        public Dictionary<string, string> PostMap { get; private set; }
+        public Dictionary<string, string> GetMap { get; }
+
+        public Dictionary<string, string> HeaderMap { get; set; }
+
+        public Dictionary<string, string> PostMap { get; set; }
 
         public Dictionary<string, string> FileMap { get; }
 
-        public string InputString
+        public string GetPostString()
         {
-            get
-            {
-                if (_inputString != null)
-                {
-                    return _inputString;
-                }
-                else if (PostMap.Count > 0)
-                {
-                    return string.Join("&", PostMap.Select(item => $"{item.Key.UrlEncode()}={item.Value.UrlEncode()}"));
-                }
-                else
-                {
-                    return null;
-                }
-            }
-            set { _inputString = value; }
+            return string.Join("&", PostMap.Select(item => $"{item.Key.UrlEncode()}={item.Value.UrlEncode()}"));
         }
 
-        public byte[] InputBytes
+        public byte[] GetPostBytes()
         {
-            get
-            {
-                if (_inputBytes != null)
-                {
-                    return _inputBytes;
-                }
-                else if (PostMap.Count > 0)
-                {
-                    return Encoding.GetEncoding(Charset).GetBytes(InputString);
-                }
-                else
-                {
-                    return null;
-                }
-            }
-            set { _inputBytes = value; }
+            return Encoding.GetEncoding(Charset).GetBytes(GetPostString());
+        }
+
+        public Stream GetPostStream()
+        {
+            return _inputStream ?? new MemoryStream(GetPostBytes());
         }
 
         public void AddHeader(string key, string value)
@@ -146,45 +94,43 @@ namespace iQQ.Net.WebQQCore.Im.Http
             HeaderMap.Add(key, value, AddChoice.Update);
         }
 
-        public void SetBody(Dictionary<string, string> keymap)
-        {
-            PostMap = keymap;
-        }
-
         public void SetBody(Stream inputStream)
         {
             _inputStream = inputStream;
         }
 
-
-        public void AddPostValue(string key, string value)
-        {
-            PostMap.Add(key, value ?? string.Empty, AddChoice.Update);
-        }
-
         public void AddPostValue(string key, object value)
         {
-            AddPostValue(key, value?.ToString());
+            PostMap[key] = value?.ToString() ?? string.Empty;
         }
 
         public void AddPostFile(string key, string file)
         {
+            FileMap[key] = file;
             FileMap.Add(key, file, AddChoice.Update);
-        }
-
-        public void AddGetValue(string key, string value)
-        {
-            _getMap.Add(key, value ?? string.Empty, AddChoice.Update);
         }
 
         public void AddGetValue(string key, object value)
         {
-            AddGetValue(key, value?.ToString());
+            GetMap[key] = value?.ToString() ?? string.Empty;
         }
 
-        public void AddRefer(string refer)
+        public string ContentType
         {
-            AddHeader(HttpConstants.Referer, refer);
+            get { return HeaderMap[HttpConstants.ContentType]; }
+            set { HeaderMap[HttpConstants.ContentType] = value; }
+        }
+
+        public string Refer
+        {
+            get { return HeaderMap[HttpConstants.Referer]; }
+            set { HeaderMap[HttpConstants.ContentType] = value; }
+        }
+
+        public string UserAgent
+        {
+            get { return HeaderMap[HttpConstants.UserAgent]; }
+            set { HeaderMap[HttpConstants.UserAgent] = value; }
         }
     }
 

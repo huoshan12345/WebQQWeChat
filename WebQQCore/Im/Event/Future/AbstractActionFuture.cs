@@ -6,7 +6,7 @@ using iQQ.Net.WebQQCore.Util;
 
 namespace iQQ.Net.WebQQCore.Im.Event.Future
 {
-    public abstract class AbstractActionFuture : QQActionFuture, IQQActionListener
+    public abstract class AbstractActionFuture : IQQActionFuture, IQQActionListener
     {
         private readonly BlockingCollection<QQActionEvent> _eventQueue;
         private volatile bool _isCanceled;

@@ -1,6 +1,7 @@
 ﻿using iQQ.Net.WebQQCore.Im.Core;
 using iQQ.Net.WebQQCore.Im.Event;
 using iQQ.Net.WebQQCore.Im.Http;
+using iQQ.Net.WebQQCore.Util;
 
 namespace iQQ.Net.WebQQCore.Im.Action
 {
@@ -27,7 +28,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
 
         public override QQHttpRequest OnBuildRequest()
         {
-            return CreateHttpRequest("GET", _checkSigUrl);
+            return CreateHttpRequest(HttpConstants.Get, _checkSigUrl);
         }
 
     }

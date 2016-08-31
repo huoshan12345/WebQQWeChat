@@ -16,12 +16,12 @@ namespace iQQ.Net.WebQQCore.Im.Module
             return QQModuleType.DISCUZ;
         }
 
-        public QQActionFuture GetDiscuzList(QQActionEventHandler listener)
+        public IQQActionFuture GetDiscuzList(QQActionEventHandler listener)
         {
             return PushHttpAction(new GetDiscuzListAction(this.Context, listener));
         }
 
-        public QQActionFuture GetDiscuzInfo(QQDiscuz discuz, QQActionEventHandler listener)
+        public IQQActionFuture GetDiscuzInfo(QQDiscuz discuz, QQActionEventHandler listener)
         {
             return PushHttpAction(new GetDiscuzInfoAction(this.Context, listener, discuz));
         }

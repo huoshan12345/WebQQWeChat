@@ -23,9 +23,9 @@ namespace iQQ.Net.WebQQCore.Im.Module
         {
         }
 
-        public QQActionFuture PushHttpAction(IHttpAction action)
+        public IQQActionFuture PushHttpAction(IHttpAction action)
         {
-            QQActionFuture future = new HttpActionFuture(action);	 	//替换掉原始的QQActionListener
+            IQQActionFuture future = new HttpActionFuture(action);	 	//替换掉原始的QQActionListener
             this.Context.PushActor(new HttpActor(HttpActorType.BUILD_REQUEST, this.Context, action));
             return future;
         }

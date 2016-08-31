@@ -61,7 +61,7 @@ namespace iQQ.Net.WebQQCore.Im.Module
                 {
                     ErrorCount = 0;
                     // 跳到步骤四
-                    string key = Event.Target.ToString();
+                    var key = Event.Target.ToString();
                     GetWPKey(key, wpkeyListener);
                     Context.Session.EmailAuthKey = key;
                 }
@@ -77,7 +77,7 @@ namespace iQQ.Net.WebQQCore.Im.Module
                         {
                             ErrorCount = 0;
                             // 跳到步骤四
-                            string key = Event.Target.ToString();
+                            var key = Event.Target.ToString();
                             GetWPKey(key, wpkeyListener);
                             Context.Session.EmailAuthKey = key;
                         }
@@ -127,17 +127,17 @@ namespace iQQ.Net.WebQQCore.Im.Module
                     {
                         if (GetPT4Auth(null).WaitFinalEvent(3000).Type != QQActionEventType.EVT_OK)
                         {
-                            QQException ex = (QQException)Event.Target;
+                            var ex = (QQException)Event.Target;
                             if (ex.ErrorCode == QQErrorCode.INVALID_LOGIN_AUTH)
                             {
                                 // 登录失败，QQ消息的POLL同时也失效，这时那边会重新登录
                                 // 如果已经在登录中，或者已经登录了，就不用再次执行
                                 MyLogger.Default.Warn("GetPT4Auth error!!! wait Relogin...", ex);
-                                QQSession session = Context.Session;
+                                var session = Context.Session;
                                 if (session.State == QQSessionState.LOGINING
                                     || session.State == QQSessionState.KICKED) return;
 
-                                ProcModule procModule = Context.GetModule<ProcModule>(QQModuleType.PROC);
+                                var procModule = Context.GetModule<ProcModule>(QQModuleType.PROC);
                                 procModule.Relogin();// 重新登录成功会重新唤醒beginPoll
                             }
                             else if (ErrorCount < QQConstants.MAX_POLL_ERR_CNT)
@@ -178,11 +178,11 @@ namespace iQQ.Net.WebQQCore.Im.Module
                     else
                     {
                         // 有新邮件
-                        QQNotifyEvent evt = (QQNotifyEvent)Event.Target;
+                        var evt = (QQNotifyEvent)Event.Target;
                         // 通知事件
                         Context.FireNotify(evt);
                         // 消除所有，传上最后t的标记上去
-                        List<QQEmail> mailList = (List<QQEmail>)evt.Target;
+                        var mailList = (List<QQEmail>)evt.Target;
                         LoopPoll(sid, mailList[mailList.Count - 1].Flag);
 
                         // 把邮件标记为已读，需要邮件列表ID
@@ -191,7 +191,7 @@ namespace iQQ.Net.WebQQCore.Im.Module
                 }
                 else if (Event.Type == QQActionEventType.EVT_ERROR)
                 {
-                    QQException ex = (QQException)Event.Target;
+                    var ex = (QQException)Event.Target;
                     if (ex.ErrorCode == QQErrorCode.INVALID_LOGIN_AUTH)
                     {
                         // 凭证失效，重新认证
@@ -214,7 +214,7 @@ namespace iQQ.Net.WebQQCore.Im.Module
          * @param listener a {@link iqq.im.IQQActionListener} object.
          * @return a {@link iqq.im.Event.QQActionFuture} object.
          */
-        private QQActionFuture Poll(string sid, long t, QQActionEventHandler listener)
+        private IQQActionFuture Poll(string sid, long t, QQActionEventHandler listener)
         {
             return PushHttpAction(new PollEmailAction(sid, t, Context, listener));
         }
@@ -226,7 +226,7 @@ namespace iQQ.Net.WebQQCore.Im.Module
          * @param listener a {@link iqq.im.IQQActionListener} object.
          * @return a {@link iqq.im.Event.QQActionFuture} object.
          */
-        private QQActionFuture GetWPKey(string sid, QQActionEventHandler listener)
+        private IQQActionFuture GetWPKey(string sid, QQActionEventHandler listener)
         {
             return PushHttpAction(new GetWPKeyAction(sid, Context, listener));
         }
@@ -237,7 +237,7 @@ namespace iQQ.Net.WebQQCore.Im.Module
          * @param listener a {@link iqq.im.IQQActionListener} object.
          * @return a {@link iqq.im.Event.QQActionFuture} object.
          */
-        private QQActionFuture Login(QQActionEventHandler listener)
+        private IQQActionFuture Login(QQActionEventHandler listener)
         {
             return PushHttpAction(new LoginEmailAction(Context, listener));
         }
@@ -249,7 +249,7 @@ namespace iQQ.Net.WebQQCore.Im.Module
          * @param listener a {@link iqq.im.IQQActionListener} object.
          * @return a {@link iqq.im.Event.QQActionFuture} object.
          */
-        private QQActionFuture Check(string url, QQActionEventHandler listener)
+        private IQQActionFuture Check(string url, QQActionEventHandler listener)
         {
             return PushHttpAction(new CheckEmailSig(url, Context, listener));
         }
@@ -260,7 +260,7 @@ namespace iQQ.Net.WebQQCore.Im.Module
          * @param listener a {@link iqq.im.IQQActionListener} object.
          * @return a {@link iqq.im.Event.QQActionFuture} object.
          */
-        private QQActionFuture GetPT4Auth(QQActionEventHandler listener)
+        private IQQActionFuture GetPT4Auth(QQActionEventHandler listener)
         {
             return PushHttpAction(new GetPT4Auth(Context, listener));
         }
@@ -273,7 +273,7 @@ namespace iQQ.Net.WebQQCore.Im.Module
          * @param listener a {@link iqq.im.IQQActionListener} object.
          * @return a {@link iqq.im.Event.QQActionFuture} object.
          */
-        private QQActionFuture Mark(bool unread, List<QQEmail> mails, QQActionEventHandler listener)
+        private IQQActionFuture Mark(bool unread, List<QQEmail> mails, QQActionEventHandler listener)
         {
             return PushHttpAction(new MarkEmailAction(unread, mails, Context, listener));
         }
@@ -285,7 +285,7 @@ namespace iQQ.Net.WebQQCore.Im.Module
          * @param listener a {@link iqq.im.IQQActionListener} object.
          * @return a {@link iqq.im.Event.QQActionFuture} object.
          */
-        private QQActionFuture Delete(List<QQEmail> mails, QQActionEventHandler listener)
+        private IQQActionFuture Delete(List<QQEmail> mails, QQActionEventHandler listener)
         {
             return PushHttpAction(new DeleteEmailAction(mails, Context, listener));
         }

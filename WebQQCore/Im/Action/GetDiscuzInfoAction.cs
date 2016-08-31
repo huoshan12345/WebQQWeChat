@@ -25,8 +25,8 @@ namespace iQQ.Net.WebQQCore.Im.Action
 
         public override QQHttpRequest OnBuildRequest()
         {
-            QQSession session = Context.Session;
-            QQHttpRequest req = CreateHttpRequest("GET", QQConstants.URL_GET_DISCUZ_INFO);
+            var session = Context.Session;
+            var req = CreateHttpRequest(HttpConstants.Get, QQConstants.URL_GET_DISCUZ_INFO);
             req.AddGetValue("clientid", session.ClientId);
             req.AddGetValue("psessionid", session.SessionId);
             req.AddGetValue("vfwebqq", session.Vfwebqq);
@@ -37,23 +37,23 @@ namespace iQQ.Net.WebQQCore.Im.Action
 
         public override void OnHttpStatusOK(QQHttpResponse response)
         {
-            JObject json = JObject.Parse(response.GetResponseString());
-            QQStore store = Context.Store;
+            var json = JObject.Parse(response.GetResponseString());
+            var store = Context.Store;
             if (json["retcode"].ToString() == "0")
             {
-                JObject result = json["result"].ToObject<JObject>();
+                var result = json["result"].ToObject<JObject>();
 
                 //result/info
-                JObject info = result["info"].ToObject<JObject>();
+                var info = result["info"].ToObject<JObject>();
                 discuz.Name = info["discu_name"].ToString();
                 discuz.Owner = info["discu_owner"].ToObject<long>();
 
                 //result/mem_list
-                JArray memlist = result["mem_info"].ToObject<JArray>();
-                foreach (JToken t in memlist)
+                var memlist = result["mem_info"].ToObject<JArray>();
+                foreach (var t in memlist)
                 {
-                    JObject memjson = t.ToObject<JObject>();
-                    QQDiscuzMember member = discuz.GetMemberByUin(memjson["uin"].ToObject<long>());
+                    var memjson = t.ToObject<JObject>();
+                    var member = discuz.GetMemberByUin(memjson["uin"].ToObject<long>());
                     if (member == null)
                     {
                         member = new QQDiscuzMember();
@@ -68,11 +68,11 @@ namespace iQQ.Net.WebQQCore.Im.Action
                 // 消除所有成员状态，如果不在线的，webqq是不会返回的。
                 discuz.ClearStatus();
                 //result/mem_status
-                JArray statlist = result["mem_status"].ToObject<JArray>();
-                foreach (JToken t in statlist)
+                var statlist = result["mem_status"].ToObject<JArray>();
+                foreach (var t in statlist)
                 {
                     // 下面重新设置最新状态
-                    JObject statjson = t.ToObject<JObject>();
+                    var statjson = t.ToObject<JObject>();
                     QQUser member = discuz.GetMemberByUin(statjson["uin"].ToObject<long>());
                     if (statjson["client_type"] != null && member != null)
                     {
@@ -82,10 +82,10 @@ namespace iQQ.Net.WebQQCore.Im.Action
                 }
 
                 //result/mem_info
-                JArray infolist = result["mem_info"].ToObject<JArray>();
-                foreach (JToken t in infolist)
+                var infolist = result["mem_info"].ToObject<JArray>();
+                foreach (var t in infolist)
                 {
-                    JObject infojson = t.ToObject<JObject>();
+                    var infojson = t.ToObject<JObject>();
                     QQUser member = discuz.GetMemberByUin(infojson["uin"].ToObject<long>());
                     member.Nickname = infojson["nick"].ToString();
                 }

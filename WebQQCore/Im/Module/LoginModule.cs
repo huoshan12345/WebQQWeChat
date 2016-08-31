@@ -11,7 +11,7 @@ namespace iQQ.Net.WebQQCore.Im.Module
     /// </summary>
     public class LoginModule : AbstractModule
     {
-        public QQActionFuture GetSelfInfo(QQActionEventHandler listener)
+        public IQQActionFuture GetSelfInfo(QQActionEventHandler listener)
         {
             return PushHttpAction(new GetSelfInfoAction(Context, listener));
         }
@@ -21,58 +21,58 @@ namespace iQQ.Net.WebQQCore.Im.Module
             return QQModuleType.LOGIN;
         }
 
-        public QQActionFuture GetQRCode(QQActionEventHandler listener)
+        public IQQActionFuture GetQRCode(QQActionEventHandler listener)
         {
             return PushHttpAction(new GetQRCodeAction(Context, listener));
         }
 
-        public QQActionFuture CheckQRCode(QQActionEventHandler listener)
+        public IQQActionFuture CheckQRCode(QQActionEventHandler listener)
         {
             return PushHttpAction(new CheckQRCodeAction(Context, listener));
         }
 
-        public QQActionFuture CheckVerify(string qqAccount, QQActionEventHandler listener)
+        public IQQActionFuture CheckVerify(string qqAccount, QQActionEventHandler listener)
         {
             return PushHttpAction(new CheckVerifyAction(Context, listener, qqAccount));
         }
 
-        public QQActionFuture WebLogin(string username, string password, long uin,
+        public IQQActionFuture WebLogin(string username, string password, long uin,
             string verifyCode, QQActionEventHandler listener)
         {
             return PushHttpAction(new WebLoginAction(Context, listener, username, password, uin, verifyCode));
         }
 
-        public QQActionFuture ChannelLogin(QQStatus status, QQActionEventHandler listener)
+        public IQQActionFuture ChannelLogin(QQStatus status, QQActionEventHandler listener)
         {
             return PushHttpAction(new ChannelLoginAction(Context, listener, status));
         }
 
-        public QQActionFuture GetCaptcha(long uin, QQActionEventHandler listener)
+        public IQQActionFuture GetCaptcha(long uin, QQActionEventHandler listener)
         {
             return PushHttpAction(new GetCaptchaImageAction(Context, listener, uin));
         }
 
-        public QQActionFuture PollMsg(QQActionEventHandler listener)
+        public IQQActionFuture PollMsg(QQActionEventHandler listener)
         {
             return PushHttpAction(new PollMsgAction(Context, listener));
         }
 
-        public QQActionFuture Logout(QQActionEventHandler listener)
+        public IQQActionFuture Logout(QQActionEventHandler listener)
         {
             return PushHttpAction(new WebLogoutAction(Context, listener));
         }
 
-        public QQActionFuture GetLoginSig(QQActionEventHandler listener)
+        public IQQActionFuture GetLoginSig(QQActionEventHandler listener)
         {
             return PushHttpAction(new GetLoginSigAction(Context, listener));
         }
 
-        public QQActionFuture CheckLoginSig(string checkUrl, QQActionEventHandler listener)
+        public IQQActionFuture CheckLoginSig(string checkUrl, QQActionEventHandler listener)
         {
             return PushHttpAction(new CheckLoginSigAction(Context, listener, checkUrl));
         }
 
-        public QQActionFuture GetVFWebqq(QQActionEventHandler listener)
+        public IQQActionFuture GetVFWebqq(QQActionEventHandler listener)
         {
             return PushHttpAction(new GetVFWebqq(Context, listener));
         }

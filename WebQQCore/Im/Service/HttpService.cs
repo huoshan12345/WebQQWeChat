@@ -15,6 +15,8 @@ namespace iQQ.Net.WebQQCore.Im.Service
 {
     public class HttpService : AbstractService, IHttpService
     {
+        private static readonly string[] IgnoreHeaderType = { HttpConstants.UserAgent , HttpConstants.Referer, HttpConstants.ContentType };
+
         private CookieContainer _cookieContainer;
 
         public string UserAgent { get; set; }
@@ -29,7 +31,6 @@ namespace iQQ.Net.WebQQCore.Im.Service
         {
             var req = new QQHttpRequest(url, method);
             req.AddHeader(HttpConstants.UserAgent, UserAgent ?? QQConstants.USER_AGENT);
-            req.AddHeader(HttpConstants.Referer, QQConstants.REFFER);
             return req;
         }
 
@@ -40,36 +41,22 @@ namespace iQQ.Net.WebQQCore.Im.Service
             {
                 KeepAlive = true,
                 ProtocolVersion = HttpVersion.Version11,
-                ContentType = "application/json; charset=utf-8", // post方法的时候必须填写，要不然服务器无法解析
+                ContentType = request.ContentType, // post方法的时候必须填写，要不然服务器无法解析
                 Encoding = Encoding.UTF8,
                 AllowAutoRedirect = true,
                 Method = request.Method,
                 Url = uri.AbsoluteUri,
                 Host = uri.Host,
-                ReadWriteTimeout = (request.ReadTimeout > 0) ? request.ReadTimeout : 100000,
-                Timeout = (request.ConnectTimeout > 0) ? request.ConnectTimeout : 30000,
+                UserAgent = request.UserAgent,
+                ReadWriteTimeout = request.ReadTimeout,
+                Timeout = request.ConnectTimeout,
                 ResultType = ResultType.Byte,
                 CookieContainer = _cookieContainer,
             };
 
-            if (request.HeaderMap.ContainsKey(HttpConstants.UserAgent))
-            {
-                httpItem.UserAgent = request.HeaderMap[HttpConstants.UserAgent];
-                request.HeaderMap.Remove(HttpConstants.UserAgent);
-            }
-            if (request.HeaderMap.ContainsKey(HttpConstants.Referer))
-            {
-                httpItem.Referer = request.HeaderMap[HttpConstants.Referer];
-                request.HeaderMap.Remove(HttpConstants.Referer);
-            }
-            if (request.HeaderMap.ContainsKey(HttpConstants.ContentType))
-            {
-                httpItem.ContentType = request.HeaderMap[HttpConstants.ContentType];
-                request.HeaderMap.Remove(HttpConstants.ContentType);
-            }
-
             foreach (var header in request.HeaderMap)
             {
+                if(IgnoreHeaderType.Contains(header.Key)) continue;
                 httpItem.Header.Add(header.Key, header.Value);
             }
 
@@ -83,11 +70,10 @@ namespace iQQ.Net.WebQQCore.Im.Service
                 else if (request.PostMap.Count > 0)
                 {
                     httpItem.PostDataType = PostDataType.String;
-                    httpItem.Postdata = request.InputString;
+                    httpItem.Postdata = request.GetPostString();
                 }
                 else if (request.PostBody != null)
                 {
-                    // request.AddHeader(HttpConstants.ContentType, "application/json; charset=utf-8");
                     httpItem.ContentType = "application/json; charset=utf-8";
                     httpItem.PostDataType = PostDataType.String;
                     httpItem.Postdata = request.PostBody;
@@ -136,7 +122,17 @@ namespace iQQ.Net.WebQQCore.Im.Service
                 //    }
                 //}
 
-                if (!result.CookieCollection.IsNullOrEmpty()) _cookieContainer.Add(result.CookieCollection);
+                // if (!result.CookieCollection.IsNullOrEmpty()) _cookieContainer.Add(result.CookieCollection);
+
+#if DEBUG
+                if (request.Url == QQConstants.URL_CHANNEL_LOGIN)
+                {
+                    var cookieList = _cookieContainer.GetAllCookies().Select(item => $"name={item.Name}, value={item.Value}, domain={item.Domain}").ToList();
+                    var count = cookieList.Count;
+                }
+#endif
+
+
 
                 if (!result.RedirectUrl.IsNullOrEmpty())
                 {

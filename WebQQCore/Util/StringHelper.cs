@@ -15,11 +15,11 @@ namespace iQQ.Net.WebQQCore.Util
     {
         public static Dictionary<string, string> QueryStringToDict(string queryString)
         {
-            Dictionary<string, string> dict = new Dictionary<string, string>();
-            string[] queryItems = queryString.Split('&');
-            foreach (string query in queryItems)
+            var dict = new Dictionary<string, string>();
+            var queryItems = queryString.Split('&');
+            foreach (var query in queryItems)
             {
-                string[] pair = query.Split('=');
+                var pair = query.Split('=');
                 if (pair.Length == 2 && !dict.Keys.Contains(pair[0]))
                 {
                     dict.Add(pair[0], pair[1]);
@@ -43,9 +43,9 @@ namespace iQQ.Net.WebQQCore.Util
             {
                 hex = "0" + hex;
             }
-            byte[] result = new byte[hex.Length / 2];
+            var result = new byte[hex.Length / 2];
 
-            for (int i = 0; i < hex.Length / 2; i++)
+            for (var i = 0; i < hex.Length / 2; i++)
             {
                 result[i] = byte.Parse(hex.Substring(2 * i, 2), System.Globalization.NumberStyles.AllowHexSpecifier);
             }
@@ -63,7 +63,7 @@ namespace iQQ.Net.WebQQCore.Util
             if (html == null) return null;
             string[] specialChars = { "&", "\"", "'", "<", ">" };
             string[] qouteChars = { "&amp;", "&quot;", "&apos;", "&lt;", "&gt;" };
-            for (int i = 0; i < specialChars.Length; i++)
+            for (var i = 0; i < specialChars.Length; i++)
             {
                 html = html.Replace(specialChars[i], qouteChars[i]);
             }
@@ -81,7 +81,7 @@ namespace iQQ.Net.WebQQCore.Util
             if (html == null) return null;
             string[] specialChars = { "&", "\"", "'", "<", ">", " " };
             string[] qouteChars = { "&amp;", "&quot;", "&apos;", "&lt;", "&gt;", "&nbsp;" };
-            for (int i = 0; i < specialChars.Count(); i++)
+            for (var i = 0; i < specialChars.Count(); i++)
             {
                 html = html.Replace(qouteChars[i], specialChars[i]);
             }

@@ -27,8 +27,8 @@ namespace iQQ.Net.WebQQCore.Im.Action
 
         public override QQHttpRequest OnBuildRequest()
         {
-            QQSession session = Context.Session;
-            QQHttpRequest req = CreateHttpRequest("GET", QQConstants.URL_GET_USER_FACE);
+            var session = Context.Session;
+            var req = CreateHttpRequest(HttpConstants.Get, QQConstants.URL_GET_USER_FACE);
             req.AddGetValue("uin", _user.Uin);
             req.AddGetValue("vfwebqq", session.Vfwebqq);
             req.AddGetValue("t", DateTime.Now.CurrentTimeSeconds());
@@ -42,7 +42,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
 
         public override void OnHttpStatusOK(QQHttpResponse response)
         {
-            MemoryStream ms = new MemoryStream(response.ResponseData); // 输入流
+            var ms = new MemoryStream(response.ResponseData); // 输入流
             Image image = null;
             try
             {

@@ -28,7 +28,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
         {
             var session = Context.Session;
 
-            var req = CreateHttpRequest("GET",
+            var req = CreateHttpRequest(HttpConstants.Get,
                     QQConstants.URL_GET_USER_SIGN);
             req.AddGetValue("tuin", _buddy.Uin);
             req.AddGetValue("vfwebqq", session.Vfwebqq);

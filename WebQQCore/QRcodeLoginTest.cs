@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -22,6 +23,7 @@ namespace iQQ.Net.WebQQCore
      */
     public class QRcodeLoginTest
     {
+        private static Process QRcodeProcess = null;
 
         static readonly IQQClient mClient = new WebQQClient("", "", (sender, Event) =>
         {
@@ -35,15 +37,18 @@ namespace iQQ.Net.WebQQCore
                 case QQNotifyEventType.QRCODE_READY:
                     {
                         var verify = (Image)Event.Target;
-                        verify.Save("verify.png", System.Drawing.Imaging.ImageFormat.Png);
+                        const string path = "verify.png";
+                        verify.Save(path, System.Drawing.Imaging.ImageFormat.Png);
                         Console.WriteLine("请扫描在项目根目录下qrcode.png图片");
+                        QRcodeProcess = Process.Start(path);
                         break;
                     }
 
+                case QQNotifyEventType.QRCODE_SUCCESS:
                 case QQNotifyEventType.QRCODE_INVALID:
-                    Console.WriteLine(Event.Target);
+                    Console.WriteLine(Event);
+                    QRcodeProcess?.Kill();
                     break;
-
             }
 
         }, new ThreadActorDispatcher());
@@ -51,7 +56,10 @@ namespace iQQ.Net.WebQQCore
         public static void Main(string[] args)
         {
             // 获取二维码
-            mClient.GetQRCode(null);
+            mClient.GetQRCode((sender, @event) =>
+            {
+                
+            });
 
             //// 检查二维码状态
             //mClient.CheckQRCode((sender, Event) =>

@@ -20,7 +20,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
         public override QQHttpRequest OnBuildRequest()
         {
             var session = Context.Session;
-            var req = CreateHttpRequest("GET", QQConstants.URL_GET_ONLINE_BUDDY_LIST);
+            var req = CreateHttpRequest(HttpConstants.Get, QQConstants.URL_GET_ONLINE_BUDDY_LIST);
             req.AddGetValue("clientid", session.ClientId);
             req.AddGetValue("psessionid", session.SessionId);
             req.AddGetValue("t", DateTime.Now.CurrentTimeSeconds());

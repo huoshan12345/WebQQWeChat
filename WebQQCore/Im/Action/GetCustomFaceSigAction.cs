@@ -18,9 +18,9 @@ namespace iQQ.Net.WebQQCore.Im.Action
 
         public override QQHttpRequest OnBuildRequest()
         {
-            QQSession session = Context.Session;
+            var session = Context.Session;
 
-            QQHttpRequest req = CreateHttpRequest("GET",
+            var req = CreateHttpRequest(HttpConstants.Get,
                     QQConstants.URL_CUSTOM_FACE_SIG);
             req.AddGetValue("clientid", session.ClientId);
             req.AddGetValue("psessionid", session.SessionId);
@@ -32,12 +32,12 @@ namespace iQQ.Net.WebQQCore.Im.Action
 
         public override void OnHttpStatusOK(QQHttpResponse response)
         {
-            QQSession session = Context.Session;
+            var session = Context.Session;
 
-            JObject json = JObject.Parse(response.GetResponseString());
+            var json = JObject.Parse(response.GetResponseString());
             if (json["retcode"].ToString() == "0")
             {
-                JObject obj = json["result"].ToObject<JObject>();
+                var obj = json["result"].ToObject<JObject>();
                 session.CfaceKey = obj["gface_key"].ToString();
                 session.CfaceSig = obj["gface_sig"].ToString();
                 NotifyActionEvent(QQActionEventType.EVT_OK, session);

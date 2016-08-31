@@ -188,7 +188,7 @@ namespace iQQ.Net.WebQQCore.Im
             }
         }
 
-        public QQActionFuture GetSelfInfo(QQActionEventHandler listener)
+        public IQQActionFuture GetSelfInfo(QQActionEventHandler listener)
         {
             var mod = GetModule<LoginModule>(QQModuleType.LOGIN);
             return mod.GetSelfInfo(listener);
@@ -205,7 +205,7 @@ namespace iQQ.Net.WebQQCore.Im
         /// <param name="status"></param>
         /// <param name="listener"></param>
         /// <returns></returns>
-        public QQActionFuture Login(QQStatus status, QQActionEventHandler listener)
+        public IQQActionFuture Login(QQStatus status, QQActionEventHandler listener)
         {
             //检查客户端状态，是否允许登陆
             if (Session.State == QQSessionState.ONLINE)
@@ -237,7 +237,7 @@ namespace iQQ.Net.WebQQCore.Im
         /// <param name="status"></param>
         /// <param name="listener"></param>
         /// <returns></returns>
-        public QQActionFuture Relogin(QQStatus status, QQActionEventHandler listener)
+        public IQQActionFuture Relogin(QQStatus status, QQActionEventHandler listener)
         {
             if (Session.State == QQSessionState.ONLINE)
             {
@@ -307,7 +307,7 @@ namespace iQQ.Net.WebQQCore.Im
         /// </summary>
         /// <param name="listener"></param>
         /// <returns></returns>
-        public QQActionFuture GetBuddyList(QQActionEventHandler listener)
+        public IQQActionFuture GetBuddyList(QQActionEventHandler listener)
         {
             var categoryModule = GetModule<CategoryModule>(QQModuleType.CATEGORY);
             return categoryModule.GetCategoryList(listener);
@@ -318,7 +318,7 @@ namespace iQQ.Net.WebQQCore.Im
         /// </summary>
         /// <param name="listener"></param>
         /// <returns></returns>
-        public QQActionFuture GetGroupList(QQActionEventHandler listener)
+        public IQQActionFuture GetGroupList(QQActionEventHandler listener)
         {
             var groupModule = GetModule<GroupModule>(QQModuleType.GROUP);
             return groupModule.GetGroupList(listener);
@@ -329,7 +329,7 @@ namespace iQQ.Net.WebQQCore.Im
         /// </summary>
         /// <param name="listener"></param>
         /// <returns></returns>
-        public QQActionFuture GetOnlineList(QQActionEventHandler listener)
+        public IQQActionFuture GetOnlineList(QQActionEventHandler listener)
         {
             var buddyModule = GetModule<BuddyModule>(QQModuleType.BUDDY);
             return buddyModule.GetOnlineBuddy(listener);
@@ -340,7 +340,7 @@ namespace iQQ.Net.WebQQCore.Im
         /// </summary>
         /// <param name="listener"></param>
         /// <returns></returns>
-        public QQActionFuture GetRecentList(QQActionEventHandler listener)
+        public IQQActionFuture GetRecentList(QQActionEventHandler listener)
         {
             var buddyModule = GetModule<BuddyModule>(QQModuleType.BUDDY);
             return buddyModule.GetRecentList(listener);
@@ -352,7 +352,7 @@ namespace iQQ.Net.WebQQCore.Im
         /// <param name="user"></param>
         /// <param name="listener"></param>
         /// <returns></returns>
-        public QQActionFuture GetUserQQ(QQUser user, QQActionEventHandler listener)
+        public IQQActionFuture GetUserQQ(QQUser user, QQActionEventHandler listener)
         {
             var userModule = GetModule<UserModule>(QQModuleType.USER);
             return userModule.GetUserAccount(user, listener);
@@ -363,7 +363,7 @@ namespace iQQ.Net.WebQQCore.Im
         /// </summary>
         /// <param name="listener"></param>
         /// <returns></returns>
-        public QQActionFuture Logout(QQActionEventHandler listener)
+        public IQQActionFuture Logout(QQActionEventHandler listener)
         {
             if (Session.State == QQSessionState.OFFLINE)
             {
@@ -392,10 +392,9 @@ namespace iQQ.Net.WebQQCore.Im
         /// <param name="verifyEvent"></param>
         public void SubmitVerify(string code, QQNotifyEvent verifyEvent)
         {
-            var verify =
-                (QQNotifyEventArgs.ImageVerify)verifyEvent.Target;
+            var verify =(ImageVerify)verifyEvent.Target;
 
-            if (verify.Type == QQNotifyEventArgs.ImageVerify.VerifyType.LOGIN)
+            if (verify.Type == ImageVerify.VerifyType.LOGIN)
             {
                 var mod = GetModule<ProcModule>(QQModuleType.PROC);
                 mod.LoginWithVerify(code, (ProcActionFuture)verify.Future);
@@ -408,7 +407,7 @@ namespace iQQ.Net.WebQQCore.Im
         /// <param name="user"></param>
         /// <param name="listener"></param>
         /// <returns></returns>
-        public QQActionFuture GetUserInfo(QQUser user, QQActionEventHandler listener)
+        public IQQActionFuture GetUserInfo(QQUser user, QQActionEventHandler listener)
         {
             var mod = GetModule<UserModule>(QQModuleType.USER);
             return mod.GetUserInfo(user, listener);
@@ -420,7 +419,7 @@ namespace iQQ.Net.WebQQCore.Im
         /// <param name="status"></param>
         /// <param name="listener"></param>
         /// <returns></returns>
-        public QQActionFuture ChangeStatus(QQStatus status, QQActionEventHandler listener)
+        public IQQActionFuture ChangeStatus(QQStatus status, QQActionEventHandler listener)
         {
             var userModule = GetModule<UserModule>(QQModuleType.USER);
             return userModule.ChangeStatus(status, listener);
@@ -432,7 +431,7 @@ namespace iQQ.Net.WebQQCore.Im
         /// <param name="group"></param>
         /// <param name="listener"></param>
         /// <returns></returns>
-        public QQActionFuture GetGroupFace(QQGroup group, QQActionEventHandler listener)
+        public IQQActionFuture GetGroupFace(QQGroup group, QQActionEventHandler listener)
         {
             var mod = GetModule<GroupModule>(QQModuleType.GROUP);
             return mod.GetGroupFace(group, listener);
@@ -444,7 +443,7 @@ namespace iQQ.Net.WebQQCore.Im
         /// <param name="group"></param>
         /// <param name="listener"></param>
         /// <returns></returns>
-        public QQActionFuture GetGroupInfo(QQGroup group, QQActionEventHandler listener)
+        public IQQActionFuture GetGroupInfo(QQGroup group, QQActionEventHandler listener)
         {
             var mod = GetModule<GroupModule>(QQModuleType.GROUP);
             return mod.GetGroupInfo(group, listener);
@@ -456,7 +455,7 @@ namespace iQQ.Net.WebQQCore.Im
         /// <param name="group"></param>
         /// <param name="listener"></param>
         /// <returns></returns>
-        public QQActionFuture GetGroupGid(QQGroup group, QQActionEventHandler listener)
+        public IQQActionFuture GetGroupGid(QQGroup group, QQActionEventHandler listener)
         {
             var mod = GetModule<GroupModule>(QQModuleType.GROUP);
             return mod.GetGroupGid(group, listener);
@@ -468,7 +467,7 @@ namespace iQQ.Net.WebQQCore.Im
         /// <param name="user"></param>
         /// <param name="listener"></param>
         /// <returns></returns>
-        public QQActionFuture GetUserFace(QQUser user, QQActionEventHandler listener)
+        public IQQActionFuture GetUserFace(QQUser user, QQActionEventHandler listener)
         {
             var mod = GetModule<UserModule>(QQModuleType.USER);
             return mod.GetUserFace(user, listener);
@@ -480,7 +479,7 @@ namespace iQQ.Net.WebQQCore.Im
         /// <param name="user"></param>
         /// <param name="listener"></param>
         /// <returns></returns>
-        public QQActionFuture GetUserSign(QQUser user, QQActionEventHandler listener)
+        public IQQActionFuture GetUserSign(QQUser user, QQActionEventHandler listener)
         {
             var mod = GetModule<UserModule>(QQModuleType.USER);
             return mod.GetUserSign(user, listener);
@@ -492,7 +491,7 @@ namespace iQQ.Net.WebQQCore.Im
         /// <param name="user"></param>
         /// <param name="listener"></param>
         /// <returns></returns>
-        public QQActionFuture GetUserLevel(QQUser user, QQActionEventHandler listener)
+        public IQQActionFuture GetUserLevel(QQUser user, QQActionEventHandler listener)
         {
             var mod = GetModule<UserModule>(QQModuleType.USER);
             return mod.GetUserLevel(user, listener);
@@ -504,7 +503,7 @@ namespace iQQ.Net.WebQQCore.Im
         /// <param name="user"></param>
         /// <param name="listener"></param>
         /// <returns></returns>
-        public QQActionFuture GetStrangerInfo(QQUser user, QQActionEventHandler listener)
+        public IQQActionFuture GetStrangerInfo(QQUser user, QQActionEventHandler listener)
         {
             var mod = GetModule<UserModule>(QQModuleType.USER);
             return mod.GetStrangerInfo(user, listener);
@@ -516,13 +515,13 @@ namespace iQQ.Net.WebQQCore.Im
         /// <param name="msg"></param>
         /// <param name="listener"></param>
         /// <returns></returns>
-        public QQActionFuture SendMsg(QQMsg msg, QQActionEventHandler listener)
+        public IQQActionFuture SendMsg(QQMsg msg, QQActionEventHandler listener)
         {
             var mod = GetModule<ChatModule>(QQModuleType.CHAT);
             return mod.SendMsg(msg, listener);
         }
 
-        public QQActionFuture GetRobotReply(QQMsg input, RobotType robotType, QQActionEventHandler listener)
+        public IQQActionFuture GetRobotReply(QQMsg input, RobotType robotType, QQActionEventHandler listener)
         {
             var mod = GetModule<ChatModule>(QQModuleType.CHAT);
             return mod.GetRobotReply(input, robotType, listener);
@@ -534,7 +533,7 @@ namespace iQQ.Net.WebQQCore.Im
         /// <param name="user"></param>
         /// <param name="listener"></param>
         /// <returns></returns>
-        public QQActionFuture SendShake(QQUser user, QQActionEventHandler listener)
+        public IQQActionFuture SendShake(QQUser user, QQActionEventHandler listener)
         {
             var mod = GetModule<ChatModule>(QQModuleType.CHAT);
             return mod.SendShake(user, listener);
@@ -548,14 +547,14 @@ namespace iQQ.Net.WebQQCore.Im
         /// <param name="picout"></param>
         /// <param name="listener"></param>
         /// <returns></returns>
-        public QQActionFuture GetOffPic(OffPicItem offpic, QQMsg msg, Stream picout,
+        public IQQActionFuture GetOffPic(OffPicItem offpic, QQMsg msg, Stream picout,
                         QQActionEventHandler listener)
         {
             var mod = GetModule<ChatModule>(QQModuleType.CHAT);
             return mod.GetOffPic(offpic, msg, picout, listener);
         }
 
-        public QQActionFuture GetUserPic(CFaceItem cface, QQMsg msg,
+        public IQQActionFuture GetUserPic(CFaceItem cface, QQMsg msg,
                         Stream picout, QQActionEventHandler listener)
         {
             var mod = GetModule<ChatModule>(QQModuleType.CHAT);
@@ -570,7 +569,7 @@ namespace iQQ.Net.WebQQCore.Im
         /// <param name="picout"></param>
         /// <param name="listener"></param>
         /// <returns></returns>
-        public QQActionFuture GetGroupPic(CFaceItem cface, QQMsg msg,
+        public IQQActionFuture GetGroupPic(CFaceItem cface, QQMsg msg,
                 Stream picout, QQActionEventHandler listener)
         {
             var mod = GetModule<ChatModule>(QQModuleType.CHAT);
@@ -584,7 +583,7 @@ namespace iQQ.Net.WebQQCore.Im
         /// <param name="file"></param>
         /// <param name="listener"></param>
         /// <returns></returns>
-        public QQActionFuture UploadOffPic(QQUser user, string file, QQActionEventHandler listener)
+        public IQQActionFuture UploadOffPic(QQUser user, string file, QQActionEventHandler listener)
         {
             var mod = GetModule<ChatModule>(QQModuleType.CHAT);
             return mod.UploadOffPic(user, file, listener);
@@ -596,7 +595,7 @@ namespace iQQ.Net.WebQQCore.Im
         /// <param name="file"></param>
         /// <param name="listener"></param>
         /// <returns></returns>
-        public QQActionFuture UploadCustomPic(string file, QQActionEventHandler listener)
+        public IQQActionFuture UploadCustomPic(string file, QQActionEventHandler listener)
         {
             var mod = GetModule<ChatModule>(QQModuleType.CHAT);
             return mod.UploadCFace(file, listener);
@@ -608,7 +607,7 @@ namespace iQQ.Net.WebQQCore.Im
         /// <param name="user"></param>
         /// <param name="listener"></param>
         /// <returns></returns>
-        public QQActionFuture SendInputNotify(QQUser user, QQActionEventHandler listener)
+        public IQQActionFuture SendInputNotify(QQUser user, QQActionEventHandler listener)
         {
             var mod = GetModule<ChatModule>(QQModuleType.CHAT);
             return mod.SendInputNotify(user, listener);
@@ -619,7 +618,7 @@ namespace iQQ.Net.WebQQCore.Im
         /// </summary>
         /// <param name="listener"></param>
         /// <returns></returns>
-        public QQActionFuture GetDiscuzList(QQActionEventHandler listener)
+        public IQQActionFuture GetDiscuzList(QQActionEventHandler listener)
         {
             var mod = GetModule<DiscuzModule>(QQModuleType.DISCUZ);
             return mod.GetDiscuzList(listener);
@@ -631,7 +630,7 @@ namespace iQQ.Net.WebQQCore.Im
         /// <param name="discuz"></param>
         /// <param name="listener"></param>
         /// <returns></returns>
-        public QQActionFuture GetDiscuzInfo(QQDiscuz discuz, QQActionEventHandler listener)
+        public IQQActionFuture GetDiscuzInfo(QQDiscuz discuz, QQActionEventHandler listener)
         {
             var mod = GetModule<DiscuzModule>(QQModuleType.DISCUZ);
             return mod.GetDiscuzInfo(discuz, listener);
@@ -643,7 +642,7 @@ namespace iQQ.Net.WebQQCore.Im
         /// <param name="user"></param>
         /// <param name="listener"></param>
         /// <returns></returns>
-        public QQActionFuture GetSessionMsgSig(QQStranger user, QQActionEventHandler listener)
+        public IQQActionFuture GetSessionMsgSig(QQStranger user, QQActionEventHandler listener)
         {
             var mod = GetModule<ChatModule>(QQModuleType.CHAT);
             return mod.GetSessionMsgSig(user, listener);
@@ -655,7 +654,7 @@ namespace iQQ.Net.WebQQCore.Im
         /// <param name="group"></param>
         /// <param name="listener"></param>
         /// <returns></returns>
-        public QQActionFuture GetGroupMemberStatus(QQGroup group, QQActionEventHandler listener)
+        public IQQActionFuture GetGroupMemberStatus(QQGroup group, QQActionEventHandler listener)
         {
             var mod = GetModule<GroupModule>(QQModuleType.GROUP);
             return mod.GetMemberStatus(group, listener);
@@ -667,7 +666,7 @@ namespace iQQ.Net.WebQQCore.Im
         /// <param name="verifyEvent"></param>
         /// <param name="listener"></param>
         /// <returns></returns>
-        public QQActionFuture FreshVerify(QQNotifyEvent verifyEvent, QQActionEventHandler listener)
+        public IQQActionFuture FreshVerify(QQNotifyEvent verifyEvent, QQActionEventHandler listener)
         {
             var mod = GetModule<LoginModule>(QQModuleType.LOGIN);
             return mod.GetCaptcha(Account.Uin, listener);
@@ -678,7 +677,7 @@ namespace iQQ.Net.WebQQCore.Im
         /// </summary>
         /// <param name="listener"></param>
         /// <returns></returns>
-        public QQActionFuture UpdateGroupMessageFilter(QQActionEventHandler listener)
+        public IQQActionFuture UpdateGroupMessageFilter(QQActionEventHandler listener)
         {
             var mod = GetModule<GroupModule>(QQModuleType.GROUP);
             return mod.UpdateGroupMessageFilter(listener);
@@ -690,7 +689,7 @@ namespace iQQ.Net.WebQQCore.Im
         /// <param name="resultList"></param>
         /// <param name="listener"></param>
         /// <returns></returns>
-        public QQActionFuture SearchGroupGetList(QQGroupSearchList resultList, QQActionEventHandler listener)
+        public IQQActionFuture SearchGroupGetList(QQGroupSearchList resultList, QQActionEventHandler listener)
         {
             var mod = GetModule<GroupModule>(QQModuleType.GROUP);
             return mod.SearchGroup(resultList, listener);
@@ -702,7 +701,7 @@ namespace iQQ.Net.WebQQCore.Im
         /// <param name="verifyEvent"></param>
         public void CancelVerify(QQNotifyEvent verifyEvent)
         {
-            var verify = (QQNotifyEventArgs.ImageVerify)verifyEvent.Target;
+            var verify = (ImageVerify)verifyEvent.Target;
             verify.Future.Cancel();
         }
 
@@ -771,7 +770,7 @@ namespace iQQ.Net.WebQQCore.Im
         /// 获取登录二维码
         /// </summary>
         /// <param name="qqActionListener"></param>
-        public QQActionFuture GetQRCode(QQActionEventHandler qqActionListener)
+        public IQQActionFuture GetQRCode(QQActionEventHandler qqActionListener)
         {
             var login = GetModule<ProcModule>(QQModuleType.PROC);
             return login.GetQRCode(qqActionListener);

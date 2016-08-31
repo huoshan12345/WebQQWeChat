@@ -18,14 +18,14 @@ namespace iQQ.Net.WebQQCore.Im.Action
 
         public override QQHttpRequest OnBuildRequest()
         {
-            QQSession session = Context.Session;
+            var session = Context.Session;
 
-            JObject json = new JObject();
+            var json = new JObject();
             json.Add("vfwebqq", session.Vfwebqq);
             json.Add("clientid", session.ClientId);
             json.Add("psessionid", session.SessionId);
 
-            QQHttpRequest req = CreateHttpRequest("POST", QQConstants.URL_GET_RECENT_LIST);
+            var req = CreateHttpRequest("POST", QQConstants.URL_GET_RECENT_LIST);
             req.AddPostValue("r", JsonConvert.SerializeObject(json));
             req.AddPostValue("clientid", session.ClientId);
             req.AddPostValue("psessionid", session.SessionId);
@@ -35,20 +35,20 @@ namespace iQQ.Net.WebQQCore.Im.Action
 
         public override void OnHttpStatusOK(QQHttpResponse response)
         {
-            JObject json = JObject.Parse(response.GetResponseString());
-            List<object> recents = new List<object>();
-            QQStore store = Context.Store;
+            var json = JObject.Parse(response.GetResponseString());
+            var recents = new List<object>();
+            var store = Context.Store;
             if (json["retcode"].ToString() == "0")
             {
-                JArray result = json["result"].ToObject<JArray>();
-                for (int i = 0; i < result.Count; i++)
+                var result = json["result"].ToObject<JArray>();
+                for (var i = 0; i < result.Count; i++)
                 {
-                    JObject rejson = result[i].ToObject<JObject>();
+                    var rejson = result[i].ToObject<JObject>();
                     switch (rejson["type"].ToObject<int>())
                     {
                         case 0:
                         {	//好友
-                            QQBuddy buddy = store.GetBuddyByUin(rejson["uin"].ToObject<long>());
+                            var buddy = store.GetBuddyByUin(rejson["uin"].ToObject<long>());
                             if (buddy != null)
                             {
                                 recents.Add(buddy);
@@ -58,7 +58,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
 
                         case 1:
                         {	//群
-                            QQGroup group = store.GetGroupByCode(rejson["uin"].ToObject<long>());
+                            var group = store.GetGroupByCode(rejson["uin"].ToObject<long>());
                             if (group != null)
                             {
                                 recents.Add(group);
@@ -68,7 +68,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
 
                         case 2:
                         {	//讨论组
-                            QQDiscuz discuz = store.GetDiscuzByDid(rejson["uin"].ToObject<long>());
+                            var discuz = store.GetDiscuzByDid(rejson["uin"].ToObject<long>());
                             if (discuz != null)
                             {
                                 recents.Add(discuz);

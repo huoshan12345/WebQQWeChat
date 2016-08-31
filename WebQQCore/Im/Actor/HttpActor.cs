@@ -66,6 +66,7 @@ namespace iQQ.Net.WebQQCore.Im.Actor
                         break;
                 }
             }
+            // 统一异常处理
             catch (Exception e)
             {
                 _action.NotifyActionEvent(QQActionEventType.EVT_ERROR, e);

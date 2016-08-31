@@ -4,6 +4,7 @@ using iQQ.Net.WebQQCore.Im.Bean;
 using iQQ.Net.WebQQCore.Im.Core;
 using iQQ.Net.WebQQCore.Im.Event;
 using iQQ.Net.WebQQCore.Im.Http;
+using iQQ.Net.WebQQCore.Util;
 using Newtonsoft.Json.Linq;
 
 namespace iQQ.Net.WebQQCore.Im.Action
@@ -17,24 +18,24 @@ namespace iQQ.Net.WebQQCore.Im.Action
     {
 
 
-        private string sid = "";
-        private long t = 0;
+        private readonly string _sid;
+        private readonly long _t;
 
         public PollEmailAction(string sid, long t, IQQContext context, QQActionEventHandler listener)
             : base(context, listener)
         {
-            this.sid = sid;
-            this.t = t;
+            _sid = sid;
+            _t = t;
         }
 
         public override QQHttpRequest OnBuildRequest()
         {
-            QQHttpRequest req = CreateHttpRequest("GET", QQConstants.URL_EMAIL_POLL);
+            var req = CreateHttpRequest(HttpConstants.Get, QQConstants.URL_EMAIL_POLL);
             req.AddGetValue("r", new Random().NextDouble());
             req.AddGetValue("u", Context.Account.Username);
             req.AddGetValue("s", "7");
-            req.AddGetValue("k", sid);
-            req.AddGetValue("t", t);
+            req.AddGetValue("k", _sid);
+            req.AddGetValue("t", _t);
             req.AddGetValue("i", "30");
             req.AddGetValue("r", new Random().NextDouble());
             req.ReadTimeout = 70 * 1000;
@@ -45,7 +46,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
 
         public override void OnHttpStatusOK(QQHttpResponse response)
         {
-            string content = response.GetResponseString();
+            var content = response.GetResponseString();
             // LOG.info("Poll email content: " + content);
             if (content.StartsWith("({e:-101"))
             {
@@ -61,14 +62,14 @@ namespace iQQ.Net.WebQQCore.Im.Action
             else
             {
                 content = content.Substring(1, content.Length - 1);
-                JArray arr = JArray.Parse(content);
+                var arr = JArray.Parse(content);
                 // 封装返回的邮件列表
-                List<QQEmail> list = new List<QQEmail>();
-                for (int i = 0; i < arr.Count; i++)
+                var list = new List<QQEmail>();
+                for (var i = 0; i < arr.Count; i++)
                 {
-                    JObject json = arr[i].ToObject<JObject>();
-                    JObject ct = json["c"].ToObject<JObject>();
-                    QQEmail mail = new QQEmail();
+                    var json = arr[i].ToObject<JObject>();
+                    var ct = json["c"].ToObject<JObject>();
+                    var mail = new QQEmail();
                     mail.Flag = json["t"].ToObject<long>();
                     mail.Id = ct["mailid"].ToString();
                     mail.Sender = ct["sender"].ToString();

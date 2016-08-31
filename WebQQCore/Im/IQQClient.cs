@@ -28,11 +28,11 @@ namespace iQQ.Net.WebQQCore.Im
 
         void Destroy();
 
-        QQActionFuture GetSelfInfo(QQActionEventHandler listener);
+        IQQActionFuture GetSelfInfo(QQActionEventHandler listener);
 
         void InitExtendQQModel(IQQModule qqModule);
 
-        QQActionFuture GetQRCode(QQActionEventHandler qqActionListener);
+        IQQActionFuture GetQRCode(QQActionEventHandler qqActionListener);
 
         //QQActionFuture CheckQRCode(QQActionEventHandler qqActionListener);
 
@@ -42,7 +42,7 @@ namespace iQQ.Net.WebQQCore.Im
         /// <param name="status">状态</param>
         /// <param name="listener">事件处理委托</param>
         /// <returns></returns>
-        QQActionFuture Login(QQStatus status, QQActionEventHandler listener = null);
+        IQQActionFuture Login(QQStatus status, QQActionEventHandler listener = null);
 
         /// <summary>
         /// 重新登录
@@ -50,14 +50,14 @@ namespace iQQ.Net.WebQQCore.Im
         /// <param name="status">状态</param>
         /// <param name="listener">事件处理委托</param>
         /// <returns></returns>
-        QQActionFuture Relogin(QQStatus status, QQActionEventHandler listener = null);
+        IQQActionFuture Relogin(QQStatus status, QQActionEventHandler listener = null);
 
         /// <summary>
         /// 登出
         /// </summary>
         /// <param name="listener">事件处理委托</param>
         /// <returns></returns>
-        QQActionFuture Logout(QQActionEventHandler listener = null);
+        IQQActionFuture Logout(QQActionEventHandler listener = null);
 
         /// <summary>
         /// 获得QQ基本信息，自己或者好友
@@ -65,7 +65,7 @@ namespace iQQ.Net.WebQQCore.Im
         /// <param name="user"></param>
         /// <param name="listener">事件处理委托</param>
         /// <returns></returns>
-        QQActionFuture GetUserInfo(QQUser user, QQActionEventHandler listener = null);
+        IQQActionFuture GetUserInfo(QQUser user, QQActionEventHandler listener = null);
 
         /// <summary>
         /// 改变状态
@@ -73,28 +73,28 @@ namespace iQQ.Net.WebQQCore.Im
         /// <param name="status"></param>
         /// <param name="listener"></param>
         /// <returns></returns>
-        QQActionFuture ChangeStatus(QQStatus status, QQActionEventHandler listener = null);
+        IQQActionFuture ChangeStatus(QQStatus status, QQActionEventHandler listener = null);
        
         /// <summary>
         /// 获取好友列表
         /// </summary>
         /// <param name="listener"></param>
         /// <returns></returns>
-        QQActionFuture GetBuddyList(QQActionEventHandler listener);
+        IQQActionFuture GetBuddyList(QQActionEventHandler listener);
 
         /// <summary>
         /// 获取在线好友列表
         /// </summary>
         /// <param name="listener"></param>
         /// <returns></returns>
-        QQActionFuture GetOnlineList(QQActionEventHandler listener = null);
+        IQQActionFuture GetOnlineList(QQActionEventHandler listener = null);
 
         /// <summary>
         /// 获取最近联系人列表
         /// </summary>
         /// <param name="listener"></param>
         /// <returns></returns>
-        QQActionFuture GetRecentList(QQActionEventHandler listener = null);
+        IQQActionFuture GetRecentList(QQActionEventHandler listener = null);
 
         /// <summary>
         /// 获取用户头像
@@ -102,7 +102,7 @@ namespace iQQ.Net.WebQQCore.Im
         /// <param name="user"></param>
         /// <param name="listener"></param>
         /// <returns></returns>
-        QQActionFuture GetUserFace(QQUser user, QQActionEventHandler listener = null);
+        IQQActionFuture GetUserFace(QQUser user, QQActionEventHandler listener = null);
 
         /// <summary>
         /// 获取用户签名
@@ -110,7 +110,7 @@ namespace iQQ.Net.WebQQCore.Im
         /// <param name="user"></param>
         /// <param name="listener"></param>
         /// <returns></returns>
-        QQActionFuture GetUserSign(QQUser user, QQActionEventHandler listener = null);
+        IQQActionFuture GetUserSign(QQUser user, QQActionEventHandler listener = null);
 
         /// <summary>
         /// 获取QQ号码
@@ -118,7 +118,7 @@ namespace iQQ.Net.WebQQCore.Im
         /// <param name="user"></param>
         /// <param name="listener"></param>
         /// <returns></returns>
-        QQActionFuture GetUserQQ(QQUser user, QQActionEventHandler listener = null);
+        IQQActionFuture GetUserQQ(QQUser user, QQActionEventHandler listener = null);
 
         /// <summary>
         /// 获取等级
@@ -126,7 +126,7 @@ namespace iQQ.Net.WebQQCore.Im
         /// <param name="user"></param>
         /// <param name="listener"></param>
         /// <returns></returns>
-        QQActionFuture GetUserLevel(QQUser user, QQActionEventHandler listener = null);
+        IQQActionFuture GetUserLevel(QQUser user, QQActionEventHandler listener = null);
 
         /// <summary>
         /// 获取陌生人信息
@@ -134,14 +134,14 @@ namespace iQQ.Net.WebQQCore.Im
         /// <param name="user"></param>
         /// <param name="listener"></param>
         /// <returns></returns>
-        QQActionFuture GetStrangerInfo(QQUser user, QQActionEventHandler listener = null);
+        IQQActionFuture GetStrangerInfo(QQUser user, QQActionEventHandler listener = null);
 
         /// <summary>
         /// 获取群列表
         /// </summary>
         /// <param name="listener"></param>
         /// <returns></returns>
-        QQActionFuture GetGroupList(QQActionEventHandler listener);
+        IQQActionFuture GetGroupList(QQActionEventHandler listener);
 
         /// <summary>
         /// 获取群列表
@@ -149,7 +149,7 @@ namespace iQQ.Net.WebQQCore.Im
         /// <param name="group"></param>
         /// <param name="listener"></param>
         /// <returns></returns>
-        QQActionFuture GetGroupFace(QQGroup group, QQActionEventHandler listener = null);
+        IQQActionFuture GetGroupFace(QQGroup group, QQActionEventHandler listener = null);
 
         /// <summary>
         /// 获取群信息
@@ -157,7 +157,7 @@ namespace iQQ.Net.WebQQCore.Im
         /// <param name="group"></param>
         /// <param name="listener"></param>
         /// <returns></returns>
-        QQActionFuture GetGroupInfo(QQGroup group, QQActionEventHandler listener = null);
+        IQQActionFuture GetGroupInfo(QQGroup group, QQActionEventHandler listener = null);
 
         /// <summary>
         /// 获取群号码
@@ -165,7 +165,7 @@ namespace iQQ.Net.WebQQCore.Im
         /// <param name="group"></param>
         /// <param name="listener"></param>
         /// <returns></returns>
-        QQActionFuture GetGroupGid(QQGroup group, QQActionEventHandler listener = null);
+        IQQActionFuture GetGroupGid(QQGroup group, QQActionEventHandler listener = null);
 
         /// <summary>
         /// 获取群成员状态
@@ -173,14 +173,14 @@ namespace iQQ.Net.WebQQCore.Im
         /// <param name="group"></param>
         /// <param name="listener"></param>
         /// <returns></returns>
-        QQActionFuture GetGroupMemberStatus(QQGroup group, QQActionEventHandler listener = null);
+        IQQActionFuture GetGroupMemberStatus(QQGroup group, QQActionEventHandler listener = null);
 
         /// <summary>
         /// 获取讨论组列表
         /// </summary>
         /// <param name="listener"></param>
         /// <returns></returns>
-        QQActionFuture GetDiscuzList(QQActionEventHandler listener);
+        IQQActionFuture GetDiscuzList(QQActionEventHandler listener);
 
         /// <summary>
         /// 获取讨论组信息
@@ -188,7 +188,7 @@ namespace iQQ.Net.WebQQCore.Im
         /// <param name="discuz"></param>
         /// <param name="listener"></param>
         /// <returns></returns>
-        QQActionFuture GetDiscuzInfo(QQDiscuz discuz, QQActionEventHandler listener = null);
+        IQQActionFuture GetDiscuzInfo(QQDiscuz discuz, QQActionEventHandler listener = null);
 
         /// <summary>
         /// 临时消息信道，用于发送群U2U会话消息
@@ -196,7 +196,7 @@ namespace iQQ.Net.WebQQCore.Im
         /// <param name="user"></param>
         /// <param name="listener"></param>
         /// <returns></returns>
-        QQActionFuture GetSessionMsgSig(QQStranger user, QQActionEventHandler listener = null);
+        IQQActionFuture GetSessionMsgSig(QQStranger user, QQActionEventHandler listener = null);
 
         /// <summary>
         /// 发送消息
@@ -204,7 +204,7 @@ namespace iQQ.Net.WebQQCore.Im
         /// <param name="msg"></param>
         /// <param name="listener"></param>
         /// <returns></returns>
-        QQActionFuture SendMsg(QQMsg msg, QQActionEventHandler listener = null);
+        IQQActionFuture SendMsg(QQMsg msg, QQActionEventHandler listener = null);
 
         /// <summary>
         /// 发送抖屏
@@ -212,7 +212,7 @@ namespace iQQ.Net.WebQQCore.Im
         /// <param name="user"></param>
         /// <param name="listener"></param>
         /// <returns></returns>
-        QQActionFuture SendShake(QQUser user, QQActionEventHandler listener = null);
+        IQQActionFuture SendShake(QQUser user, QQActionEventHandler listener = null);
 
         /// <summary>
         /// 获取离线图片
@@ -222,7 +222,7 @@ namespace iQQ.Net.WebQQCore.Im
         /// <param name="picout"></param>
         /// <param name="listener"></param>
         /// <returns></returns>
-        QQActionFuture GetOffPic(OffPicItem offpic, QQMsg msg, Stream picout, QQActionEventHandler listener = null);
+        IQQActionFuture GetOffPic(OffPicItem offpic, QQMsg msg, Stream picout, QQActionEventHandler listener = null);
 
         /// <summary>
         /// 获取聊天图片
@@ -232,7 +232,7 @@ namespace iQQ.Net.WebQQCore.Im
         /// <param name="picout"></param>
         /// <param name="listener"></param>
         /// <returns></returns>
-        QQActionFuture GetUserPic(CFaceItem cface, QQMsg msg, Stream picout, QQActionEventHandler listener = null);
+        IQQActionFuture GetUserPic(CFaceItem cface, QQMsg msg, Stream picout, QQActionEventHandler listener = null);
 
         /// <summary>
         /// 获取群聊天图片
@@ -242,7 +242,7 @@ namespace iQQ.Net.WebQQCore.Im
         /// <param name="picout"></param>
         /// <param name="listener"></param>
         /// <returns></returns>
-        QQActionFuture GetGroupPic(CFaceItem cface, QQMsg msg, Stream picout, QQActionEventHandler listener = null);
+        IQQActionFuture GetGroupPic(CFaceItem cface, QQMsg msg, Stream picout, QQActionEventHandler listener = null);
 
         /// <summary>
         /// 上传离线图片
@@ -251,7 +251,7 @@ namespace iQQ.Net.WebQQCore.Im
         /// <param name="file"></param>
         /// <param name="listener"></param>
         /// <returns></returns>
-        QQActionFuture UploadOffPic(QQUser user, string file, QQActionEventHandler listener = null);
+        IQQActionFuture UploadOffPic(QQUser user, string file, QQActionEventHandler listener = null);
 
         /// <summary>
         /// 上传好友图片
@@ -259,7 +259,7 @@ namespace iQQ.Net.WebQQCore.Im
         /// <param name="file"></param>
         /// <param name="listener"></param>
         /// <returns></returns>
-        QQActionFuture UploadCustomPic(string file, QQActionEventHandler listener = null);
+        IQQActionFuture UploadCustomPic(string file, QQActionEventHandler listener = null);
 
         /// <summary>
         /// 发送正在输入通知
@@ -267,7 +267,7 @@ namespace iQQ.Net.WebQQCore.Im
         /// <param name="user"></param>
         /// <param name="listener"></param>
         /// <returns></returns>
-        QQActionFuture SendInputNotify(QQUser user, QQActionEventHandler listener = null);
+        IQQActionFuture SendInputNotify(QQUser user, QQActionEventHandler listener = null);
 
         /// <summary>
         /// 刷新验证码
@@ -275,14 +275,14 @@ namespace iQQ.Net.WebQQCore.Im
         /// <param name="verifyEvent"></param>
         /// <param name="listener"></param>
         /// <returns></returns>
-        QQActionFuture FreshVerify(QQNotifyEvent verifyEvent, QQActionEventHandler listener = null);
+        IQQActionFuture FreshVerify(QQNotifyEvent verifyEvent, QQActionEventHandler listener = null);
 
         /// <summary>
         /// 更新群消息筛选
         /// </summary>
         /// <param name="listener"></param>
         /// <returns></returns>
-        QQActionFuture UpdateGroupMessageFilter(QQActionEventHandler listener = null);
+        IQQActionFuture UpdateGroupMessageFilter(QQActionEventHandler listener = null);
 
         /// <summary>
         /// 搜索群列表
@@ -290,7 +290,7 @@ namespace iQQ.Net.WebQQCore.Im
         /// <param name="resultList"></param>
         /// <param name="listener"></param>
         /// <returns></returns>
-        QQActionFuture SearchGroupGetList(QQGroupSearchList resultList, QQActionEventHandler listener = null);
+        IQQActionFuture SearchGroupGetList(QQGroupSearchList resultList, QQActionEventHandler listener = null);
 
         /// <summary>
         /// 提交验证码
@@ -357,7 +357,7 @@ namespace iQQ.Net.WebQQCore.Im
         /// 获取聊天机器人的回复
         /// </summary>
         /// <returns></returns>
-        QQActionFuture GetRobotReply(QQMsg input, RobotType robotType, QQActionEventHandler listener = null);
+        IQQActionFuture GetRobotReply(QQMsg input, RobotType robotType, QQActionEventHandler listener = null);
 
         /// <summary>
         /// 获取好友列表，但必须已经使用接口获取过

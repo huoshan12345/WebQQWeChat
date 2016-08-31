@@ -227,7 +227,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
                 {
                     buddy = new QQBuddy() {Uin = uin};
                     Context.Store.AddBuddy(buddy);
-                    UserModule userModule = Context.GetModule<UserModule>(QQModuleType.USER);
+                    var userModule = Context.GetModule<UserModule>(QQModuleType.USER);
                     userModule.GetUserInfo(buddy, null);
                 }
                 var status = pollData["status"].ToString();
@@ -440,7 +440,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
                             var groupModule = Context.GetModule<GroupModule>(QQModuleType.GROUP);
                             groupModule.GetGroupInfo(group, null);
                         }
-                        foreach (QQGroupMember u in group.Members)
+                        foreach (var u in group.Members)
                         {
                             if (u.Uin == fromUin)
                             {
@@ -462,7 +462,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
                         }
 
 
-                        foreach (QQDiscuzMember u in discuz.Members)
+                        foreach (var u in discuz.Members)
                         {
                             if (u.Uin == fromUin)
                             {

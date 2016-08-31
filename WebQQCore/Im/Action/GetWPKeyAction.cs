@@ -1,6 +1,7 @@
 ﻿using iQQ.Net.WebQQCore.Im.Core;
 using iQQ.Net.WebQQCore.Im.Event;
 using iQQ.Net.WebQQCore.Im.Http;
+using iQQ.Net.WebQQCore.Util;
 using Newtonsoft.Json.Linq;
 
 namespace iQQ.Net.WebQQCore.Im.Action
@@ -12,31 +13,31 @@ namespace iQQ.Net.WebQQCore.Im.Action
     /// </summary>
     public class GetWPKeyAction : AbstractHttpAction
     {
-        private string sid = "";
+        private readonly string _sid;
  
         public GetWPKeyAction(string sid, IQQContext context, QQActionEventHandler listener)
             : base(context, listener)
         {
 
-            this.sid = sid;
+            _sid = sid;
         }
 
         public override QQHttpRequest OnBuildRequest()
         {
-            QQHttpRequest req = CreateHttpRequest("GET", QQConstants.URL_GET_WP_KEY);
+            var req = CreateHttpRequest(HttpConstants.Get, QQConstants.URL_GET_WP_KEY);
             req.AddGetValue("r", "0.7975904128979892");
             req.AddGetValue("resp_charset", "UTF8");
             req.AddGetValue("ef", "js");
-            req.AddGetValue("sid", sid);
-            req.AddGetValue("Referer", "http://mail.qq.com/cgi-bin/frame_html?sid=" + sid);
+            req.AddGetValue("sid", _sid);
+            req.AddGetValue("Referer", "http://mail.qq.com/cgi-bin/frame_html?sid=" + _sid);
             return req;
         }
 
         public override void OnHttpStatusOK(QQHttpResponse response)
         {
-            string resp = response.GetResponseString();
+            var resp = response.GetResponseString();
             resp = resp.Substring(1, resp.Length - 1);
-            JObject json = JObject.Parse(resp);
+            var json = JObject.Parse(resp);
             if (json["k"] != null)
             {
                 NotifyActionEvent(QQActionEventType.EVT_OK, json["k"].ToString());

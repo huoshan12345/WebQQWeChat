@@ -1,6 +1,7 @@
 ﻿using iQQ.Net.WebQQCore.Im.Core;
 using iQQ.Net.WebQQCore.Im.Event;
 using iQQ.Net.WebQQCore.Im.Http;
+using iQQ.Net.WebQQCore.Util;
 
 namespace iQQ.Net.WebQQCore.Im.Action
 {
@@ -23,7 +24,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
             _url += "&regmaster=undefined&aid=1";
             _url += "&s_url=http%3A%2F%2Fmail.qq.com%2Fcgi-bin%2Flogin%3Ffun%3Dpassport%26from%3Dwebqq";
 
-            QQHttpRequest req = CreateHttpRequest("GET", _url);
+            var req = CreateHttpRequest(HttpConstants.Get, _url);
             return req;
         }
 

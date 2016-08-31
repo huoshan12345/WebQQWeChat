@@ -175,7 +175,7 @@ namespace iQQ.Net.WebQQCore.Im.Bean
         public override bool Equals(object obj)
         {
             if (obj == null || this == obj) return false;
-            QQUser m = obj as QQUser;
+            var m = obj as QQUser;
             return (m?.Uin == Uin);
         }
 

@@ -18,9 +18,9 @@ namespace iQQ.Net.WebQQCore.Im.Action
 
         public override QQHttpRequest OnBuildRequest()
         {
-            QQSession session = Context.Session;
+            var session = Context.Session;
 
-            QQHttpRequest req = CreateHttpRequest("GET", QQConstants.URL_LOGOUT);
+            var req = CreateHttpRequest(HttpConstants.Get, QQConstants.URL_LOGOUT);
             req.AddGetValue("ids", ""); // 产生过会话才出现ID，如何获取？？
             req.AddGetValue("clientid", session.ClientId);
             req.AddGetValue("psessionid", session.SessionId);
@@ -32,8 +32,8 @@ namespace iQQ.Net.WebQQCore.Im.Action
 
         public override void OnHttpStatusOK(QQHttpResponse response)
         {
-            JObject json = JObject.Parse(response.GetResponseString());
-            string isOK = json["result"].ToString().ToLower();
+            var json = JObject.Parse(response.GetResponseString());
+            var isOK = json["result"].ToString().ToLower();
             if (json["retcode"].ToString() == "0")
             {
                 if (isOK.Equals("ok"))

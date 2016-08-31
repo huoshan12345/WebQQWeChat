@@ -2,6 +2,7 @@
 using iQQ.Net.WebQQCore.Im.Core;
 using iQQ.Net.WebQQCore.Im.Event;
 using iQQ.Net.WebQQCore.Im.Http;
+using iQQ.Net.WebQQCore.Util;
 
 namespace iQQ.Net.WebQQCore.Im.Action
 {
@@ -16,7 +17,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
 
         public override QQHttpRequest OnBuildRequest()
         {
-            QQHttpRequest req = CreateHttpRequest("GET", QQConstants.URL_LOGIN_EMAIL);
+            var req = CreateHttpRequest(HttpConstants.Get, QQConstants.URL_LOGIN_EMAIL);
             req.AddGetValue("fun", "passport");
             req.AddGetValue("from", "webqq");
             req.AddGetValue("Referer", "https://mail.qq.com/cgi-bin/loginpage");
@@ -25,13 +26,13 @@ namespace iQQ.Net.WebQQCore.Im.Action
 
         public override void OnHttpStatusOK(QQHttpResponse response)
         {
-            string REGXP = "sid=(.*?)\"";
-            Regex rex = new Regex(REGXP);
-            Match m = rex.Match(response.GetResponseString());
+            var REGXP = "sid=(.*?)\"";
+            var rex = new Regex(REGXP);
+            var m = rex.Match(response.GetResponseString());
 
             if (m.Success)
             {
-                string sid = m.Groups[1].Value;
+                var sid = m.Groups[1].Value;
                 NotifyActionEvent(QQActionEventType.EVT_OK, sid);
             }
             else

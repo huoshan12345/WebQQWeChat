@@ -30,9 +30,9 @@ namespace iQQ.Net.WebQQCore.Im.Action
         public override QQHttpRequest OnBuildRequest()
         {
 
-            QQSession session = Context.Session;
+            var session = Context.Session;
 
-            QQHttpRequest req = CreateHttpRequest("POST", QQConstants.URL_UPLOAD_CUSTOM_FACE);
+            var req = CreateHttpRequest("POST", QQConstants.URL_UPLOAD_CUSTOM_FACE);
             req.AddGetValue("time", DateTime.Now.CurrentTimeSeconds());
             req.AddPostValue("from", "control");
             req.AddPostValue("f", "EQQ.Model.ChatMsg.callbackSendPicGroup");
@@ -46,18 +46,18 @@ namespace iQQ.Net.WebQQCore.Im.Action
         public override void OnHttpStatusOK(QQHttpResponse response)
         {
             // {'ret':0,'msg':'5F7E31F0001EF4310865F1FF4549B12B.jPg'}
-            Regex rex = new Regex(QQConstants.REGXP_JSON_SINGLE_RESULT);
-            Match m = rex.Match(response.GetResponseString());
-            CFaceItem pic = new CFaceItem();
+            var rex = new Regex(QQConstants.REGXP_JSON_SINGLE_RESULT);
+            var m = rex.Match(response.GetResponseString());
+            var pic = new CFaceItem();
             JObject obj = null;
             if (m.Success)
             {
                 try
                 {
-                    string regResult = Regex.Replace(Regex.Replace(m.Groups[0].Value, "[\\r]?[\\n]", " "), "[\r]?[\n]", " ");
+                    var regResult = Regex.Replace(Regex.Replace(m.Groups[0].Value, "[\\r]?[\\n]", " "), "[\r]?[\n]", " ");
                     obj = JObject.Parse(regResult);
 
-                    int retcode = obj["ret"].ToObject<int>();
+                    var retcode = obj["ret"].ToObject<int>();
                     if (retcode == 0)
                     {
                         pic.IsSuccess = true;
@@ -71,15 +71,15 @@ namespace iQQ.Net.WebQQCore.Im.Action
                     {
                         // {'ret':4,'msg':'D81AB7A7627ED673FDCD4DD24220C192.jPg
                         // -6102 upload cface failed'}
-                        string prefix = "\"msg\":\"";
-                        string suffix = ".jPg";
+                        var prefix = "\"msg\":\"";
+                        var suffix = ".jPg";
 
                         rex = new Regex(prefix + "([\\s\\S]*)" + suffix, RegexOptions.IgnoreCase);
                         m = rex.Match(obj.ToString());
 
                         if (m.Success)
                         {
-                            string r = Regex.Replace(m.Groups[0].Value, prefix, "");
+                            var r = Regex.Replace(m.Groups[0].Value, prefix, "");
                             //LOG.debug("ret 4: " + r);
                             pic.IsSuccess = true;
                             pic.FileName = r;

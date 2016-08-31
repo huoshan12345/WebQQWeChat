@@ -38,7 +38,7 @@ namespace iQQ.Net.WebQQCore
                 {
                     try
                     {
-                        var verify = (QQNotifyEventArgs.ImageVerify)Event.Target;
+                        var verify = (ImageVerify)Event.Target;
                         verify.Image.Save("verify.png", System.Drawing.Imaging.ImageFormat.Png);
                         Console.WriteLine(verify.Reason);
                         Console.Write(client.Account.Username + "-请输入verify.png里面的验证码：");

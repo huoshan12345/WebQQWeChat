@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using iQQ.Net.WebQQCore.Im.Core;
 using iQQ.Net.WebQQCore.Im.Event;
 using iQQ.Net.WebQQCore.Im.Http;
+using iQQ.Net.WebQQCore.Util;
 
 namespace iQQ.Net.WebQQCore.Im.Action
 {
@@ -25,7 +26,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
 
         public override QQHttpRequest OnBuildRequest()
         {
-            var req = CreateHttpRequest("GET", QQConstants.URL_GET_QRCODE);
+            var req = CreateHttpRequest(HttpConstants.Get, QQConstants.URL_GET_QRCODE);
             req.AddGetValue("appid", QQConstants.APPID);
             req.AddGetValue("e", "0");
             req.AddGetValue("l", "M");
@@ -40,19 +41,8 @@ namespace iQQ.Net.WebQQCore.Im.Action
 
         public override void OnHttpStatusOK(QQHttpResponse response)
         {
-            try
-            {
-                var ms = new MemoryStream(response.ResponseData);
-                NotifyActionEvent(QQActionEventType.EVT_OK, Image.FromStream(ms));
-            }
-            catch (IOException e)
-            {
-                NotifyActionEvent(QQActionEventType.EVT_ERROR, new QQException(QQErrorCode.IO_ERROR, e));
-            }
-            catch (Exception e)
-            {
-                NotifyActionEvent(QQActionEventType.EVT_ERROR, new QQException(QQErrorCode.UNKNOWN_ERROR, e));
-            }
+            var ms = new MemoryStream(response.ResponseData);
+            NotifyActionEvent(QQActionEventType.EVT_OK, Image.FromStream(ms));
         }
     }
 }

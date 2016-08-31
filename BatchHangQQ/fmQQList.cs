@@ -183,7 +183,7 @@ namespace iQQ.Net.BatchHangQQ
 
                         case QQNotifyEventType.CAPACHA_VERIFY:
                         {
-                            var verify = (QQNotifyEventArgs.ImageVerify)Event.Target;
+                            var verify = (ImageVerify)Event.Target;
                             this.Invoke(new MethodInvoker(() =>
                             {
                                 pbVerifyPic.Image = verify.Image;

@@ -4,6 +4,7 @@ using iQQ.Net.WebQQCore.Im.Bean.Content;
 using iQQ.Net.WebQQCore.Im.Core;
 using iQQ.Net.WebQQCore.Im.Event;
 using iQQ.Net.WebQQCore.Im.Http;
+using iQQ.Net.WebQQCore.Util;
 
 namespace iQQ.Net.WebQQCore.Im.Action
 {
@@ -13,34 +14,34 @@ namespace iQQ.Net.WebQQCore.Im.Action
     /// </summary>
     public class GetOffPicAction : AbstractHttpAction
     {
-        private OffPicItem offpic;
-        private QQMsg msg;
-        private Stream picOut;
+        private readonly OffPicItem _offpic;
+        private readonly QQMsg _msg;
+        private readonly Stream _picOut;
 
         public GetOffPicAction(IQQContext context, QQActionEventHandler listener,
             OffPicItem offpic, QQMsg msg, Stream picOut)
             : base(context, listener)
         {
 
-            this.offpic = offpic;
-            this.msg = msg;
-            this.picOut = picOut;
+            _offpic = offpic;
+            _msg = msg;
+            _picOut = picOut;
         }
 
         public override void OnHttpStatusOK(QQHttpResponse response)
         {
-            NotifyActionEvent(QQActionEventType.EVT_OK, offpic);
+            NotifyActionEvent(QQActionEventType.EVT_OK, _offpic);
         }
 
         public override QQHttpRequest OnBuildRequest()
         {
-            QQHttpRequest req = CreateHttpRequest("GET", QQConstants.URL_GET_OFFPIC);
-            QQSession session = Context.Session;
+            var req = CreateHttpRequest(HttpConstants.Get, QQConstants.URL_GET_OFFPIC);
+            var session = Context.Session;
             req.AddGetValue("clientid", session.ClientId);
-            req.AddGetValue("f_uin", msg.From.Uin);
-            req.AddGetValue("file_path", offpic.FilePath);
+            req.AddGetValue("f_uin", _msg.From.Uin);
+            req.AddGetValue("file_path", _offpic.FilePath);
             req.AddGetValue("psessionid", session.SessionId);
-            req.OutputStream = picOut;
+            req.OutputStream = _picOut;
             return req;
         }
         

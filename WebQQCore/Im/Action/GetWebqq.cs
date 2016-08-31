@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using iQQ.Net.WebQQCore.Im.Core;
 using iQQ.Net.WebQQCore.Im.Http;
+using iQQ.Net.WebQQCore.Util;
 
 namespace iQQ.Net.WebQQCore.Im.Action
 {
@@ -25,7 +26,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
 
         public override QQHttpRequest BuildRequest()
         {
-            var request = CreateHttpRequest("GET", url);
+            var request = CreateHttpRequest(HttpConstants.Get, url);
             request.AddGetValue("appid", "1000164");
             request.AddGetValue("touin", "null");
             request.AddGetValue("releaseversion", "SMARTQQ");

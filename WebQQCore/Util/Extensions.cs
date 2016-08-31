@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Reflection;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -29,7 +31,7 @@ namespace iQQ.Net.WebQQCore.Util
         {
             using (var sr = new StreamReader(stream, encoding ?? Encoding.UTF8))
             {
-                string text = sr.ReadToEnd();
+                var text = sr.ReadToEnd();
                 return text;
             }
         }
@@ -66,39 +68,37 @@ namespace iQQ.Net.WebQQCore.Util
         /// <para>不更新：如果不存在，则添加；存在，则忽略。</para></summary>
         public static void Add<TKey, TValue>(this Dictionary<TKey, TValue> dict, TKey key, TValue value, AddChoice addChoice)
         {
-            if (dict.ContainsKey(key))
+            switch (addChoice)
             {
-                if (addChoice == AddChoice.Update)
-                {
+                case AddChoice.Update:
                     dict[key] = value;
                     return;
-                }
-                else if (addChoice == AddChoice.IgnoreDuplication)
-                {
+
+                case AddChoice.IgnoreDuplication:
                     return;
-                }
-                else if (addChoice == AddChoice.NotIgnoreDuplication)
-                {
+
+                case AddChoice.NotIgnoreDuplication:
                     throw new ArgumentException("已存在具有相同键的元素");
-                }
             }
-            else
-            {
-                dict.Add(key, value);
-            }
+        }
+
+        public static TValue GetValueOrDefault<TKey, TValue>(this Dictionary<TKey, TValue> dict, TKey key, TValue defaultValue = default(TValue))
+        {
+            if (dict.ContainsKey(key)) return dict[key];
+            else return defaultValue;
         }
 
         public static IEnumerable<Cookie> GetAllCookies(this CookieContainer cc)
         {
-            Hashtable table = (Hashtable)cc.GetType().InvokeMember("m_domainTable",
-            System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.GetField |
-            System.Reflection.BindingFlags.Instance, null, cc, new object[] { });
+            var table = (Hashtable)cc.GetType().InvokeMember("m_domainTable",
+            BindingFlags.NonPublic | BindingFlags.GetField | BindingFlags.Instance,
+            null, cc, new object[] { });
 
             foreach (var pathList in table.Values)
             {
-                SortedList lstCookieCol = (SortedList)pathList.GetType().InvokeMember("m_list",
-                System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.GetField
-                | System.Reflection.BindingFlags.Instance, null, pathList, new object[] { });
+                var lstCookieCol = (SortedList)pathList.GetType().InvokeMember("m_list",
+                BindingFlags.NonPublic | BindingFlags.GetField | BindingFlags.Instance, 
+                null, pathList, new object[] { });
                 foreach (CookieCollection colCookies in lstCookieCol.Values)
                 {
                     foreach (var c in colCookies.OfType<Cookie>())

@@ -26,7 +26,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
         public override QQHttpRequest OnBuildRequest()
         {
             var session = Context.Session;
-            var req = CreateHttpRequest("GET", QQConstants.URL_SHAKE_WINDOW);
+            var req = CreateHttpRequest(HttpConstants.Get, QQConstants.URL_SHAKE_WINDOW);
             req.AddGetValue("to_uin", _user.Uin);
             req.AddGetValue("psessionid", session.SessionId);
             req.AddGetValue("clientid", session.ClientId);

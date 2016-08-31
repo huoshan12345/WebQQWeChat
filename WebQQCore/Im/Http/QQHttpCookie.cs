@@ -52,14 +52,14 @@ namespace iQQ.Net.WebQQCore.Im.Http
                                |       "Secure"
                                |       "Version" "=" 1*DIGIT
             */
-            string[] parts = cookie.Split(';');
+            var parts = cookie.Split(';');
             if (parts.Length < 2) throw new ArgumentException("Invalid cookie string:" + cookie);
 
-            for (int i = 0; i < parts.Length; i++)
+            for (var i = 0; i < parts.Length; i++)
             {
-                string[] pairs = parts[i].Split('=');
-                string key = pairs[0].Trim();
-                string val = pairs.Length > 1 ? pairs[1].Trim() : "";
+                var pairs = parts[i].Split('=');
+                var key = pairs[0].Trim();
+                var val = pairs.Length > 1 ? pairs[1].Trim() : "";
                 if (i == 0)
                 {	//解析name和value
                     Name = key;

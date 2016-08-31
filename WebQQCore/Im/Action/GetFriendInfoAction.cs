@@ -33,7 +33,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
                 t	1346856270187                         
              */
             var session = Context.Session;
-            var req = CreateHttpRequest("GET", QQConstants.URL_GET_FRIEND_INFO);
+            var req = CreateHttpRequest(HttpConstants.Get, QQConstants.URL_GET_FRIEND_INFO);
             req.AddGetValue("tuin", buddy.Uin);
             req.AddGetValue("verifysession", "");	//难道有验证码？？？
             req.AddGetValue("code", "");

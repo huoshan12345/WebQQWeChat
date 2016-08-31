@@ -11,6 +11,17 @@ using System.Text.RegularExpressions;
 
 namespace iQQ.Net.WebQQCore.Util
 {
+    public abstract class HttpConstants
+    {
+        public const string UserAgent = "User-Agent";
+        public const string Referer = "Referer";
+        public const string Post = "POST";
+        public const string Get = "GET";
+        public const string ContentType = "Content-Type";
+        public const string ContentLength = "Content-Length";
+        public const string SetCookie = "Set-Cookie";
+        public const string Origin = "Origin";
+    }
 
     /// <summary>
     /// Http连接操作帮助类
@@ -108,7 +119,7 @@ namespace iQQ.Net.WebQQCore.Util
             result.ResponseUri = _response.ResponseUri;
 
             // 添加header中的cookie
-            FixCookies(_request, _response);
+            // FixCookies(_request, _response);
 
             //获取CookieCollection
             result.CookieCollection = _response.Cookies;
@@ -332,7 +343,7 @@ namespace iQQ.Net.WebQQCore.Util
         private void SetPostData(HttpItem item)
         {
             //验证在得到结果时是否有传入数据
-            if (!_request.Method.Trim().ToLower().Contains("get"))
+            if (!_request.Method.Trim().ToLower().Contains(HttpConstants.Get))
             {
                 if (item.PostEncoding != null)
                 {
@@ -438,8 +449,7 @@ namespace iQQ.Net.WebQQCore.Util
             for (var i = 0; i < response.Headers.Count; i++)
             {
                 var name = response.Headers.GetKey(i);
-                if (name != "Set-Cookie")
-                    continue;
+                if (name != HttpConstants.SetCookie) continue;
                 var value = response.Headers.Get(i);
                 var cookieCollection = ParseCookieString(value, () => request.Host.Split(':')[0]);
                 response.Cookies.Add(cookieCollection);
@@ -457,17 +467,12 @@ namespace iQQ.Net.WebQQCore.Util
 
             var cookiesValues = new Dictionary<string, string>();
 
-            var cookieValuePairsStrings = cookieString.Split(';');
+            var cookieValuePairsStrings = cookieString.Split(new[] { ";" }, StringSplitOptions.RemoveEmptyEntries);
             foreach (var cookieValuePairString in cookieValuePairsStrings)
             {
-                var pairArr = cookieValuePairString.Split('=');
-                var pairArrLength = pairArr.Length;
-                for (var i = 0; i < pairArrLength; i++)
-                {
-                    pairArr[i] = pairArr[i].Trim();
-                }
+                var pairArr = cookieValuePairString.Split('=').Select(item=>item.Trim()).ToArray();
                 var propertyName = pairArr[0];
-                if (pairArrLength == 1)
+                if (pairArr.Length == 1)
                 {
                     if (propertyName.Equals("httponly", StringComparison.OrdinalIgnoreCase))
                         httpOnly = true;
@@ -525,7 +530,7 @@ namespace iQQ.Net.WebQQCore.Util
         /// <summary>
         /// 请求方式默认为GET方式,当为POST方式时必须设置Postdata的值
         /// </summary>
-        public string Method { get; set; } = "GET";
+        public string Method { get; set; } = HttpConstants.Get;
 
         /// <summary>
         /// 默认请求超时时间

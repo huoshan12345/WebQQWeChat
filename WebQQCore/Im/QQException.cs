@@ -1,6 +1,7 @@
 ﻿using iQQ.Net.WebQQCore.Util;
 using System;
 using System.IO;
+using Newtonsoft.Json;
 
 namespace iQQ.Net.WebQQCore.Im
 {
@@ -37,11 +38,12 @@ namespace iQQ.Net.WebQQCore.Im
 
     public class QQException : Exception
     {
-        private QQErrorCode GetErrorCode(Exception e)
+        private static QQErrorCode GetErrorCode(Exception e)
         {
             if (e is TimeoutException) return QQErrorCode.IO_TIMEOUT;
             if (e is IOException) return QQErrorCode.IO_ERROR;
             if (e is ArgumentException) return QQErrorCode.INVALID_PARAMETER;
+            if(e is JsonException) return QQErrorCode.JSON_ERROR;
 
             return QQErrorCode.UNKNOWN_ERROR;
         }

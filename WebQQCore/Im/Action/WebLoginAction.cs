@@ -61,7 +61,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
             // MyLogger.Default.Info($"qq信息加密后是{qqpwd}");
 
             //尝试登录，准备传递的参数值
-            var req = CreateHttpRequest("GET", QQConstants.URL_UI_LOGIN);
+            var req = CreateHttpRequest(HttpConstants.Get, QQConstants.URL_UI_LOGIN);
             req.AddGetValue("u", _username);
             req.AddGetValue("p", qqpwd);
             req.AddGetValue("verifycode", _verifyCode);

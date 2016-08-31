@@ -18,8 +18,8 @@ namespace iQQ.Net.WebQQCore.Im.Action
 
         public override QQHttpRequest OnBuildRequest()
         {
-            IHttpService httpService = Context.GetSerivce<IHttpService>(QQServiceType.HTTP);
-            QQHttpRequest req = CreateHttpRequest("GET", QQConstants.URL_PT4_AUTH);
+            var httpService = Context.GetSerivce<IHttpService>(QQServiceType.HTTP);
+            var req = CreateHttpRequest(HttpConstants.Get, QQConstants.URL_PT4_AUTH);
             req.AddGetValue("daid", "4");
             req.AddGetValue("appid", "1");
             req.AddGetValue("auth_token", QQEncryptor.Time33(httpService.GetCookie("supertoken",
@@ -29,12 +29,12 @@ namespace iQQ.Net.WebQQCore.Im.Action
 
         public override void OnHttpStatusOK(QQHttpResponse response)
         {
-            Regex rex = new Regex(QQConstants.REGXP_EMAIL_AUTH);
-            Match m = rex.Match(response.GetResponseString());
+            var rex = new Regex(QQConstants.REGXP_EMAIL_AUTH);
+            var m = rex.Match(response.GetResponseString());
 
             if (m.Success)
             {
-                string qqHex = m.Groups[2].Value;
+                var qqHex = m.Groups[2].Value;
                 NotifyActionEvent(QQActionEventType.EVT_OK, qqHex);
             }
             else

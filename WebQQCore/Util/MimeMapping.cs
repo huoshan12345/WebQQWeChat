@@ -15,9 +15,9 @@ namespace iQQ.Net.WebQQCore.Util
 
         public static string GetMimeMapping(string fileName)
         {
-            string ext = Path.GetExtension(fileName);
-            string key = string.IsNullOrEmpty(ext) ? ".*" : ext;
-            string text = _mimeMap[key] ?? _mimeMap[".*"];
+            var ext = Path.GetExtension(fileName);
+            var key = string.IsNullOrEmpty(ext) ? ".*" : ext;
+            var text = _mimeMap[key] ?? _mimeMap[".*"];
             return text;
         }
 

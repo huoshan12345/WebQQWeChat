@@ -5,6 +5,7 @@ using System.IO;
 using iQQ.Net.WebQQCore.Im.Core;
 using iQQ.Net.WebQQCore.Im.Event;
 using iQQ.Net.WebQQCore.Im.Http;
+using iQQ.Net.WebQQCore.Util;
 
 namespace iQQ.Net.WebQQCore.Im.Action
 {
@@ -26,7 +27,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
         {
             try
             {
-                MemoryStream ms = new MemoryStream(response.ResponseData);
+                var ms = new MemoryStream(response.ResponseData);
                 NotifyActionEvent(QQActionEventType.EVT_OK, Image.FromStream(ms));
             }
             catch (IOException e)
@@ -37,7 +38,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
 
         public override QQHttpRequest OnBuildRequest()
         {
-            QQHttpRequest req = CreateHttpRequest("GET", QQConstants.URL_GET_CAPTCHA);
+            var req = CreateHttpRequest(HttpConstants.Get, QQConstants.URL_GET_CAPTCHA);
             req.AddGetValue("aid", QQConstants.APPID);
             req.AddGetValue("r", new Random().NextDouble().ToString("f16"));
             req.AddGetValue("uin", _uin);

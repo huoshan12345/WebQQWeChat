@@ -1,4 +1,6 @@
-﻿namespace iQQ.Net.WebQQCore.Im.Event
+﻿using System.ComponentModel;
+
+namespace iQQ.Net.WebQQCore.Im.Event
 {
 
     public enum QQNotifyEventType
@@ -42,7 +44,12 @@
         /// <summary>
         /// 二维码失效
         /// </summary>
-        QRCODE_INVALID
+        QRCODE_INVALID,
+
+        /// <summary>
+        /// 二维码验证成功
+        /// </summary>
+        QRCODE_SUCCESS
     }
 
     public class QQNotifyEvent : QQEvent
@@ -56,9 +63,11 @@
             Target = target;
         }
 
+        public QQNotifyEvent(QQNotifyEventType type) : this(type, null) { }
+
         public override string ToString()
         {
-            return $"QQNotifyEvent [type={Type}, target={Target ?? "未知事件"}]";
+            return $"QQNotifyEvent [type={Type}, target={Target ?? ""}]";
         }
     }
 }

@@ -36,7 +36,7 @@ namespace iQQ.Net.WebQQCore.Im.Bean
 
         public void ClearStatus()
         {
-            foreach (QQDiscuzMember mem in Members)
+            foreach (var mem in Members)
             {
                 mem.Status = QQStatus.OFFLINE;
             }
@@ -48,8 +48,8 @@ namespace iQQ.Net.WebQQCore.Im.Bean
 
         public override int GetHashCode()
         {
-            int prime = 31;
-            int result = 1;
+            var prime = 31;
+            var result = 1;
             result = prime * result + (int)((ulong)Did ^ ((ulong)Did >> 32));
             return result;
         }
@@ -62,7 +62,7 @@ namespace iQQ.Net.WebQQCore.Im.Bean
                 return false;
             if (GetType() != obj.GetType())
                 return false;
-            QQDiscuz other = (QQDiscuz)obj;
+            var other = (QQDiscuz)obj;
             if (Did != other.Did)
                 return false;
             return true;

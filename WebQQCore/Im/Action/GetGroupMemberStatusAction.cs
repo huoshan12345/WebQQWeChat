@@ -60,7 +60,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
 
         public override QQHttpRequest OnBuildRequest()
         {
-            var req = CreateHttpRequest("GET", QQConstants.URL_GET_GROUP_INFO_EXT);
+            var req = CreateHttpRequest(HttpConstants.Get, QQConstants.URL_GET_GROUP_INFO_EXT);
             req.AddGetValue("gcode", _group.Code);
             req.AddGetValue("vfwebqq", Context.Session.Vfwebqq);
             req.AddGetValue("t", DateTime.Now.CurrentTimeSeconds());

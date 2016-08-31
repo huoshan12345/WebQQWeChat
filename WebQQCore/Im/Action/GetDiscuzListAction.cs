@@ -18,8 +18,8 @@ namespace iQQ.Net.WebQQCore.Im.Action
 
         public override QQHttpRequest OnBuildRequest()
         {
-            QQSession session = Context.Session;
-            QQHttpRequest req = CreateHttpRequest("GET", QQConstants.URL_GET_DISCUZ_LIST);
+            var session = Context.Session;
+            var req = CreateHttpRequest(HttpConstants.Get, QQConstants.URL_GET_DISCUZ_LIST);
             req.AddGetValue("clientid", session.ClientId);
             req.AddGetValue("psessionid", session.SessionId);
             req.AddGetValue("vfwebqq", session.Vfwebqq);
@@ -32,16 +32,16 @@ namespace iQQ.Net.WebQQCore.Im.Action
             //{"retcode":0,"result":{"dnamelist":[{"did":3536443553,"name":"\u8FD9\u662F\u6807\u9898"},
             //{"did":625885728,"name":""}],"dmasklist":[{"did":1000,"mask":0}]}}
 
-            JObject json = JObject.Parse(response.GetResponseString());
-            QQStore store = Context.Store;
+            var json = JObject.Parse(response.GetResponseString());
+            var store = Context.Store;
             if (json["retcode"].ToString() == "0")
             {
-                JObject result = json["result"].ToObject<JObject>();
-                JArray dizlist = result["dnamelist"].ToObject<JArray>();
-                for (int i = 0; i < dizlist.Count; i++)
+                var result = json["result"].ToObject<JObject>();
+                var dizlist = result["dnamelist"].ToObject<JArray>();
+                for (var i = 0; i < dizlist.Count; i++)
                 {
-                    QQDiscuz discuz = new QQDiscuz();
-                    JObject dizjson = dizlist[i].ToObject<JObject>();
+                    var discuz = new QQDiscuz();
+                    var dizjson = dizlist[i].ToObject<JObject>();
                     discuz.Did = dizjson["did"].ToObject<long>();
                     discuz.Name = dizjson["name"].ToString();
                     store.AddDiscuz(discuz);

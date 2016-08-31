@@ -17,7 +17,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
     {
         private int _retryTimes;
         public IQQContext Context { get; }
-        public QQActionFuture ActionFuture { get; set; }
+        public IQQActionFuture ActionFuture { get; set; }
         public Task<QQHttpResponse> ResponseFuture { get; set; }
         public QQActionEventHandler Listener { get; set; }
 
@@ -30,40 +30,22 @@ namespace iQQ.Net.WebQQCore.Im.Action
 
         public virtual void OnHttpFinish(QQHttpResponse response)
         {
-            try
+            var type = response.GetContentType();
+            if (type != null && (type.StartsWith("application/x-javascript")
+                    || type.StartsWith("application/json")
+                    || type.Contains("text")
+                    ) && response.GetContentLength() > 0)
             {
-                var type = response.GetContentType();
-                if (type != null && (type.StartsWith("application/x-javascript")
-                        || type.StartsWith("application/json")
-                        || type.Contains("text")
-                        ) && response.GetContentLength() > 0)
-                {
-                    // MyLogger.Default.Debug(response.GetResponseString());
-                }
+                // MyLogger.Default.Debug(response.GetResponseString());
+            }
 
-                if (response.ResponseCode == QQHttpResponse.S_OK)
-                {
-                    OnHttpStatusOK(response);
-                }
-                else
-                {
-                    OnHttpStatusError(response);
-                }
-            }
-            catch (QQException)
+            if (response.ResponseCode == QQHttpResponse.S_OK)
             {
-                // NotifyActionEvent(QQActionEventType.EVT_ERROR, ex);
-                throw; 
+                OnHttpStatusOK(response);
             }
-            catch (JsonException ex)
+            else
             {
-                // NotifyActionEvent(QQActionEventType.EVT_ERROR, new QQException(QQErrorCode.JSON_ERROR, ex));
-                throw new QQException(QQErrorCode.JSON_ERROR, ex);
-            }
-            catch (Exception ex)
-            {
-                // NotifyActionEvent(QQActionEventType.EVT_ERROR, new QQException(QQErrorCode.UNKNOWN_ERROR, ex));
-                throw new QQException(QQErrorCode.UNKNOWN_ERROR, ex);
+                OnHttpStatusError(response);
             }
         }
 
@@ -134,7 +116,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
 
         public virtual QQHttpRequest CreateHttpRequest(string method, string url)
         {
-            IHttpService httpService = Context.GetSerivce<IHttpService>(QQServiceType.HTTP);
+            var httpService = Context.GetSerivce<IHttpService>(QQServiceType.HTTP);
             return httpService.CreateHttpRequest(method, url);
         }
 

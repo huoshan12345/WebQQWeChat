@@ -2,6 +2,7 @@
 using iQQ.Net.WebQQCore.Im.Core;
 using iQQ.Net.WebQQCore.Im.Event;
 using iQQ.Net.WebQQCore.Im.Http;
+using iQQ.Net.WebQQCore.Util;
 
 namespace iQQ.Net.WebQQCore.Im.Action
 {
@@ -16,17 +17,17 @@ namespace iQQ.Net.WebQQCore.Im.Action
 
         public override QQHttpRequest OnBuildRequest()
         {
-            return CreateHttpRequest("GET", QQConstants.URL_LOGIN_PAGE);
+            return CreateHttpRequest(HttpConstants.Get, QQConstants.URL_LOGIN_PAGE);
         }
         
         public override void OnHttpStatusOK(QQHttpResponse response)
         {
-            Regex rex = new Regex(QQConstants.REGXP_LOGIN_SIG);
-            Match mc = rex.Match(response.GetResponseString());
+            var rex = new Regex(QQConstants.REGXP_LOGIN_SIG);
+            var mc = rex.Match(response.GetResponseString());
 
             if (mc.Success)
             {
-                QQSession session = Context.Session;
+                var session = Context.Session;
                 session.LoginSig = mc.Groups[1].Value;
 
                 NotifyActionEvent(QQActionEventType.EVT_OK, session.LoginSig);

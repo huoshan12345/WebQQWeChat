@@ -28,7 +28,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
         {
             var session = Context.Session;
             // tuin=4245757755&verifysession=&type=1&code=&vfwebqq=**&t=1361631644492
-            var req = CreateHttpRequest("GET",
+            var req = CreateHttpRequest(HttpConstants.Get,
                     QQConstants.URL_GET_USER_ACCOUNT);
             req.AddGetValue("tuin", _group.Code);
             req.AddGetValue("vfwebqq", session.Vfwebqq);

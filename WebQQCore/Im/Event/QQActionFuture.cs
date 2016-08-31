@@ -6,7 +6,7 @@ namespace iQQ.Net.WebQQCore.Im.Event
     /// <summary>
     /// qq动作的执行结果
     /// </summary>
-    public interface QQActionFuture
+    public interface IQQActionFuture
     {
 
         /// <summary>

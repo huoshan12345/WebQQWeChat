@@ -24,9 +24,9 @@ namespace iQQ.Net.WebQQCore.Im.Action
 
         public override QQHttpRequest OnBuildRequest()
         {
-            QQSession session = this.Context.Session;
+            var session = this.Context.Session;
 
-            QQHttpRequest req = CreateHttpRequest("GET",
+            var req = CreateHttpRequest(HttpConstants.Get,
                     QQConstants.URL_CHANGE_STATUS);
             req.AddGetValue("newstatus", _status.Value);
             req.AddGetValue("clientid", session.ClientId);
@@ -39,7 +39,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
 
         public override void OnHttpStatusOK(QQHttpResponse response)
         {
-            JObject json = JObject.Parse(response.GetResponseString());
+            var json = JObject.Parse(response.GetResponseString());
             if (json["retcode"].ToString() == "0")
             {
                 Context.Account.Status = _status;
@@ -47,8 +47,8 @@ namespace iQQ.Net.WebQQCore.Im.Action
             }
             else
             {
-                NotifyActionEvent(QQActionEventType.EVT_ERROR,
-                    new QQException(QQErrorCode.UNEXPECTED_RESPONSE, response.GetResponseString()));
+                // NotifyActionEvent(QQActionEventType.EVT_ERROR, new QQException(QQErrorCode.UNEXPECTED_RESPONSE, response.GetResponseString()));
+                throw new QQException(QQErrorCode.UNEXPECTED_RESPONSE, response.GetResponseString());
             }
         }
 

@@ -39,7 +39,7 @@ namespace iQQ.Net.WebQQCore.Im.Http
          */
         public void UpdateCookies(List<string> tmpCookies)
         {
-            List<string> newCookies = new List<string>();
+            var newCookies = new List<string>();
             if (tmpCookies != null)
             {
                 newCookies.AddRange(tmpCookies);
@@ -49,8 +49,8 @@ namespace iQQ.Net.WebQQCore.Im.Http
             {
                 foreach (var it in newCookies)
                 {
-                    QQHttpCookie cookie = new QQHttpCookie(it);
-                    QQHttpCookie oldCookie = this.GetCookie(cookie.Name, null);
+                    var cookie = new QQHttpCookie(it);
+                    var oldCookie = this.GetCookie(cookie.Name, null);
                     //如果有之前相同名字的Cookie,删除之前的cookie
                     if (oldCookie != null)
                     {
@@ -71,8 +71,8 @@ namespace iQQ.Net.WebQQCore.Im.Http
 
         public string GetCookieHeader(string url)
         {
-            Uri u = new Uri(url);
-            StringBuilder buffer = new StringBuilder();
+            var u = new Uri(url);
+            var buffer = new StringBuilder();
 
 
             foreach (var cookie in CookieContainer)

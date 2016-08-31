@@ -29,7 +29,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
         public override QQHttpRequest OnBuildRequest()
         {
             var session = Context.Session;
-            var req = CreateHttpRequest("GET", QQConstants.URL_GET_STRANGER_INFO);
+            var req = CreateHttpRequest(HttpConstants.Get, QQConstants.URL_GET_STRANGER_INFO);
             req.AddGetValue("tuin", user.Uin);
             req.AddGetValue("verifysession", "");	// ?
             req.AddGetValue("gid", "0");
