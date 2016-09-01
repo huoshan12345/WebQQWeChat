@@ -27,7 +27,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
             var req = CreateHttpRequest(HttpConstants.Get, QQConstants.URL_GET_GROUP_INFO_EXT);
             req.AddGetValue("gcode", _group.Code);
             req.AddGetValue("vfwebqq", Context.Account.Vfwebqq);
-            req.AddGetValue("t", DateTime.Now.CurrentTimeSeconds());
+            req.AddGetValue("t", DateTime.Now.CurrentTimeMillis());
             req.AddHeader("Referer", QQConstants.REFERER_S);
             // req.AddHeader("Origin", QQConstants.ORIGIN_S);
 

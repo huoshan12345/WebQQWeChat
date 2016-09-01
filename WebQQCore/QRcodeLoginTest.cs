@@ -92,10 +92,10 @@ namespace iQQ.Net.WebQQCore
                 {
                     if (e.Type == QQActionEventType.EvtOK) DefaultLogger.Info("加载好友列表成功");
                 });
-                _mClient.GetGroupList((s, e) =>
-                {
-                    if (e.Type == QQActionEventType.EvtOK) DefaultLogger.Info("加载群列表成功");
-                });
+                //_mClient.GetGroupList((s, e) =>
+                //{
+                //    if (e.Type == QQActionEventType.EvtOK) DefaultLogger.Info("加载群列表成功");
+                //});
                 _mClient.GetSelfInfo((s, e) =>
                 {
                     if (e.Type == QQActionEventType.EvtOK) DefaultLogger.Info("获取个人信息成功");

@@ -288,6 +288,7 @@ namespace iQQ.Net.WebQQCore.Im.Module
         /// </summary>
         public void DoPollMsg()
         {
+            DefaultLogger.Info("begin to poll...");
             var login = Context.GetModule<LoginModule>(QQModuleType.LOGIN);
             login.PollMsg((sender, Event) =>
             {

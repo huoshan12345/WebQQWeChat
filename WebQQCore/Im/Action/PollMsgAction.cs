@@ -67,6 +67,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
             if ((ex as QQException)?.ErrorCode == QQErrorCode.IO_TIMEOUT)
             {
                 Context.PushActor(new HttpActor(HttpActorType.BUILD_REQUEST, Context, this));
+                DefaultLogger.Info("polling...");
                 return;
             }
             else base.OnHttpError(ex);
@@ -77,11 +78,8 @@ namespace iQQ.Net.WebQQCore.Im.Action
         /// </summary>
         /// <param name="result"></param>
         /// <returns></returns>
-        private IList<QQNotifyEvent> GetAllMessagesWhenPollSuccess(JToken result)
+        private IList<QQNotifyEvent> GetAllMessagesWhenPollSuccess(JArray result)
         {
-            //有可能为  {"retcode":0,"result":"ok"}
-            if (!(result is JArray)) return null;
-
             var notifyEvents = new List<QQNotifyEvent>();
             var results = result.ToObject<JArray>();
             // 消息下载来的列表中是倒过来的，那我直接倒过来取，编位回来
@@ -94,92 +92,92 @@ namespace iQQ.Net.WebQQCore.Im.Action
                 switch (pollType)
                 {
                     case "input_notify":
-                        {
-                            var fromUin = pollData["from_uin"].ToObject<long>();
-                            var qqBuddy = Context.Store.GetBuddyByUin(fromUin);
-                            notifyEvents.Add(new QQNotifyEvent(QQNotifyEventType.BuddyInput, qqBuddy));
-                            break;
-                        }
+                    {
+                        var fromUin = pollData["from_uin"].ToObject<long>();
+                        var qqBuddy = Context.Store.GetBuddyByUin(fromUin);
+                        notifyEvents.Add(new QQNotifyEvent(QQNotifyEventType.BuddyInput, qqBuddy));
+                        break;
+                    }
                     case "message":
-                        {
-                            // 好友消息
-                            notifyEvents.Add(ProcessBuddyMsg(pollData));
-                            break;
-                        }
+                    {
+                        // 好友消息
+                        notifyEvents.Add(ProcessBuddyMsg(pollData));
+                        break;
+                    }
                     case "group_message":
-                        {
-                            // 群消息
-                            notifyEvents.Add(ProcessGroupMsg(pollData));
-                            break;
-                        }
+                    {
+                        // 群消息
+                        notifyEvents.Add(ProcessGroupMsg(pollData));
+                        break;
+                    }
                     case "discu_message":
-                        {
-                            // 讨论组消息
-                            notifyEvents.Add(ProcessDiscuzMsg(pollData));
-                            break;
-                        }
+                    {
+                        // 讨论组消息
+                        notifyEvents.Add(ProcessDiscuzMsg(pollData));
+                        break;
+                    }
                     case "sess_message":
-                        {
-                            // 临时会话消息
-                            notifyEvents.Add(ProcessSessionMsg(pollData));
-                            break;
-                        }
+                    {
+                        // 临时会话消息
+                        notifyEvents.Add(ProcessSessionMsg(pollData));
+                        break;
+                    }
                     case "shake_message":
-                        {
-                            // 窗口震动
-                            var fromUin = pollData["from_uin"].ToObject<long>();
-                            var user = Context.Store.GetBuddyByUin(fromUin);
-                            notifyEvents.Add(new QQNotifyEvent(QQNotifyEventType.ShakeWindow, user));
-                            break;
-                        }
+                    {
+                        // 窗口震动
+                        var fromUin = pollData["from_uin"].ToObject<long>();
+                        var user = Context.Store.GetBuddyByUin(fromUin);
+                        notifyEvents.Add(new QQNotifyEvent(QQNotifyEventType.ShakeWindow, user));
+                        break;
+                    }
                     case "kick_message":
-                        {
-                            // 被踢下线
-                            Context.Account.Status = QQStatus.OFFLINE;
-                            Context.Session.State = QQSessionState.KICKED;
-                            notifyEvents.Add(new QQNotifyEvent(QQNotifyEventType.KickOffline, pollData["reason"].ToString()));
-                            break;
-                        }
+                    {
+                        // 被踢下线
+                        Context.Account.Status = QQStatus.OFFLINE;
+                        Context.Session.State = QQSessionState.KICKED;
+                        notifyEvents.Add(new QQNotifyEvent(QQNotifyEventType.KickOffline, pollData["reason"].ToString()));
+                        break;
+                    }
                     case "buddies_status_change":
-                        {
-                            // 群消息
-                            notifyEvents.Add(ProcessBuddyStatusChange(pollData));
-                            break;
-                        }
+                    {
+                        // 群消息
+                        notifyEvents.Add(ProcessBuddyStatusChange(pollData));
+                        break;
+                    }
                     case "system_message": //好友添加
+                    {
+                        var processSystemMessage = ProcessSystemMsg(pollData);
+                        if (processSystemMessage != null)
                         {
-                            var processSystemMessage = ProcessSystemMsg(pollData);
-                            if (processSystemMessage != null)
-                            {
-                                notifyEvents.Add(processSystemMessage);
-                            }
-                            break;
+                            notifyEvents.Add(processSystemMessage);
                         }
+                        break;
+                    }
                     case "group_web_message": //发布了共享文件
+                    {
+                        var processSystemMessage = ProcessGroupWebMsg(pollData);
+                        if (processSystemMessage != null)
                         {
-                            var processSystemMessage = ProcessGroupWebMsg(pollData);
-                            if (processSystemMessage != null)
-                            {
-                                notifyEvents.Add(processSystemMessage);
+                            notifyEvents.Add(processSystemMessage);
 
-                            }
-                            break;
                         }
+                        break;
+                    }
                     case "sys_g_msg": //被踢出了群
+                    {
+                        var processSystemMessage = ProcessSystemGroupMsg(pollData);
+                        if (processSystemMessage != null)
                         {
-                            var processSystemMessage = ProcessSystemGroupMsg(pollData);
-                            if (processSystemMessage != null)
-                            {
-                                notifyEvents.Add(processSystemMessage);
-                            }
-                            break;
+                            notifyEvents.Add(processSystemMessage);
                         }
+                        break;
+                    }
                     default:
-                        {
-                            var ex = new QQException(QQErrorCode.UNKNOWN_ERROR, "unknown pollType: " + pollType);
-                            NotifyActionEvent(QQActionEventType.EvtError, ex);
-                            break;
-                        }
+                    {
+                        var ex = new QQException(QQErrorCode.UNKNOWN_ERROR, "unknown pollType: " + pollType);
+                        NotifyActionEvent(QQActionEventType.EvtError, ex);
+                        break;
+                    }
                 }
             }
             return notifyEvents;
@@ -194,52 +192,57 @@ namespace iQQ.Net.WebQQCore.Im.Action
             switch (retcode)
             {
                 case 0:
+                { 
+                    //有可能为  {"retcode":0,"result":"ok"}
+                    var result = json["result"] as JArray;
+                    if (result != null)
                     {
-                        var msgs = GetAllMessagesWhenPollSuccess(json["result"]);
+                        var msgs = GetAllMessagesWhenPollSuccess(result);
                         notifyEvents.AddRangeSafely(msgs);
-                        break;
                     }
+                    break;
+                }
 
                 case 102:
-                    // 接连正常，没有消息到达 {"retcode":102,"errmsg":""}
-                    // 继续进行下一个消息请求
-                    break;
+                // 接连正常，没有消息到达 {"retcode":102,"errmsg":""}
+                // 继续进行下一个消息请求
+                break;
 
                 case 110:
                 case 109:
-                    // 客户端主动退出
-                    Context.Session.State = QQSessionState.OFFLINE;
-                    break;
+                // 客户端主动退出
+                Context.Session.State = QQSessionState.OFFLINE;
+                break;
 
                 case 116:
-                    // 需要更新Ptwebqq值，暂时不知道干嘛用的
-                    // {"retcode":116,"p":"2c0d8375e6c09f2af3ce60c6e081bdf4db271a14d0d85060"}
-                    // if (a.retcode === 116) alloy.portal.Ptwebqq = a.p)
-                    Context.Session.Ptwebqq = json["p"].ToString();
-                    break;
+                // 需要更新Ptwebqq值，暂时不知道干嘛用的
+                // {"retcode":116,"p":"2c0d8375e6c09f2af3ce60c6e081bdf4db271a14d0d85060"}
+                // if (a.retcode === 116) alloy.portal.Ptwebqq = a.p)
+                Context.Session.Ptwebqq = json["p"].ToString();
+                break;
 
 
                 case 121:
                 case 120:
                 case 100:
-                    // 121,120 : ReLinkFailure		100 : NotRelogin
-                    // 服务器需求重新认证
-                    // {"retcode":121,"t":"0"}
-                    /*			LOG.info("**** NEED_REAUTH retcode: " + retcode + " ****");*/
-                    DefaultLogger.Info($"**** NEED_REAUTH retcode: {retcode} ****");
-                    Context.Session.State = QQSessionState.OFFLINE;
-                    var ex = new QQException(QQErrorCode.INVALID_LOGIN_AUTH);
-                    //NotifyActionEvent(QQActionEventType.EVT_ERROR, ex);
-                    //return;
-                    throw ex;
+                // 121,120 : ReLinkFailure		100 : NotRelogin
+                // 服务器需求重新认证
+                // {"retcode":121,"t":"0"}
+                /*			LOG.info("**** NEED_REAUTH retcode: " + retcode + " ****");*/
+                DefaultLogger.Info($"**** NEED_REAUTH retcode: {retcode} ****");
+                Context.Session.State = QQSessionState.OFFLINE;
+                var ex = new QQException(QQErrorCode.INVALID_LOGIN_AUTH);
+                //NotifyActionEvent(QQActionEventType.EVT_ERROR, ex);
+                //return;
+                throw ex;
 
                 case 103:
-                    throw new QQException(QQErrorCode.INVALID_RESPONSE, str);
+                throw new QQException(QQErrorCode.INVALID_RESPONSE, str);
 
                 //notifyEvents.Add(new QQNotifyEvent(QQNotifyEventType.NEED_REAUTH, null));
                 default:
-                    notifyEvents.Add(new QQNotifyEvent(QQNotifyEventType.UnknownError, str));
-                    break;
+                notifyEvents.Add(new QQNotifyEvent(QQNotifyEventType.UnknownError, str));
+                break;
             }
             NotifyActionEvent(QQActionEventType.EvtOK, notifyEvents);
         }
