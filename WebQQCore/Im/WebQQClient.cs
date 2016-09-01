@@ -128,7 +128,7 @@ namespace iQQ.Net.WebQQCore.Im
         /// 放入一个QQActor到队列，将会在线程执行器里面执行
         /// </summary>
         /// <param name="actor"></param>
-        public void PushActor(QQActor actor)
+        public void PushActor(IQQActor actor)
         {
             _actorDispatcher.PushActor(actor);
         }
@@ -157,7 +157,7 @@ namespace iQQ.Net.WebQQCore.Im
             }
             catch (QQException e)
             {
-                MyLogger.Default.Warn("初始化模块和服务失败", e);
+                DefaultLogger.Warn("初始化模块和服务失败", e);
             }
         }
 
@@ -183,7 +183,7 @@ namespace iQQ.Net.WebQQCore.Im
             }
             catch (QQException e)
             {
-                MyLogger.Default.Warn("销毁所有模块和服务失败", e);
+                DefaultLogger.Warn("销毁所有模块和服务失败", e);
             }
         }
 
@@ -273,7 +273,7 @@ namespace iQQ.Net.WebQQCore.Im
                 }
                 catch (Exception e)
                 {
-                    MyLogger.Default.Warn("FireNotify Error!!", e);
+                    DefaultLogger.Warn("FireNotify Error!!", e);
                 }
             }
             // 重新登录成功，重新poll
@@ -366,7 +366,7 @@ namespace iQQ.Net.WebQQCore.Im
         {
             if (Session.State == QQSessionState.OFFLINE)
             {
-                // MyLogger.Default.Warn($"{Account.Username}: client is aready offline !!!");
+                // DefaultLogger.Warn($"{Account.Username}: client is aready offline !!!");
                 throw new Exception("client is aready offline !!!");
             }
 

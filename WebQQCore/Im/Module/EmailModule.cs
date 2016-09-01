@@ -132,7 +132,7 @@ namespace iQQ.Net.WebQQCore.Im.Module
                             {
                                 // 登录失败，QQ消息的POLL同时也失效，这时那边会重新登录
                                 // 如果已经在登录中，或者已经登录了，就不用再次执行
-                                MyLogger.Default.Warn("GetPT4Auth error!!! wait Relogin...", ex);
+                                DefaultLogger.Warn("GetPT4Auth error!!! wait Relogin...", ex);
                                 var session = Context.Session;
                                 if (session.State == QQSessionState.LOGINING
                                     || session.State == QQSessionState.KICKED) return;

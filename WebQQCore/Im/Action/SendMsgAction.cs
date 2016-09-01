@@ -15,12 +15,12 @@ namespace iQQ.Net.WebQQCore.Im.Action
     /// </summary>
     public class SendMsgAction : AbstractHttpAction
     {
-        private readonly QQMsg msg;
+        private readonly QQMsg _msg;
         private static long _msgId = 81690000;
         public SendMsgAction(IQQContext context, QQActionEventHandler listener, QQMsg msg)
             : base(context, listener)
         {
-            this.msg = msg;
+            _msg = msg;
         }
 
         public override QQHttpRequest OnBuildRequest()
@@ -32,28 +32,28 @@ namespace iQQ.Net.WebQQCore.Im.Action
             var session = Context.Session;
             var json = new JObject();
             QQHttpRequest req = null;
-            if (msg.Type == QQMsgType.BUDDY_MSG)
+            if (_msg.Type == QQMsgType.BUDDY_MSG)
             {
                 req = CreateHttpRequest("POST", QQConstants.URL_SEND_BUDDY_MSG);
-                json.Add("to", msg.To.Uin);
+                json.Add("to", _msg.To.Uin);
                 json.Add("face", 0); // 这个是干嘛的？？
             }
-            else if (msg.Type == QQMsgType.GROUP_MSG)
+            else if (_msg.Type == QQMsgType.GROUP_MSG)
             {
                 req = CreateHttpRequest("POST", QQConstants.URL_SEND_GROUP_MSG);
-                json.Add("group_uin", msg.Group.Gin);
+                json.Add("group_uin", _msg.Group.Gin);
                 json.Add("face", 573);
             }
-            else if (msg.Type == QQMsgType.DISCUZ_MSG)
+            else if (_msg.Type == QQMsgType.DISCUZ_MSG)
             {
                 req = CreateHttpRequest("POST", QQConstants.URL_SEND_DISCUZ_MSG);
-                json.Add("did", msg.Discuz.Did);
+                json.Add("did", _msg.Discuz.Did);
                 json.Add("face", 573);
             }
-            else if (msg.Type == QQMsgType.SESSION_MSG)
+            else if (_msg.Type == QQMsgType.SESSION_MSG)
             {	// 临时会话消息
                 req = CreateHttpRequest("POST", QQConstants.URL_SEND_SESSION_MSG);
-                var member = (QQStranger)msg.To;
+                var member = (QQStranger)_msg.To;
                 json.Add("to", member.Uin);
                 json.Add("face", 0); // 这个是干嘛的？？
                 json.Add("group_sig", member.GroupSig);
@@ -61,10 +61,10 @@ namespace iQQ.Net.WebQQCore.Im.Action
             }
             else
             {
-                MyLogger.Default.Warn("unknown MsgType: " + msg.Type);
+                DefaultLogger.Warn("unknown MsgType: " + _msg.Type);
             }
 
-            json.Add("content", msg.PackContentList());
+            json.Add("content", _msg.PackContentList());
             json.Add("msg_id", ++_msgId);
             json.Add("clientid", session.ClientId);
             json.Add("psessionid", session.SessionId);
@@ -80,18 +80,24 @@ namespace iQQ.Net.WebQQCore.Im.Action
 
         public override void OnHttpStatusOK(QQHttpResponse response)
         {
-            var json = JObject.Parse(response.GetResponseString());
+            var str = response.GetResponseString();
+            var json = JObject.Parse(str);
             var retcode = json["retcode"].ToObject<int>();
             if (retcode == 0)
             {
                 var result = json["result"].ToString();
                 if (result.Equals("ok"))
                 {
-                    NotifyActionEvent(QQActionEventType.EVT_OK, msg);
-                    return;
+                    NotifyActionEvent(QQActionEventType.EVT_OK, _msg);
                 }
             }
-            NotifyActionEvent(QQActionEventType.EVT_ERROR, new QQException(QQErrorCode.UNEXPECTED_RESPONSE, JsonConvert.SerializeObject(json)));
+            else
+            {
+                // NotifyActionEvent(QQActionEventType.EVT_ERROR, ));
+                throw new QQException(QQErrorCode.UNEXPECTED_RESPONSE, str);
+            }
+             
+            
         }
     }
 }

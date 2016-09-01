@@ -11,8 +11,8 @@ namespace iQQ.Net.WebQQCore.Im.Actor
     /// </summary>
     public class ThreadActorDispatcher : IQQActorDispatcher
     {
-        private readonly BlockingCollection<QQActor> _actorQueue = null;
-        private readonly BlockingCollection<QQActor> _pollActorQueue = null;
+        private readonly BlockingCollection<IQQActor> _actorQueue = null;
+        private readonly BlockingCollection<IQQActor> _pollActorQueue = null;
         //private BlockingCollection<QQActor> robotReplyActorQueue = null;
         private Task _dispatchThread = null;
         private Task _pollDispatchThread = null;
@@ -20,12 +20,12 @@ namespace iQQ.Net.WebQQCore.Im.Actor
 
         public ThreadActorDispatcher()
         {
-            _actorQueue = new BlockingCollection<QQActor>();
-            _pollActorQueue = new BlockingCollection<QQActor>();
+            _actorQueue = new BlockingCollection<IQQActor>();
+            _pollActorQueue = new BlockingCollection<IQQActor>();
             // robotReplyActorQueue = new BlockingCollection<QQActor>();
         }
 
-        public void PushActor(QQActor actor)
+        public void PushActor(IQQActor actor)
         {
             try
             {
@@ -52,7 +52,7 @@ namespace iQQ.Net.WebQQCore.Im.Actor
         /// </summary>
         /// <param name="actor"></param>
         /// <returns></returns>
-        private bool DispatchAction(QQActor actor)
+        private bool DispatchAction(IQQActor actor)
         {
             if (actor == null) return true;
             actor.Execute();
@@ -97,7 +97,7 @@ namespace iQQ.Net.WebQQCore.Im.Actor
         /// <summary>
         /// 一个伪Actor只是为了让ActorLoop停下来
         /// </summary>
-        public class ExitActor : QQActor
+        public class ExitActor : IQQActor
         {
             public void Execute()
             {

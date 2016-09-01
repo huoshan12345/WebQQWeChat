@@ -55,7 +55,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
                 }
                 catch (FormatException e)
                 {
-                    MyLogger.Default.Warn($"日期转换失败：{obj["birthday"]}", e);
+                    DefaultLogger.Warn($"日期转换失败：{obj["birthday"]}", e);
                     buddy.Birthday = null;
                 }
                 buddy.Occupation = obj["occupation"].ToString();

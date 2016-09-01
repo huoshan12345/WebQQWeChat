@@ -54,7 +54,7 @@ namespace iQQ.Net.WebQQCore.Util
             }
             catch (Exception ex)
             {
-                MyLogger.Default.Warn($"从本地加载资源失败：{name}", ex);
+                DefaultLogger.Warn($"从本地加载资源失败：{name}", ex);
             }
 
             try
@@ -64,7 +64,7 @@ namespace iQQ.Net.WebQQCore.Util
             }
             catch (Exception ex)
             {
-                MyLogger.Default.Warn($"从服务器加载资源失败：{url}", ex);
+                DefaultLogger.Warn($"从服务器加载资源失败：{url}", ex);
             }
 
             return default(T);

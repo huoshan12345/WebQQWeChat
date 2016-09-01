@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Reflection;
+using iQQ.Net.WebQQCore.Util.Extensions;
 
 namespace iQQ.Net.WebQQCore.Im.Event
 {
@@ -50,7 +51,7 @@ namespace iQQ.Net.WebQQCore.Im.Event
 
         public override string ToString()
         {
-            return $"QQActionEvent [type={Type.GetDescription()}, target={Target}]";
+            return $"QQActionEvent [type={Type.GetFullDescription()}, target={Target}]";
         }
     }
 }

@@ -139,7 +139,7 @@ namespace iQQ.Net.WebQQCore.Im.Bean
             }
             catch (QQException e)
             {
-                MyLogger.Default.Warn(e.Message, e);
+                DefaultLogger.Warn(e.Message, e);
                 return "";
             }
         }

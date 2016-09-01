@@ -44,7 +44,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
                 }
                 catch (Exception e)
                 {
-                    MyLogger.Default.Warn($"日期转换失败：{obj["birthday"]}", e);
+                    DefaultLogger.Warn($"日期转换失败：{obj["birthday"]}", e);
                     account.Birthday = null;
                 }
 

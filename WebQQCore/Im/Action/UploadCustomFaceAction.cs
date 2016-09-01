@@ -88,12 +88,12 @@ namespace iQQ.Net.WebQQCore.Im.Action
                     }
                     else
                     {
-                        MyLogger.Default.Debug($"ret: {retcode}");
+                        DefaultLogger.Debug($"ret: {retcode}");
                     }
                 }
                 catch (Exception e)
                 {
-                    MyLogger.Default.Warn(e.Message, e);
+                    DefaultLogger.Warn(e.Message, e);
                 }
             }
             // 失败后返回路径

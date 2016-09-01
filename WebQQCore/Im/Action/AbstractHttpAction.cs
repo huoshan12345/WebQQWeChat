@@ -9,6 +9,7 @@ using iQQ.Net.WebQQCore.Im.Event;
 using iQQ.Net.WebQQCore.Im.Http;
 using iQQ.Net.WebQQCore.Im.Service;
 using iQQ.Net.WebQQCore.Util;
+using iQQ.Net.WebQQCore.Util.Extensions;
 using Newtonsoft.Json;
 
 namespace iQQ.Net.WebQQCore.Im.Action
@@ -36,7 +37,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
                     || type.Contains("text")
                     ) && response.GetContentLength() > 0)
             {
-                // MyLogger.Default.Debug(response.GetResponseString());
+                // DefaultLogger.Debug(response.GetResponseString());
             }
 
             if (response.ResponseCode == QQHttpResponse.S_OK)
@@ -52,10 +53,9 @@ namespace iQQ.Net.WebQQCore.Im.Action
         public virtual void OnHttpError(Exception ex)
         {
             var qqEx = ex as QQException ?? new QQException(ex);
-            if (!DoRetryIt(qqEx))
+            if (!DoRetryIt(qqEx, QQConstants.MAX_RETRY_TIMES))
             {
-                // NotifyActionEvent(QQActionEventType.EVT_ERROR, qqEx);
-                throw qqEx;
+                NotifyActionEvent(QQActionEventType.EVT_ERROR, qqEx);
             }
         }
 
@@ -93,21 +93,28 @@ namespace iQQ.Net.WebQQCore.Im.Action
             switch (type)
             {
                 case QQActionEventType.EVT_ERROR:
-                    var ex = (QQException) target;
-                    MyLogger.Default.Error($"{GetType().Name} [type={EnumExt.GetDescription(type)}, errorcode={ex.ErrorCode}, exception={ex}]{Environment.NewLine}{ex.StackTrace}", ex);
+                {
+                    var ex = (QQException)target;
+                    DefaultLogger.Fatal($"{GetType().Name} [type={type.GetFullDescription()}, errorcode={ex.ErrorCode}, exception={ex.Message}]{Environment.NewLine}{ex.StackTrace}", ex);
                     break;
+                }
 
                 case QQActionEventType.EVT_RETRY:
-                case QQActionEventType.EVT_CANCELED:
-                    MyLogger.Default.Info($"{GetType().Name} [type={EnumExt.GetDescription(type)}, target={target}]");
+                {
+                    var ex = (QQException)target;
+                    DefaultLogger.Error($"{GetType().Name} [type={type.GetFullDescription()}, 重试次数={_retryTimes}, target={ex.Message}]");
                     break;
+                }
+
+                case QQActionEventType.EVT_CANCELED:
+                DefaultLogger.Info($"{GetType().Name} [type={type.GetFullDescription()}, target={target}]");
+                break;
 
                 case QQActionEventType.EVT_OK:
                 case QQActionEventType.EVT_WRITE:
                 case QQActionEventType.EVT_READ:
                 default:
-                    break;
-
+                break;
             }
             Listener?.Invoke(ActionFuture, new QQActionEvent(type, target));
         }
@@ -126,7 +133,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
         public virtual void OnHttpStatusError(QQHttpResponse response)
         {
             var ex = new QQException(QQErrorCode.ERROR_HTTP_STATUS, response.ResponseMessage);
-            if (!DoRetryIt(ex))
+            if (!DoRetryIt(ex, QQConstants.MAX_RETRY_TIMES))
             {
                 // NotifyActionEvent(QQActionEventType.EVT_ERROR, ex);
                 throw ex;
@@ -151,11 +158,10 @@ namespace iQQ.Net.WebQQCore.Im.Action
 
         public virtual bool IsCancelable() => false;
 
-        private bool DoRetryIt(QQException ex)
+        private bool DoRetryIt(QQException ex, int maxTimes)
         {
             if (ActionFuture.IsCanceled) return true;
-            if (++_retryTimes > QQConstants.MAX_RETRY_TIMES) return false;
-
+            if (++_retryTimes > maxTimes) return false;
             NotifyActionEvent(QQActionEventType.EVT_RETRY, ex);
             Thread.Sleep(1000);
             Context.PushActor(new HttpActor(HttpActorType.BUILD_REQUEST, Context, this));

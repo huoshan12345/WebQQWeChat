@@ -57,7 +57,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
              */
 
             var qqpwd = QQEncryptor.EncryptQQ(_uin, _password, _verifyCode);
-            // MyLogger.Default.Info($"qq信息加密后是{qqpwd}");
+            // DefaultLogger.Info($"qq信息加密后是{qqpwd}");
 
             //尝试登录，准备传递的参数值
             var req = CreateHttpRequest(HttpConstants.Get, QQConstants.URL_UI_LOGIN);
@@ -96,7 +96,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
                 ?? httpService.GetCookie("verifysession", QQConstants.URL_CHECK_VERIFY);// 验证session在获取验证码阶段得到的。
 
             if (ptvfsession != null) req.AddGetValue("pt_verifysession_v1", ptvfsession.Value);
-            else MyLogger.Default.Info("pt_verifysession_v1为空");
+            else DefaultLogger.Info("pt_verifysession_v1为空");
 
             req.AddHeader("Referer", QQConstants.REFFER);
             return req;

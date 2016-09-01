@@ -60,7 +60,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
                     }
                     catch (FormatException e)
                     {
-                        MyLogger.Default.Warn($"日期转换失败：{obj["birthday"]}", e);
+                        DefaultLogger.Warn($"日期转换失败：{obj["birthday"]}", e);
                         user.Birthday = null;
                     }
                     user.Occupation = obj["occupation"].ToString();
@@ -97,7 +97,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
             }
             catch (Exception e)
             {
-                MyLogger.Default.Warn(e.Message, e);
+                DefaultLogger.Warn(e.Message, e);
             }
             NotifyActionEvent(QQActionEventType.EVT_OK, user);
         }

@@ -17,7 +17,11 @@ namespace iQQ.Net.WebQQCore.Im
         WRONG_CAPTCHA,          // 验证码错误
         NEED_CAPTCHA,           // 需要验证
         IO_ERROR,               // 网络错误
-        IO_TIMEOUT,             // 网络超时
+
+        /// <summary>
+        /// 网络超时
+        /// </summary>
+        IO_TIMEOUT,            
         USER_NOT_FOUND,         // 用户没有找到
         WRONG_ANSWER,           // 回答验证问题错误
         USER_REFUSE_ADD,        // 用户拒绝添加好友
@@ -121,10 +125,5 @@ namespace iQQ.Net.WebQQCore.Im
         public override string StackTrace => base.StackTrace ?? InnerException?.StackTrace ?? string.Empty;
 
         public override string Message => base.Message.RegexReplace(@"[\r\n]+", string.Empty);
-
-        public override string ToString()
-        {
-            return Message;
-        }
     }
 }

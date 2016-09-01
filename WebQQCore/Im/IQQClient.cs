@@ -309,21 +309,9 @@ namespace iQQ.Net.WebQQCore.Im
         /// 开始轮询消息，发送心跳包
         /// </summary>
         void BeginPollMsg();
-        /**
-         * <p>setHttpUserAgent.</p>
-         *
-         * @param userAgent a {@link java.lang.String} object.
-         */
+
         void SetHttpUserAgent(string userAgent);
-        /**
-         * <p>SetHttpProxy.</p>
-         *
-         * @param proxyType a {@link iqq.im.service.IHttpService.ProxyType} object.
-         * @param proxyHost a {@link java.lang.String} object.
-         * @param proxyPort a int.
-         * @param proxyAuthUser a {@link java.lang.String} object.
-         * @param proxyAuthPassword a {@link java.lang.String} object.
-         */
+
         void SetHttpProxy(ProxyType proxyType, string proxyHost, int proxyPort, string proxyAuthUser, string proxyAuthPassword);
         
         /// <summary>

@@ -9,7 +9,7 @@ namespace iQQ.Net.WebQQCore.Im.Core
     /// </summary>
     public interface IQQContext
     {
-        void PushActor(QQActor actor);
+        void PushActor(IQQActor actor);
 
         void FireNotify(QQNotifyEvent qqNotifyEvent);
 

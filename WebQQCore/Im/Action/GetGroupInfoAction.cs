@@ -36,7 +36,9 @@ namespace iQQ.Net.WebQQCore.Im.Action
 
         public override void OnHttpStatusOK(QQHttpResponse response)
         {
-            var json = JObject.Parse(response.GetResponseString());
+            var str = response.GetResponseString();
+            var json = JObject.Parse(str);
+
             if (json["retcode"].ToString() == "0")
             {
                 json = json["result"].ToObject<JObject>();
@@ -62,9 +64,9 @@ namespace iQQ.Net.WebQQCore.Im.Action
 
                 //result/minfo
                 var minfos = json["minfo"].ToObject<JArray>();
-                for (var i = 0; i < minfos.Count; i++)
+                foreach (var token in minfos)
                 {
-                    var minfo = minfos[i].ToObject<JObject>();
+                    var minfo = token.ToObject<JObject>();
                     var member = _group.GetMemberByUin(minfo["uin"].ToObject<int>());
                     member.Nickname = minfo["nick"].ToString();
                     member.Province = minfo["province"].ToString();
@@ -113,7 +115,8 @@ namespace iQQ.Net.WebQQCore.Im.Action
             }
             else
             {
-                NotifyActionEvent(QQActionEventType.EVT_ERROR, QQErrorCode.UNEXPECTED_RESPONSE);
+                // NotifyActionEvent(QQActionEventType.EVT_ERROR, QQErrorCode.UNEXPECTED_RESPONSE);
+                throw new QQException(QQErrorCode.UNEXPECTED_RESPONSE, str);
             }
         }
 

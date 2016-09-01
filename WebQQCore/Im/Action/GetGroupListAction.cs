@@ -39,10 +39,31 @@ namespace iQQ.Net.WebQQCore.Im.Action
 
         public override void OnHttpStatusOK(QQHttpResponse response)
         {
-            // {"retcode":0,"result":{"gmasklist":[{"gid":1000,"mask":0},{"gid":1638195794,"mask":0},{"gid":321105219,"mask":0}],
-            // "gnamelist":[{"flag":16777217,"name":"iQQ","gid":1638195794,"code":2357062609},{"flag":1048577,"name":"iQQ核心开发区","gid":321105219,"code":640215156}],"gmarklist":[]}}
+            /*
+                {
+                    "retcode": 0,
+                    "result": {
+                        "gmasklist": [
+                            {
+                                "gid": 1000,
+                                "mask": "3"
+                            }
+                        ],
+                        "gnamelist": [
+                            {
+                                "flag": 184550417,
+                                "name": "iQQ",
+                                "gid": 2920037469,
+                                "code": 1478013841
+                            },
+                        ],
+                        "gmarklist": []
+                    }
+                }
+            */
             var store = Context.Store;
-            var json = JObject.Parse(response.GetResponseString());
+            var str = response.GetResponseString();
+            var json = JObject.Parse(str);
 
             var retcode = json["retcode"].ToString();
             if (retcode == "0")
@@ -57,12 +78,14 @@ namespace iQQ.Net.WebQQCore.Im.Action
                 foreach (var t in groupJsonList)
                 {
                     var groupJson = t.ToObject<JObject>();
-                    var group = new QQGroup();
-                    group.Gin = groupJson["gid"].ToObject<long>();
-                    group.Gid = group.Gin;
-                    group.Code = groupJson["code"].ToObject<long>();
-                    group.Flag = groupJson["flag"].ToObject<long>();
-                    group.Name = groupJson["name"].ToString();
+                    var group = new QQGroup()
+                    {
+                        Gid = groupJson["gid"].ToObject<long>(),
+                        Code = groupJson["code"].ToObject<long>(),
+                        Flag = groupJson["flag"].ToObject<long>(),
+                        Name = groupJson["name"].ToString(),
+                    };
+                    group.Gin = group.Gid;
                     //添加到Store
                     store.AddGroup(group);
                 }
@@ -86,7 +109,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
             {
                 // LOG.warn("unknown retcode: " + retcode);
                 // NotifyActionEvent(QQActionEventType.EVT_ERROR, null);
-                throw new QQException(QQErrorCode.INVALID_RESPONSE, $"unknown retcode: {retcode}");
+                throw new QQException(QQErrorCode.INVALID_RESPONSE, str);
             }
 
         }

@@ -6,7 +6,7 @@ using iQQ.Net.WebQQCore.Util;
 
 namespace iQQ.Net.WebQQCore.Im.Event.Future
 {
-    public abstract class AbstractActionFuture : IQQActionFuture, IQQActionListener
+    public abstract class AbstractActionFuture : IQQActionFuture
     {
         private readonly BlockingCollection<QQActionEvent> _eventQueue;
         private volatile bool _isCanceled;
@@ -16,15 +16,14 @@ namespace iQQ.Net.WebQQCore.Im.Event.Future
    
         protected AbstractActionFuture(QQActionEventHandler proxyListener)
         {
-            this._hasEvent = true;
-            this._eventQueue = new BlockingCollection<QQActionEvent>();
-            this._proxyListener = proxyListener;
+            _hasEvent = true;
+            _eventQueue = new BlockingCollection<QQActionEvent>();
+            _proxyListener = proxyListener;
             Listener = (sender, args) =>
             {
                 _proxyListener?.Invoke(sender, args);
                 _eventQueue.Add(args);         // 没问题
             };
-            OnActionEvent += Listener;
         }
 
         public bool IsCanceled
@@ -206,13 +205,11 @@ namespace iQQ.Net.WebQQCore.Im.Event.Future
 
         public void NotifyActionEvent(QQActionEventType type, object target)
         {
-            OnActionEvent?.Invoke(this, new QQActionEvent(type, target));
+            Listener?.Invoke(this, new QQActionEvent(type, target));
         }
 
         public abstract bool IsCancelable();
 
         public abstract void Cancel();
-
-        public event QQActionEventHandler OnActionEvent;
     }
 }

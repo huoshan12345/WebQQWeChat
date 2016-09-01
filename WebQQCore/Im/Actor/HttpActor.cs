@@ -19,7 +19,7 @@ namespace iQQ.Net.WebQQCore.Im.Actor
         ON_HTTP_READ
     }
 
-    public class HttpActor : QQActor
+    public class HttpActor : IQQActor
     {
         private readonly HttpActorType _type;
         private readonly IQQContext _context;
@@ -71,7 +71,8 @@ namespace iQQ.Net.WebQQCore.Im.Actor
             catch (Exception ex)
             {
                 var qqEx = ex as QQException ?? new QQException(ex);
-                _action.NotifyActionEvent(QQActionEventType.EVT_ERROR, qqEx);
+                // _action.NotifyActionEvent(QQActionEventType.EVT_ERROR, qqEx);
+                _action.OnHttpError(qqEx);
             }
         }
 

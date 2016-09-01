@@ -40,15 +40,16 @@ namespace iQQ.Net.WebQQCore.Im.Action
         public override void OnHttpStatusOK(QQHttpResponse response)
         {
             // ({msg : "new successful",rbkey : "1391255617",status : "false"})
-            var ct = response.GetResponseString();
+            var str = response.GetResponseString();
             // LOG.info("delete email: " + ct);
-            if (ct.Contains("success"))
+            if (str.Contains("success"))
             {
-                NotifyActionEvent(QQActionEventType.EVT_OK, ct);
+                NotifyActionEvent(QQActionEventType.EVT_OK, str);
             }
             else
             {
-                NotifyActionEvent(QQActionEventType.EVT_ERROR, ct);
+                // NotifyActionEvent(QQActionEventType.EVT_ERROR, str);
+                throw new QQException(QQErrorCode.UNEXPECTED_RESPONSE, str);
             }
         }
 

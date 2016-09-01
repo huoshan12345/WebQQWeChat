@@ -77,8 +77,7 @@ namespace iQQ.Net.WebQQCore.Im.Module
             };
             login.CheckQRCode(handler);
         }
-
-
+        
         public IQQActionFuture Login(QQActionEventHandler listener)
         {
             var future = new ProcActionFuture(listener, true);
@@ -248,12 +247,12 @@ namespace iQQ.Net.WebQQCore.Im.Module
             Context.Account.Status = status;
             Context.Session.State = QQSessionState.LOGINING;
             var login = Context.GetModule<LoginModule>(QQModuleType.LOGIN);
-            MyLogger.Default.Info("iqq client Relogin...");
+            DefaultLogger.Info("iqq client Relogin...");
             var future = login.ChannelLogin(status, (sender, Event) =>
             {
                 if (Event.Type == QQActionEventType.EVT_ERROR)
                 {
-                    MyLogger.Default.Info("iqq client ReloginChannel fail!!! use Relogin.");
+                    DefaultLogger.Info("iqq client ReloginChannel fail!!! use Relogin.");
                     Login(listener);
                 }
                 else
@@ -266,7 +265,7 @@ namespace iQQ.Net.WebQQCore.Im.Module
 
         public void Relogin()
         {
-            MyLogger.Default.Info("Relogin...");
+            DefaultLogger.Info("Relogin...");
             var session = Context.Session;
             if (session.State == QQSessionState.LOGINING) return;
             // 登录失效，重新登录
@@ -289,7 +288,6 @@ namespace iQQ.Net.WebQQCore.Im.Module
         /// </summary>
         public void DoPollMsg()
         {
-            MyLogger.Default.Info("polling...");
             var login = Context.GetModule<LoginModule>(QQModuleType.LOGIN);
             login.PollMsg((sender, Event) =>
             {
@@ -317,7 +315,6 @@ namespace iQQ.Net.WebQQCore.Im.Module
                 }
                 else if (Event.Type == QQActionEventType.EVT_ERROR)
                 {
-                    //因为自带了错误重试机制，如果出现了错误回调，表明已经超时多次均失败，这里直接返回网络错误的异常
                     var ex = (QQException)Event.Target;
                     var code = ex.ErrorCode;
                     if (code == QQErrorCode.IO_TIMEOUT)
@@ -326,16 +323,16 @@ namespace iQQ.Net.WebQQCore.Im.Module
                         return; // 心跳超时是正常的
                     }
 
+                    //因为自带了错误重试机制，如果出现了错误回调，表明已经超时多次均失败，这里直接返回网络错误的异常
                     var session = Context.Session;
                     var account = Context.Account;
                     session.State = QQSessionState.OFFLINE;
-
 
                     if (code == QQErrorCode.INVALID_LOGIN_AUTH)
                     {
                         Relogin();
                     }
-                    else if (code == QQErrorCode.IO_ERROR || code == QQErrorCode.IO_TIMEOUT)
+                    else if (code == QQErrorCode.IO_ERROR || code == QQErrorCode.IO_TIMEOUT || code == QQErrorCode.INVALID_RESPONSE)
                     {
                         account.Status = QQStatus.OFFLINE;
                         //粗线了IO异常，直接报网络错误
@@ -343,7 +340,7 @@ namespace iQQ.Net.WebQQCore.Im.Module
                     }
                     else
                     {
-                        MyLogger.Default.Info("poll msg unexpected error, ignore it ...", ex);
+                        DefaultLogger.Info("poll msg unexpected error, ignore it ...", ex);
                         Relogin();
                         DoPollMsg();
                         return;
@@ -352,7 +349,7 @@ namespace iQQ.Net.WebQQCore.Im.Module
                 else if (Event.Type == QQActionEventType.EVT_RETRY)
                 {
                     // System.err.println("Poll Retry:" + this);
-                    MyLogger.Default.Info("poll msg error, retrying....", (QQException)Event.Target);
+                    DefaultLogger.Info("poll msg error, retrying....", (QQException)Event.Target);
                 }
             });
         }

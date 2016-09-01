@@ -216,7 +216,7 @@ namespace iQQ.Net.WebQQCore.Im.Bean
                 catch (Exception e)
                 {
                     Birthday = null;
-                    MyLogger.Default.Warn(e.Message, e);
+                    DefaultLogger.Warn(e.Message, e);
                 }
             }
         }

@@ -63,7 +63,8 @@
     <Compile Include="Im\Action\GetVFWebqq.cs" />
     <Compile Include="Im\Action\GetWebqq.cs" />
     <Compile Include="QRcodeLoginTest.cs" />
-    <Compile Include="Util\EnumExtensions.cs" />
+    <Compile Include="Util\DefaultLogger.cs" />
+    <Compile Include="Util\Extensions\EnumExtensions.cs" />
     <Compile Include="Util\Extensions\CollectionExtensions.cs" />
     <Compile Include="Util\Extensions\DictionaryExtensions.cs" />
     <Compile Include="Util\Extensions\HttpExtensions.cs" />

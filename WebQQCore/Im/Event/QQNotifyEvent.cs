@@ -21,8 +21,19 @@ namespace iQQ.Net.WebQQCore.Im.Event
         BUDDY_INPUT,
         /** 窗口震动 */
         SHAKE_WINDOW,
-        /** 聊天消息，包括好友，群，临时会话，讨论组消息 */
+
+
+
+        /// <summary>
+        /// 聊天消息，包括好友，临时会话
+        /// </summary>
         CHAT_MSG,
+
+        /// <summary>
+        /// 群，讨论组消息
+        /// </summary>
+        GROUP_MSG,
+
         /** 好友通知，如其他人请求添加好友，添加其他用户请求通过或者拒绝 */
         BUDDY_NOTIFY,
         /** 群通知，如管理员通过或拒绝了添加群请求，群成员退出等 */

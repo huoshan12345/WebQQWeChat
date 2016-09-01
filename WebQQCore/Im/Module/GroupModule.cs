@@ -16,37 +16,37 @@ namespace iQQ.Net.WebQQCore.Im.Module
             return QQModuleType.GROUP;
         }
 
-        public IQQActionFuture GetGroupList(QQActionEventHandler listener)
+        public IQQActionFuture GetGroupList(QQActionEventHandler listener = null)
         {
             return PushHttpAction(new GetGroupListAction(Context, listener));
         }
 
-        public IQQActionFuture UpdateGroupMessageFilter(QQActionEventHandler listener)
+        public IQQActionFuture UpdateGroupMessageFilter(QQActionEventHandler listener = null)
         {
             return PushHttpAction(new UpdateGroupMessageFilterAction(Context, listener));
         }
 
-        public IQQActionFuture GetGroupFace(QQGroup group, QQActionEventHandler listener)
+        public IQQActionFuture GetGroupFace(QQGroup group, QQActionEventHandler listener = null)
         {
             return PushHttpAction(new GetGroupFaceAction(Context, listener, group));
         }
 
-        public IQQActionFuture GetGroupInfo(QQGroup group, QQActionEventHandler listener)
+        public IQQActionFuture GetGroupInfo(QQGroup group, QQActionEventHandler listener = null)
         {
             return PushHttpAction(new GetGroupInfoAction(Context, listener, group));
         }
 
-        public IQQActionFuture GetGroupGid(QQGroup group, QQActionEventHandler listener)
+        public IQQActionFuture GetGroupGid(QQGroup group, QQActionEventHandler listener = null)
         {
             return PushHttpAction(new GetGroupAccoutAction(Context, listener, group));
         }
 
-        public IQQActionFuture GetMemberStatus(QQGroup group, QQActionEventHandler listener)
+        public IQQActionFuture GetMemberStatus(QQGroup group, QQActionEventHandler listener = null)
         {
             return PushHttpAction(new GetGroupMemberStatusAction(Context, listener, group));
         }
 
-        public IQQActionFuture SearchGroup(QQGroupSearchList resultList, QQActionEventHandler listener)
+        public IQQActionFuture SearchGroup(QQGroupSearchList resultList, QQActionEventHandler listener = null)
         {
             return PushHttpAction(new SearchGroupInfoAction(Context, listener, resultList));
         }

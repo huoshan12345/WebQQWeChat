@@ -10,7 +10,7 @@ namespace iQQ.Net.WebQQCore.Im.Actor
     }
 
 
-    public interface QQActor
+    public interface IQQActor
     {
         void Execute();
 

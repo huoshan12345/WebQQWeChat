@@ -15,7 +15,7 @@ namespace iQQ.Net.WebQQCore.Im.Service
 {
     public class HttpService : AbstractService, IHttpService
     {
-        private static readonly string[] IgnoreHeaderType = { HttpConstants.UserAgent , HttpConstants.Referer, HttpConstants.ContentType };
+        private static readonly string[] _ignoreHeaderType = { HttpConstants.UserAgent , HttpConstants.Referer, HttpConstants.ContentType };
 
         private CookieContainer _cookieContainer;
 
@@ -57,7 +57,7 @@ namespace iQQ.Net.WebQQCore.Im.Service
 
             foreach (var header in request.HeaderMap)
             {
-                if(IgnoreHeaderType.Contains(header.Key)) continue;
+                if(_ignoreHeaderType.Contains(header.Key)) continue;
                 httpItem.Header.Add(header.Key, header.Value);
             }
 
@@ -97,6 +97,13 @@ namespace iQQ.Net.WebQQCore.Im.Service
             {
 
                 var httpItem = GetHttpRequest(request);
+#if DEBUG
+                if (request.RawUrl == QQConstants.URL_POLL_MSG)
+                {
+                    var str = httpItem.GetRequestHeader();
+                    var count = str.Length;
+                }
+#endif
                 var result = new HttpHelper().GetHtml(httpItem);
 
                 if (result.HasError) throw result.Exception; // 会到下面的catch中
@@ -124,20 +131,18 @@ namespace iQQ.Net.WebQQCore.Im.Service
                 }
                 else
                 {
-                    if (listener != null)
-                    {
-                        listener.OnHttpHeader(response);
-                        listener.OnHttpRead(0, response.GetContentLength());
-                        listener.OnHttpFinish(response);
-                    }
+                    listener.OnHttpHeader(response);
+                    listener.OnHttpRead(0, response.GetContentLength());
+                    listener.OnHttpFinish(response);
                     return response;
                 }
             }
             catch (Exception ex)
             {
-                var qqEx = new QQException(ex);
-                listener?.OnHttpError(ex);
-                throw qqEx;
+                var qqEx = ex as QQException ?? new QQException(ex);
+                // throw qqEx;              // 不抛出，而是交给listener处理
+                listener.OnHttpError(qqEx); // 这个listener负责推送一个类型为ON_HTTP_ERROR的actor到线程池，这个actor会执行action的OnHttpError方法
+                return null;
             }
         }
 
@@ -158,7 +163,7 @@ namespace iQQ.Net.WebQQCore.Im.Service
             QQHttpCookie qqHttpCookie = null;
             var cookie = _cookieContainer.GetCookies(new Uri(url))[name] ?? _cookieContainer.GetCookies(name).FirstOrDefault();
             if (cookie != null) qqHttpCookie = new QQHttpCookie(cookie);
-            else MyLogger.Default.Error($"获取cookie失败：{name}");
+            else DefaultLogger.Error($"获取cookie失败：{name}");
             return qqHttpCookie;
         }
 
