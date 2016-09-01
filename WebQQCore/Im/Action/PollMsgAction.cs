@@ -192,7 +192,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
             switch (retcode)
             {
                 case 0:
-                { 
+                {
                     //有可能为  {"retcode":0,"result":"ok"}
                     var result = json["result"] as JArray;
                     if (result != null)
@@ -225,19 +225,24 @@ namespace iQQ.Net.WebQQCore.Im.Action
                 case 121:
                 case 120:
                 case 100:
-                // 121,120 : ReLinkFailure		100 : NotRelogin
-                // 服务器需求重新认证
-                // {"retcode":121,"t":"0"}
-                /*			LOG.info("**** NEED_REAUTH retcode: " + retcode + " ****");*/
-                DefaultLogger.Info($"**** NEED_REAUTH retcode: {retcode} ****");
-                Context.Session.State = QQSessionState.OFFLINE;
-                var ex = new QQException(QQErrorCode.INVALID_LOGIN_AUTH);
-                //NotifyActionEvent(QQActionEventType.EVT_ERROR, ex);
-                //return;
-                throw ex;
+                {
+                    // 121,120 : ReLinkFailure		100 : NotRelogin
+                    // 服务器需求重新认证
+                    // {"retcode":121,"t":"0"}
+                    /*			LOG.info("**** NEED_REAUTH retcode: " + retcode + " ****");*/
+                    DefaultLogger.Warn($"**** NEED_REAUTH retcode: {retcode} ****");
+                    Context.Session.State = QQSessionState.OFFLINE;
+                    var ex = new QQException(QQErrorCode.INVALID_LOGIN_AUTH);
+                    //NotifyActionEvent(QQActionEventType.EVT_ERROR, ex);
+                    //return;
+                    throw ex;
+                }
 
-                case 103:
-                throw new QQException(QQErrorCode.INVALID_RESPONSE, str);
+                case 103: // 未知，暂且重新登录
+                {
+                    Context.Session.State = QQSessionState.OFFLINE;
+                    throw new QQException(QQErrorCode.INVALID_LOGIN_AUTH, str);
+                }
 
                 //notifyEvents.Add(new QQNotifyEvent(QQNotifyEventType.NEED_REAUTH, null));
                 default:
@@ -284,28 +289,52 @@ namespace iQQ.Net.WebQQCore.Im.Action
         /// <returns></returns>
         private QQNotifyEvent ProcessBuddyMsg(JObject pollData)
         {
+            /*
+                {
+                    "content": [
+                        [
+                            "font",
+                            {
+                                "color": "000000",
+                                "name": "微软雅黑",
+                                "size": 10,
+                                "style": [0, 0, 0]
+                            }
+                        ],
+                        "你好！"
+                    ],
+                    "from_uin": 1000693217,
+                    "msg_id": 25426,
+                    "msg_type": 0,
+                    "time": 1472754511,
+                    "to_uin": 89009143
+                }
+             */
             try
             {
                 var store = Context.Store;
                 var fromUin = pollData["from_uin"].ToObject<long>();
+                var ticks = pollData["time"].ToObject<long>() * 1000;
                 var msg = new QQMsg
                 {
                     Id = pollData["msg_id"].ToObject<long>(),
-                    Id2 = pollData["msg_id2"]?.ToObject<long>() ?? 0
+                    Type = QQMsgType.BUDDY_MSG,
+                    To = Context.Account,
+                    From = store.GetBuddyByUin(fromUin),
+                    Date = ticks > DateTime.MaxValue.Ticks ? DateTime.Now : new DateTime(ticks),
+                    // Id2 = pollData["msg_id2"]?.ToObject<long>() ?? 0
                 };
                 msg.ParseContentList(JsonConvert.SerializeObject(pollData["content"]));
-                msg.Type = QQMsgType.BUDDY_MSG;
-                msg.To = Context.Account;
-                msg.From = store.GetBuddyByUin(fromUin);
-                var ticks = pollData["time"].ToObject<long>() * 1000;
-                msg.Date = ticks > DateTime.MaxValue.Ticks ? DateTime.Now : new DateTime(ticks);
                 if (msg.From == null)
                 {
-                    var member = new QQBuddy() { Uin = fromUin };
+                    var member = new QQBuddy()
+                    {
+                        Uin = fromUin
+                    };
                     store.AddBuddy(member);
                     // 获取用户信息
                     var userModule = Context.GetModule<UserModule>(QQModuleType.USER);
-                    userModule.GetUserInfo(member, null);
+                    userModule.GetUserInfo(member);
                     msg.From = member;
                 }
                 return new QQNotifyEvent(QQNotifyEventType.ChatMsg, msg);

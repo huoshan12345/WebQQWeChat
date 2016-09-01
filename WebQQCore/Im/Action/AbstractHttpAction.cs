@@ -95,14 +95,14 @@ namespace iQQ.Net.WebQQCore.Im.Action
                 case QQActionEventType.EvtError:
                 {
                     var ex = (QQException)target;
-                    DefaultLogger.Fatal($"{GetType().Name} [type={type.GetFullDescription()}, errorcode={ex.ErrorCode}, exception={ex.Message}]{Environment.NewLine}{ex.StackTrace}", ex);
+                    DefaultLogger.Error($"{GetType().Name} [type={type.GetFullDescription()}, errorcode={ex.ErrorCode}, exception={ex.Message}]{Environment.NewLine}{ex.StackTrace}", ex);
                     break;
                 }
 
                 case QQActionEventType.EvtRetry:
                 {
                     var ex = (QQException)target;
-                    DefaultLogger.Error($"{GetType().Name} [type={type.GetFullDescription()}, 重试次数={_retryTimes}, target={ex.Message}]");
+                    DefaultLogger.Warn($"{GetType().Name} [type={type.GetFullDescription()}, 重试次数={_retryTimes}, target={ex.Message}]");
                     break;
                 }
 

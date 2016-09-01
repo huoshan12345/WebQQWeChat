@@ -15,37 +15,37 @@ namespace iQQ.Net.WebQQCore.Im.Module
             return QQModuleType.USER;
         }
 
-        public IQQActionFuture GetUserInfo(QQUser user, QQActionEventHandler listener)
+        public IQQActionFuture GetUserInfo(QQUser user, QQActionEventHandler listener = null)
         {
             return PushHttpAction(new GetFriendInfoAction(Context, listener, user));
         }
 
-        public IQQActionFuture GetUserFace(QQUser user, QQActionEventHandler listener)
+        public IQQActionFuture GetUserFace(QQUser user, QQActionEventHandler listener = null)
         {
             return PushHttpAction(new GetFriendFaceAction(Context, listener, user));
         }
         
-        public IQQActionFuture GetUserAccount(QQUser user, QQActionEventHandler listener)
+        public IQQActionFuture GetUserAccount(QQUser user, QQActionEventHandler listener = null)
         {
             return PushHttpAction(new GetFriendAccoutAction(Context, listener, user));
         }
 
-        public IQQActionFuture GetUserSign(QQUser user, QQActionEventHandler listener)
+        public IQQActionFuture GetUserSign(QQUser user, QQActionEventHandler listener = null)
         {
             return PushHttpAction(new GetFriendSignAction(Context, listener, user));
         }
 
-        public IQQActionFuture GetUserLevel(QQUser user, QQActionEventHandler listener)
+        public IQQActionFuture GetUserLevel(QQUser user, QQActionEventHandler listener = null)
         {
             return PushHttpAction(new GetUserLevelAction(Context, listener, user));
         }
 
-        public IQQActionFuture ChangeStatus(QQStatus status, QQActionEventHandler listener)
+        public IQQActionFuture ChangeStatus(QQStatus status, QQActionEventHandler listener = null)
         {
             return PushHttpAction(new ChangeStatusAction(Context, listener, status));
         }
 
-        public IQQActionFuture GetStrangerInfo(QQUser user, QQActionEventHandler listener)
+        public IQQActionFuture GetStrangerInfo(QQUser user, QQActionEventHandler listener = null)
         {
             return PushHttpAction(new GetStrangerInfoAction(Context, listener, user));
         }
