@@ -53,7 +53,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
             {
                 throw new QQException(QQErrorCode.IO_ERROR, e);
             }
-            NotifyActionEvent(QQActionEventType.EVT_OK, _group);
+            NotifyActionEvent(QQActionEventType.EvtOK, _group);
         }
     }
 }

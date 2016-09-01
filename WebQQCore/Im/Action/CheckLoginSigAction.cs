@@ -23,7 +23,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
         {
             // LOG.info("checkSig result:" + response.GetResponseString());
             // LOG.info("Location:" + response.getHeader("Location"));
-            NotifyActionEvent(QQActionEventType.EVT_OK, null);
+            NotifyActionEvent(QQActionEventType.EvtOK, null);
         }
 
         public override QQHttpRequest OnBuildRequest()

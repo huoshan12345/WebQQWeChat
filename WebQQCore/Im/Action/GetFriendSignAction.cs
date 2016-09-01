@@ -48,7 +48,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
                 _buddy.Sign = obj["lnick"].ToString();
             }
 
-            NotifyActionEvent(QQActionEventType.EVT_OK, _buddy);
+            NotifyActionEvent(QQActionEventType.EvtOK, _buddy);
         }
 
     }

@@ -30,17 +30,17 @@ namespace iQQ.Net.WebQQCore.Im.Module
             // 步骤四
             QQActionEventHandler wpkeyListener = (sender, Event) =>
             {
-                if (Event.Type == QQActionEventType.EVT_OK)
+                if (Event.Type == QQActionEventType.EvtOK)
                 {
                     ErrorCount = 0;
                     // 跳到轮询
                     LoopPoll(Event.Target.ToString(), 0);
                 }
-                else if (Event.Type == QQActionEventType.EVT_ERROR)
+                else if (Event.Type == QQActionEventType.EvtError)
                 {
                     while (ErrorCount < QQConstants.MAX_POLL_ERR_CNT)
                     {
-                        if (GetPT4Auth(null).WaitFinalEvent(3000).Type != QQActionEventType.EVT_OK)
+                        if (GetPT4Auth(null).WaitFinalEvent(3000).Type != QQActionEventType.EvtOK)
                         {
                             ErrorCount++;
                         }
@@ -57,7 +57,7 @@ namespace iQQ.Net.WebQQCore.Im.Module
             // 步骤三
             QQActionEventHandler loginListener = (sender, Event) =>
             {
-                if (Event.Type == QQActionEventType.EVT_OK)
+                if (Event.Type == QQActionEventType.EvtOK)
                 {
                     ErrorCount = 0;
                     // 跳到步骤四
@@ -65,11 +65,11 @@ namespace iQQ.Net.WebQQCore.Im.Module
                     GetWPKey(key, wpkeyListener);
                     Context.Session.EmailAuthKey = key;
                 }
-                else if (Event.Type == QQActionEventType.EVT_ERROR)
+                else if (Event.Type == QQActionEventType.EvtError)
                 {
                     while (ErrorCount < QQConstants.MAX_POLL_ERR_CNT)
                     {
-                        if (GetPT4Auth(null).WaitFinalEvent(3000).Type != QQActionEventType.EVT_OK)
+                        if (GetPT4Auth(null).WaitFinalEvent(3000).Type != QQActionEventType.EvtOK)
                         {
                             ErrorCount++;
                         }
@@ -88,17 +88,17 @@ namespace iQQ.Net.WebQQCore.Im.Module
             // 步骤二
             QQActionEventHandler checkListener = (sender, Event) =>
             {
-                if (Event.Type == QQActionEventType.EVT_OK)
+                if (Event.Type == QQActionEventType.EvtOK)
                 {
                     ErrorCount = 0;
                     // 跳到步骤三
                     Login(loginListener);
                 }
-                else if (Event.Type == QQActionEventType.EVT_ERROR)
+                else if (Event.Type == QQActionEventType.EvtError)
                 {
                     while (ErrorCount < QQConstants.MAX_POLL_ERR_CNT)
                     {
-                        if (GetPT4Auth(null).WaitFinalEvent(3000).Type != QQActionEventType.EVT_OK)
+                        if (GetPT4Auth(null).WaitFinalEvent(3000).Type != QQActionEventType.EvtOK)
                         {
                             ErrorCount++;
                         }
@@ -115,17 +115,17 @@ namespace iQQ.Net.WebQQCore.Im.Module
             // 步骤一
             QQActionEventHandler pt4Listener = (sender, Event) =>
             {
-                if (Event.Type == QQActionEventType.EVT_OK)
+                if (Event.Type == QQActionEventType.EvtOK)
                 {
                     ErrorCount = 0;
                     // 跳到步骤二
                     Check(Event.Target.ToString(), checkListener);
                 }
-                else if (Event.Type == QQActionEventType.EVT_ERROR)
+                else if (Event.Type == QQActionEventType.EvtError)
                 {
                     while (ErrorCount < QQConstants.MAX_POLL_ERR_CNT)
                     {
-                        if (GetPT4Auth(null).WaitFinalEvent(3000).Type != QQActionEventType.EVT_OK)
+                        if (GetPT4Auth(null).WaitFinalEvent(3000).Type != QQActionEventType.EvtOK)
                         {
                             var ex = (QQException)Event.Target;
                             if (ex.ErrorCode == QQErrorCode.INVALID_LOGIN_AUTH)
@@ -167,7 +167,7 @@ namespace iQQ.Net.WebQQCore.Im.Module
         {
             Poll(sid, t, (sender, Event) =>
             {
-                if (Event.Type == QQActionEventType.EVT_OK)
+                if (Event.Type == QQActionEventType.EvtOK)
                 {
                     ErrorCount = 0;
                     if (Event.Target == null)
@@ -189,7 +189,7 @@ namespace iQQ.Net.WebQQCore.Im.Module
                         // mark(false, mailList, null);
                     }
                 }
-                else if (Event.Type == QQActionEventType.EVT_ERROR)
+                else if (Event.Type == QQActionEventType.EvtError)
                 {
                     var ex = (QQException)Event.Target;
                     if (ex.ErrorCode == QQErrorCode.INVALID_LOGIN_AUTH)

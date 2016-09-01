@@ -48,7 +48,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
 
             }
 
-            NotifyActionEvent(QQActionEventType.EVT_OK, store.GetOnlineBuddyList());
+            NotifyActionEvent(QQActionEventType.EvtOK, store.GetOnlineBuddyList());
         }
 
     }

@@ -93,8 +93,8 @@ namespace iQQ.Net.BatchHangQQ
             {
                 switch (Event.Type)
                 {
-                    case QQActionEventType.EVT_CANCELED:
-                    case QQActionEventType.EVT_ERROR:
+                    case QQActionEventType.EvtCanceled:
+                    case QQActionEventType.EvtError:
                         ShowMessage(Event.ToString());
                         break;
                 }
@@ -109,13 +109,13 @@ namespace iQQ.Net.BatchHangQQ
                 {
                     switch (Event.Type)
                     {
-                        case QQNotifyEventType.BUDDY_INPUT:
-                        case QQNotifyEventType.BUDDY_STATUS_CHANGE:
+                        case QQNotifyEventType.BuddyInput:
+                        case QQNotifyEventType.BuddyStatusChange:
                             {
                                 break;
                             }
 
-                        case QQNotifyEventType.CHAT_MSG:
+                        case QQNotifyEventType.ChatMsg:
                             {
                                 var msg = Event.Target as QQMsg;
                                 switch (msg.Type)
@@ -145,7 +145,7 @@ namespace iQQ.Net.BatchHangQQ
                                                 {
                                                     var replyEvent = client.GetRobotReply(msg,
                                                         RobotType.Tuling).WaitFinalEvent(10000);
-                                                    text = replyEvent.Type == QQActionEventType.EVT_OK ? new TextItem(replyEvent.Target as string)
+                                                    text = replyEvent.Type == QQActionEventType.EvtOK ? new TextItem(replyEvent.Target as string)
                                                     : new TextItem("这是自动回复");
                                                 }
                                                 else
@@ -178,11 +178,11 @@ namespace iQQ.Net.BatchHangQQ
                                 break;
                             }
 
-                        case QQNotifyEventType.KICK_OFFLINE:
+                        case QQNotifyEventType.KickOffline:
                             ShowMessage(client.Account.QQ + "：被踢下线-" + (String)Event.Target);
                             break;
 
-                        case QQNotifyEventType.CAPACHA_VERIFY:
+                        case QQNotifyEventType.CapachaVerify:
                             {
                                 var verify = (ImageVerify)Event.Target;
                                 this.Invoke(new MethodInvoker(() =>
@@ -204,7 +204,7 @@ namespace iQQ.Net.BatchHangQQ
                                 break;
                             }
 
-                        case QQNotifyEventType.SHAKE_WINDOW:
+                        case QQNotifyEventType.ShakeWindow:
                             {
                                 var buddy = Event.Target as QQBuddy;
                                 if (buddy?.QQ == default(long))
@@ -219,8 +219,8 @@ namespace iQQ.Net.BatchHangQQ
                                 break;
                             }
 
-                        case QQNotifyEventType.NET_ERROR:
-                        case QQNotifyEventType.UNKNOWN_ERROR:
+                        case QQNotifyEventType.NetError:
+                        case QQNotifyEventType.UnknownError:
                             ShowMessage(client.Account.QQ + "：出错-" + Event.Target.ToString());
                             break;
 
@@ -380,7 +380,7 @@ namespace iQQ.Net.BatchHangQQ
                 var future = client.Login(status, _eventHandler);
                 ShowMessage(client.Account.Username + "-登录中......");
                 var Event = future.WaitFinalEvent();
-                if (Event.Type == QQActionEventType.EVT_OK)
+                if (Event.Type == QQActionEventType.EvtOK)
                 {
                     ShowMessage(client.Account.Username + "-登录成功！！！");
                     (client as WebQQClient)?.SaveCookie();
@@ -390,7 +390,7 @@ namespace iQQ.Net.BatchHangQQ
 
                     if (qqCount < 5)
                     {
-                        if (QQActionEventType.EVT_OK == client.GetBuddyList(_eventHandler).WaitFinalEvent().Type)
+                        if (QQActionEventType.EvtOK == client.GetBuddyList(_eventHandler).WaitFinalEvent().Type)
                         {
                             ShowMessage(string.Format("{0}-好友数量：{1}", client.Account.Username, client.GetBuddyList().Count));
                         }
@@ -399,7 +399,7 @@ namespace iQQ.Net.BatchHangQQ
                             ShowMessage(string.Format(client.Account.Username + "-获取好友列表失败"));
                         }
 
-                        if (QQActionEventType.EVT_OK == client.GetGroupList(_eventHandler).WaitFinalEvent().Type)
+                        if (QQActionEventType.EvtOK == client.GetGroupList(_eventHandler).WaitFinalEvent().Type)
                         {
                             ShowMessage(string.Format("{0}-群数量：{1}", client.Account.Username, client.GetGroupList().Count));
                         }
@@ -411,7 +411,7 @@ namespace iQQ.Net.BatchHangQQ
 
                     client.BeginPollMsg();
                 }
-                else if (Event.Type == QQActionEventType.EVT_ERROR)
+                else if (Event.Type == QQActionEventType.EvtError)
                 {
                     client.Account.Status = QQStatus.OFFLINE;
                     var ex = (QQException)Event.Target;
@@ -476,7 +476,7 @@ namespace iQQ.Net.BatchHangQQ
 
                 var Event = await future.WhenFinalEvent();
 
-                if (Event.Type == QQActionEventType.EVT_OK)
+                if (Event.Type == QQActionEventType.EvtOK)
                 {
                     ShowMessage(client.Account.Username + "-登录成功！！！");
                     (client as WebQQClient)?.SaveCookie();
@@ -487,19 +487,19 @@ namespace iQQ.Net.BatchHangQQ
                     if (qqCount < 5)
                     {
                         var actionEvent = await client.GetBuddyList(_eventHandler).WhenFinalEvent();
-                        ShowMessage(QQActionEventType.EVT_OK == actionEvent.Type
+                        ShowMessage(QQActionEventType.EvtOK == actionEvent.Type
                             ? $"{client.Account.Username}-好友数量：{client.GetBuddyList().Count}"
                             : string.Format(client.Account.Username + "-获取好友列表失败"));
 
                         actionEvent = await client.GetGroupList(_eventHandler).WhenFinalEvent();
-                        ShowMessage(QQActionEventType.EVT_OK == actionEvent.Type
+                        ShowMessage(QQActionEventType.EvtOK == actionEvent.Type
                             ? $"{client.Account.Username}-群数量：{client.GetGroupList().Count}"
                             : string.Format(client.Account.Username + "-获取群列表失败"));
                     }
 
                     client.BeginPollMsg();
                 }
-                else if (Event.Type == QQActionEventType.EVT_ERROR)
+                else if (Event.Type == QQActionEventType.EvtError)
                 {
                     client.Account.Status = QQStatus.OFFLINE;
                     var ex = (QQException)Event.Target;

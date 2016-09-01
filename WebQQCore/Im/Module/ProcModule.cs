@@ -26,15 +26,15 @@ namespace iQQ.Net.WebQQCore.Im.Module
             var login = Context.GetModule<LoginModule>(QQModuleType.LOGIN);
             login.GetQRCode((sender, @event) =>
             {
-                if (@event.Type == QQActionEventType.EVT_OK)
+                if (@event.Type == QQActionEventType.EvtOK)
                 {
                     var verify = (Image)@event.Target;
-                    Context.FireNotify(new QQNotifyEvent(QQNotifyEventType.QRCODE_READY, verify));
+                    Context.FireNotify(new QQNotifyEvent(QQNotifyEventType.QrcodeReady, verify));
                     CheckQRCode(future);
                 }
-                else if (@event.Type == QQActionEventType.EVT_ERROR)
+                else if (@event.Type == QQActionEventType.EvtError)
                 {
-                    future.NotifyActionEvent(QQActionEventType.EVT_ERROR, "获取二维码失败");
+                    future.NotifyActionEvent(QQActionEventType.EvtError, "获取二维码失败");
                 }
             });
             return future;
@@ -46,13 +46,13 @@ namespace iQQ.Net.WebQQCore.Im.Module
             QQActionEventHandler handler = null;
             handler = (sender, Event) =>
             {
-                if (Event.Type == QQActionEventType.EVT_OK)
+                if (Event.Type == QQActionEventType.EvtOK)
                 {
                     var eventArgs = (CheckQRCodeArgs) Event.Target;
                     switch (eventArgs.Status)
                     {
                         case QRCodeStatus.QRCODE_OK:
-                            Context.FireNotify(new QQNotifyEvent(QQNotifyEventType.QRCODE_SUCCESS));
+                            Context.FireNotify(new QQNotifyEvent(QQNotifyEventType.QrcodeSuccess));
                             DoCheckLoginSig(eventArgs.Msg, future);
                             break;
 
@@ -63,16 +63,16 @@ namespace iQQ.Net.WebQQCore.Im.Module
                             break;
 
                         case QRCodeStatus.QRCODE_INVALID:
-                            Context.FireNotify(new QQNotifyEvent(QQNotifyEventType.QRCODE_INVALID, eventArgs.Msg));
+                            Context.FireNotify(new QQNotifyEvent(QQNotifyEventType.QrcodeInvalid, eventArgs.Msg));
                             break;
 
                         default:
                             throw new ArgumentOutOfRangeException();
                     }
                 }
-                else if (Event.Type == QQActionEventType.EVT_ERROR)
+                else if (Event.Type == QQActionEventType.EvtError)
                 {
-                    future.NotifyActionEvent(QQActionEventType.EVT_ERROR, Event.Target);
+                    future.NotifyActionEvent(QQActionEventType.EvtError, Event.Target);
                 }
             };
             login.CheckQRCode(handler);
@@ -97,13 +97,13 @@ namespace iQQ.Net.WebQQCore.Im.Module
             var login = Context.GetModule<LoginModule>(QQModuleType.LOGIN);
             login.GetLoginSig((sender, Event) =>
             {
-                if (Event.Type == QQActionEventType.EVT_OK)
+                if (Event.Type == QQActionEventType.EvtOK)
                 {
                     DoCheckVerify(future);
                 }
-                else if (Event.Type == QQActionEventType.EVT_ERROR)
+                else if (Event.Type == QQActionEventType.EvtError)
                 {
-                    future.NotifyActionEvent(QQActionEventType.EVT_ERROR, Event.Target);
+                    future.NotifyActionEvent(QQActionEventType.EvtError, Event.Target);
                 }
             });
         }
@@ -116,7 +116,7 @@ namespace iQQ.Net.WebQQCore.Im.Module
             var login = Context.GetModule<LoginModule>(QQModuleType.LOGIN);
             login.GetCaptcha(account.Uin, (sender, Event) =>
             {
-                if (Event.Type == QQActionEventType.EVT_OK)
+                if (Event.Type == QQActionEventType.EvtOK)
                 {
                     var verify = new ImageVerify
                     {
@@ -125,11 +125,11 @@ namespace iQQ.Net.WebQQCore.Im.Module
                         Reason = reason,
                         Future = future
                     };
-                    Context.FireNotify(new QQNotifyEvent(QQNotifyEventType.CAPACHA_VERIFY, verify));
+                    Context.FireNotify(new QQNotifyEvent(QQNotifyEventType.CapachaVerify, verify));
                 }
-                else if (Event.Type == QQActionEventType.EVT_ERROR)
+                else if (Event.Type == QQActionEventType.EvtError)
                 {
-                    future.NotifyActionEvent(QQActionEventType.EVT_ERROR, Event.Target);
+                    future.NotifyActionEvent(QQActionEventType.EvtError, Event.Target);
                 }
             });
         }
@@ -145,7 +145,7 @@ namespace iQQ.Net.WebQQCore.Im.Module
             var account = Context.Account;
             login.CheckVerify(account.Username, (sender, Event) =>
             {
-                if (Event.Type == QQActionEventType.EVT_OK)
+                if (Event.Type == QQActionEventType.EvtOK)
                 {
                     var args = (CheckVerifyArgs)(Event.Target);
                     Context.Account.Uin = args.Uin;
@@ -159,9 +159,9 @@ namespace iQQ.Net.WebQQCore.Im.Module
                         DoGetVerify("为了保证您账号的安全，请输入验证码中字符继续登录。", future);
                     }
                 }
-                else if (Event.Type == QQActionEventType.EVT_ERROR)
+                else if (Event.Type == QQActionEventType.EvtError)
                 {
-                    future.NotifyActionEvent(QQActionEventType.EVT_ERROR, Event.Target);
+                    future.NotifyActionEvent(QQActionEventType.EvtError, Event.Target);
                 }
             });
         }
@@ -172,11 +172,11 @@ namespace iQQ.Net.WebQQCore.Im.Module
             login.WebLogin(Context.Account.Username, Context.Account.Password, Context.Account.Uin,
                 verifyCode, ((sender, Event) =>
             {
-                if (Event.Type == QQActionEventType.EVT_OK)
+                if (Event.Type == QQActionEventType.EvtOK)
                 {
                     DoCheckLoginSig((string)Event.Target, future);
                 }
-                else if (Event.Type == QQActionEventType.EVT_ERROR)
+                else if (Event.Type == QQActionEventType.EvtError)
                 {
                     var ex = (QQException)(Event.Target);
                     if (ex.ErrorCode == QQErrorCode.WRONG_CAPTCHA)
@@ -185,7 +185,7 @@ namespace iQQ.Net.WebQQCore.Im.Module
                     }
                     else
                     {
-                        future.NotifyActionEvent(QQActionEventType.EVT_ERROR, Event.Target);
+                        future.NotifyActionEvent(QQActionEventType.EvtError, Event.Target);
                     }
                 }
             }));
@@ -196,13 +196,13 @@ namespace iQQ.Net.WebQQCore.Im.Module
             var login = Context.GetModule<LoginModule>(QQModuleType.LOGIN);
             login.CheckLoginSig(checkSigUrl, (sender, Event) =>
             {
-                if (Event.Type == QQActionEventType.EVT_OK)
+                if (Event.Type == QQActionEventType.EvtOK)
                 {
                     DoGetVFWebqq(future);
                 }
-                else if (Event.Type == QQActionEventType.EVT_ERROR)
+                else if (Event.Type == QQActionEventType.EvtError)
                 {
-                    future.NotifyActionEvent(QQActionEventType.EVT_ERROR, Event.Target);
+                    future.NotifyActionEvent(QQActionEventType.EvtError, Event.Target);
                 }
             });
         }
@@ -212,13 +212,13 @@ namespace iQQ.Net.WebQQCore.Im.Module
             var login = Context.GetModule<LoginModule>(QQModuleType.LOGIN);
             login.GetVFWebqq((sender, Event) =>
             {
-                if (Event.Type == QQActionEventType.EVT_OK)
+                if (Event.Type == QQActionEventType.EvtOK)
                 {
                     DoChannelLogin(future);
                 }
-                else if (Event.Type == QQActionEventType.EVT_ERROR)
+                else if (Event.Type == QQActionEventType.EvtError)
                 {
-                    future.NotifyActionEvent(QQActionEventType.EVT_ERROR, Event.Target);
+                    future.NotifyActionEvent(QQActionEventType.EvtError, Event.Target);
                 }
             });
         }
@@ -230,14 +230,14 @@ namespace iQQ.Net.WebQQCore.Im.Module
 
             login.ChannelLogin(Context.Account.Status, (sender, Event) =>
             {
-                if (Event.Type == QQActionEventType.EVT_OK)
+                if (Event.Type == QQActionEventType.EvtOK)
                 {
-                    future.NotifyActionEvent(QQActionEventType.EVT_OK, null);
-                    Context.FireNotify(new QQNotifyEvent(QQNotifyEventType.LOGIN_SUCCESS));
+                    future.NotifyActionEvent(QQActionEventType.EvtOK, null);
+                    Context.FireNotify(new QQNotifyEvent(QQNotifyEventType.LoginSuccess));
                 }
-                else if (Event.Type == QQActionEventType.EVT_ERROR)
+                else if (Event.Type == QQActionEventType.EvtError)
                 {
-                    future.NotifyActionEvent(QQActionEventType.EVT_ERROR, Event.Target);
+                    future.NotifyActionEvent(QQActionEventType.EvtError, Event.Target);
                 }
             });
         }
@@ -250,7 +250,7 @@ namespace iQQ.Net.WebQQCore.Im.Module
             DefaultLogger.Info("iqq client Relogin...");
             var future = login.ChannelLogin(status, (sender, Event) =>
             {
-                if (Event.Type == QQActionEventType.EVT_ERROR)
+                if (Event.Type == QQActionEventType.EvtError)
                 {
                     DefaultLogger.Info("iqq client ReloginChannel fail!!! use Relogin.");
                     Login(listener);
@@ -271,14 +271,14 @@ namespace iQQ.Net.WebQQCore.Im.Module
             // 登录失效，重新登录
             Relogin(Context.Account.Status, (sender, Event) =>
             {
-                if (Event.Type == QQActionEventType.EVT_OK)
+                if (Event.Type == QQActionEventType.EvtOK)
                 {
                     // 重新登录成功重新POLL
-                    Context.FireNotify(new QQNotifyEvent(QQNotifyEventType.RELOGIN_SUCCESS, null));
+                    Context.FireNotify(new QQNotifyEvent(QQNotifyEventType.ReloginSuccess, null));
                 }
-                else if (Event.Type == QQActionEventType.EVT_ERROR)
+                else if (Event.Type == QQActionEventType.EvtError)
                 {
-                    Context.FireNotify(new QQNotifyEvent(QQNotifyEventType.UNKNOWN_ERROR, Event));
+                    Context.FireNotify(new QQNotifyEvent(QQNotifyEventType.UnknownError, Event));
                 }
             });
         }
@@ -292,7 +292,7 @@ namespace iQQ.Net.WebQQCore.Im.Module
             login.PollMsg((sender, Event) =>
             {
                 // 回调通知事件函数
-                if (Event.Type == QQActionEventType.EVT_OK)
+                if (Event.Type == QQActionEventType.EvtOK)
                 {
                     var events = (List<QQNotifyEvent>)Event.Target;
                     foreach (var evt in events)
@@ -313,7 +313,7 @@ namespace iQQ.Net.WebQQCore.Im.Module
                         return;
                     }
                 }
-                else if (Event.Type == QQActionEventType.EVT_ERROR)
+                else if (Event.Type == QQActionEventType.EvtError)
                 {
                     var ex = (QQException)Event.Target;
                     var code = ex.ErrorCode;
@@ -336,7 +336,7 @@ namespace iQQ.Net.WebQQCore.Im.Module
                     {
                         account.Status = QQStatus.OFFLINE;
                         //粗线了IO异常，直接报网络错误
-                        Context.FireNotify(new QQNotifyEvent(QQNotifyEventType.NET_ERROR, ex));
+                        Context.FireNotify(new QQNotifyEvent(QQNotifyEventType.NetError, ex));
                     }
                     else
                     {
@@ -346,7 +346,7 @@ namespace iQQ.Net.WebQQCore.Im.Module
                         return;
                     }
                 }
-                else if (Event.Type == QQActionEventType.EVT_RETRY)
+                else if (Event.Type == QQActionEventType.EvtRetry)
                 {
                     // System.err.println("Poll Retry:" + this);
                     DefaultLogger.Info("poll msg error, retrying....", (QQException)Event.Target);

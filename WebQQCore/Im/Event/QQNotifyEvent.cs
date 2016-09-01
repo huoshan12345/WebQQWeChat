@@ -1,70 +1,77 @@
 ﻿using System.ComponentModel;
+using iQQ.Net.WebQQCore.Util.Extensions;
 
 namespace iQQ.Net.WebQQCore.Im.Event
 {
-
+    /// <summary>
+    /// QQ通知事件类型
+    /// </summary>
+    [Description("QQ通知事件类型")]
     public enum QQNotifyEventType
     {
         /// <summary>
         /// 登录成功
         /// </summary>
-        LOGIN_SUCCESS,
+        LoginSuccess,
         /** 重新登录成功 **/
-        RELOGIN_SUCCESS,
+        ReloginSuccess,
         /** 网络连接出错，客户端已经掉线 */
-        NET_ERROR,
+        NetError,
         /** 未知错误，如retcode多次出现未知值 */
-        UNKNOWN_ERROR,
+        UnknownError,
         /** 客户端被踢下线，可能是其他地方登陆 */
-        KICK_OFFLINE,
+        KickOffline,
         /** 对方正在输入 */
-        BUDDY_INPUT,
+        BuddyInput,
         /** 窗口震动 */
-        SHAKE_WINDOW,
-
-
+        ShakeWindow,
 
         /// <summary>
         /// 聊天消息，包括好友，临时会话
         /// </summary>
-        CHAT_MSG,
+        [Description("聊天消息")]
+        ChatMsg,
 
         /// <summary>
         /// 群，讨论组消息
         /// </summary>
-        GROUP_MSG,
+        [Description("群和讨论组消息")]
+        GroupMsg,
 
         /** 好友通知，如其他人请求添加好友，添加其他用户请求通过或者拒绝 */
-        BUDDY_NOTIFY,
+        BuddyNotify,
         /** 群通知，如管理员通过或拒绝了添加群请求，群成员退出等 */
-        GROUP_NOTIFY,
+        GroupNotify,
         /** 文件传输通知，如对方请求发送文件，对方已同意接受文件等 */
-        FILE_NOTIFY,
+        FileNotify,
         /** 视频通知，如对方请求和你视频，对方同意视频等。。 */
-        AV_NOTIFY,
+        AvNotify,
         /** 系统广播 */
-        SYSTEM_NOTIFY,
+        SystemNotify,
         /** 好友状态改变 */
-        BUDDY_STATUS_CHANGE,
+        BuddyStatusChange,
         /** 验证请求，需要用户输入验证码以继续 */
-        CAPACHA_VERIFY,
+        CapachaVerify,
         /** 新邮件通知 */
-        EMAIL_NOTIFY,
+        EmailNotify,
 
         /// <summary>
         /// 二维码已就绪
         /// </summary>
-        QRCODE_READY,
+        [Description("二维码已就绪")]
+        QrcodeReady,
 
         /// <summary>
         /// 二维码失效
         /// </summary>
-        QRCODE_INVALID,
+        [Description("二维码失效")]
+        QrcodeInvalid,
 
         /// <summary>
         /// 二维码验证成功
         /// </summary>
-        QRCODE_SUCCESS
+        [Description("二维码验证成功")]
+        QrcodeSuccess
     }
 
     public class QQNotifyEvent : QQEvent
@@ -82,7 +89,7 @@ namespace iQQ.Net.WebQQCore.Im.Event
 
         public override string ToString()
         {
-            return $"QQNotifyEvent [type={Type}, target={Target ?? ""}]";
+            return $"{Type.GetFullDescription()}, target={Target ?? ""}]";
         }
     }
 }

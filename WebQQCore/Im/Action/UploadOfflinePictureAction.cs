@@ -63,7 +63,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
             if (!m.Success)
             {
                 pic.IsSuccess = false;
-                NotifyActionEvent(QQActionEventType.EVT_ERROR,
+                NotifyActionEvent(QQActionEventType.EvtError,
                         new QQException(QQErrorCode.UNEXPECTED_RESPONSE, response.GetResponseString()));
             }
 
@@ -77,14 +77,14 @@ namespace iQQ.Net.WebQQCore.Im.Action
                 pic.FileSize = obj["filesize"].ToObject<int>();
                 pic.FileName = obj["filename"].ToString();
                 pic.FilePath = obj["filepath"].ToString();
-                NotifyActionEvent(QQActionEventType.EVT_OK, pic);
+                NotifyActionEvent(QQActionEventType.EvtOK, pic);
                 return;
             }
 
             // 失败后返回路径
             pic.FilePath = _file;
             pic.IsSuccess = false;
-            NotifyActionEvent(QQActionEventType.EVT_ERROR,
+            NotifyActionEvent(QQActionEventType.EvtError,
                     new QQException(QQErrorCode.UNEXPECTED_RESPONSE, response.GetResponseString()));
 
         }

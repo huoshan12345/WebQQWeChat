@@ -97,7 +97,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
                         {
                             var fromUin = pollData["from_uin"].ToObject<long>();
                             var qqBuddy = Context.Store.GetBuddyByUin(fromUin);
-                            notifyEvents.Add(new QQNotifyEvent(QQNotifyEventType.BUDDY_INPUT, qqBuddy));
+                            notifyEvents.Add(new QQNotifyEvent(QQNotifyEventType.BuddyInput, qqBuddy));
                             break;
                         }
                     case "message":
@@ -129,7 +129,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
                             // 窗口震动
                             var fromUin = pollData["from_uin"].ToObject<long>();
                             var user = Context.Store.GetBuddyByUin(fromUin);
-                            notifyEvents.Add(new QQNotifyEvent(QQNotifyEventType.SHAKE_WINDOW, user));
+                            notifyEvents.Add(new QQNotifyEvent(QQNotifyEventType.ShakeWindow, user));
                             break;
                         }
                     case "kick_message":
@@ -137,7 +137,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
                             // 被踢下线
                             Context.Account.Status = QQStatus.OFFLINE;
                             Context.Session.State = QQSessionState.KICKED;
-                            notifyEvents.Add(new QQNotifyEvent(QQNotifyEventType.KICK_OFFLINE, pollData["reason"].ToString()));
+                            notifyEvents.Add(new QQNotifyEvent(QQNotifyEventType.KickOffline, pollData["reason"].ToString()));
                             break;
                         }
                     case "buddies_status_change":
@@ -177,7 +177,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
                     default:
                         {
                             var ex = new QQException(QQErrorCode.UNKNOWN_ERROR, "unknown pollType: " + pollType);
-                            NotifyActionEvent(QQActionEventType.EVT_ERROR, ex);
+                            NotifyActionEvent(QQActionEventType.EvtError, ex);
                             break;
                         }
                 }
@@ -238,10 +238,10 @@ namespace iQQ.Net.WebQQCore.Im.Action
 
                 //notifyEvents.Add(new QQNotifyEvent(QQNotifyEventType.NEED_REAUTH, null));
                 default:
-                    notifyEvents.Add(new QQNotifyEvent(QQNotifyEventType.UNKNOWN_ERROR, str));
+                    notifyEvents.Add(new QQNotifyEvent(QQNotifyEventType.UnknownError, str));
                     break;
             }
-            NotifyActionEvent(QQActionEventType.EVT_OK, notifyEvents);
+            NotifyActionEvent(QQActionEventType.EvtOK, notifyEvents);
         }
 
         /// <summary>
@@ -266,11 +266,11 @@ namespace iQQ.Net.WebQQCore.Im.Action
                 var clientType = pollData["client_type"].ToObject<int>();
                 buddy.Status = QQStatus.ValueOfRaw(status);
                 buddy.ClientType = QQClientType.ValueOfRaw(clientType);
-                return new QQNotifyEvent(QQNotifyEventType.BUDDY_STATUS_CHANGE, buddy);
+                return new QQNotifyEvent(QQNotifyEventType.BuddyStatusChange, buddy);
             }
             catch (Exception ex)
             {
-                return new QQNotifyEvent(QQNotifyEventType.NET_ERROR, ex);
+                return new QQNotifyEvent(QQNotifyEventType.NetError, ex);
             }
         }
 
@@ -305,11 +305,11 @@ namespace iQQ.Net.WebQQCore.Im.Action
                     userModule.GetUserInfo(member, null);
                     msg.From = member;
                 }
-                return new QQNotifyEvent(QQNotifyEventType.CHAT_MSG, msg);
+                return new QQNotifyEvent(QQNotifyEventType.ChatMsg, msg);
             }
             catch (Exception ex)
             {
-                return new QQNotifyEvent(QQNotifyEventType.NET_ERROR, ex);
+                return new QQNotifyEvent(QQNotifyEventType.NetError, ex);
             }
         }
 
@@ -370,11 +370,11 @@ namespace iQQ.Net.WebQQCore.Im.Action
                     var userModule = Context.GetModule<UserModule>(QQModuleType.USER);
                     userModule.GetUserInfo(member, null);
                 }
-                return new QQNotifyEvent(QQNotifyEventType.GROUP_MSG, msg);
+                return new QQNotifyEvent(QQNotifyEventType.GroupMsg, msg);
             }
             catch (Exception ex)
             {
-                return new QQNotifyEvent(QQNotifyEventType.NET_ERROR, ex);
+                return new QQNotifyEvent(QQNotifyEventType.NetError, ex);
             }
         }
 
@@ -421,11 +421,11 @@ namespace iQQ.Net.WebQQCore.Im.Action
                     var userModule = Context.GetModule<UserModule>(QQModuleType.USER);
                     userModule.GetUserInfo(member, null);
                 }
-                return new QQNotifyEvent(QQNotifyEventType.GROUP_MSG, msg);
+                return new QQNotifyEvent(QQNotifyEventType.GroupMsg, msg);
             }
             catch (Exception ex)
             {
-                return new QQNotifyEvent(QQNotifyEventType.NET_ERROR, ex);
+                return new QQNotifyEvent(QQNotifyEventType.NetError, ex);
             }
         }
 
@@ -523,11 +523,11 @@ namespace iQQ.Net.WebQQCore.Im.Action
                 }
                 user.QQ = fromQQ; // 带上QQ号码
                 msg.From = user;
-                return new QQNotifyEvent(QQNotifyEventType.CHAT_MSG, msg);
+                return new QQNotifyEvent(QQNotifyEventType.ChatMsg, msg);
             }
             catch (Exception ex)
             {
-                return new QQNotifyEvent(QQNotifyEventType.NET_ERROR, ex);
+                return new QQNotifyEvent(QQNotifyEventType.NetError, ex);
             }
         }
 
@@ -550,7 +550,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
 
 
 
-                return new QQNotifyEvent(QQNotifyEventType.BUDDY_NOTIFY, target.ToString());
+                return new QQNotifyEvent(QQNotifyEventType.BuddyNotify, target.ToString());
             }
             return null;
         }
@@ -569,7 +569,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
                 {"file", pollData["xml"].ToString()},// 共享的文件信息
                 {"sender", pollData["send_uin"].ToObject<long>()}// 共享者
             };
-            return new QQNotifyEvent(QQNotifyEventType.GROUP_NOTIFY, target.ToString());
+            return new QQNotifyEvent(QQNotifyEventType.GroupNotify, target.ToString());
         }
 
         /// <summary>
@@ -591,7 +591,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
                     {"admin_uin", pollData["admin_uin"].ToObject<long>()}, //被哪个人踢
                     {"admin_nick", pollData["admin_nick"].ToString()}
                 };
-                return new QQNotifyEvent(QQNotifyEventType.GROUP_NOTIFY, target.ToString());
+                return new QQNotifyEvent(QQNotifyEventType.GroupNotify, target.ToString());
             }
             return null;
         }

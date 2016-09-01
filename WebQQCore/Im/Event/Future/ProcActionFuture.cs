@@ -30,7 +30,7 @@
         public override void Cancel()
         {
             IsCanceled = true;
-            NotifyActionEvent(QQActionEventType.EVT_CANCELED, null);
+            NotifyActionEvent(QQActionEventType.EvtCanceled, null);
         }
 
     }

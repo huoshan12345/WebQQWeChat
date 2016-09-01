@@ -28,11 +28,11 @@ namespace iQQ.Net.WebQQCore.Im.Action
             var json = JObject.Parse(response.GetResponseString());
             if (json["retcode"].ToString() == "0")
             {
-                NotifyActionEvent(QQActionEventType.EVT_OK, user);
+                NotifyActionEvent(QQActionEventType.EvtOK, user);
             }
             else
             {
-                NotifyActionEvent(QQActionEventType.EVT_ERROR,
+                NotifyActionEvent(QQActionEventType.EvtError,
                         new QQException(QQErrorCode.UNEXPECTED_RESPONSE, response.GetResponseString()));
             }
         }

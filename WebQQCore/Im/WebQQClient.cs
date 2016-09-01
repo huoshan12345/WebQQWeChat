@@ -277,7 +277,7 @@ namespace iQQ.Net.WebQQCore.Im
                 }
             }
             // 重新登录成功，重新poll
-            if (Event.Type == QQNotifyEventType.RELOGIN_SUCCESS)
+            if (Event.Type == QQNotifyEventType.ReloginSuccess)
             {
                 BeginPollMsg();
             }
@@ -374,8 +374,8 @@ namespace iQQ.Net.WebQQCore.Im
             return procModule.DoLogout((sender, Event) =>
             {
                 // 无论退出登录失败还是成功，都需要释放资源
-                if (Event.Type == QQActionEventType.EVT_OK
-                    || Event.Type == QQActionEventType.EVT_ERROR)
+                if (Event.Type == QQActionEventType.EvtOK
+                    || Event.Type == QQActionEventType.EvtError)
                 {
                     Session.State = QQSessionState.OFFLINE;
                     Destroy();

@@ -40,7 +40,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
             var json = JObject.Parse(str);
             if (json["retcode"].ToString() == "0")
             {
-                NotifyActionEvent(QQActionEventType.EVT_OK, json);
+                NotifyActionEvent(QQActionEventType.EvtOK, json);
             }
             else
             {

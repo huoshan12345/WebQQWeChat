@@ -40,11 +40,11 @@ namespace iQQ.Net.WebQQCore.Im.Action
             var json = JObject.Parse(resp);
             if (json["k"] != null)
             {
-                NotifyActionEvent(QQActionEventType.EVT_OK, json["k"].ToString());
+                NotifyActionEvent(QQActionEventType.EvtOK, json["k"].ToString());
             }
             else
             {
-                NotifyActionEvent(QQActionEventType.EVT_ERROR, QQErrorCode.UNEXPECTED_RESPONSE);
+                NotifyActionEvent(QQActionEventType.EvtError, QQErrorCode.UNEXPECTED_RESPONSE);
             }
             // System.out.println("GetWPKeyAction: " + response.GetResponseString());
         }

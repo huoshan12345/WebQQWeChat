@@ -99,7 +99,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
             {
                 DefaultLogger.Warn(e.Message, e);
             }
-            NotifyActionEvent(QQActionEventType.EVT_OK, user);
+            NotifyActionEvent(QQActionEventType.EvtOK, user);
         }
 
     }

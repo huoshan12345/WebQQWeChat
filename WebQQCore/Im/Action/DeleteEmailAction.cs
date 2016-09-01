@@ -44,7 +44,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
             // LOG.info("delete email: " + ct);
             if (str.Contains("success"))
             {
-                NotifyActionEvent(QQActionEventType.EVT_OK, str);
+                NotifyActionEvent(QQActionEventType.EvtOK, str);
             }
             else
             {

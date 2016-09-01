@@ -67,14 +67,14 @@ namespace iQQ.Net.WebQQCore.Im.Action
                         case "40005":
                         case "40006":
                         case "40007":
-                        NotifyActionEvent(QQActionEventType.EVT_ERROR,
+                        NotifyActionEvent(QQActionEventType.EvtError,
                             new QQException(QQErrorCode.UNEXPECTED_RESPONSE, response.GetResponseString()));
                         break;
 
                         case "100000":
                         {
                             var text = json["text"].ToString();
-                            NotifyActionEvent(QQActionEventType.EVT_OK, text);
+                            NotifyActionEvent(QQActionEventType.EvtOK, text);
                             break;
                         }
 
@@ -83,7 +83,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
                             var text = json["text"].ToString();
                             var url = json["url"].ToString();
                             var reply = string.Format("{0} \n网址：{1}", text, url);
-                            NotifyActionEvent(QQActionEventType.EVT_OK, reply);
+                            NotifyActionEvent(QQActionEventType.EvtOK, reply);
                             break;
                         }
 
@@ -92,7 +92,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
                             var text = json["text"].ToString();
                             var list = json["list"].ToObject<JArray>();
                             var reply = string.Format("{0}", text);
-                            NotifyActionEvent(QQActionEventType.EVT_OK, reply);
+                            NotifyActionEvent(QQActionEventType.EvtOK, reply);
                             break;
                         }
 
@@ -108,7 +108,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
                                    item["trainnum"], item["start"], item["terminal"], item["starttime"], item["endtime"], item["detailurl"]);
                             }
                             var reply = string.Format("{0}\n{1}\n", text, sb);
-                            NotifyActionEvent(QQActionEventType.EVT_OK, reply);
+                            NotifyActionEvent(QQActionEventType.EvtOK, reply);
                             break;
                         }
 
@@ -124,7 +124,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
                                    item["flight"], item["route"], item["starttime"], item["endtime"], item["state"], item["detailurl"]);
                             }
                             var reply = string.Format("{0}\n{1}\n", text, sb);
-                            NotifyActionEvent(QQActionEventType.EVT_OK, reply);
+                            NotifyActionEvent(QQActionEventType.EvtOK, reply);
                             break;
                         }
 
@@ -140,14 +140,14 @@ namespace iQQ.Net.WebQQCore.Im.Action
                                    item["name"], item["price"], item["satisfaction"], item["count"], item["detailurl"]);
                             }
                             var reply = string.Format("{0}\n{1}", text, sb);
-                            NotifyActionEvent(QQActionEventType.EVT_OK, reply);
+                            NotifyActionEvent(QQActionEventType.EvtOK, reply);
                             break;
                         }
 
                         default:
                         {
                             var text = json["text"].ToString();
-                            NotifyActionEvent(QQActionEventType.EVT_OK, text);
+                            NotifyActionEvent(QQActionEventType.EvtOK, text);
                             break;
                         }
                     }
@@ -157,7 +157,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
                 case RobotType.Moli:
                 {
                     var result = response.GetResponseString();
-                    NotifyActionEvent(QQActionEventType.EVT_OK, result);
+                    NotifyActionEvent(QQActionEventType.EvtOK, result);
                     break;
                 }
             }

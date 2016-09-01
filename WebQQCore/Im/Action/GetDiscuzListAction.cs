@@ -46,11 +46,11 @@ namespace iQQ.Net.WebQQCore.Im.Action
                     discuz.Name = dizjson["name"].ToString();
                     store.AddDiscuz(discuz);
                 }
-                NotifyActionEvent(QQActionEventType.EVT_OK, store.GetDiscuzList());
+                NotifyActionEvent(QQActionEventType.EvtOK, store.GetDiscuzList());
             }
             else
             {
-                NotifyActionEvent(QQActionEventType.EVT_ERROR, new QQException(QQErrorCode.UNEXPECTED_RESPONSE));
+                NotifyActionEvent(QQActionEventType.EvtError, new QQException(QQErrorCode.UNEXPECTED_RESPONSE));
             }
         }
     }

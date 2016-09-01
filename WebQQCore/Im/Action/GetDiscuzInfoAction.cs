@@ -90,11 +90,11 @@ namespace iQQ.Net.WebQQCore.Im.Action
                     member.Nickname = infojson["nick"].ToString();
                 }
 
-                NotifyActionEvent(QQActionEventType.EVT_OK, store.GetDiscuzList());
+                NotifyActionEvent(QQActionEventType.EvtOK, store.GetDiscuzList());
             }
             else
             {
-                NotifyActionEvent(QQActionEventType.EVT_ERROR, new QQException(QQErrorCode.UNEXPECTED_RESPONSE));
+                NotifyActionEvent(QQActionEventType.EvtError, new QQException(QQErrorCode.UNEXPECTED_RESPONSE));
             }
         }
     }

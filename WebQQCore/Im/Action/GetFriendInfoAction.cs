@@ -88,7 +88,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
                 }
             }
 
-            NotifyActionEvent(QQActionEventType.EVT_OK, buddy);
+            NotifyActionEvent(QQActionEventType.EvtOK, buddy);
         }
     }
 }

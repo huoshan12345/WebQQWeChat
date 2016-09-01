@@ -38,12 +38,12 @@ namespace iQQ.Net.WebQQCore.Im.Action
             {
                 if (isOK.Equals("ok"))
                 {
-                    NotifyActionEvent(QQActionEventType.EVT_OK, isOK);
+                    NotifyActionEvent(QQActionEventType.EvtOK, isOK);
                     return;
                 }
             }
 
-            NotifyActionEvent(QQActionEventType.EVT_ERROR, isOK);
+            NotifyActionEvent(QQActionEventType.EvtError, isOK);
         }
 
     }

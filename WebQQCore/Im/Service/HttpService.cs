@@ -98,7 +98,7 @@ namespace iQQ.Net.WebQQCore.Im.Service
 
                 var httpItem = GetHttpRequest(request);
 #if DEBUG
-                if (request.RawUrl == QQConstants.URL_POLL_MSG)
+                if (request.RawUrl == QQConstants.URL_GET_GROUP_INFO_EXT)
                 {
                     var str = httpItem.GetRequestHeader();
                     var count = str.Length;

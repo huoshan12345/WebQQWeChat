@@ -51,7 +51,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
                 buddy.QQ = obj["account"].ToObject<long>();
             }
 
-            NotifyActionEvent(QQActionEventType.EVT_OK, buddy);
+            NotifyActionEvent(QQActionEventType.EvtOK, buddy);
         }
 
     }

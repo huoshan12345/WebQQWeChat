@@ -50,11 +50,11 @@ namespace iQQ.Net.WebQQCore.Im.Action
                     }
                 }
 
-                NotifyActionEvent(QQActionEventType.EVT_OK, _group);
+                NotifyActionEvent(QQActionEventType.EvtOK, _group);
             }
             else
             {
-                NotifyActionEvent(QQActionEventType.EVT_ERROR, QQErrorCode.UNEXPECTED_RESPONSE);
+                NotifyActionEvent(QQActionEventType.EvtError, QQErrorCode.UNEXPECTED_RESPONSE);
             }
         }
 

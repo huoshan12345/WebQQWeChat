@@ -43,7 +43,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
             if (json["retcode"].ToString() == "0")
             {
                 Context.Account.Status = _status;
-                NotifyActionEvent(QQActionEventType.EVT_OK, _status);
+                NotifyActionEvent(QQActionEventType.EvtOK, _status);
             }
             else
             {

@@ -5,37 +5,21 @@ using iQQ.Net.WebQQCore.Util.Extensions;
 
 namespace iQQ.Net.WebQQCore.Im.Event
 {
-    [Description("QQ事件类型")]
+    [Description("QQ动作事件类型")]
     public enum QQActionEventType
     {
         [Description("成功")]
-        EVT_OK,
+        EvtOK,
         [Description("错误")]
-        EVT_ERROR,
+        EvtError,
         [Description("写入")]
-        EVT_WRITE,
+        EvtWrite,
         [Description("读取")]
-        EVT_READ,
+        EvtRead,
         [Description("取消")]
-        EVT_CANCELED,
+        EvtCanceled,
         [Description("重试")]
-        EVT_RETRY,
-    }
-
-    public static class EnumExt
-    {
-        public static string GetDescription(this Enum en)
-        {
-            var temType = en.GetType();
-            var memberInfos = temType.GetMember(en.ToString());
-            if (memberInfos.Length > 0)
-            {
-                var desc = memberInfos[0].GetCustomAttribute<DescriptionAttribute>()?.Description ?? "";
-                var parentDesc = temType.GetCustomAttribute<DescriptionAttribute>()?.Description ?? "";
-                return $"{parentDesc}-{desc}";
-            }
-            return en.ToString();
-        }
+        EvtRetry,
     }
 
     public class QQActionEvent : QQEvent
@@ -51,7 +35,7 @@ namespace iQQ.Net.WebQQCore.Im.Event
 
         public override string ToString()
         {
-            return $"QQActionEvent [type={Type.GetFullDescription()}, target={Target}]";
+            return $"{Type.GetFullDescription()}, target={Target ?? ""}]";
         }
     }
 }

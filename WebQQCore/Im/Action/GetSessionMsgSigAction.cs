@@ -68,12 +68,12 @@ namespace iQQ.Net.WebQQCore.Im.Action
                 if (result["value"] != null)
                 {
                     _user.GroupSig = result["value"].ToString();
-                    NotifyActionEvent(QQActionEventType.EVT_OK, _user);
+                    NotifyActionEvent(QQActionEventType.EvtOK, _user);
                     return;
                 }
             }
 
-            NotifyActionEvent(QQActionEventType.EVT_ERROR, new QQException(
+            NotifyActionEvent(QQActionEventType.EvtError, new QQException(
                     QQErrorCode.UNEXPECTED_RESPONSE, JsonConvert.SerializeObject(json)));
         }
     }

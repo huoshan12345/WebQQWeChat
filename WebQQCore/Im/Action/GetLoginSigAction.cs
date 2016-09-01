@@ -30,11 +30,11 @@ namespace iQQ.Net.WebQQCore.Im.Action
                 var session = Context.Session;
                 session.LoginSig = mc.Groups[1].Value;
 
-                NotifyActionEvent(QQActionEventType.EVT_OK, session.LoginSig);
+                NotifyActionEvent(QQActionEventType.EvtOK, session.LoginSig);
             }
             else
             {
-                NotifyActionEvent(QQActionEventType.EVT_ERROR, new QQException(QQErrorCode.INVALID_RESPONSE, "Login Sig Not Found!!"));
+                NotifyActionEvent(QQActionEventType.EvtError, new QQException(QQErrorCode.INVALID_RESPONSE, "Login Sig Not Found!!"));
             }
         }
 

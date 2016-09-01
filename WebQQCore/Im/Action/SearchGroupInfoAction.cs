@@ -72,7 +72,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
                 this._buddy.NeedVfcode = true;
 
             }
-            NotifyActionEvent(QQActionEventType.EVT_OK, _buddy);
+            NotifyActionEvent(QQActionEventType.EvtOK, _buddy);
         }
 
     }

@@ -34,11 +34,11 @@ namespace iQQ.Net.WebQQCore.Im.Action
                 level.Days = result["days"].ToObject<int>();
                 level.Hours = result["hours"].ToObject<int>();
                 level.RemainDays = result["remainDays"].ToObject<int>();
-                NotifyActionEvent(QQActionEventType.EVT_OK, user);
+                NotifyActionEvent(QQActionEventType.EvtOK, user);
             }
             else
             {
-                NotifyActionEvent(QQActionEventType.EVT_ERROR,
+                NotifyActionEvent(QQActionEventType.EvtError,
                         new QQException(QQErrorCode.UNEXPECTED_RESPONSE, response.GetResponseString()));
             }
         }

@@ -28,11 +28,11 @@ namespace iQQ.Net.WebQQCore.Im.Action
             try
             {
                 var ms = new MemoryStream(response.ResponseData);
-                NotifyActionEvent(QQActionEventType.EVT_OK, Image.FromStream(ms));
+                NotifyActionEvent(QQActionEventType.EvtOK, Image.FromStream(ms));
             }
             catch (IOException e)
             {
-                NotifyActionEvent(QQActionEventType.EVT_ERROR, new QQException(QQErrorCode.UNKNOWN_ERROR, e));
+                NotifyActionEvent(QQActionEventType.EvtError, new QQException(QQErrorCode.UNKNOWN_ERROR, e));
             }
         }
 

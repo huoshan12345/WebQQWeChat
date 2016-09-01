@@ -41,11 +41,11 @@ namespace iQQ.Net.WebQQCore.Im.Action
             var json = JObject.Parse(response.GetResponseString());
             if (json["retcode"].ToString() == "0")
             {
-                NotifyActionEvent(QQActionEventType.EVT_OK, _user);
+                NotifyActionEvent(QQActionEventType.EvtOK, _user);
             }
             else
             {
-                NotifyActionEvent(QQActionEventType.EVT_ERROR, new QQException(QQErrorCode.UNEXPECTED_RESPONSE));
+                NotifyActionEvent(QQActionEventType.EvtError, new QQException(QQErrorCode.UNEXPECTED_RESPONSE));
             }
 
         }

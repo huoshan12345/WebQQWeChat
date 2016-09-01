@@ -51,12 +51,12 @@ namespace iQQ.Net.WebQQCore.Im.Action
             if (content.StartsWith("({e:-101"))
             {
                 // 空，没有新邮件
-                NotifyActionEvent(QQActionEventType.EVT_OK, null);
+                NotifyActionEvent(QQActionEventType.EvtOK, null);
             }
             else if (content.StartsWith("({e:-100"))
             {
                 // 凭证已经失效，需要重新登录或者获取wpkey	
-                NotifyActionEvent(QQActionEventType.EVT_ERROR,
+                NotifyActionEvent(QQActionEventType.EvtError,
                         new QQException(QQErrorCode.INVALID_LOGIN_AUTH, content));
             }
             else
@@ -80,7 +80,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
                     mail.Unread = true;
                     list.Add(mail);
                 }
-                NotifyActionEvent(QQActionEventType.EVT_OK, new QQNotifyEvent(QQNotifyEventType.EMAIL_NOTIFY, list));
+                NotifyActionEvent(QQActionEventType.EvtOK, new QQNotifyEvent(QQNotifyEventType.EmailNotify, list));
             }
         }
 

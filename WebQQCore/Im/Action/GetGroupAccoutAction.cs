@@ -50,7 +50,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
                 _group.Gid = obj["account"].ToObject<long>();
             }
 
-            NotifyActionEvent(QQActionEventType.EVT_OK, _group);
+            NotifyActionEvent(QQActionEventType.EvtOK, _group);
         }
     }
 }

@@ -42,14 +42,14 @@ namespace iQQ.Net.WebQQCore.Im.Module
                 {
                     GetSessionMsgSig(stranger, (sender, Event) =>
                     {
-                        if (Event.Type == QQActionEventType.EVT_OK)
+                        if (Event.Type == QQActionEventType.EvtOK)
                         {
                             if (!future.IsCanceled)
                             {
                                 DoSendMsg(msg, future.Listener);
                             }
                         }
-                        else if (Event.Type == QQActionEventType.EVT_ERROR)
+                        else if (Event.Type == QQActionEventType.EvtError)
                         {
                             future.NotifyActionEvent(Event.Type, Event.Target);
                         }

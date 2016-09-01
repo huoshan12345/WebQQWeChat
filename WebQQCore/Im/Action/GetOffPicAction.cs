@@ -30,7 +30,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
 
         public override void OnHttpStatusOK(QQHttpResponse response)
         {
-            NotifyActionEvent(QQActionEventType.EVT_OK, _offpic);
+            NotifyActionEvent(QQActionEventType.EvtOK, _offpic);
         }
 
         public override QQHttpRequest OnBuildRequest()

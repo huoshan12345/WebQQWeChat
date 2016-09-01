@@ -65,7 +65,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
                 session.State = QQSessionState.ONLINE;
                 session.Index = ret["index"].ToObject<int>();
                 session.Port = ret["port"].ToObject<int>();
-                NotifyActionEvent(QQActionEventType.EVT_OK, null);
+                NotifyActionEvent(QQActionEventType.EvtOK, null);
             }
             else
             {

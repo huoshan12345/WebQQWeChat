@@ -35,7 +35,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
             {
                 var ret = json["result"].ToObject<JObject>();
                 Context.Session.Vfwebqq = ret["vfwebqq"].ToString();
-                NotifyActionEvent(QQActionEventType.EVT_OK, null);
+                NotifyActionEvent(QQActionEventType.EvtOK, null);
             }
             else
             {

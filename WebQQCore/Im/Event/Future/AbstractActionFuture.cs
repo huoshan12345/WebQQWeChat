@@ -70,13 +70,13 @@ namespace iQQ.Net.WebQQCore.Im.Event.Future
             catch (Exception e)
             {
                 // throw new QQException(QQErrorCode.WAIT_INTERUPPTED, e);
-                NotifyActionEvent(QQActionEventType.EVT_ERROR, new QQException(QQErrorCode.WAIT_INTERUPPTED, e));
+                NotifyActionEvent(QQActionEventType.EvtError, new QQException(QQErrorCode.WAIT_INTERUPPTED, e));
             }
 
             if (Event == null)
             {
                 // throw new QQException(QQErrorCode.WAIT_TIMEOUT);
-                NotifyActionEvent(QQActionEventType.EVT_ERROR, new QQException(QQErrorCode.WAIT_TIMEOUT));
+                NotifyActionEvent(QQActionEventType.EvtError, new QQException(QQErrorCode.WAIT_TIMEOUT));
             }
             else
             {
@@ -95,7 +95,7 @@ namespace iQQ.Net.WebQQCore.Im.Event.Future
                     return Event;
                 }
             }
-            return new QQActionEvent(QQActionEventType.EVT_ERROR, this);
+            return new QQActionEvent(QQActionEventType.EvtError, this);
         }
 
         public QQActionEvent WaitFinalEvent(long timeoutMs)
@@ -115,7 +115,7 @@ namespace iQQ.Net.WebQQCore.Im.Event.Future
                     start = DateTime.Now.CurrentTimeMillis();
                 }
             }
-            return new QQActionEvent(QQActionEventType.EVT_ERROR, this);
+            return new QQActionEvent(QQActionEventType.EvtError, this);
         }
 
         public Task<QQActionEvent> WhenEvent()
@@ -171,7 +171,7 @@ namespace iQQ.Net.WebQQCore.Im.Event.Future
                     if (Event == null) break;
                     if (IsFinalEvent(Event)) return Event;
                 }
-                return new QQActionEvent(QQActionEventType.EVT_ERROR, this);
+                return new QQActionEvent(QQActionEventType.EvtError, this);
             });
         }
 
@@ -186,7 +186,7 @@ namespace iQQ.Net.WebQQCore.Im.Event.Future
                     if (Event == null) break;
                     if (IsFinalEvent(Event)) return Event;
                 }
-                return new QQActionEvent(QQActionEventType.EVT_ERROR, this);
+                return new QQActionEvent(QQActionEventType.EvtError, this);
             }, token);
         }
 
@@ -198,9 +198,9 @@ namespace iQQ.Net.WebQQCore.Im.Event.Future
         private bool IsFinalEvent(QQActionEvent Event)
         {
             var type = Event.Type;
-            return type == QQActionEventType.EVT_CANCELED
-                    || type == QQActionEventType.EVT_ERROR
-                    || type == QQActionEventType.EVT_OK;
+            return type == QQActionEventType.EvtCanceled
+                    || type == QQActionEventType.EvtError
+                    || type == QQActionEventType.EvtOK;
         }
 
         public void NotifyActionEvent(QQActionEventType type, object target)

@@ -44,11 +44,11 @@ namespace iQQ.Net.WebQQCore.Im.Action
             var ct = response.GetResponseString();
             if (ct.Contains("success"))
             {
-                NotifyActionEvent(QQActionEventType.EVT_OK, ct);
+                NotifyActionEvent(QQActionEventType.EvtOK, ct);
             }
             else
             {
-                NotifyActionEvent(QQActionEventType.EVT_ERROR, ct);
+                NotifyActionEvent(QQActionEventType.EvtError, ct);
             }
         }
     }

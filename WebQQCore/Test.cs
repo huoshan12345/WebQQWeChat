@@ -10,26 +10,26 @@ namespace iQQ.Net.WebQQCore
 {
     class Test
     {
-        private static readonly QQNotifyHandler handler = (sender, Event) =>
+        private static readonly QQNotifyHandler _handler = (client, Event) =>
         {
-            var client = sender as IQQClient;
-            if (client == null) return;
-
+            //var client = sender as IQQClient;
+            //if (client == null) return;
+ 
             switch (Event.Type)
             {
-                case QQNotifyEventType.GROUP_MSG:
-                case QQNotifyEventType.CHAT_MSG:
+                case QQNotifyEventType.GroupMsg:
+                case QQNotifyEventType.ChatMsg:
                 {
                     var msg = (QQMsg)Event.Target;
                         DefaultLogger.Info("{0}-好友{1}消息：{2}", client.Account.QQ, msg.From.QQ, msg.GetText());
                         break;
                 }
-                case QQNotifyEventType.KICK_OFFLINE:
+                case QQNotifyEventType.KickOffline:
                 {
                     DefaultLogger.Info(client.Account.QQ + "-被踢下线: " + (string)Event.Target);
                     break;
                 }
-                case QQNotifyEventType.CAPACHA_VERIFY:
+                case QQNotifyEventType.CapachaVerify:
                 {
                     try
                     {
@@ -48,8 +48,8 @@ namespace iQQ.Net.WebQQCore
                     break;
                 }
 
-                case QQNotifyEventType.UNKNOWN_ERROR:
-                case QQNotifyEventType.NET_ERROR:
+                case QQNotifyEventType.UnknownError:
+                case QQNotifyEventType.NetError:
                 DefaultLogger.Info(client.Account.QQ + "-出错：" + Event.Target.ToString());
                 break;
 
@@ -71,7 +71,7 @@ namespace iQQ.Net.WebQQCore
             var username = Console.ReadLine();
             Console.Write("请输入QQ密码：");
             var password = Console.ReadLine();
-            client = new WebQQClient(username, password, handler, threadActorDispatcher);
+            client = new WebQQClient(username, password, _handler, threadActorDispatcher);
 
 
             //测试同步模式登录
@@ -79,13 +79,13 @@ namespace iQQ.Net.WebQQCore
             DefaultLogger.Info(client.Account.Username + "-登录中......");
 
             var Event = future.WaitFinalEvent();
-            if (Event.Type == QQActionEventType.EVT_OK)
+            if (Event.Type == QQActionEventType.EvtOK)
             {
                 DefaultLogger.Info(client.Account.Username + "-登录成功！！！！");
 
                 var getUserInfoEvent = client.GetUserInfo(client.Account, null).WaitFinalEvent();
 
-                if (getUserInfoEvent.Type == QQActionEventType.EVT_OK)
+                if (getUserInfoEvent.Type == QQActionEventType.EvtOK)
                 {
                     DefaultLogger.Info(client.Account.QQ + "-用户信息:" + getUserInfoEvent.Target);
 
@@ -104,7 +104,7 @@ namespace iQQ.Net.WebQQCore
                 //所有的逻辑完了后，启动消息轮询
                 client.BeginPollMsg();
             }
-            else if (Event.Type == QQActionEventType.EVT_ERROR)
+            else if (Event.Type == QQActionEventType.EvtError)
             {
                 var ex = (QQException)Event.Target;
                 DefaultLogger.Info(ex.Message);

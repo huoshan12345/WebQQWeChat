@@ -125,13 +125,13 @@ namespace iQQ.Net.WebQQCore.Im.Action
                     buddy.IsVip = isVip != 0;
                 }
 
-                NotifyActionEvent(QQActionEventType.EVT_OK, store.GetCategoryList());
+                NotifyActionEvent(QQActionEventType.EvtOK, store.GetCategoryList());
 
             }
             else
             {
                 // LOG.warn("unknown retcode: " + retcode);
-                NotifyActionEvent(QQActionEventType.EVT_ERROR, new QQException(QQErrorCode.ERROR_HTTP_STATUS, "unknown retcode: " + retcode));
+                NotifyActionEvent(QQActionEventType.EvtError, new QQException(QQErrorCode.ERROR_HTTP_STATUS, "unknown retcode: " + retcode));
             }
         }
     }

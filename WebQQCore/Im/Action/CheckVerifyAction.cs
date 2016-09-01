@@ -53,11 +53,11 @@ namespace iQQ.Net.WebQQCore.Im.Action
                     Code = m.Groups[2].Value,
                     Uin = long.Parse(qqHex, NumberStyles.HexNumber)
                 };
-                NotifyActionEvent(QQActionEventType.EVT_OK, args);
+                NotifyActionEvent(QQActionEventType.EvtOK, args);
             }
             else
             {
-                NotifyActionEvent(QQActionEventType.EVT_ERROR, QQErrorCode.UNEXPECTED_RESPONSE);
+                NotifyActionEvent(QQActionEventType.EvtError, QQErrorCode.UNEXPECTED_RESPONSE);
             }
         }
     }

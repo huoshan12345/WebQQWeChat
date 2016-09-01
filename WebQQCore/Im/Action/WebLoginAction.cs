@@ -113,7 +113,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
                 switch (ret)
                 {
                     case 0:
-                    NotifyActionEvent(QQActionEventType.EVT_OK, mc.Groups[3].Value);
+                    NotifyActionEvent(QQActionEventType.EvtOK, mc.Groups[3].Value);
                     break;
 
                     case 3:

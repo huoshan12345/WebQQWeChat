@@ -77,7 +77,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
 
             }
 
-            NotifyActionEvent(QQActionEventType.EVT_OK, account);
+            NotifyActionEvent(QQActionEventType.EvtOK, account);
         }
 
     }

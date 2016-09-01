@@ -33,11 +33,11 @@ namespace iQQ.Net.WebQQCore.Im.Action
             if (m.Success)
             {
                 var sid = m.Groups[1].Value;
-                NotifyActionEvent(QQActionEventType.EVT_OK, sid);
+                NotifyActionEvent(QQActionEventType.EvtOK, sid);
             }
             else
             {
-                NotifyActionEvent(QQActionEventType.EVT_ERROR, QQErrorCode.UNEXPECTED_RESPONSE);
+                NotifyActionEvent(QQActionEventType.EvtError, QQErrorCode.UNEXPECTED_RESPONSE);
             }
         }
 

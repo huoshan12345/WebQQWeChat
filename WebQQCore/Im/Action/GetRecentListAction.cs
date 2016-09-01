@@ -77,11 +77,11 @@ namespace iQQ.Net.WebQQCore.Im.Action
                         }
                     }
                 }
-                NotifyActionEvent(QQActionEventType.EVT_OK, recents);
+                NotifyActionEvent(QQActionEventType.EvtOK, recents);
             }
             else
             {
-                NotifyActionEvent(QQActionEventType.EVT_ERROR, new QQException(QQErrorCode.UNEXPECTED_RESPONSE));
+                NotifyActionEvent(QQActionEventType.EvtError, new QQException(QQErrorCode.UNEXPECTED_RESPONSE));
             }
         }
 

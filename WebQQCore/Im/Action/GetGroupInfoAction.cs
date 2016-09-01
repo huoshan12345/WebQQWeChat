@@ -111,7 +111,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
                     member.IsVip = (vipinfo["is_vip"].ToString() != "0");
                 }
 
-                NotifyActionEvent(QQActionEventType.EVT_OK, _group);
+                NotifyActionEvent(QQActionEventType.EvtOK, _group);
             }
             else
             {

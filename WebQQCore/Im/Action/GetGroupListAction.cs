@@ -102,7 +102,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
                     }
                 }
 
-                NotifyActionEvent(QQActionEventType.EVT_OK, store.GetGroupList());
+                NotifyActionEvent(QQActionEventType.EvtOK, store.GetGroupList());
 
             }
             else

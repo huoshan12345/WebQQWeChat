@@ -88,7 +88,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
                 var result = json["result"].ToString();
                 if (result.Equals("ok"))
                 {
-                    NotifyActionEvent(QQActionEventType.EVT_OK, _msg);
+                    NotifyActionEvent(QQActionEventType.EvtOK, _msg);
                 }
             }
             else

@@ -35,11 +35,11 @@ namespace iQQ.Net.WebQQCore.Im.Action
             if (m.Success)
             {
                 var qqHex = m.Groups[2].Value;
-                NotifyActionEvent(QQActionEventType.EVT_OK, qqHex);
+                NotifyActionEvent(QQActionEventType.EvtOK, qqHex);
             }
             else
             {
-                NotifyActionEvent(QQActionEventType.EVT_ERROR,
+                NotifyActionEvent(QQActionEventType.EvtError,
                         new QQException(QQErrorCode.INVALID_LOGIN_AUTH));
             }
         }

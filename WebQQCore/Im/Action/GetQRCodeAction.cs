@@ -42,7 +42,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
         public override void OnHttpStatusOK(QQHttpResponse response)
         {
             var ms = new MemoryStream(response.ResponseData);
-            NotifyActionEvent(QQActionEventType.EVT_OK, Image.FromStream(ms));
+            NotifyActionEvent(QQActionEventType.EvtOK, Image.FromStream(ms));
         }
     }
 }

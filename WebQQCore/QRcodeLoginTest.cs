@@ -17,30 +17,27 @@ using iQQ.Net.WebQQCore.Util.Extensions;
 
 namespace iQQ.Net.WebQQCore
 {
-    /**
-     * 使用二维码登录WebQQ
-     * <p/>
-     * <p/>
-     * Created by Tony on 10/6/15.
-     */
+    /// <summary>
+    /// 使用二维码登录WebQQ
+    /// </summary>
     public class QRcodeLoginTest
     {
         private static readonly IQQClient _mClient = new WebQQClient("", "", (client, notifyEvent) =>
         {
             switch (notifyEvent.Type)
             {
-                case QQNotifyEventType.LOGIN_SUCCESS:
+                case QQNotifyEventType.LoginSuccess:
                 DefaultLogger.Info("登录成功");
                 break;
 
-                case QQNotifyEventType.GROUP_MSG:
+                case QQNotifyEventType.GroupMsg:
                 {
                     var revMsg = (QQMsg)notifyEvent.Target;
                     DefaultLogger.Info($"{client.Account.QQ}-群{revMsg.Group.Name}好友{revMsg.From.QQ}消息：{revMsg.GetText()}");
                     break;
                 }
 
-                case QQNotifyEventType.CHAT_MSG:
+                case QQNotifyEventType.ChatMsg:
                 {
                     var revMsg = (QQMsg)notifyEvent.Target;
                     DefaultLogger.Info($"{client.Account.QQ}-好友{revMsg.From.QQ}消息：{revMsg.GetText()}");
@@ -60,7 +57,7 @@ namespace iQQ.Net.WebQQCore
                     break;
                 }
 
-                case QQNotifyEventType.QRCODE_READY:
+                case QQNotifyEventType.QrcodeReady:
                 {
                     var verify = (Image)notifyEvent.Target;
                     const string path = "verify.png";
@@ -70,7 +67,7 @@ namespace iQQ.Net.WebQQCore
                     break;
                 }
 
-                case QQNotifyEventType.QRCODE_INVALID:
+                case QQNotifyEventType.QrcodeInvalid:
                 {
                     DefaultLogger.Info("二维码已失效");
                     break;
@@ -89,19 +86,19 @@ namespace iQQ.Net.WebQQCore
         {
             // 获取二维码
             var loginResult = _mClient.LoginWithQRCode().WaitFinalEvent();
-            if (loginResult.Type == QQActionEventType.EVT_OK)
+            if (loginResult.Type == QQActionEventType.EvtOK)
             {
                 _mClient.GetBuddyList((s, e) =>
                 {
-                    if (e.Type == QQActionEventType.EVT_OK) DefaultLogger.Info("加载好友列表成功");
+                    if (e.Type == QQActionEventType.EvtOK) DefaultLogger.Info("加载好友列表成功");
                 });
                 _mClient.GetGroupList((s, e) =>
                 {
-                    if (e.Type == QQActionEventType.EVT_OK) DefaultLogger.Info("加载群列表成功");
+                    if (e.Type == QQActionEventType.EvtOK) DefaultLogger.Info("加载群列表成功");
                 });
                 _mClient.GetSelfInfo((s, e) =>
                 {
-                    if (e.Type == QQActionEventType.EVT_OK) DefaultLogger.Info("获取个人信息成功");
+                    if (e.Type == QQActionEventType.EvtOK) DefaultLogger.Info("获取个人信息成功");
                 });
                 _mClient.BeginPollMsg();
             }

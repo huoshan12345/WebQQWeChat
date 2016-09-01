@@ -40,11 +40,11 @@ namespace iQQ.Net.WebQQCore.Im.Action
                 var obj = json["result"].ToObject<JObject>();
                 session.CfaceKey = obj["gface_key"].ToString();
                 session.CfaceSig = obj["gface_sig"].ToString();
-                NotifyActionEvent(QQActionEventType.EVT_OK, session);
+                NotifyActionEvent(QQActionEventType.EvtOK, session);
             }
             else
             {
-                NotifyActionEvent(QQActionEventType.EVT_ERROR,
+                NotifyActionEvent(QQActionEventType.EvtError,
                     new QQException(QQErrorCode.UNEXPECTED_RESPONSE, response.GetResponseString()));
             }
         }

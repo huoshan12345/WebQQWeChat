@@ -61,7 +61,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
                     {
                         pic.IsSuccess = true;
                         pic.FileName = obj["msg"].ToString();
-                        NotifyActionEvent(QQActionEventType.EVT_OK, pic);
+                        NotifyActionEvent(QQActionEventType.EvtOK, pic);
 
                         Context.Store.AddPicItem(pic);
                         return;
@@ -82,7 +82,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
                             //LOG.debug("ret 4: " + r);
                             pic.IsSuccess = true;
                             pic.FileName = r;
-                            NotifyActionEvent(QQActionEventType.EVT_OK, pic);
+                            NotifyActionEvent(QQActionEventType.EvtOK, pic);
                             return;
                         }
                     }
@@ -99,7 +99,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
             // 失败后返回路径
             pic.FileName = file;
             pic.IsSuccess = false;
-            NotifyActionEvent(QQActionEventType.EVT_ERROR, new QQException(QQErrorCode.UNEXPECTED_RESPONSE, "CFace: " + response.GetResponseString()));
+            NotifyActionEvent(QQActionEventType.EvtError, new QQException(QQErrorCode.UNEXPECTED_RESPONSE, "CFace: " + response.GetResponseString()));
         }
     }
 }
