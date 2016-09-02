@@ -3,6 +3,7 @@ using System.Net;
 
 namespace iQQ.Net.WebQQCore.Im.Http
 {
+    [Obsolete("目前用不上")]
     public class QQHttpCookie
     {
         public string Name { get; set; }

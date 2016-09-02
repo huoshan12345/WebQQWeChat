@@ -4,11 +4,6 @@ using Newtonsoft.Json.Linq;
 
 namespace iQQ.Net.WebQQCore.Util
 {
-    /**
-     * <p>DateUtils class.</p>
-     *
-     * @author solosky
-     */
     public class DateUtils
     {
         public static DateTime Parse(JObject jsonobj)
@@ -22,7 +17,6 @@ namespace iQQ.Net.WebQQCore.Util
         /// <summary>
         /// 自1970年1月1日0时起的毫秒数
         /// </summary>
-        /// <param name="d"></param>
         /// <returns></returns>
         public static long NowTimestamp()
         {
@@ -32,7 +26,7 @@ namespace iQQ.Net.WebQQCore.Util
 
     public static class DateTimeExtensions
     {
-        private static readonly DateTime Jan1St1970 = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+        private static readonly DateTime _jan1St1970 = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
 
         /// <summary>
         /// 自1970年1月1日0时起的毫秒数
@@ -41,7 +35,7 @@ namespace iQQ.Net.WebQQCore.Util
         /// <returns></returns>
         public static long CurrentTimeMillis(this DateTime d)
         {
-            return (long)((DateTime.UtcNow - Jan1St1970).TotalMilliseconds);
+            return (long)((DateTime.UtcNow - _jan1St1970).TotalMilliseconds);
         }
 
         public static long CurrentTimeSeconds(this DateTime d)

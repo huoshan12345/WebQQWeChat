@@ -8,35 +8,21 @@ namespace iQQ.Net.WebQQCore.Im.Http
     /// <summary>
     /// 保存和读取cookie
     /// </summary>
+    [Obsolete("目前用不上")]
     public class QQHttpCookieJar
     {
-        /**
-         * <p>Constructor for QQHttpCookieJar.</p>
-         */
         public QQHttpCookieJar()
         {
             this.CookieContainer = new List<QQHttpCookie>();
         }
 
         public List<QQHttpCookie> CookieContainer { get; set; }
-
-        /**
-         * <p>GetCookie.</p>
-         *
-         * @param name a {@link java.lang.String} object.
-         * @param url a {@link java.lang.String} object.
-         * @return a {@link iqq.im.http.QQHttpCookie} object.
-         */
+        
         public QQHttpCookie GetCookie(string name, string url)
         {
             return CookieContainer.FirstOrDefault(cookie => cookie.Name.Equals(name));
         }
 
-        /**
-         * <p>updateCookies.</p>
-         *
-         * @param tmpCookies a {@link java.util.List} object.
-         */
         public void UpdateCookies(List<string> tmpCookies)
         {
             var newCookies = new List<string>();
