@@ -103,7 +103,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
                 case QQActionEventType.EvtRetry:
                 {
                     var ex = (QQException)target;
-                    Context.Logger.Error($"[Action={GetType().Name}, Type={type.GetFullDescription()}, RetryTimes={_retryTimes}]{ex.ToSimpleString()}]");
+                    Context.Logger.Warn($"[Action={GetType().Name}, Type={type.GetFullDescription()}, RetryTimes={_retryTimes}]{ex.ToSimpleString()}]");
                     break;
                 }
 

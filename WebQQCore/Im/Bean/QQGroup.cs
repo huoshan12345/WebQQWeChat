@@ -42,9 +42,8 @@ namespace iQQ.Net.WebQQCore.Im.Bean
 
         public override bool Equals(object obj)
         {
-            if (obj == null || this == obj) return false;
-            var g = obj as QQGroup;
-            return g?.Code == Code;
+            var other = obj as QQGroup;
+            return Code == other?.Code;
         }
 
         public override string ToString()

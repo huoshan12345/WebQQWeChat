@@ -62,9 +62,19 @@ namespace iQQ.Net.WebQQCore.Im.Event.Future
         {
             while (!Cts.Token.IsCancellationRequested)
             {
-                var Event = WaitEvent();
-                if (Event == null) break;
-                if (IsFinalEvent(Event)) return Event;
+                try
+                {
+                    var Event = WaitEvent();
+                    if (IsFinalEvent(Event)) return Event;
+                }
+                catch (OperationCanceledException)
+                {
+                    return new QQActionEvent(QQActionEventType.EvtCanceled, this);
+                }
+                catch (Exception ex)
+                {
+                    return new QQActionEvent(QQActionEventType.EvtError, ex);
+                }
             }
             return new QQActionEvent(QQActionEventType.EvtCanceled, this);
         }

@@ -129,8 +129,8 @@ namespace iQQ.Net.WebQQCore.Im.Module
                                 // 如果已经在登录中，或者已经登录了，就不用再次执行
                                 Context.Logger.Warn("GetPT4Auth error!!! wait Relogin...", ex);
                                 var session = Context.Session;
-                                if (session.State == QQSessionState.LOGINING
-                                    || session.State == QQSessionState.KICKED) return;
+                                if (session.State == QQSessionState.Logining
+                                    || session.State == QQSessionState.Kicked) return;
 
                                 var procModule = Context.GetModule<ProcModule>(QQModuleType.PROC);
                                 procModule.Relogin();// 重新登录成功会重新唤醒beginPoll

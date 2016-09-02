@@ -26,7 +26,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
         {
             var req = CreateHttpRequest(HttpConstants.Get, QQConstants.URL_GET_GROUP_INFO_EXT);
             req.AddGetValue("gcode", _group.Code);
-            req.AddGetValue("vfwebqq", Context.Account.Vfwebqq);
+            req.AddGetValue("vfwebqq", Context.Session.Vfwebqq);
             req.AddGetValue("t", DateTime.Now.CurrentTimeMillis());
             req.AddHeader("Referer", QQConstants.REFERER_S);
             // req.AddHeader("Origin", QQConstants.ORIGIN_S);
@@ -41,11 +41,12 @@ namespace iQQ.Net.WebQQCore.Im.Action
 
             if (json["retcode"].ToString() == "0")
             {
-                json = json["result"].ToObject<JObject>();
-                var ginfo = json["ginfo"].ToObject<JObject>();
+                var result = json["result"].ToObject<JObject>();
+                var ginfo = result["ginfo"].ToObject<JObject>();
                 _group.Memo = ginfo["memo"].ToString();
                 _group.Level = ginfo["level"].ToObject<int>();
-                _group.CreateTime = new DateTime(ginfo["createtime"].ToObject<int>());
+                var ticks = ginfo["createtime"].ToObject<long>() * 1000;
+                _group.CreateTime = ticks > DateTime.MaxValue.Ticks ? DateTime.Now : new DateTime(ticks);
 
                 var members = ginfo["members"].ToObject<JArray>();
                 for (var i = 0; i < members.Count; i++)
@@ -63,11 +64,11 @@ namespace iQQ.Net.WebQQCore.Im.Action
                 }
 
                 //result/minfo
-                var minfos = json["minfo"].ToObject<JArray>();
+                var minfos = result["minfo"].ToObject<JArray>();
                 foreach (var token in minfos)
                 {
                     var minfo = token.ToObject<JObject>();
-                    var member = _group.GetMemberByUin(minfo["uin"].ToObject<int>());
+                    var member = _group.GetMemberByUin(minfo["uin"].ToObject<long>());
                     member.Nickname = minfo["nick"].ToString();
                     member.Province = minfo["province"].ToString();
                     member.Country = minfo["country"].ToString();
@@ -76,7 +77,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
                 }
 
                 //result/stats
-                var stats = json["stats"].ToObject<JArray>();
+                var stats = result["stats"].ToObject<JArray>();
                 for (var i = 0; i < stats.Count; i++)
                 {
                     // 下面重新设置最新状态
@@ -87,9 +88,9 @@ namespace iQQ.Net.WebQQCore.Im.Action
                 }
 
                 //results/cards
-                if (json["cards"] != null)
+                if (result["cards"] != null)
                 {
-                    var cards = json["cards"].ToObject<JArray>();
+                    var cards = result["cards"].ToObject<JArray>();
                     for (var i = 0; i < cards.Count; i++)
                     {
                         var card = cards[i].ToObject<JObject>();
@@ -102,7 +103,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
                 }
 
                 //results/vipinfo
-                var vipinfos = json["vipinfo"].ToObject<JArray>();
+                var vipinfos = result["vipinfo"].ToObject<JArray>();
                 for (var i = 0; i < vipinfos.Count; i++)
                 {
                     var vipinfo = vipinfos[i].ToObject<JObject>();

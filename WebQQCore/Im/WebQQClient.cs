@@ -210,12 +210,12 @@ namespace iQQ.Net.WebQQCore.Im
         public IQQActionFuture Login(QQStatus status, QQActionListener listener)
         {
             //检查客户端状态，是否允许登陆
-            if (Session.State == QQSessionState.ONLINE)
+            if (Session.State == QQSessionState.Online)
             {
                 throw new Exception("client is aready online !!!");
             }
             Account.Status = status;
-            Session.State = QQSessionState.LOGINING;
+            Session.State = QQSessionState.Logining;
 
             var procModule = GetModule<ProcModule>(QQModuleType.PROC);
             return procModule.Login(listener);
@@ -241,13 +241,13 @@ namespace iQQ.Net.WebQQCore.Im
         /// <returns></returns>
         public IQQActionFuture Relogin(QQStatus status, QQActionListener listener)
         {
-            if (Session.State == QQSessionState.ONLINE)
+            if (Session.State == QQSessionState.Online)
             {
                 throw new Exception("client is aready online !!!");
             }
 
             Account.Status = status;
-            Session.State = QQSessionState.LOGINING;
+            Session.State = QQSessionState.Logining;
             var procModule = GetModule<ProcModule>(QQModuleType.PROC);
             return procModule.Relogin(status, listener);
         }
@@ -291,7 +291,7 @@ namespace iQQ.Net.WebQQCore.Im
         /// </summary>
         public void BeginPollMsg()
         {
-            if (Session.State == QQSessionState.OFFLINE)
+            if (Session.State == QQSessionState.Offline)
             {
                 throw new Exception("client is aready offline !!!");
             }
@@ -367,7 +367,7 @@ namespace iQQ.Net.WebQQCore.Im
         /// <returns></returns>
         public IQQActionFuture Logout(QQActionListener listener)
         {
-            if (Session.State == QQSessionState.OFFLINE)
+            if (Session.State == QQSessionState.Offline)
             {
                 // _logger.Warn($"{Account.Username}: client is aready offline !!!");
                 throw new Exception("client is aready offline !!!");
@@ -380,7 +380,7 @@ namespace iQQ.Net.WebQQCore.Im
                 if (Event.Type == QQActionEventType.EvtOK
                     || Event.Type == QQActionEventType.EvtError)
                 {
-                    Session.State = QQSessionState.OFFLINE;
+                    Session.State = QQSessionState.Offline;
                     Destroy();
                 }
                 listener?.Invoke(sender, Event);
@@ -750,7 +750,7 @@ namespace iQQ.Net.WebQQCore.Im
         /// <returns></returns>
         public bool IsOnline()
         {
-            return Session.State == QQSessionState.ONLINE;
+            return Session.State == QQSessionState.Online;
         }
 
         /// <summary>
@@ -759,7 +759,7 @@ namespace iQQ.Net.WebQQCore.Im
         /// <returns></returns>
         public bool IsLogining()
         {
-            return Session.State == QQSessionState.LOGINING;
+            return Session.State == QQSessionState.Logining;
         }
 
         public void AcceptBuddyRequest(string qq, QQActionListener listener = null)

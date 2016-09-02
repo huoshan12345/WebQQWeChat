@@ -23,6 +23,7 @@ namespace iQQ.Net.WebQQCore.Im.Event
 
         /// <summary>
         /// 等待最终的事件，通常是EVT_CANCELED,EVT_ERROR,EVT_OK
+        /// 不抛出异常
         /// </summary>
         /// <returns></returns>
         QQActionEvent WaitFinalEvent();

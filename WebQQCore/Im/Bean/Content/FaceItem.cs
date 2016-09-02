@@ -50,7 +50,7 @@ namespace iQQ.Net.WebQQCore.Im.Bean.Content
 
         public string ToText()
         {
-            return string.Format("[表情 {0}]", Id);
+            return $"[表情 {Id}]";
         }
     }
 

@@ -62,7 +62,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
                 session.SessionId = ret["psessionid"].ToString();
                 // session.Vfwebqq = ret["vfwebqq"].ToString();
                 account.Status = QQStatus.ValueOfRaw(ret["status"].ToString());
-                session.State = QQSessionState.ONLINE;
+                session.State = QQSessionState.Online;
                 session.Index = ret["index"].ToObject<int>();
                 session.Port = ret["port"].ToObject<int>();
                 NotifyActionEvent(QQActionEventType.EvtOK, null);

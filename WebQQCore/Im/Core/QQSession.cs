@@ -5,11 +5,11 @@ namespace iQQ.Net.WebQQCore.Im.Core
 
     public enum QQSessionState
     {
-        OFFLINE,
-        ONLINE,
-        KICKED,
-        LOGINING,
-        ERROR
+        Offline,
+        Online,
+        Kicked,
+        Logining,
+        Error
     }
 
     /// <summary>

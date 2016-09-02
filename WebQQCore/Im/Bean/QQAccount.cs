@@ -11,8 +11,5 @@ namespace iQQ.Net.WebQQCore.Im.Bean
         public string Username { get; set; }
 
         public string Vfwebqq { get; set; }
-
-        public byte[] Md5PwdArray => Password.Md5ToArray();
-        public string Md5Pwd => Password.Md5ToString();
     }
 }

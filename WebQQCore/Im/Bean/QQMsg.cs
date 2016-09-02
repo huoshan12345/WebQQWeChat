@@ -71,6 +71,60 @@ namespace iQQ.Net.WebQQCore.Im.Bean
             return JsonConvert.SerializeObject(json);
         }
 
+
+        //public void ParseContentList(JToken jToken)
+        //{
+        //    /*
+        //        [
+        //            [
+        //                "font",
+        //                {
+        //                    "color": "000000",
+        //                    "name": "微软雅黑",
+        //                    "size": 10,
+        //                    "style": [
+        //                        0,
+        //                        0,
+        //                        0
+        //                    ]
+        //                }
+        //            ],
+        //            "d"
+        //        ]
+        //    */
+        //    var array = jToken as JArray;
+        //    if (array != null)
+        //    {
+        //        foreach (var t in array)
+        //        {
+        //            if (t is JArray)
+        //            {
+        //                var items = t.ToObject<JArray>();
+        //                var contentItemType = ContentItemType.ValueOfRaw(items[0].ToString());
+        //                var item = JsonConvert.SerializeObject(items);
+        //                switch (contentItemType.Name.ToUpper())
+        //                {
+        //                    case "FACE": AddContentItem(new FaceItem(item)); break;
+        //                    case "FONT": AddContentItem(new FontItem(item)); break;
+        //                    case "CFACE": AddContentItem(new CFaceItem(item)); break;
+        //                    case "OFFPIC": AddContentItem(new OffPicItem(item)); break;
+
+        //                    default:
+        //                    break;
+        //                }
+        //            }
+        //            else
+        //            {
+        //                AddContentItem(new TextItem(JsonConvert.SerializeObject(t)));
+        //            }
+        //        }
+        //    }
+        //    else
+        //    {
+        //        throw new QQException(QQErrorCode.JSON_ERROR);
+        //    }
+        //}
+
         public void ParseContentList(string text)
         {
             try
@@ -86,23 +140,23 @@ namespace iQQ.Net.WebQQCore.Im.Bean
                         switch (contentItemType.Name.ToUpper())
                         {
                             case "FACE":
-                                AddContentItem(new FaceItem(item));
-                                break;
+                            AddContentItem(new FaceItem(item));
+                            break;
 
                             case "FONT":
-                                AddContentItem(new FontItem(item));
-                                break;
+                            AddContentItem(new FontItem(item));
+                            break;
 
                             case "CFACE":
-                                AddContentItem(new CFaceItem(item));
-                                break;
+                            AddContentItem(new CFaceItem(item));
+                            break;
 
                             case "OFFPIC":
-                                AddContentItem(new OffPicItem(item));
-                                break;
+                            AddContentItem(new OffPicItem(item));
+                            break;
 
                             default:
-                                break;
+                            break;
                         }
                     }
                     else

@@ -124,12 +124,14 @@ namespace iQQ.Net.WebQQCore.Im.Core
 
         public QQGroup GetGroupById(long id)
         {
-            return (from g in _groupMap where g.Value.Gid == id select g.Value).FirstOrDefault();
+            // return (from g in _groupMap where g.Value.Gid == id select g.Value).FirstOrDefault();
+            return _groupMap.Where(g => g.Value.Gid == id).Select(g => g.Value).FirstOrDefault();
         }
 
         public QQGroup GetGroupByGin(long gin)
         {
-            return (from g in _groupMap where g.Value.Gin == gin select g.Value).FirstOrDefault();
+            // return (from g in _groupMap where g.Value.Gin == gin select g.Value).FirstOrDefault();
+            return _groupMap.Where(g => g.Value.Gin == gin).Select(g => g.Value).FirstOrDefault();
         }
 
         public QQDiscuz GetDiscuzByDid(long did)

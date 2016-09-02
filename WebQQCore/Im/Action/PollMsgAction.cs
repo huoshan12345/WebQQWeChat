@@ -134,7 +134,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
                     {
                         // 被踢下线
                         Context.Account.Status = QQStatus.OFFLINE;
-                        Context.Session.State = QQSessionState.KICKED;
+                        Context.Session.State = QQSessionState.Kicked;
                         notifyEvents.Add(new QQNotifyEvent(QQNotifyEventType.KickOffline, pollData["reason"].ToString()));
                         break;
                     }
@@ -192,7 +192,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
             switch (retcode)
             {
                 case 0:
-                { 
+                {
                     //有可能为  {"retcode":0,"result":"ok"}
                     var result = json["result"] as JArray;
                     if (result != null)
@@ -211,7 +211,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
                 case 110:
                 case 109:
                 // 客户端主动退出
-                Context.Session.State = QQSessionState.OFFLINE;
+                Context.Session.State = QQSessionState.Offline;
                 break;
 
                 case 116:
@@ -231,7 +231,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
                     // {"retcode":121,"t":"0"}
                     /*			LOG.info("**** NEED_REAUTH retcode: " + retcode + " ****");*/
                     Context.Logger.Warn($"**** NEED_REAUTH retcode: {retcode} ****");
-                    Context.Session.State = QQSessionState.OFFLINE;
+                    Context.Session.State = QQSessionState.Offline;
                     var ex = new QQException(QQErrorCode.INVALID_LOGIN_AUTH);
                     //NotifyActionEvent(QQActionEventType.EVT_ERROR, ex);
                     //return;
@@ -240,7 +240,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
 
                 case 103: // 未知，暂且重新登录
                 {
-                    Context.Session.State = QQSessionState.OFFLINE;
+                    Context.Session.State = QQSessionState.Offline;
                     throw new QQException(QQErrorCode.INVALID_LOGIN_AUTH, str);
                 }
 
@@ -352,43 +352,57 @@ namespace iQQ.Net.WebQQCore.Im.Action
         /// <returns></returns>
         private QQNotifyEvent ProcessGroupMsg(JObject pollData)
         {
-            // {"retcode":0,"result":[{"poll_type":"group_message",
-            // "value":{"msg_id":6175,"from_uin":3924684389,"to_uin":1070772010,"msg_id2":992858,"msg_type":43,"reply_ip":176621921,
-            // "group_code":3439321257,"send_uin":1843694270,"seq":875,"time":1365934781,"info_seq":170125666,"content":[["font",{"size":10,"color":"3b3b3b","style":[0,0,0],"name":"\u5FAE\u8F6F\u96C5\u9ED1"}],"eeeeeeeee "]}}]}
-
+            /*
+                {
+                    "content": [
+                        [
+                            "font",
+                            {
+                                "color": "000000",
+                                "name": "微软雅黑",
+                                "size": 10,
+                                "style": [
+                                    0,
+                                    0,
+                                    0
+                                ]
+                            }
+                        ],
+                        "d"
+                    ],
+                    "from_uin": 3471070329,
+                    "group_code": 3471070329,
+                    "msg_id": 29208,
+                    "msg_type": 0,
+                    "send_uin": 1000693217,
+                    "time": 1472803177,
+                    "to_uin": 89009143
+                }
+            */
             try
             {
                 var store = Context.Store;
+                var groupMudule = Context.GetModule<GroupModule>(QQModuleType.GROUP);
+
+                var ticks = pollData["time"].ToObject<long>() * 1000;
                 var msg = new QQMsg
                 {
                     Id = pollData["msg_id"].ToObject<long>(),
-                    Id2 = pollData["msg_id2"]?.ToObject<long>() ?? 0
+                    Type = QQMsgType.GROUP_MSG,
+                    To = Context.Account,
+                    Date = ticks > DateTime.MaxValue.Ticks ? DateTime.Now : new DateTime(ticks),
                 };
                 var fromUin = pollData["send_uin"].ToObject<long>();
-                var groupCode = pollData["group_code"].ToObject<long>();
-                // var groupId = pollData["info_seq"].ToObject<long>(); // 真实群号码
-                var group = store.GetGroupByGin(groupCode);
+                var code = pollData["group_code"].ToObject<long>(); // 实际上是gid不是gcode
+                var group = store.GetGroupById(code);
                 if (group == null)
                 {
-                    var groupModule = Context.GetModule<GroupModule>(QQModuleType.GROUP);
-                    group = new QQGroup
-                    {
-                        Code = groupCode,
-                        // Gid = groupId
-                    };
-                    // put to store
-                    store.AddGroup(group);
-                    groupModule.GetGroupInfo(group);
+                    groupMudule.GetGroupList();
+                    group = new QQGroup { Gid = code };
                 }
-                //if (group.Gid <= 0)
-                //{
-                //    group.Gid = groupId;
-                //}
+                groupMudule.GetGroupInfo(group);
 
                 msg.ParseContentList(JsonConvert.SerializeObject(pollData["content"]));
-                msg.Type = QQMsgType.GROUP_MSG;
-                msg.To = Context.Account;
-                var ticks = pollData["time"].ToObject<long>() * 1000;
                 msg.Date = ticks > DateTime.MaxValue.Ticks ? DateTime.Now : new DateTime(ticks);
                 msg.Group = group;
                 msg.From = group.GetMemberByUin(fromUin);
@@ -400,8 +414,9 @@ namespace iQQ.Net.WebQQCore.Im.Action
                     group.Members.Add(member);
                     // 获取用户信息
                     var userModule = Context.GetModule<UserModule>(QQModuleType.USER);
-                    userModule.GetUserInfo(member, null);
+                    userModule.GetUserInfo(member);
                 }
+
                 return new QQNotifyEvent(QQNotifyEventType.GroupMsg, msg);
             }
             catch (Exception ex)
@@ -572,7 +587,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
         {
             var type = pollData["type"].ToString().ToLower();
             if (type == "verify_required")
-            {	//好友请求
+            {   //好友请求
                 var target = new JObject
                 {
                     {"type", "verify_required"},                    // 通知类型（好友请求）

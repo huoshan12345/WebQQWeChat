@@ -229,6 +229,9 @@ namespace iQQ.Net.WebQQCore.Im.Module
                 {
                     future.NotifyActionEvent(QQActionEventType.EvtOK, null);
                     Context.FireNotify(new QQNotifyEvent(QQNotifyEventType.LoginSuccess));
+                    Context.GetModule<GroupModule>(QQModuleType.GROUP).GetGroupList();
+                    Context.GetModule<CategoryModule>(QQModuleType.CATEGORY).GetCategoryList();
+                    Context.GetModule<LoginModule>(QQModuleType.LOGIN).GetSelfInfo();
                     DoPollMsg();
                 }
                 else if (Event.Type == QQActionEventType.EvtError)
@@ -241,7 +244,7 @@ namespace iQQ.Net.WebQQCore.Im.Module
         public IQQActionFuture Relogin(QQStatus status, QQActionListener listener)
         {
             Context.Account.Status = status;
-            Context.Session.State = QQSessionState.LOGINING;
+            Context.Session.State = QQSessionState.Logining;
             var login = Context.GetModule<LoginModule>(QQModuleType.LOGIN);
             Context.Logger.Info("iqq client Relogin...");
             var future = login.ChannelLogin(status, (sender, Event) =>
@@ -263,7 +266,7 @@ namespace iQQ.Net.WebQQCore.Im.Module
         {
             Context.Logger.Info("Relogin...");
             var session = Context.Session;
-            if (session.State == QQSessionState.LOGINING) return;
+            if (session.State == QQSessionState.Logining) return;
             // 登录失效，重新登录
             Relogin(Context.Account.Status, (sender, Event) =>
             {
@@ -300,12 +303,12 @@ namespace iQQ.Net.WebQQCore.Im.Module
 
                     // 准备提交下次poll请求
                     var session = Context.Session;
-                    if (session.State == QQSessionState.ONLINE)
+                    if (session.State == QQSessionState.Online)
                     {
                         DoPollMsg();
                         return;
                     }
-                    else if (session.State != QQSessionState.KICKED)
+                    else if (session.State != QQSessionState.Kicked)
                     {
                         Relogin();
                         return;
@@ -324,7 +327,7 @@ namespace iQQ.Net.WebQQCore.Im.Module
                     //因为自带了错误重试机制，如果出现了错误回调，表明已经超时多次均失败，这里直接返回网络错误的异常
                     var session = Context.Session;
                     var account = Context.Account;
-                    session.State = QQSessionState.OFFLINE;
+                    session.State = QQSessionState.Offline;
 
                     if (code == QQErrorCode.INVALID_LOGIN_AUTH)
                     {

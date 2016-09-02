@@ -96,22 +96,7 @@ namespace iQQ.Net.WebQQCore
         public static void Main(string[] args)
         {
             // 获取二维码
-            var loginResult = _mClient.LoginWithQRCode().WaitFinalEvent(); // 登录之后自动开始轮训
-            if (loginResult.Type == QQActionEventType.EvtOK)
-            {
-                _mClient.GetBuddyList((s, e) =>
-                {
-                    if (e.Type == QQActionEventType.EvtOK) _mClient.Logger.Info("加载好友列表成功");
-                });
-                //_mClient.GetGroupList((s, e) =>
-                //{
-                //    if (e.Type == QQActionEventType.EvtOK) client.Logger.Info("加载群列表成功");
-                //});
-                _mClient.GetSelfInfo((s, e) =>
-                {
-                    if (e.Type == QQActionEventType.EvtOK) _mClient.Logger.Info("获取个人信息成功");
-                });
-            }
+            _mClient.LoginWithQRCode(); // 登录之后自动开始轮训
             Console.ReadKey();
         }
     }
