@@ -73,11 +73,11 @@ namespace iQQ.Net.WebQQCore.Im.Actor
         {
             if (_dispatchThread == null)
             {
-                _dispatchThread = Task.Factory.StartNew(Run);
+                _dispatchThread = Task.Run(() => Run());
             }
             if (_pollDispatchThread == null)
             {
-                _pollDispatchThread = Task.Factory.StartNew(DoPoll);
+                _pollDispatchThread = Task.Run(() => DoPoll());
             }
         }
 
@@ -108,7 +108,7 @@ namespace iQQ.Net.WebQQCore.Im.Actor
 
             public Task ExecuteAsync()
             {
-                throw new NotImplementedException();
+                return Task.Run(() => Execute());
             }
         }
     }

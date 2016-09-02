@@ -11,11 +11,6 @@ namespace iQQ.Net.WebQQCore.Im.Module
     /// </summary>
     public class DiscuzModule : AbstractModule
     {
-        public override QQModuleType GetModuleType()
-        {
-            return QQModuleType.DISCUZ;
-        }
-
         public IQQActionFuture GetDiscuzList(QQActionListener listener)
         {
             return PushHttpAction(new GetDiscuzListAction(this.Context, listener));

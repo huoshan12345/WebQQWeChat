@@ -22,26 +22,27 @@ namespace iQQ.Net.WebQQCore
     /// </summary>
     public class QRcodeLoginTest
     {
-        private static Process qrCodeProcess = null;
+        private static Process _qrCodeProcess = null;
+
         private static readonly IQQClient _mClient = new WebQQClient("", "", (client, notifyEvent) =>
         {
             switch (notifyEvent.Type)
             {
                 case QQNotifyEventType.LoginSuccess:
-                client.Logger.Info($"[{client.Account.QQ}]: 登录成功");
+                client.Logger.Info("登录成功");
                 break;
 
                 case QQNotifyEventType.GroupMsg:
                 {
                     var revMsg = (QQMsg)notifyEvent.Target;
-                    client.Logger.Info($"{client.Account.QQ}-群{revMsg.Group.Name}好友{revMsg.From.QQ}消息：{revMsg.GetText()}");
+                    client.Logger.Info($"群[{revMsg.Group.Name}]-好友[{revMsg.From.Nickname}]：{revMsg.GetText()}");
                     break;
                 }
 
                 case QQNotifyEventType.ChatMsg:
                 {
                     var revMsg = (QQMsg)notifyEvent.Target;
-                    client.Logger.Info($"{client.Account.QQ}-好友{revMsg.From.QQ}消息：{revMsg.GetText()}");
+                    client.Logger.Info($"好友[{revMsg.From.Nickname}]：{revMsg.GetText()}");
 
                     var msgReply = new QQMsg()
                     {
@@ -63,23 +64,23 @@ namespace iQQ.Net.WebQQCore
                     var verify = (Image)notifyEvent.Target;
                     const string path = "verify.png";
                     verify.Save(path, System.Drawing.Imaging.ImageFormat.Png);
-                    DefaultLogger.Info("请扫描在项目根目录下qrcode.png图片");
-                    qrCodeProcess = Process.Start(path);
+                    client.Logger.Info("请扫描在项目根目录下qrcode.png图片");
+                    _qrCodeProcess = Process.Start(path);
                     break;
                 }
 
                 case QQNotifyEventType.QrcodeSuccess:
                 {
-                    qrCodeProcess?.CloseMainWindow();
-                    qrCodeProcess?.Kill();
+                    _qrCodeProcess?.CloseMainWindow();
+                    _qrCodeProcess?.Kill();
                     break;
                 }
 
                 case QQNotifyEventType.QrcodeInvalid:
                 {
-                    DefaultLogger.Warn("二维码已失效");
-                    qrCodeProcess?.CloseMainWindow();
-                    qrCodeProcess?.Kill();
+                    client.Logger.Warn("二维码已失效");
+                    _qrCodeProcess?.CloseMainWindow();
+                    _qrCodeProcess?.Kill();
                     break;
                 }
 

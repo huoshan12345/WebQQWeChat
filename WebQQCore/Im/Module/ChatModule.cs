@@ -16,10 +16,6 @@ namespace iQQ.Net.WebQQCore.Im.Module
     /// </summary>
     public class ChatModule : AbstractModule
     {
-        public override QQModuleType GetModuleType()
-        {
-            return QQModuleType.CHAT;
-        }
 
         private IQQActionFuture DoSendMsg(QQMsg msg, QQActionListener listener)
         {

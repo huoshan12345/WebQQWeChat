@@ -19,20 +19,11 @@
         public ProcActionFuture(QQActionListener proxyListener, bool cancelable)
             : base(proxyListener)
         {
-            IsCanceled = false;
         }
 
         public override bool IsCancelable()
         {
             return true;
         }
-
-        public override void Cancel()
-        {
-            IsCanceled = true;
-            NotifyActionEvent(QQActionEventType.EvtCanceled, null);
-        }
-
     }
-
 }

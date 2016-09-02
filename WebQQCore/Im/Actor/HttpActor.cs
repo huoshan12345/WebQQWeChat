@@ -31,6 +31,10 @@ namespace iQQ.Net.WebQQCore.Im.Actor
 
         public void Execute()
         {
+            if (_action.ActionFuture.IsCanceled)
+            {
+                return;
+            }
             try
             {
                 switch (_type)

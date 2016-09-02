@@ -15,7 +15,7 @@ namespace iQQ.Net.WebQQCore.Im.Http
 
         QQActionListener Listener { get; set; }
 
-        IQQActionFuture ActionFuture { set; }
+        IQQActionFuture ActionFuture { get; set; }
 
         Task<QQHttpResponse> ResponseFuture { set; }
     }

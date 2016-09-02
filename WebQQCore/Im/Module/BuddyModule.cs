@@ -24,11 +24,6 @@ namespace iQQ.Net.WebQQCore.Im.Module
         {
             return PushHttpAction(new AcceptBuddyAddAction(Context, listener, account));
         }
-
-        public override QQModuleType GetModuleType()
-        {
-            return QQModuleType.BUDDY;
-        }
     }
 
 }

@@ -11,11 +11,6 @@ namespace iQQ.Net.WebQQCore.Im.Module
     /// </summary>
     public class GroupModule : AbstractModule
     {
-        public override QQModuleType GetModuleType()
-        {
-            return QQModuleType.GROUP;
-        }
-
         public IQQActionFuture GetGroupList(QQActionListener listener = null)
         {
             return PushHttpAction(new GetGroupListAction(Context, listener));

@@ -8,180 +8,82 @@ namespace iQQ.Net.WebQQCore.Im.Event.Future
 {
     public abstract class AbstractActionFuture : IQQActionFuture
     {
-        private readonly BlockingCollection<QQActionEvent> _eventQueue;
-        private bool _hasEvent;
-        public QQActionListener Listener { get; set; }
-        public QQActionListener ProxyListener { get; set; }
+        private volatile bool _hasEvent;
+        private volatile bool _isCanceled;
+
+        // BlockingCollection<T> is a thread-safe collection
+        protected BlockingCollection<QQActionEvent> EventQueue { get;  }
+
+        protected bool HasEvent
+        {
+            get { return _hasEvent; }
+            private set { _hasEvent = value; } 
+        }
+
+        public bool IsCanceled
+        {
+            get { return _isCanceled; } 
+            private set { _isCanceled = value; } 
+        }
+
+        protected CancellationTokenSource Cts
+        {
+            get { return _cts; }
+            set { _cts = value; }
+        }
+
+        private volatile CancellationTokenSource _cts;
+
+        public QQActionListener Listener { get; }
+        public QQActionListener ProxyListener { get; }
 
         protected AbstractActionFuture(QQActionListener proxyListener)
         {
+            _isCanceled = false;
             _hasEvent = true;
-            _eventQueue = new BlockingCollection<QQActionEvent>();
+            EventQueue = new BlockingCollection<QQActionEvent>();
             ProxyListener = proxyListener;
             Listener = (sender, args) =>
             {
-                ProxyListener?.Invoke(sender, args);
-                _eventQueue.Add(args);
+                ProxyListener?.Invoke(this, args);
+                EventQueue.Add(args);
             };
+            Cts = new CancellationTokenSource();
         }
 
-        public bool IsCanceled { get; set; }
-
-        public QQActionEvent WaitEvent()
+        private QQActionEvent WaitEvent()
         {
-            if (!_hasEvent)
-            {
-                return null;
-            }
-            try
-            {
-                var Event = _eventQueue.Take();
-                _hasEvent = !IsFinalEvent(Event);
-                return Event;
-            }
-            catch (ThreadInterruptedException e)
-            {
-                throw new QQException(QQErrorCode.WAIT_INTERUPPTED, e);
-            }
-        }
-
-        public QQActionEvent WaitEvent(long timeoutMs)
-        {
-            QQActionEvent Event = null;
-            if (!_hasEvent)
-            {
-                return null;
-            }
-            try
-            {
-                _eventQueue.TryTake(out Event, (int)timeoutMs);
-            }
-            catch (Exception e)
-            {
-                // throw new QQException(QQErrorCode.WAIT_INTERUPPTED, e);
-                NotifyActionEvent(QQActionEventType.EvtError, new QQException(QQErrorCode.WAIT_INTERUPPTED, e));
-            }
-
-            if (Event == null)
-            {
-                // throw new QQException(QQErrorCode.WAIT_TIMEOUT);
-                NotifyActionEvent(QQActionEventType.EvtError, new QQException(QQErrorCode.WAIT_TIMEOUT));
-            }
-            else
-            {
-                _hasEvent = !IsFinalEvent(Event);
-            }
+            var Event = EventQueue.Take(Cts.Token);
+            HasEvent = !IsFinalEvent(Event);
             return Event;
         }
 
         public QQActionEvent WaitFinalEvent()
         {
-            QQActionEvent Event = null;
-            while ((Event = WaitEvent()) != null)
+            while (!Cts.Token.IsCancellationRequested)
             {
-                if (IsFinalEvent(Event))
-                {
-                    return Event;
-                }
+                var Event = WaitEvent();
+                if (Event == null) break;
+                if (IsFinalEvent(Event)) return Event;
             }
-            return new QQActionEvent(QQActionEventType.EvtError, this);
+            return new QQActionEvent(QQActionEventType.EvtCanceled, this);
         }
 
         public QQActionEvent WaitFinalEvent(long timeoutMs)
         {
-            QQActionEvent Event = null;
-            var start = DateTime.Now.CurrentTimeMillis();
-            while ((Event = WaitEvent(timeoutMs)) != null)
-            {
-                var end = DateTime.Now.CurrentTimeMillis();
-                if (IsFinalEvent(Event))
-                {
-                    return Event;
-                }
-                else
-                {
-                    timeoutMs -= end - start;
-                    start = DateTime.Now.CurrentTimeMillis();
-                }
-            }
-            return new QQActionEvent(QQActionEventType.EvtError, this);
-        }
-
-        public Task<QQActionEvent> WhenEvent()
-        {
-            return Task.Run(() =>
-            {
-                try
-                {
-                    var Event = _eventQueue.Take();
-                    _hasEvent = !IsFinalEvent(Event);
-                    return Event;
-                }
-                catch (OperationCanceledException ex)
-                {
-                    throw new QQException(QQErrorCode.CANCELED, ex);
-                }
-                catch (Exception ex)
-                {
-                    throw new QQException(QQErrorCode.UNKNOWN_ERROR, ex);
-                }
-            });
-        }
-
-        public Task<QQActionEvent> WhenEvent(CancellationToken token)
-        {
-            return Task.Run(() =>
-            {
-                try
-                {
-                    var Event = _eventQueue.Take(token);
-                    _hasEvent = !IsFinalEvent(Event);
-                    return Event;
-                }
-                catch (OperationCanceledException ex)
-                {
-                    throw new QQException(QQErrorCode.CANCELED, ex);
-                }
-                catch (Exception ex)
-                {
-                    throw new QQException(QQErrorCode.UNKNOWN_ERROR, ex);
-                }
-            }, token);
-
+            _cts = new CancellationTokenSource(new TimeSpan(timeoutMs));
+            return WaitFinalEvent();
         }
 
         public Task<QQActionEvent> WhenFinalEvent()
         {
-            return Task.Run(() =>
-            {
-                while (true)
-                {
-                    var Event = WhenEvent().Result;
-                    if (Event == null) break;
-                    if (IsFinalEvent(Event)) return Event;
-                }
-                return new QQActionEvent(QQActionEventType.EvtError, this);
-            });
+            return Task.Run(() => WaitFinalEvent(), _cts.Token);
         }
 
-        public Task<QQActionEvent> WhenFinalEvent(CancellationToken token)
+        public Task<QQActionEvent> WhenFinalEvent(long timeoutMs)
         {
-            return Task.Run(() =>
-            {
-                while (true)
-                {
-                    token.ThrowIfCancellationRequested();
-                    var Event = WhenEvent(token).Result;
-                    if (Event == null) break;
-                    if (IsFinalEvent(Event)) return Event;
-                }
-                return new QQActionEvent(QQActionEventType.EvtError, this);
-            }, token);
-        }
-
-        public Task<QQActionEvent> WhenFinalEvent(int timeoutMs)
-        {
-            return WhenFinalEvent(new CancellationTokenSource(timeoutMs).Token);
+            _cts = new CancellationTokenSource(new TimeSpan(timeoutMs));
+            return WhenFinalEvent();
         }
 
         private bool IsFinalEvent(QQActionEvent Event)
@@ -199,6 +101,14 @@ namespace iQQ.Net.WebQQCore.Im.Event.Future
 
         public abstract bool IsCancelable();
 
-        public abstract void Cancel();
+        public virtual void Cancel()
+        {
+            if (IsCancelable() && !IsCanceled)
+            {
+                IsCanceled = true;
+                Cts.Cancel();
+                NotifyActionEvent(QQActionEventType.EvtCanceled, this);
+            }
+        }
     }
 }

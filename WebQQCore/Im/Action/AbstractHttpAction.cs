@@ -96,14 +96,14 @@ namespace iQQ.Net.WebQQCore.Im.Action
                 case QQActionEventType.EvtError:
                 {
                     var ex = (QQException)target;
-                    Context.Logger.Error($"[Action={GetType().Name}, Type={type.GetFullDescription()}, {ex}]");
+                    Context.Logger.Error($"[Action={GetType().Name}, Type={type.GetFullDescription()}]{ex}");
                     break;
                 }
 
                 case QQActionEventType.EvtRetry:
                 {
                     var ex = (QQException)target;
-                    Context.Logger.Error($"[Action={GetType().Name}, Type={type.GetFullDescription()}, {ex.ToSimpleString()}]");
+                    Context.Logger.Error($"[Action={GetType().Name}, Type={type.GetFullDescription()}, RetryTimes={_retryTimes}]{ex.ToSimpleString()}]");
                     break;
                 }
 
@@ -119,7 +119,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
                 default:
                 break;
             }
-            Listener?.Invoke(ActionFuture, new QQActionEvent(type, target));
+            Listener?.Invoke(this, new QQActionEvent(type, target));
         }
 
         public virtual QQHttpRequest BuildRequest()

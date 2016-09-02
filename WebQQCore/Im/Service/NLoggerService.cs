@@ -13,7 +13,7 @@ namespace iQQ.Net.WebQQCore.Im.Service
     {
         private Logger _logger;
         private IQQContext _context;
-        private string LoggerPrefix => $"[{_context.Account.QQ}]: ";
+        private string LoggerPrefix => _context.Account.QQ == 0 ? string.Empty : $"[{_context.Account.QQ}]: ";
 
         public void Init(IQQContext context)
         {

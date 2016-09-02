@@ -230,7 +230,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
                     // 服务器需求重新认证
                     // {"retcode":121,"t":"0"}
                     /*			LOG.info("**** NEED_REAUTH retcode: " + retcode + " ****");*/
-                    DefaultLogger.Warn($"**** NEED_REAUTH retcode: {retcode} ****");
+                    Context.Logger.Warn($"**** NEED_REAUTH retcode: {retcode} ****");
                     Context.Session.State = QQSessionState.OFFLINE;
                     var ex = new QQException(QQErrorCode.INVALID_LOGIN_AUTH);
                     //NotifyActionEvent(QQActionEventType.EVT_ERROR, ex);

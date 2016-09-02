@@ -19,7 +19,5 @@ namespace iQQ.Net.WebQQCore.Im.Core
     public interface IQQModule : IQQLifeCycle
     {
         IQQActionFuture PushHttpAction(IHttpAction action);
-
-        QQModuleType GetModuleType();
     }
 }

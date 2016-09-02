@@ -15,11 +15,6 @@ namespace iQQ.Net.WebQQCore.Im.Module
     /// </summary>
     public class ProcModule : AbstractModule
     {
-        public override QQModuleType GetModuleType()
-        {
-            return QQModuleType.PROC;
-        }
-
         public IQQActionFuture LoginWithQRCode(QQActionListener listener)
         {
             var future = new ProcActionFuture(listener, true);
@@ -248,7 +243,7 @@ namespace iQQ.Net.WebQQCore.Im.Module
             Context.Account.Status = status;
             Context.Session.State = QQSessionState.LOGINING;
             var login = Context.GetModule<LoginModule>(QQModuleType.LOGIN);
-            DefaultLogger.Info("iqq client Relogin...");
+            Context.Logger.Info("iqq client Relogin...");
             var future = login.ChannelLogin(status, (sender, Event) =>
             {
                 if (Event.Type == QQActionEventType.EvtError)

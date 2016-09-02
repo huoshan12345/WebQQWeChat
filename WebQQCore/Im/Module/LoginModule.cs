@@ -16,11 +16,6 @@ namespace iQQ.Net.WebQQCore.Im.Module
             return PushHttpAction(new GetSelfInfoAction(Context, listener));
         }
 
-        public override QQModuleType GetModuleType()
-        {
-            return QQModuleType.LOGIN;
-        }
-
         public IQQActionFuture GetQRCode(QQActionListener listener)
         {
             return PushHttpAction(new GetQRCodeAction(Context, listener));

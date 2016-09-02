@@ -29,7 +29,5 @@ namespace iQQ.Net.WebQQCore.Im.Module
             Context.PushActor(new HttpActor(HttpActorType.BUILD_REQUEST, Context, action));
             return future;
         }
-
-        public abstract QQModuleType GetModuleType();
     }
 }

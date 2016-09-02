@@ -14,10 +14,5 @@ namespace iQQ.Net.WebQQCore.Im.Module
         {
             return PushHttpAction(new GetBuddyListAction(this.Context, listener));
         }
-
-        public override QQModuleType GetModuleType()
-        {
-            return QQModuleType.CATEGORY;
-        }
     }
 }
