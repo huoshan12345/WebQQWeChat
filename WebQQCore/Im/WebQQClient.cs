@@ -280,10 +280,10 @@ namespace iQQ.Net.WebQQCore.Im
                 }
             }
             // 重新登录成功，重新poll
-            if (Event.Type == QQNotifyEventType.ReloginSuccess)
-            {
-                BeginPollMsg();
-            }
+            //if (Event.Type == QQNotifyEventType.ReloginSuccess)
+            //{
+            //    BeginPollMsg(); // 直接在重登录之后轮训，不用到这里
+            //}
         }
 
         /// <summary>

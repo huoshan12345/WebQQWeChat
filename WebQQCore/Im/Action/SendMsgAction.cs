@@ -82,11 +82,11 @@ namespace iQQ.Net.WebQQCore.Im.Action
         {
             var str = response.GetResponseString();
             var json = JObject.Parse(str);
-            var retcode = json["retcode"].ToObject<int>();
-            if (retcode == 0)
+            var retcode = json["errCode"].ToString();
+            if (retcode == "0")
             {
-                var result = json["result"].ToString();
-                if (result.Equals("ok"))
+                var msg = json["msg"].ToString();
+                if (msg == "send ok")
                 {
                     NotifyActionEvent(QQActionEventType.EvtOK, _msg);
                 }

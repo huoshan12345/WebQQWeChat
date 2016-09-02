@@ -22,6 +22,7 @@ namespace iQQ.Net.WebQQCore
     /// </summary>
     public class QRcodeLoginTest
     {
+        private static Process qrCodeProcess = null;
         private static readonly IQQClient _mClient = new WebQQClient("", "", (client, notifyEvent) =>
         {
             switch (notifyEvent.Type)
@@ -62,14 +63,23 @@ namespace iQQ.Net.WebQQCore
                     var verify = (Image)notifyEvent.Target;
                     const string path = "verify.png";
                     verify.Save(path, System.Drawing.Imaging.ImageFormat.Png);
-                    client.Logger.Info("请扫描在项目根目录下qrcode.png图片");
-                    Process.Start(path);
+                    DefaultLogger.Info("请扫描在项目根目录下qrcode.png图片");
+                    qrCodeProcess = Process.Start(path);
+                    break;
+                }
+
+                case QQNotifyEventType.QrcodeSuccess:
+                {
+                    qrCodeProcess?.CloseMainWindow();
+                    qrCodeProcess?.Kill();
                     break;
                 }
 
                 case QQNotifyEventType.QrcodeInvalid:
                 {
-                    client.Logger.Info("二维码已失效");
+                    DefaultLogger.Warn("二维码已失效");
+                    qrCodeProcess?.CloseMainWindow();
+                    qrCodeProcess?.Kill();
                     break;
                 }
 
@@ -85,7 +95,7 @@ namespace iQQ.Net.WebQQCore
         public static void Main(string[] args)
         {
             // 获取二维码
-            var loginResult = _mClient.LoginWithQRCode().WaitFinalEvent();
+            var loginResult = _mClient.LoginWithQRCode().WaitFinalEvent(); // 登录之后自动开始轮训
             if (loginResult.Type == QQActionEventType.EvtOK)
             {
                 _mClient.GetBuddyList((s, e) =>
@@ -100,7 +110,6 @@ namespace iQQ.Net.WebQQCore
                 {
                     if (e.Type == QQActionEventType.EvtOK) _mClient.Logger.Info("获取个人信息成功");
                 });
-                _mClient.BeginPollMsg();
             }
             Console.ReadKey();
         }

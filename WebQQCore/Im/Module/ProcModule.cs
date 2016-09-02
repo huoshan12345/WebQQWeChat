@@ -234,6 +234,7 @@ namespace iQQ.Net.WebQQCore.Im.Module
                 {
                     future.NotifyActionEvent(QQActionEventType.EvtOK, null);
                     Context.FireNotify(new QQNotifyEvent(QQNotifyEventType.LoginSuccess));
+                    DoPollMsg();
                 }
                 else if (Event.Type == QQActionEventType.EvtError)
                 {
@@ -247,7 +248,7 @@ namespace iQQ.Net.WebQQCore.Im.Module
             Context.Account.Status = status;
             Context.Session.State = QQSessionState.LOGINING;
             var login = Context.GetModule<LoginModule>(QQModuleType.LOGIN);
-            Context.Logger.Info("iqq client Relogin...");
+            DefaultLogger.Info("iqq client Relogin...");
             var future = login.ChannelLogin(status, (sender, Event) =>
             {
                 if (Event.Type == QQActionEventType.EvtError)
@@ -275,6 +276,7 @@ namespace iQQ.Net.WebQQCore.Im.Module
                 {
                     // 重新登录成功重新POLL
                     Context.FireNotify(new QQNotifyEvent(QQNotifyEventType.ReloginSuccess, null));
+                    DoPollMsg();
                 }
                 else if (Event.Type == QQActionEventType.EvtError)
                 {
@@ -332,18 +334,19 @@ namespace iQQ.Net.WebQQCore.Im.Module
                     if (code == QQErrorCode.INVALID_LOGIN_AUTH)
                     {
                         Relogin();
+                        return;
                     }
                     else if (code == QQErrorCode.IO_ERROR || code == QQErrorCode.IO_TIMEOUT || code == QQErrorCode.INVALID_RESPONSE)
                     {
                         account.Status = QQStatus.OFFLINE;
                         //粗线了IO异常，直接报网络错误
                         Context.FireNotify(new QQNotifyEvent(QQNotifyEventType.NetError, ex));
+                        return;
                     }
                     else
                     {
                         Context.Logger.Info("poll msg unexpected error, ignore it ...", ex);
                         Relogin();
-                        DoPollMsg();
                         return;
                     }
                 }

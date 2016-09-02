@@ -43,16 +43,8 @@ namespace iQQ.Net.WebQQCore.Im.Action
         public override void OnHttpStatusOK(QQHttpResponse response)
         {
             var ms = new MemoryStream(response.ResponseData); // 输入流
-            Image image = null;
-            try
-            {
-                image = Image.FromStream(ms);
-                _user.Face = image;
-            }
-            catch (IOException e)
-            {
-                throw new QQException(QQErrorCode.IO_ERROR, e);
-            }
+            var image = Image.FromStream(ms);
+            _user.Face = image;
             NotifyActionEvent(QQActionEventType.EvtOK, _user);
         }
     }
