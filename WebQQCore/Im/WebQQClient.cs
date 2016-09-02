@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using iQQ.Net.WebQQCore.Im.Actor;
 using iQQ.Net.WebQQCore.Im.Bean;
 using iQQ.Net.WebQQCore.Im.Bean.Content;
@@ -312,7 +313,7 @@ namespace iQQ.Net.WebQQCore.Im
         public IQQActionFuture GetBuddyList(QQActionListener listener)
         {
             var categoryModule = GetModule<CategoryModule>(QQModuleType.CATEGORY);
-            return categoryModule.GetCategoryList(listener);
+            return categoryModule.GetBuddyList(listener);
         }
 
         /// <summary>
@@ -713,7 +714,7 @@ namespace iQQ.Net.WebQQCore.Im
         /// <returns></returns>
         public List<QQBuddy> GetBuddyList()
         {
-            return Store.GetBuddyList();
+            return Store.GetBuddyList().ToList();
         }
 
         /// <summary>
@@ -722,7 +723,7 @@ namespace iQQ.Net.WebQQCore.Im
         /// <returns></returns>
         public List<QQGroup> GetGroupList()
         {
-            return Store.GetGroupList();
+            return Store.GetGroupList().ToList();
         }
 
         /// <summary>
@@ -731,7 +732,7 @@ namespace iQQ.Net.WebQQCore.Im
         /// <returns></returns>
         public List<QQDiscuz> GetDiscuzList()
         {
-            return Store.GetDiscuzList();
+            return Store.GetDiscuzList().ToList();
         }
 
         /// <summary>

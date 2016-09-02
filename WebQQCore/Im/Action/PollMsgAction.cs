@@ -42,8 +42,8 @@ namespace iQQ.Net.WebQQCore.Im.Action
             req.Timeout = 60 * 1000;
             req.ReadTimeout = 60 * 1000;
             req.ConnectTimeout = 60 * 1000;
-            req.AddHeader("Referer", QQConstants.REFFER);
-            req.AddHeader("Origin", QQConstants.ORIGIN);
+            req.Refer = "https://d1.web2.qq.com/cfproxy.html?v=20151105001&callback=1";
+            req.Origin = "https://d1.web2.qq.com";
             return req;
         }
 
@@ -233,16 +233,15 @@ namespace iQQ.Net.WebQQCore.Im.Action
                     /*			LOG.info("**** NEED_REAUTH retcode: " + retcode + " ****");*/
                     Context.Logger.Warn($"**** NEED_REAUTH retcode: {retcode} ****");
                     Context.Session.State = QQSessionState.Offline;
-                    var ex = new QQException(QQErrorCode.InvalidLoginAuth);
                     //NotifyActionEvent(QQActionEventType.EVT_ERROR, ex);
                     //return;
-                    throw ex;
+                    throw new QQException(QQErrorCode.InvalidLoginAuth);
                 }
 
                 case 103: // 未知，暂且重新登录
                 {
                     Context.Session.State = QQSessionState.Offline;
-                    throw new QQException(QQErrorCode.InvalidLoginAuth, str);
+                    throw new QQException(QQErrorCode.NeedToLogin, str);
                 }
 
                 //notifyEvents.Add(new QQNotifyEvent(QQNotifyEventType.NEED_REAUTH, null));

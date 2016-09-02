@@ -26,10 +26,10 @@ namespace iQQ.Net.WebQQCore.Im.Http
         {
             RawUrl = rawUrl;
             Method = method.ToUpper();
-            HeaderMap = new Dictionary<string, string>();
-            PostMap = new Dictionary<string, string>();
-            GetMap = new Dictionary<string, string>();
-            FileMap = new Dictionary<string, string>();
+            HeaderMap = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+            PostMap = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+            GetMap = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+            FileMap = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
             HeaderMap[HttpConstants.ContentType] = Method == HttpConstants.Post ? DefaultPostContentType : DefaultGetContentType;
             HeaderMap[HttpConstants.UserAgent] = QQConstants.USER_AGENT;
             HeaderMap[HttpConstants.Referer] = QQConstants.REFFER;
@@ -125,13 +125,19 @@ namespace iQQ.Net.WebQQCore.Im.Http
         public string Refer
         {
             get { return HeaderMap[HttpConstants.Referer]; }
-            set { HeaderMap[HttpConstants.ContentType] = value; }
+            set { HeaderMap[HttpConstants.Referer] = value; }
         }
 
         public string UserAgent
         {
             get { return HeaderMap[HttpConstants.UserAgent]; }
             set { HeaderMap[HttpConstants.UserAgent] = value; }
+        }
+
+        public string Origin
+        {
+            get { return HeaderMap[HttpConstants.Origin]; }
+            set { HeaderMap[HttpConstants.Origin] = value; }
         }
     }
 

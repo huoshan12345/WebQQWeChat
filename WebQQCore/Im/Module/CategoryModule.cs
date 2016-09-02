@@ -10,9 +10,9 @@ namespace iQQ.Net.WebQQCore.Im.Module
     /// </summary>
     public class CategoryModule : AbstractModule
     {
-        public IQQActionFuture GetCategoryList(QQActionListener listener = null)
+        public IQQActionFuture GetBuddyList(QQActionListener listener = null)
         {
-            return PushHttpAction(new GetBuddyListAction(this.Context, listener));
+            return PushHttpAction(new GetBuddyListAction(Context, listener));
         }
     }
 }

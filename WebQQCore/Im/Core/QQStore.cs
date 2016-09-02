@@ -139,34 +139,39 @@ namespace iQQ.Net.WebQQCore.Im.Core
             return _discuzMap.ContainsKey(did) ? _discuzMap[did] : null;
         }
 
-        public List<QQBuddy> GetBuddyList()
+        public IEnumerable<QQBuddy> GetBuddyList()
         {
-            return _buddyMap.Values.ToList();
+            return _buddyMap.Select(item => item.Value);
         }
+        public int BuddyCount => _buddyMap.Count;
 
-        public List<QQStranger> GetStrangerList()
+        public IEnumerable<QQStranger> GetStrangerList()
         {
-            return _strangerMap.Values.ToList();
+            return _strangerMap.Select(item => item.Value);
         }
+        public int StrangerCount => _strangerMap.Count;
 
-        public List<QQCategory> GetCategoryList()
+        public IEnumerable<QQCategory> GetCategoryList()
         {
-            return _categoryMap.Values.ToList();
+            return _categoryMap.Select(item => item.Value);
         }
+        public int CategoryCount => _categoryMap.Count;
 
-        public List<QQGroup> GetGroupList()
+        public IEnumerable<QQGroup> GetGroupList()
         {
-            return _groupMap.Values.ToList();
+            return _groupMap.Select(item => item.Value);
         }
+        public int GroupCount => _groupMap.Count;
 
-        public List<QQDiscuz> GetDiscuzList()
+        public IEnumerable<QQDiscuz> GetDiscuzList()
         {
-            return _discuzMap.Values.ToList();
+            return _discuzMap.Select(item => item.Value);
         }
+        public int DiscuzCount => _discuzMap.Count;
 
-        public List<QQBuddy> GetOnlineBuddyList()
+        public IEnumerable<QQBuddy> GetOnlineBuddyList()
         {
-            return (from buddy in _buddyMap where QQStatus.IsGeneralOnline(buddy.Value.Status) select buddy.Value).ToList();
+            return (from buddy in _buddyMap where QQStatus.IsGeneralOnline(buddy.Value.Status) select buddy.Value);
         }
 
         public List<IContentItem> GetPicItemList()

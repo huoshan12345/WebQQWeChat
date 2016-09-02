@@ -239,9 +239,27 @@ namespace iQQ.Net.WebQQCore.Im.Module
                 {
                     future.NotifyActionEvent(QQActionEventType.EvtOK, null);
                     Context.FireNotify(new QQNotifyEvent(QQNotifyEventType.LoginSuccess));
-                    Context.GetModule<GroupModule>(QQModuleType.GROUP).GetGroupList();
-                    Context.GetModule<CategoryModule>(QQModuleType.CATEGORY).GetCategoryList();
-                    Context.GetModule<LoginModule>(QQModuleType.LOGIN).GetSelfInfo();
+                    Context.GetModule<GroupModule>(QQModuleType.GROUP).GetGroupList((s, e) =>
+                    {
+                        if (e.Type == QQActionEventType.EvtOK)
+                        {
+                            Context.Logger.Info($"获取群列表成功，共{Context.Store.GroupCount}个群");
+                        }
+                    });
+                    Context.GetModule<CategoryModule>(QQModuleType.CATEGORY).GetBuddyList((s, e) =>
+                    {
+                        if (e.Type == QQActionEventType.EvtOK)
+                        {
+                            Context.Logger.Info($"获取好友列表成功，共{Context.Store.BuddyCount}个好友");
+                        }
+                    });
+                    Context.GetModule<LoginModule>(QQModuleType.LOGIN).GetSelfInfo((s, e) =>
+                    {
+                        if (e.Type == QQActionEventType.EvtOK)
+                        {
+                            Context.Logger.Info($"获取个人信息成功");
+                        }
+                    });
                     DoPollMsg();
                 }
                 else if (Event.Type == QQActionEventType.EvtError)
@@ -256,12 +274,11 @@ namespace iQQ.Net.WebQQCore.Im.Module
             Context.Account.Status = status;
             Context.Session.State = QQSessionState.Logining;
             var login = Context.GetModule<LoginModule>(QQModuleType.LOGIN);
-            Context.Logger.Info("iqq client Relogin...");
             var future = login.ChannelLogin(status, (sender, Event) =>
             {
                 if (Event.Type == QQActionEventType.EvtError)
                 {
-                    Context.Logger.Info("iqq client ReloginChannel fail!!! use Relogin.");
+                    Context.Logger.Info("iqq client ReloginChannel fail!!! use Login.");
                     Login(listener);
                 }
                 else
