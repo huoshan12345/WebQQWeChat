@@ -13,7 +13,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
     public class CheckEmailSig : AbstractHttpAction
     {
         private string _url;
-        public CheckEmailSig(string url, IQQContext context, QQActionEventHandler listener)
+        public CheckEmailSig(string url, IQQContext context, QQActionListener listener)
             : base(context, listener)
         {
             this._url = url;

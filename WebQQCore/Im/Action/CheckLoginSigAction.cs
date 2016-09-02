@@ -13,7 +13,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
     {
         private readonly string _checkSigUrl;
  
-        public CheckLoginSigAction(IQQContext context, QQActionEventHandler listener, string checkSigUrl)
+        public CheckLoginSigAction(IQQContext context, QQActionListener listener, string checkSigUrl)
             : base(context, listener)
         {
             _checkSigUrl = checkSigUrl;

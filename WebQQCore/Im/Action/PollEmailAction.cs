@@ -21,7 +21,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
         private readonly string _sid;
         private readonly long _t;
 
-        public PollEmailAction(string sid, long t, IQQContext context, QQActionEventHandler listener)
+        public PollEmailAction(string sid, long t, IQQContext context, QQActionListener listener)
             : base(context, listener)
         {
             _sid = sid;

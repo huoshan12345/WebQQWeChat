@@ -1,6 +1,7 @@
 ﻿using iQQ.Net.WebQQCore.Im.Actor;
 using iQQ.Net.WebQQCore.Im.Bean;
 using iQQ.Net.WebQQCore.Im.Event;
+using iQQ.Net.WebQQCore.Im.Service;
 
 namespace iQQ.Net.WebQQCore.Im.Core
 {
@@ -9,6 +10,8 @@ namespace iQQ.Net.WebQQCore.Im.Core
     /// </summary>
     public interface IQQContext
     {
+        ILoggerService Logger { get; }
+
         void PushActor(IQQActor actor);
 
         void FireNotify(QQNotifyEvent qqNotifyEvent);

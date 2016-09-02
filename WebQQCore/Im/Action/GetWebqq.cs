@@ -19,7 +19,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
          * @param context  a {@link IQQContext} object.
          * @param listener a {@link QQActionListener} object.
          */
-        public GetWebqq(IQQContext context, QQActionEventHandler listener) : base(context, listener)
+        public GetWebqq(IQQContext context, QQActionListener listener) : base(context, listener)
         {
 
         }

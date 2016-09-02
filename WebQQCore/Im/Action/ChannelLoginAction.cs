@@ -14,7 +14,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
     {
         private readonly QQStatus _status;
 
-        public ChannelLoginAction(IQQContext context, QQActionEventHandler listener, QQStatus status)
+        public ChannelLoginAction(IQQContext context, QQActionListener listener, QQStatus status)
             : base(context, listener)
         {
             this._status = status;

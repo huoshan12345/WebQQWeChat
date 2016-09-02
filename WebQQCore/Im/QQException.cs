@@ -2,6 +2,7 @@
 using System;
 using System.IO;
 using System.Net;
+using System.Text;
 using iQQ.Net.WebQQCore.Util.Extensions;
 using Newtonsoft.Json;
 
@@ -122,8 +123,20 @@ namespace iQQ.Net.WebQQCore.Im
             ErrorCode = errorCode;
         }
 
-        public override string StackTrace => base.StackTrace ?? InnerException?.StackTrace ?? string.Empty;
+        public override string StackTrace => base.StackTrace ?? InnerException?.StackTrace;
 
         public override string Message => base.Message.RegexReplace(@"[\r\n]+", string.Empty);
+
+        public override string ToString()
+        {
+            var msg = new StringBuilder($"ErrorCode={ErrorCode}, ErrorMsg={Message}, StackTrace=");
+            msg.AppendLineIf($"{Environment.NewLine}{StackTrace}", StackTrace != null);
+            return msg.ToString();
+        }
+
+        public string ToSimpleString()
+        {
+            return $"ErrorCode={ErrorCode}, ErrorMsg={Message}";
+        }
     }
 }

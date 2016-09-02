@@ -16,7 +16,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
     {
         private readonly QQUser _user;
  
-        public ShakeWindowAction(IQQContext context, QQActionEventHandler listener, QQUser user)
+        public ShakeWindowAction(IQQContext context, QQActionListener listener, QQUser user)
             : base(context, listener)
         {
 

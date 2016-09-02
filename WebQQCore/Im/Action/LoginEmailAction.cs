@@ -13,7 +13,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
     /// </summary>
     public class LoginEmailAction : AbstractHttpAction
     {
-        public LoginEmailAction(IQQContext context, QQActionEventHandler listener) : base(context, listener) { }
+        public LoginEmailAction(IQQContext context, QQActionListener listener) : base(context, listener) { }
 
         public override QQHttpRequest OnBuildRequest()
         {

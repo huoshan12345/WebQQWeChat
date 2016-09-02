@@ -13,7 +13,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
     /// </summary>
     public class UpdateGroupMessageFilterAction : AbstractHttpAction
     {
-        public UpdateGroupMessageFilterAction(IQQContext context, QQActionEventHandler listener) : base(context, listener) { }
+        public UpdateGroupMessageFilterAction(IQQContext context, QQActionListener listener) : base(context, listener) { }
 
         public override QQHttpRequest OnBuildRequest()
         {

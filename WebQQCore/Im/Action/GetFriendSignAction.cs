@@ -18,7 +18,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
 
         private readonly QQUser _buddy;
 
-        public GetFriendSignAction(IQQContext context, QQActionEventHandler listener,QQUser buddy)
+        public GetFriendSignAction(IQQContext context, QQActionListener listener,QQUser buddy)
             : base(context, listener)
         {
             this._buddy = buddy;

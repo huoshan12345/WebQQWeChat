@@ -209,15 +209,7 @@ namespace iQQ.Net.WebQQCore.Im.Bean
             }
             if (json["birthday"] != null)
             {
-                try
-                {
-                    Birthday = DateUtils.Parse(json["birthday"].ToObject<JObject>());
-                }
-                catch (Exception e)
-                {
-                    Birthday = null;
-                    DefaultLogger.Warn(e.Message, e);
-                }
+                Birthday = DateUtils.Parse(json["birthday"].ToObject<JObject>());
             }
         }
     }

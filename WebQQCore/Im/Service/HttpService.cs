@@ -163,7 +163,7 @@ namespace iQQ.Net.WebQQCore.Im.Service
             QQHttpCookie qqHttpCookie = null;
             var cookie = _cookieContainer.GetCookies(new Uri(url))[name] ?? _cookieContainer.GetCookies(name).FirstOrDefault();
             if (cookie != null) qqHttpCookie = new QQHttpCookie(cookie);
-            else DefaultLogger.Error($"获取cookie失败：{name}");
+            else Context.Logger.Error($"获取cookie失败：{name}");
             return qqHttpCookie;
         }
 

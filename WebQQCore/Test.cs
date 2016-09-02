@@ -8,9 +8,10 @@ using iQQ.Net.WebQQCore.Util;
 
 namespace iQQ.Net.WebQQCore
 {
+    [Obsolete("验证码登录方式已经不可用，请使用二维码登录")]
     class Test
     {
-        private static readonly QQNotifyHandler _handler = (client, Event) =>
+        private static readonly QQNotifyListener _listener = (client, Event) =>
         {
             //var client = sender as IQQClient;
             //if (client == null) return;
@@ -21,12 +22,12 @@ namespace iQQ.Net.WebQQCore
                 case QQNotifyEventType.ChatMsg:
                 {
                     var msg = (QQMsg)Event.Target;
-                        DefaultLogger.Info("{0}-好友{1}消息：{2}", client.Account.QQ, msg.From.QQ, msg.GetText());
+                        client.Logger.Info($"{client.Account.QQ}-好友{msg.From.QQ}消息：{msg.GetText()}");
                         break;
                 }
                 case QQNotifyEventType.KickOffline:
                 {
-                    DefaultLogger.Info(client.Account.QQ + "-被踢下线: " + (string)Event.Target);
+                    client.Logger.Info(client.Account.QQ + "-被踢下线: " + (string)Event.Target);
                     break;
                 }
                 case QQNotifyEventType.CapachaVerify:
@@ -35,7 +36,7 @@ namespace iQQ.Net.WebQQCore
                     {
                         var verify = (ImageVerify)Event.Target;
                         verify.Image.Save("verify.png", System.Drawing.Imaging.ImageFormat.Png);
-                        DefaultLogger.Info(verify.Reason);
+                        client.Logger.Info(verify.Reason);
                         Console.Write(client.Account.Username + "-请输入verify.png里面的验证码：");
                         var code = Console.ReadLine();
                         client.SubmitVerify(code, Event);
@@ -43,18 +44,18 @@ namespace iQQ.Net.WebQQCore
                     catch (Exception e)
                     {
                         // TODO Auto-generated catch block
-                        DefaultLogger.Info(client.Account.QQ + e.StackTrace);
+                        client.Logger.Info(client.Account.QQ + e.StackTrace);
                     }
                     break;
                 }
 
                 case QQNotifyEventType.UnknownError:
                 case QQNotifyEventType.NetError:
-                DefaultLogger.Info(client.Account.QQ + "-出错：" + Event.Target.ToString());
+                client.Logger.Info(client.Account.QQ + "-出错：" + Event.Target.ToString());
                 break;
 
                 default:
-                DefaultLogger.Info(client.Account.QQ + "-" + Event.Type + ", " + Event.Target);
+                client.Logger.Info(client.Account.QQ + "-" + Event.Type + ", " + Event.Target);
                 break;
             }
         };
@@ -71,34 +72,34 @@ namespace iQQ.Net.WebQQCore
             var username = Console.ReadLine();
             Console.Write("请输入QQ密码：");
             var password = Console.ReadLine();
-            client = new WebQQClient(username, password, _handler, threadActorDispatcher);
+            client = new WebQQClient(username, password, _listener, threadActorDispatcher);
 
 
             //测试同步模式登录
             var future = client.Login(QQStatus.ONLINE, null);
-            DefaultLogger.Info(client.Account.Username + "-登录中......");
+            client.Logger.Info(client.Account.Username + "-登录中......");
 
             var Event = future.WaitFinalEvent();
             if (Event.Type == QQActionEventType.EvtOK)
             {
-                DefaultLogger.Info(client.Account.Username + "-登录成功！！！！");
+                client.Logger.Info(client.Account.Username + "-登录成功！！！！");
 
                 var getUserInfoEvent = client.GetUserInfo(client.Account, null).WaitFinalEvent();
 
                 if (getUserInfoEvent.Type == QQActionEventType.EvtOK)
                 {
-                    DefaultLogger.Info(client.Account.QQ + "-用户信息:" + getUserInfoEvent.Target);
+                    client.Logger.Info(client.Account.QQ + "-用户信息:" + getUserInfoEvent.Target);
 
 
                     client.GetBuddyList(null).WaitFinalEvent();
-                    DefaultLogger.Info(client.Account.QQ + "-Buddy count: " + client.GetBuddyList().Count);
+                    client.Logger.Info(client.Account.QQ + "-Buddy count: " + client.GetBuddyList().Count);
 
                     foreach (var buddy in client.GetBuddyList())
                     {
                         var f = client.GetUserQQ(buddy, null);
                         var e = f.WaitFinalEvent();
                         var name = string.IsNullOrEmpty(buddy.MarkName) ? buddy.Nickname : buddy.MarkName;
-                        DefaultLogger.Info("{0}, {1}", buddy.QQ, name);
+                        client.Logger.Info($"{buddy.QQ}, {name}");
                     }
                 }
                 //所有的逻辑完了后，启动消息轮询
@@ -107,18 +108,18 @@ namespace iQQ.Net.WebQQCore
             else if (Event.Type == QQActionEventType.EvtError)
             {
                 var ex = (QQException)Event.Target;
-                DefaultLogger.Info(ex.Message);
+                client.Logger.Info(ex.Message);
                 client.Destroy();
                 goto start;
             }
             else
             {
-                DefaultLogger.Info(client.Account.Username + "-登录失败");
+                client.Logger.Info(client.Account.Username + "-登录失败");
                 client.Destroy();
                 goto start;
             }
 
-            DefaultLogger.Info("按任意键退出");
+            client.Logger.Info("按任意键退出");
             Console.ReadLine();
         }
     }

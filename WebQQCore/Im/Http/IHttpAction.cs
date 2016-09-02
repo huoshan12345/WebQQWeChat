@@ -13,7 +13,7 @@ namespace iQQ.Net.WebQQCore.Im.Http
 
         void NotifyActionEvent(QQActionEventType type, object target);
 
-        QQActionEventHandler Listener { get; set; }
+        QQActionListener Listener { get; set; }
 
         IQQActionFuture ActionFuture { set; }
 

@@ -1,11 +1,12 @@
 iQQ.Net
 =======
-这是基于IQQ项目的.Net移植版。
+这个项目是是基于IQQ项目（其中的Webqq-Core）.Net移植版。
+和基于此的一些功能组件。
 
 IQQ项目
 ---
 * IQQ UI: https://github.com/im-qq/iqq.git
-* IQQ Core: https://github.com/im-qq/webqq-core.git
+* IQQ Webqq-Core: https://github.com/im-qq/webqq-core.git
 
 Useage
 ------------

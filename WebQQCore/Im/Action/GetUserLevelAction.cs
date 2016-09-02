@@ -16,7 +16,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
     {
         private QQUser user;
  
-        public GetUserLevelAction(IQQContext context, QQActionEventHandler listener, QQUser user)
+        public GetUserLevelAction(IQQContext context, QQActionListener listener, QQUser user)
             : base(context, listener)
         {
 

@@ -28,7 +28,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
          * @param msg a {@link iqq.im.bean.QQMsg} object.
          * @param picOut a {@link java.io.OutputStream} object.
          */
-        public GetGroupPicAction(IQQContext context, QQActionEventHandler listener,
+        public GetGroupPicAction(IQQContext context, QQActionListener listener,
                                             CFaceItem cface, QQMsg msg, Stream picOut)
             : base(context, listener)
         {

@@ -22,7 +22,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
         private readonly QQUser _user;
 
         public UploadOfflinePictureAction(IQQContext context,
-                QQActionEventHandler listener, QQUser user, string file)
+                QQActionListener listener, QQUser user, string file)
             : base(context, listener)
         {
             _user = user;

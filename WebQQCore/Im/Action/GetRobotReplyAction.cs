@@ -14,7 +14,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
         private QQMsg input;
         private RobotType robotType;
 
-        public GetRobotReplyAction(IQQContext context, QQActionEventHandler listener, QQMsg input, RobotType robotType)
+        public GetRobotReplyAction(IQQContext context, QQActionListener listener, QQMsg input, RobotType robotType)
             : base(context, listener)
         {
             this.input = input;

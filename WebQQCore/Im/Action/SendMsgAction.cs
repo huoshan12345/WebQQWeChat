@@ -17,7 +17,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
     {
         private readonly QQMsg _msg;
         private static long _msgId = 81690000;
-        public SendMsgAction(IQQContext context, QQActionEventHandler listener, QQMsg msg)
+        public SendMsgAction(IQQContext context, QQActionListener listener, QQMsg msg)
             : base(context, listener)
         {
             _msg = msg;
@@ -61,7 +61,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
             }
             else
             {
-                DefaultLogger.Warn("unknown MsgType: " + _msg.Type);
+                Context.Logger.Warn("unknown MsgType: " + _msg.Type);
             }
 
             json.Add("content", _msg.PackContentList());

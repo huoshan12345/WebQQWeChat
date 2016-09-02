@@ -15,7 +15,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
     {
         private readonly string _sid;
  
-        public GetWPKeyAction(string sid, IQQContext context, QQActionEventHandler listener)
+        public GetWPKeyAction(string sid, IQQContext context, QQActionListener listener)
             : base(context, listener)
         {
 

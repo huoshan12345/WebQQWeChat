@@ -20,7 +20,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
     /// </summary>
     public class PollMsgAction : AbstractHttpAction
     {
-        public PollMsgAction(IQQContext context, QQActionEventHandler listener) : base(context, listener) { }
+        public PollMsgAction(IQQContext context, QQActionListener listener) : base(context, listener) { }
 
         public override QQHttpRequest OnBuildRequest()
         {
@@ -67,7 +67,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
             if ((ex as QQException)?.ErrorCode == QQErrorCode.IO_TIMEOUT)
             {
                 Context.PushActor(new HttpActor(HttpActorType.BUILD_REQUEST, Context, this));
-                DefaultLogger.Info("polling...");
+                Context.Logger.Info("polling...");
                 return;
             }
             else base.OnHttpError(ex);
@@ -229,7 +229,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
                 // 服务器需求重新认证
                 // {"retcode":121,"t":"0"}
                 /*			LOG.info("**** NEED_REAUTH retcode: " + retcode + " ****");*/
-                DefaultLogger.Info($"**** NEED_REAUTH retcode: {retcode} ****");
+                Context.Logger.Info($"**** NEED_REAUTH retcode: {retcode} ****");
                 Context.Session.State = QQSessionState.OFFLINE;
                 var ex = new QQException(QQErrorCode.INVALID_LOGIN_AUTH);
                 //NotifyActionEvent(QQActionEventType.EVT_ERROR, ex);

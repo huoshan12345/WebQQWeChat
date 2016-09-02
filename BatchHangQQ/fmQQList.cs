@@ -21,8 +21,8 @@ namespace iQQ.Net.BatchHangQQ
         private readonly ThreadActorDispatcher _threadActorDispatcher = new ThreadActorDispatcher();
         private readonly AutoResetEvent _verifyCodeInputed = new AutoResetEvent(false);
         private readonly Dictionary<string, IQQClient> _qqClients = new Dictionary<string, IQQClient>();
-        private QQNotifyHandler _notifyHandler;
-        private QQActionEventHandler _eventHandler;
+        private QQNotifyListener _notifyListener;
+        private QQActionListener _eventHandler;
         private static readonly string rexQQNumPwd = @"^\d{5,}----.+$";
         private readonly NotifyIcon _notifyIcon;// 创建NotifyIcon对象 
 
@@ -100,7 +100,7 @@ namespace iQQ.Net.BatchHangQQ
                 }
             };
 
-            _notifyHandler = (sender, Event) =>
+            _notifyListener = (sender, Event) =>
             {
                 var client = sender as IQQClient;
                 if (client == null) return;
@@ -303,11 +303,11 @@ namespace iQQ.Net.BatchHangQQ
             switch (type.ToLower())
             {
                 case "webqq":
-                    iqqClient = new WebQQClient(qqNum, qqPassword, _notifyHandler, _threadActorDispatcher);
+                    iqqClient = new WebQQClient(qqNum, qqPassword, _notifyListener, _threadActorDispatcher);
                     break;
 
                 default:
-                    iqqClient = new WebQQClient(qqNum, qqPassword, _notifyHandler, _threadActorDispatcher);
+                    iqqClient = new WebQQClient(qqNum, qqPassword, _notifyListener, _threadActorDispatcher);
                     break;
             }
             _qqClients[qqNum] = iqqClient;

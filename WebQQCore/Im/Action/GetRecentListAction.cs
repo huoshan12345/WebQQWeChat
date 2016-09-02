@@ -14,7 +14,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
     /// </summary>
     public class GetRecentListAction : AbstractHttpAction
     {
-        public GetRecentListAction(IQQContext context, QQActionEventHandler listener) : base(context, listener) { }
+        public GetRecentListAction(IQQContext context, QQActionListener listener) : base(context, listener) { }
 
         public override QQHttpRequest OnBuildRequest()
         {

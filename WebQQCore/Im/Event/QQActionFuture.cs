@@ -50,11 +50,7 @@ namespace iQQ.Net.WebQQCore.Im.Event
 
         Task<QQActionEvent> WhenEvent();
 
-        Task<QQActionEvent> WhenEvent(CancellationToken token);
-
         Task<QQActionEvent> WhenFinalEvent();
-
-        Task<QQActionEvent> WhenFinalEvent(CancellationToken token);
 
         Task<QQActionEvent> WhenFinalEvent(int timeoutMs);
     }

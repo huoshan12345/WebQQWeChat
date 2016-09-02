@@ -133,15 +133,7 @@ namespace iQQ.Net.WebQQCore.Im.Bean
 
         public override string ToString()
         {
-            try
-            {
-                return PackContentList();
-            }
-            catch (QQException e)
-            {
-                DefaultLogger.Warn(e.Message, e);
-                return "";
-            }
+            return PackContentList();
         }
 
         public string GetText()

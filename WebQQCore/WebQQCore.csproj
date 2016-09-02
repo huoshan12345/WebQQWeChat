@@ -62,6 +62,9 @@
     <Compile Include="Im\Action\GetSelfInfoAction.cs" />
     <Compile Include="Im\Action\GetVFWebqq.cs" />
     <Compile Include="Im\Action\GetWebqq.cs" />
+    <Compile Include="Im\Service\EmptyLoggerService.cs" />
+    <Compile Include="Im\Service\ILoggerService.cs" />
+    <Compile Include="Im\Service\NLoggerService.cs" />
     <Compile Include="QRcodeLoginTest.cs" />
     <Compile Include="Util\DefaultLogger.cs" />
     <Compile Include="Util\Extensions\EnumExtensions.cs" />
@@ -185,10 +188,10 @@
     <Compile Include="Im\Module\LoginModule.cs" />
     <Compile Include="Im\Module\ProcModule.cs" />
     <Compile Include="Im\Module\UserModule.cs" />
-    <Compile Include="Im\IQQActionListener.cs" />
+    <Compile Include="Im\QQActionListener.cs" />
     <Compile Include="Im\IQQClient.cs" />
     <Compile Include="Im\QQException.cs" />
-    <Compile Include="Im\IQQNotifyListener.cs" />
+    <Compile Include="Im\QQNotifyListener.cs" />
     <Compile Include="Im\Service\AbstractService.cs" />
     <Compile Include="Im\Service\HttpService.cs" />
     <Compile Include="Im\Service\IHttpService.cs" />

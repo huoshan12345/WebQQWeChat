@@ -16,7 +16,7 @@
          * @param proxyListener a {@link iqq.im.IQQActionListener} object.
          * @param Cancelable a bool.
          */
-        public ProcActionFuture(QQActionEventHandler proxyListener, bool cancelable)
+        public ProcActionFuture(QQActionListener proxyListener, bool cancelable)
             : base(proxyListener)
         {
             IsCanceled = false;

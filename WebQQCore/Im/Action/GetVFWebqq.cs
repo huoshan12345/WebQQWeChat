@@ -10,7 +10,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
 {
     public class GetVFWebqq : AbstractHttpAction
     {
-        public GetVFWebqq(IQQContext context, QQActionEventHandler listener) : base(context, listener)
+        public GetVFWebqq(IQQContext context, QQActionListener listener) : base(context, listener)
         {
         }
 

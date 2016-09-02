@@ -15,7 +15,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
     public class GetSelfInfoAction : AbstractHttpAction
     {
 
-        public GetSelfInfoAction(IQQContext context, QQActionEventHandler listener) : base(context, listener)
+        public GetSelfInfoAction(IQQContext context, QQActionListener listener) : base(context, listener)
         {
 
         }
@@ -44,7 +44,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
                 }
                 catch (Exception e)
                 {
-                    DefaultLogger.Warn($"日期转换失败：{obj["birthday"]}", e);
+                    Context.Logger.Warn($"日期转换失败：{obj["birthday"]}", e);
                     account.Birthday = null;
                 }
 

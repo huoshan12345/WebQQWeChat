@@ -9,34 +9,23 @@ namespace iQQ.Net.WebQQCore.Im.Event.Future
     public abstract class AbstractActionFuture : IQQActionFuture
     {
         private readonly BlockingCollection<QQActionEvent> _eventQueue;
-        private volatile bool _isCanceled;
-        private volatile bool _hasEvent;
-        private QQActionEventHandler _proxyListener;
-        public QQActionEventHandler Listener { get; set; }
-   
-        protected AbstractActionFuture(QQActionEventHandler proxyListener)
+        private bool _hasEvent;
+        public QQActionListener Listener { get; set; }
+        public QQActionListener ProxyListener { get; set; }
+
+        protected AbstractActionFuture(QQActionListener proxyListener)
         {
             _hasEvent = true;
             _eventQueue = new BlockingCollection<QQActionEvent>();
-            _proxyListener = proxyListener;
+            ProxyListener = proxyListener;
             Listener = (sender, args) =>
             {
-                _proxyListener?.Invoke(sender, args);
-                _eventQueue.Add(args);         // 没问题
+                ProxyListener?.Invoke(sender, args);
+                _eventQueue.Add(args);
             };
         }
 
-        public bool IsCanceled
-        {
-            get { return _isCanceled; }
-            set { _isCanceled = value; }
-        }
-
-        public QQActionEventHandler ProxyListener
-        {
-            get { return _proxyListener; }
-            set { _proxyListener = value; }
-        }
+        public bool IsCanceled { get; set; }
 
         public QQActionEvent WaitEvent()
         {

@@ -15,7 +15,7 @@
         HTTP, //HTTP
         TASK, //异步任务，可以执行比较耗时的操作
         UDP,
-        WebClient,
+        LOG,
     };
 
     public interface IQQService : IQQLifeCycle

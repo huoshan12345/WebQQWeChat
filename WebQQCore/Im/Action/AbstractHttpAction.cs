@@ -4,6 +4,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using iQQ.Net.WebQQCore.Im.Actor;
+using iQQ.Net.WebQQCore.Im.Bean;
 using iQQ.Net.WebQQCore.Im.Core;
 using iQQ.Net.WebQQCore.Im.Event;
 using iQQ.Net.WebQQCore.Im.Http;
@@ -20,9 +21,9 @@ namespace iQQ.Net.WebQQCore.Im.Action
         public IQQContext Context { get; }
         public IQQActionFuture ActionFuture { get; set; }
         public Task<QQHttpResponse> ResponseFuture { get; set; }
-        public QQActionEventHandler Listener { get; set; }
+        public QQActionListener Listener { get; set; }
 
-        protected AbstractHttpAction(IQQContext context, QQActionEventHandler listener)
+        protected AbstractHttpAction(IQQContext context, QQActionListener listener)
         {
             Context = context;
             Listener = listener;
@@ -37,7 +38,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
                     || type.Contains("text")
                     ) && response.GetContentLength() > 0)
             {
-                // DefaultLogger.Debug(response.GetResponseString());
+                // Context.Logger.Debug(response.GetResponseString());
             }
 
             if (response.ResponseCode == QQHttpResponse.S_OK)
@@ -95,20 +96,22 @@ namespace iQQ.Net.WebQQCore.Im.Action
                 case QQActionEventType.EvtError:
                 {
                     var ex = (QQException)target;
-                    DefaultLogger.Fatal($"{GetType().Name} [type={type.GetFullDescription()}, errorcode={ex.ErrorCode}, exception={ex.Message}]{Environment.NewLine}{ex.StackTrace}", ex);
+                    Context.Logger.Error($"[Action={GetType().Name}, Type={type.GetFullDescription()}, {ex}]");
                     break;
                 }
 
                 case QQActionEventType.EvtRetry:
                 {
                     var ex = (QQException)target;
-                    DefaultLogger.Error($"{GetType().Name} [type={type.GetFullDescription()}, 重试次数={_retryTimes}, target={ex.Message}]");
+                    Context.Logger.Error($"[Action={GetType().Name}, Type={type.GetFullDescription()}, {ex.ToSimpleString()}]");
                     break;
                 }
 
                 case QQActionEventType.EvtCanceled:
-                DefaultLogger.Info($"{GetType().Name} [type={type.GetFullDescription()}, target={target}]");
-                break;
+                {
+                    Context.Logger.Info($"[Action={GetType().Name}{GetType().Name}, Type={type.GetFullDescription()}, Target={target}]");
+                    break;
+                }
 
                 case QQActionEventType.EvtOK:
                 case QQActionEventType.EvtWrite:
@@ -167,7 +170,5 @@ namespace iQQ.Net.WebQQCore.Im.Action
             Context.PushActor(new HttpActor(HttpActorType.BUILD_REQUEST, Context, this));
             return true;
         }
-
-
     }
 }

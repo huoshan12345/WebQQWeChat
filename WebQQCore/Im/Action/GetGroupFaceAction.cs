@@ -19,7 +19,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
 
         private readonly QQGroup _group;
 
-        public GetGroupFaceAction(IQQContext context, QQActionEventHandler listener,
+        public GetGroupFaceAction(IQQContext context, QQActionListener listener,
                 QQGroup group)
             : base(context, listener)
         {

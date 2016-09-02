@@ -21,7 +21,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
          * @param context  a {@link IQQContext} object.
          * @param listener a {@link QQActionListener} object.
          */
-        public GetQRCodeAction(IQQContext context, QQActionEventHandler listener) : base(context, listener) { }
+        public GetQRCodeAction(IQQContext context, QQActionListener listener) : base(context, listener) { }
 
 
         public override QQHttpRequest OnBuildRequest()

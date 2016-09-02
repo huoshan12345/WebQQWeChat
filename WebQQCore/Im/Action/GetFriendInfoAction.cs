@@ -16,7 +16,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
     {
         private QQUser buddy;
 
-        public GetFriendInfoAction(IQQContext context, QQActionEventHandler listener, QQUser buddy)
+        public GetFriendInfoAction(IQQContext context, QQActionListener listener, QQUser buddy)
             : base(context, listener)
         {
             this.buddy = buddy;
@@ -55,7 +55,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
                 }
                 catch (FormatException e)
                 {
-                    DefaultLogger.Warn($"日期转换失败：{obj["birthday"]}", e);
+                    Context.Logger.Warn($"日期转换失败：{obj["birthday"]}", e);
                     buddy.Birthday = null;
                 }
                 buddy.Occupation = obj["occupation"].ToString();

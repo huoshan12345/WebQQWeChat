@@ -19,7 +19,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
 
         private readonly QQStranger _user;
 
-        public GetSessionMsgSigAction(IQQContext context, QQActionEventHandler listener,
+        public GetSessionMsgSigAction(IQQContext context, QQActionListener listener,
                 QQStranger user)
             : base(context, listener)
         {

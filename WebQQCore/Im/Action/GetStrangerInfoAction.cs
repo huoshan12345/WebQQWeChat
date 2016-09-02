@@ -18,7 +18,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
     {
         private QQUser user;
 
-        public GetStrangerInfoAction(IQQContext context, QQActionEventHandler listener,
+        public GetStrangerInfoAction(IQQContext context, QQActionListener listener,
                 QQUser user)
             : base(context, listener)
         {
@@ -60,7 +60,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
                     }
                     catch (FormatException e)
                     {
-                        DefaultLogger.Warn($"日期转换失败：{obj["birthday"]}", e);
+                        Context.Logger.Warn($"日期转换失败：{obj["birthday"]}", e);
                         user.Birthday = null;
                     }
                     user.Occupation = obj["occupation"].ToString();
@@ -97,7 +97,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
             }
             catch (Exception e)
             {
-                DefaultLogger.Warn(e.Message, e);
+                Context.Logger.Warn(e.Message, e);
             }
             NotifyActionEvent(QQActionEventType.EvtOK, user);
         }

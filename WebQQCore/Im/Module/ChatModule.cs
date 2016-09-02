@@ -21,17 +21,17 @@ namespace iQQ.Net.WebQQCore.Im.Module
             return QQModuleType.CHAT;
         }
 
-        private IQQActionFuture DoSendMsg(QQMsg msg, QQActionEventHandler listener)
+        private IQQActionFuture DoSendMsg(QQMsg msg, QQActionListener listener)
         {
             return PushHttpAction(new SendMsgAction(Context, listener, msg));
         }
 
-        public IQQActionFuture GetRobotReply(QQMsg input, RobotType robotType, QQActionEventHandler listener)
+        public IQQActionFuture GetRobotReply(QQMsg input, RobotType robotType, QQActionListener listener)
         {
             return PushHttpAction(new GetRobotReplyAction(Context, listener, input, robotType));
         }
 
-        public IQQActionFuture SendMsg(QQMsg msg, QQActionEventHandler listener)
+        public IQQActionFuture SendMsg(QQMsg msg, QQActionListener listener)
         {
             var future = new ProcActionFuture(listener, true);
 
@@ -76,47 +76,47 @@ namespace iQQ.Net.WebQQCore.Im.Module
             return DoSendMsg(msg, listener);
         }
 
-        public IQQActionFuture GetSessionMsgSig(QQStranger user, QQActionEventHandler listener)
+        public IQQActionFuture GetSessionMsgSig(QQStranger user, QQActionListener listener)
         {
             return PushHttpAction(new GetSessionMsgSigAction(this.Context, listener, user));
         }
 
-        public IQQActionFuture UploadOffPic(QQUser user, string file, QQActionEventHandler listener)
+        public IQQActionFuture UploadOffPic(QQUser user, string file, QQActionListener listener)
         {
             return PushHttpAction(new UploadOfflinePictureAction(this.Context, listener, user, file));
         }
 
-        public IQQActionFuture UploadCFace(string file, QQActionEventHandler listener)
+        public IQQActionFuture UploadCFace(string file, QQActionListener listener)
         {
             return PushHttpAction(new UploadCustomFaceAction(this.Context, listener, file));
         }
 
-        public IQQActionFuture GetCFaceSig(QQActionEventHandler listener)
+        public IQQActionFuture GetCFaceSig(QQActionListener listener)
         {
             return PushHttpAction(new GetCustomFaceSigAction(this.Context, listener));
         }
 
-        public IQQActionFuture SendShake(QQUser user, QQActionEventHandler listener)
+        public IQQActionFuture SendShake(QQUser user, QQActionListener listener)
         {
             return PushHttpAction(new ShakeWindowAction(this.Context, listener, user));
         }
 
-        public IQQActionFuture GetOffPic(OffPicItem offpic, QQMsg msg, Stream picout, QQActionEventHandler listener)
+        public IQQActionFuture GetOffPic(OffPicItem offpic, QQMsg msg, Stream picout, QQActionListener listener)
         {
             return PushHttpAction(new GetOffPicAction(this.Context, listener, offpic, msg, picout));
         }
 
-        public IQQActionFuture GetUserPic(CFaceItem cface, QQMsg msg, Stream picout, QQActionEventHandler listener)
+        public IQQActionFuture GetUserPic(CFaceItem cface, QQMsg msg, Stream picout, QQActionListener listener)
         {
             return PushHttpAction(new GetUserPicAction(this.Context, listener, cface, msg, picout));
         }
 
-        public IQQActionFuture GetGroupPic(CFaceItem cface, QQMsg msg, Stream picout, QQActionEventHandler listener)
+        public IQQActionFuture GetGroupPic(CFaceItem cface, QQMsg msg, Stream picout, QQActionListener listener)
         {
             return PushHttpAction(new GetGroupPicAction(this.Context, listener, cface, msg, picout));
         }
 
-        public IQQActionFuture SendInputNotify(QQUser user, QQActionEventHandler listener)
+        public IQQActionFuture SendInputNotify(QQUser user, QQActionListener listener)
         {
             return PushHttpAction(new SendInputNotifyAction(this.Context, listener, user));
         }

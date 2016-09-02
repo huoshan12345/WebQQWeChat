@@ -19,7 +19,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
 
         private string file;
 
-        public UploadCustomFaceAction(IQQContext context, QQActionEventHandler listener, string file)
+        public UploadCustomFaceAction(IQQContext context, QQActionListener listener, string file)
             : base(context, listener)
         {
 
@@ -88,12 +88,12 @@ namespace iQQ.Net.WebQQCore.Im.Action
                     }
                     else
                     {
-                        DefaultLogger.Debug($"ret: {retcode}");
+                        Context.Logger.Debug($"ret: {retcode}");
                     }
                 }
                 catch (Exception e)
                 {
-                    DefaultLogger.Warn(e.Message, e);
+                    Context.Logger.Warn(e.Message, e);
                 }
             }
             // 失败后返回路径

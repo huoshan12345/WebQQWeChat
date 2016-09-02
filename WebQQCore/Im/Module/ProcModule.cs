@@ -20,7 +20,7 @@ namespace iQQ.Net.WebQQCore.Im.Module
             return QQModuleType.PROC;
         }
 
-        public IQQActionFuture LoginWithQRCode(QQActionEventHandler listener)
+        public IQQActionFuture LoginWithQRCode(QQActionListener listener)
         {
             var future = new ProcActionFuture(listener, true);
             var login = Context.GetModule<LoginModule>(QQModuleType.LOGIN);
@@ -43,7 +43,7 @@ namespace iQQ.Net.WebQQCore.Im.Module
         private void CheckQRCode(ProcActionFuture future)
         {
             var login = Context.GetModule<LoginModule>(QQModuleType.LOGIN);
-            QQActionEventHandler handler = null;
+            QQActionListener handler = null;
             handler = (sender, Event) =>
             {
                 if (Event.Type == QQActionEventType.EvtOK)
@@ -78,7 +78,7 @@ namespace iQQ.Net.WebQQCore.Im.Module
             login.CheckQRCode(handler);
         }
         
-        public IQQActionFuture Login(QQActionEventHandler listener)
+        public IQQActionFuture Login(QQActionListener listener)
         {
             var future = new ProcActionFuture(listener, true);
             // DoGetLoginSig(future); // 这里可以直接替换成 DoCheckVerify(future);
@@ -242,17 +242,17 @@ namespace iQQ.Net.WebQQCore.Im.Module
             });
         }
 
-        public IQQActionFuture Relogin(QQStatus status, QQActionEventHandler listener)
+        public IQQActionFuture Relogin(QQStatus status, QQActionListener listener)
         {
             Context.Account.Status = status;
             Context.Session.State = QQSessionState.LOGINING;
             var login = Context.GetModule<LoginModule>(QQModuleType.LOGIN);
-            DefaultLogger.Info("iqq client Relogin...");
+            Context.Logger.Info("iqq client Relogin...");
             var future = login.ChannelLogin(status, (sender, Event) =>
             {
                 if (Event.Type == QQActionEventType.EvtError)
                 {
-                    DefaultLogger.Info("iqq client ReloginChannel fail!!! use Relogin.");
+                    Context.Logger.Info("iqq client ReloginChannel fail!!! use Relogin.");
                     Login(listener);
                 }
                 else
@@ -265,7 +265,7 @@ namespace iQQ.Net.WebQQCore.Im.Module
 
         public void Relogin()
         {
-            DefaultLogger.Info("Relogin...");
+            Context.Logger.Info("Relogin...");
             var session = Context.Session;
             if (session.State == QQSessionState.LOGINING) return;
             // 登录失效，重新登录
@@ -288,7 +288,7 @@ namespace iQQ.Net.WebQQCore.Im.Module
         /// </summary>
         public void DoPollMsg()
         {
-            DefaultLogger.Info("begin to poll...");
+            Context.Logger.Info("begin to poll...");
             var login = Context.GetModule<LoginModule>(QQModuleType.LOGIN);
             login.PollMsg((sender, Event) =>
             {
@@ -341,7 +341,7 @@ namespace iQQ.Net.WebQQCore.Im.Module
                     }
                     else
                     {
-                        DefaultLogger.Info("poll msg unexpected error, ignore it ...", ex);
+                        Context.Logger.Info("poll msg unexpected error, ignore it ...", ex);
                         Relogin();
                         DoPollMsg();
                         return;
@@ -350,7 +350,7 @@ namespace iQQ.Net.WebQQCore.Im.Module
                 else if (Event.Type == QQActionEventType.EvtRetry)
                 {
                     // System.err.println("Poll Retry:" + this);
-                    DefaultLogger.Info("poll msg error, retrying....", (QQException)Event.Target);
+                    Context.Logger.Info("poll msg error, retrying....", (QQException)Event.Target);
                 }
             });
         }
@@ -360,7 +360,7 @@ namespace iQQ.Net.WebQQCore.Im.Module
         /// </summary>
         /// <param name="listener"></param>
         /// <returns></returns>
-        public IQQActionFuture DoLogout(QQActionEventHandler listener)
+        public IQQActionFuture DoLogout(QQActionListener listener)
         {
             var login = Context.GetModule<LoginModule>(QQModuleType.LOGIN);
             return login.Logout(listener);

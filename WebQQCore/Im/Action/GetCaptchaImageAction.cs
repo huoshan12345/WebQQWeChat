@@ -17,7 +17,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
     {
         private readonly long _uin;
 
-        public GetCaptchaImageAction(IQQContext context, QQActionEventHandler listener, long uin)
+        public GetCaptchaImageAction(IQQContext context, QQActionListener listener, long uin)
             : base(context, listener)
         {
             this._uin = uin;
