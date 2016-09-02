@@ -32,7 +32,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
             }
             catch (IOException e)
             {
-                NotifyActionEvent(QQActionEventType.EvtError, new QQException(QQErrorCode.UNKNOWN_ERROR, e));
+                NotifyActionEvent(QQActionEventType.EvtError, new QQException(QQErrorCode.UnknownError, e));
             }
         }
 

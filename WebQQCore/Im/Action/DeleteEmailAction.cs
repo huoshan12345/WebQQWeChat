@@ -49,7 +49,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
             else
             {
                 // NotifyActionEvent(QQActionEventType.EVT_ERROR, str);
-                throw new QQException(QQErrorCode.UNEXPECTED_RESPONSE, str);
+                throw new QQException(QQErrorCode.UnexpectedResponse, str);
             }
         }
 

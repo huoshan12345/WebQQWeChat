@@ -117,21 +117,21 @@ namespace iQQ.Net.WebQQCore.Im.Action
                     break;
 
                     case 3:
-                    throw new QQException(QQErrorCode.WRONG_PASSWORD, mc.Groups[5].Value);
+                    throw new QQException(QQErrorCode.WrongPassword, mc.Groups[5].Value);
 
                     case 4:
-                    throw new QQException(QQErrorCode.WRONG_CAPTCHA, mc.Groups[5].Value);
+                    throw new QQException(QQErrorCode.WrongCaptcha, mc.Groups[5].Value);
 
                     case 7:
-                    throw new QQException(QQErrorCode.IO_ERROR, mc.Groups[5].Value);
+                    throw new QQException(QQErrorCode.IOError, mc.Groups[5].Value);
 
                     default:
-                    throw new QQException(QQErrorCode.INVALID_USER, mc.Groups[5].Value);
+                    throw new QQException(QQErrorCode.InvalidUser, mc.Groups[5].Value);
                 }
             }
             else
             {
-                throw new QQException(QQErrorCode.UNEXPECTED_RESPONSE);
+                throw new QQException(QQErrorCode.UnexpectedResponse);
             }
         }
 

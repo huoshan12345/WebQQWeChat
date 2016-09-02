@@ -36,9 +36,10 @@ namespace iQQ.Net.WebQQCore.Im.Action
             // 同上
 
             var req = CreateHttpRequest("POST", QQConstants.URL_POLL_MSG);
-            req.AddPostValue("r", JsonConvert.SerializeObject(json));
+            req.AddPostValue("r", json.ToString(Formatting.None));
             req.AddPostValue("clientid", session.ClientId);
             req.AddPostValue("psessionid", session.SessionId);
+            req.Timeout = 60 * 1000;
             req.ReadTimeout = 60 * 1000;
             req.ConnectTimeout = 60 * 1000;
             req.AddHeader("Referer", QQConstants.REFFER);
@@ -64,9 +65,9 @@ namespace iQQ.Net.WebQQCore.Im.Action
 
         public override void OnHttpError(Exception ex)
         {
-            if ((ex as QQException)?.ErrorCode == QQErrorCode.IO_TIMEOUT)
+            if (!ActionFuture.IsCanceled && (ex as QQException)?.ErrorCode == QQErrorCode.IOTimeout)
             {
-                Context.PushActor(new HttpActor(HttpActorType.BUILD_REQUEST, Context, this));
+                Context.PushActor(new HttpActor(HttpActorType.BuildRequest, Context, this));
                 Context.Logger.Info("polling...");
                 return;
             }
@@ -174,7 +175,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
                     }
                     default:
                     {
-                        var ex = new QQException(QQErrorCode.UNKNOWN_ERROR, "unknown pollType: " + pollType);
+                        var ex = new QQException(QQErrorCode.UnknownError, "unknown pollType: " + pollType);
                         NotifyActionEvent(QQActionEventType.EvtError, ex);
                         break;
                     }
@@ -232,7 +233,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
                     /*			LOG.info("**** NEED_REAUTH retcode: " + retcode + " ****");*/
                     Context.Logger.Warn($"**** NEED_REAUTH retcode: {retcode} ****");
                     Context.Session.State = QQSessionState.Offline;
-                    var ex = new QQException(QQErrorCode.INVALID_LOGIN_AUTH);
+                    var ex = new QQException(QQErrorCode.InvalidLoginAuth);
                     //NotifyActionEvent(QQActionEventType.EVT_ERROR, ex);
                     //return;
                     throw ex;
@@ -241,7 +242,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
                 case 103: // 未知，暂且重新登录
                 {
                     Context.Session.State = QQSessionState.Offline;
-                    throw new QQException(QQErrorCode.INVALID_LOGIN_AUTH, str);
+                    throw new QQException(QQErrorCode.InvalidLoginAuth, str);
                 }
 
                 //notifyEvents.Add(new QQNotifyEvent(QQNotifyEventType.NEED_REAUTH, null));

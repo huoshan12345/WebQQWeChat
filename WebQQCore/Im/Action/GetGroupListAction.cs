@@ -109,7 +109,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
             {
                 // LOG.warn("unknown retcode: " + retcode);
                 // NotifyActionEvent(QQActionEventType.EVT_ERROR, null);
-                throw new QQException(QQErrorCode.INVALID_RESPONSE, str);
+                throw new QQException(QQErrorCode.InvalidResponse, str);
             }
 
         }

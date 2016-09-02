@@ -68,7 +68,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
                         case "40006":
                         case "40007":
                         NotifyActionEvent(QQActionEventType.EvtError,
-                            new QQException(QQErrorCode.UNEXPECTED_RESPONSE, response.GetResponseString()));
+                            new QQException(QQErrorCode.UnexpectedResponse, response.GetResponseString()));
                         break;
 
                         case "100000":

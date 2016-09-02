@@ -18,7 +18,7 @@ namespace iQQ.Net.BatchHangQQ
 {
     public partial class fmQQList : Form
     {
-        private readonly ThreadActorDispatcher _threadActorDispatcher = new ThreadActorDispatcher();
+        private readonly SimpleActorDispatcher _threadActorDispatcher = new SimpleActorDispatcher();
         private readonly AutoResetEvent _verifyCodeInputed = new AutoResetEvent(false);
         private readonly Dictionary<string, IQQClient> _qqClients = new Dictionary<string, IQQClient>();
         private QQNotifyListener _notifyListener;

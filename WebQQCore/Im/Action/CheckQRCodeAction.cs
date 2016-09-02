@@ -58,12 +58,12 @@ namespace iQQ.Net.WebQQCore.Im.Action
                     case "67": NotifyActionEvent(QQActionEventType.EvtOK, new CheckQRCodeArgs(QRCodeStatus.QRCODE_AUTH, m.Groups[5].Value)); break;
                     case "65":NotifyActionEvent(QQActionEventType.EvtOK, new CheckQRCodeArgs(QRCodeStatus.QRCODE_INVALID, m.Groups[5].Value)); break;
 
-                    default: throw new QQException(QQErrorCode.INVALID_USER, m.Groups[5].Value);
+                    default: throw new QQException(QQErrorCode.InvalidUser, m.Groups[5].Value);
                 }
             }
             else
             {
-                throw new QQException(QQErrorCode.UNEXPECTED_RESPONSE);
+                throw new QQException(QQErrorCode.UnexpectedResponse);
             }
         }
 

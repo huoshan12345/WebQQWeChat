@@ -123,7 +123,7 @@ namespace iQQ.Net.WebQQCore.Im.Module
                         if (GetPT4Auth(null).WaitFinalEvent(3000).Type != QQActionEventType.EvtOK)
                         {
                             var ex = (QQException)Event.Target;
-                            if (ex.ErrorCode == QQErrorCode.INVALID_LOGIN_AUTH)
+                            if (ex.ErrorCode == QQErrorCode.InvalidLoginAuth)
                             {
                                 // 登录失败，QQ消息的POLL同时也失效，这时那边会重新登录
                                 // 如果已经在登录中，或者已经登录了，就不用再次执行
@@ -187,7 +187,7 @@ namespace iQQ.Net.WebQQCore.Im.Module
                 else if (Event.Type == QQActionEventType.EvtError)
                 {
                     var ex = (QQException)Event.Target;
-                    if (ex.ErrorCode == QQErrorCode.INVALID_LOGIN_AUTH)
+                    if (ex.ErrorCode == QQErrorCode.InvalidLoginAuth)
                     {
                         // 凭证失效，重新认证
                         DoPoll();

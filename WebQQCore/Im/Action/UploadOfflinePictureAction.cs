@@ -64,7 +64,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
             {
                 pic.IsSuccess = false;
                 NotifyActionEvent(QQActionEventType.EvtError,
-                        new QQException(QQErrorCode.UNEXPECTED_RESPONSE, response.GetResponseString()));
+                        new QQException(QQErrorCode.UnexpectedResponse, response.GetResponseString()));
             }
 
             var regResult = Regex.Replace(Regex.Replace(m.Groups[0].Value, "[\\r]?[\\n]", " "), "[\r]?[\n]", " ");
@@ -85,7 +85,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
             pic.FilePath = _file;
             pic.IsSuccess = false;
             NotifyActionEvent(QQActionEventType.EvtError,
-                    new QQException(QQErrorCode.UNEXPECTED_RESPONSE, response.GetResponseString()));
+                    new QQException(QQErrorCode.UnexpectedResponse, response.GetResponseString()));
 
         }
 

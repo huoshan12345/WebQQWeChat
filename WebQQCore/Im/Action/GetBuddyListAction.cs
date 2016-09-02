@@ -131,7 +131,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
             else
             {
                 // LOG.warn("unknown retcode: " + retcode);
-                NotifyActionEvent(QQActionEventType.EvtError, new QQException(QQErrorCode.ERROR_HTTP_STATUS, "unknown retcode: " + retcode));
+                NotifyActionEvent(QQActionEventType.EvtError, new QQException(QQErrorCode.ErrorHttpStatus, "unknown retcode: " + retcode));
             }
         }
     }

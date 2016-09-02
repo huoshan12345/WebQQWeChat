@@ -135,7 +135,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
 
         public virtual void OnHttpStatusError(QQHttpResponse response)
         {
-            var ex = new QQException(QQErrorCode.ERROR_HTTP_STATUS, response.ResponseMessage);
+            var ex = new QQException(QQErrorCode.ErrorHttpStatus, response.ResponseMessage);
             if (!DoRetryIt(ex, QQConstants.MAX_RETRY_TIMES))
             {
                 // NotifyActionEvent(QQActionEventType.EVT_ERROR, ex);
@@ -167,7 +167,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
             if (++_retryTimes > maxTimes) return false;
             NotifyActionEvent(QQActionEventType.EvtRetry, ex);
             Thread.Sleep(1000);
-            Context.PushActor(new HttpActor(HttpActorType.BUILD_REQUEST, Context, this));
+            Context.PushActor(new HttpActor(HttpActorType.BuildRequest, Context, this));
             return true;
         }
     }

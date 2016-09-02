@@ -51,7 +51,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
             }
             catch (IOException e)
             {
-                throw new QQException(QQErrorCode.IO_ERROR, e);
+                throw new QQException(QQErrorCode.IOError, e);
             }
             NotifyActionEvent(QQActionEventType.EvtOK, _group);
         }

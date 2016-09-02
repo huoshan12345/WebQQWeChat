@@ -33,7 +33,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
             else
             {
                 NotifyActionEvent(QQActionEventType.EvtError,
-                        new QQException(QQErrorCode.UNEXPECTED_RESPONSE, response.GetResponseString()));
+                        new QQException(QQErrorCode.UnexpectedResponse, response.GetResponseString()));
             }
         }
  

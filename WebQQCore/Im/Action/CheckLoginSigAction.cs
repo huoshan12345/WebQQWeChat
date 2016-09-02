@@ -19,16 +19,16 @@ namespace iQQ.Net.WebQQCore.Im.Action
             _checkSigUrl = checkSigUrl;
         }
 
+        public override QQHttpRequest OnBuildRequest()
+        {
+            return CreateHttpRequest(HttpConstants.Get, _checkSigUrl);
+        }
+
         public override void OnHttpStatusOK(QQHttpResponse response)
         {
             // LOG.info("checkSig result:" + response.GetResponseString());
             // LOG.info("Location:" + response.getHeader("Location"));
             NotifyActionEvent(QQActionEventType.EvtOK, null);
-        }
-
-        public override QQHttpRequest OnBuildRequest()
-        {
-            return CreateHttpRequest(HttpConstants.Get, _checkSigUrl);
         }
 
     }

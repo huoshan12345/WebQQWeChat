@@ -57,7 +57,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
             {
                 // 凭证已经失效，需要重新登录或者获取wpkey	
                 NotifyActionEvent(QQActionEventType.EvtError,
-                        new QQException(QQErrorCode.INVALID_LOGIN_AUTH, content));
+                        new QQException(QQErrorCode.InvalidLoginAuth, content));
             }
             else
             {

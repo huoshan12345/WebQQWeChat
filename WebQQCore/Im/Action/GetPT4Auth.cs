@@ -40,7 +40,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
             else
             {
                 NotifyActionEvent(QQActionEventType.EvtError,
-                        new QQException(QQErrorCode.INVALID_LOGIN_AUTH));
+                        new QQException(QQErrorCode.InvalidLoginAuth));
             }
         }
     }

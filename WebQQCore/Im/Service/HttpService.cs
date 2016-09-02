@@ -86,7 +86,7 @@ namespace iQQ.Net.WebQQCore.Im.Service
             }
             else
             {
-                throw new QQException(QQErrorCode.IO_ERROR, "not support http method:" + request.Method);
+                throw new QQException(QQErrorCode.IOError, "not support http method:" + request.Method);
             }
             return httpItem;
         }
@@ -186,7 +186,7 @@ namespace iQQ.Net.WebQQCore.Im.Service
             }
             catch (Exception e)
             {
-                throw new QQException(QQErrorCode.INIT_ERROR, e);
+                throw new QQException(QQErrorCode.InitError, e);
             }
         }
 
@@ -200,7 +200,7 @@ namespace iQQ.Net.WebQQCore.Im.Service
             }
             catch (ThreadInterruptedException e)
             {
-                throw new QQException(QQErrorCode.UNKNOWN_ERROR, e);
+                throw new QQException(QQErrorCode.UnknownError, e);
             }
         }
 

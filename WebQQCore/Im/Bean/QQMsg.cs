@@ -167,11 +167,11 @@ namespace iQQ.Net.WebQQCore.Im.Bean
             }
             catch (JsonException e)
             {
-                throw new QQException(QQErrorCode.JSON_ERROR, e);
+                throw new QQException(QQErrorCode.JsonError, e);
             }
             catch (Exception e)
             {
-                throw new QQException(QQErrorCode.UNKNOWN_ERROR, e);
+                throw new QQException(QQErrorCode.UnknownError, e);
             }
         }
 

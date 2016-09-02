@@ -71,7 +71,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
             {
                 //var msg = $"errmsg: {json["errmsg"] ?? ""}, retcode: {retcode}";
                 //NotifyActionEvent(QQActionEventType.EVT_ERROR, new QQException(QQErrorCode.INVALID_RESPONSE, msg));	//TODO ..
-                throw new QQException(QQErrorCode.UNEXPECTED_RESPONSE, str);
+                throw new QQException(QQErrorCode.UnexpectedResponse, str);
             }
         }
 

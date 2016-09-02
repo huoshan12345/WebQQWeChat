@@ -74,7 +74,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
             }
 
             NotifyActionEvent(QQActionEventType.EvtError, new QQException(
-                    QQErrorCode.UNEXPECTED_RESPONSE, JsonConvert.SerializeObject(json)));
+                    QQErrorCode.UnexpectedResponse, JsonConvert.SerializeObject(json)));
         }
     }
 

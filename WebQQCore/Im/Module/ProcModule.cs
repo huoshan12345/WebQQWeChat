@@ -12,9 +12,12 @@ namespace iQQ.Net.WebQQCore.Im.Module
 {
     /// <summary>
     /// 处理整体登陆逻辑
+    /// 表示一系列连续的action
     /// </summary>
     public class ProcModule : AbstractModule
     {
+        private IQQActionFuture _pollFuture;
+
         public IQQActionFuture LoginWithQRCode(QQActionListener listener)
         {
             var future = new ProcActionFuture(listener, true);
@@ -25,7 +28,7 @@ namespace iQQ.Net.WebQQCore.Im.Module
                 {
                     var verify = (Image)@event.Target;
                     Context.FireNotify(new QQNotifyEvent(QQNotifyEventType.QrcodeReady, verify));
-                    CheckQRCode(future);
+                    DoCheckQRCode(future);
                 }
                 else if (@event.Type == QQActionEventType.EvtError)
                 {
@@ -35,34 +38,36 @@ namespace iQQ.Net.WebQQCore.Im.Module
             return future;
         }
 
-        private void CheckQRCode(ProcActionFuture future)
+        private void DoCheckQRCode(ProcActionFuture future)
         {
+            if (future.IsCanceled) return;
+
             var login = Context.GetModule<LoginModule>(QQModuleType.LOGIN);
             QQActionListener handler = null;
             handler = (sender, Event) =>
             {
                 if (Event.Type == QQActionEventType.EvtOK)
                 {
-                    var eventArgs = (CheckQRCodeArgs) Event.Target;
+                    var eventArgs = (CheckQRCodeArgs)Event.Target;
                     switch (eventArgs.Status)
                     {
                         case QRCodeStatus.QRCODE_OK:
-                            Context.FireNotify(new QQNotifyEvent(QQNotifyEventType.QrcodeSuccess));
-                            DoCheckLoginSig(eventArgs.Msg, future);
-                            break;
+                        Context.FireNotify(new QQNotifyEvent(QQNotifyEventType.QrcodeSuccess));
+                        DoCheckLoginSig(eventArgs.Msg, future);
+                        break;
 
                         case QRCodeStatus.QRCODE_VALID:
                         case QRCodeStatus.QRCODE_AUTH:
-                            Thread.Sleep(3000);
-                            login.CheckQRCode(handler);
-                            break;
+                        Thread.Sleep(3000);
+                        login.CheckQRCode(handler);
+                        break;
 
                         case QRCodeStatus.QRCODE_INVALID:
-                            Context.FireNotify(new QQNotifyEvent(QQNotifyEventType.QrcodeInvalid, eventArgs.Msg));
-                            break;
+                        Context.FireNotify(new QQNotifyEvent(QQNotifyEventType.QrcodeInvalid, eventArgs.Msg));
+                        break;
 
                         default:
-                            throw new ArgumentOutOfRangeException();
+                        throw new ArgumentOutOfRangeException();
                     }
                 }
                 else if (Event.Type == QQActionEventType.EvtError)
@@ -72,7 +77,7 @@ namespace iQQ.Net.WebQQCore.Im.Module
             };
             login.CheckQRCode(handler);
         }
-        
+
         public IQQActionFuture Login(QQActionListener listener)
         {
             var future = new ProcActionFuture(listener, true);
@@ -131,10 +136,7 @@ namespace iQQ.Net.WebQQCore.Im.Module
 
         private void DoCheckVerify(ProcActionFuture future)
         {
-            if (future.IsCanceled)
-            {
-                return;
-            }
+            if (future.IsCanceled) return;
 
             var login = Context.GetModule<LoginModule>(QQModuleType.LOGIN);
             var account = Context.Account;
@@ -163,6 +165,8 @@ namespace iQQ.Net.WebQQCore.Im.Module
 
         private void DoWebLogin(string verifyCode, ProcActionFuture future)
         {
+            if (future.IsCanceled) return;
+
             var login = Context.GetModule<LoginModule>(QQModuleType.LOGIN);
             login.WebLogin(Context.Account.Username, Context.Account.Password, Context.Account.Uin,
                 verifyCode, ((sender, Event) =>
@@ -174,7 +178,7 @@ namespace iQQ.Net.WebQQCore.Im.Module
                 else if (Event.Type == QQActionEventType.EvtError)
                 {
                     var ex = (QQException)(Event.Target);
-                    if (ex.ErrorCode == QQErrorCode.WRONG_CAPTCHA)
+                    if (ex.ErrorCode == QQErrorCode.WrongCaptcha)
                     {
                         DoGetVerify(ex.Message, future);
                     }
@@ -188,6 +192,8 @@ namespace iQQ.Net.WebQQCore.Im.Module
 
         private void DoCheckLoginSig(string checkSigUrl, ProcActionFuture future)
         {
+            if (future.IsCanceled) return;
+
             var login = Context.GetModule<LoginModule>(QQModuleType.LOGIN);
             login.CheckLoginSig(checkSigUrl, (sender, Event) =>
             {
@@ -204,6 +210,8 @@ namespace iQQ.Net.WebQQCore.Im.Module
 
         private void DoGetVFWebqq(ProcActionFuture future)
         {
+            if (future.IsCanceled) return;
+
             var login = Context.GetModule<LoginModule>(QQModuleType.LOGIN);
             login.GetVFWebqq((sender, Event) =>
             {
@@ -220,8 +228,10 @@ namespace iQQ.Net.WebQQCore.Im.Module
 
         private void DoChannelLogin(ProcActionFuture future)
         {
+            if (future.IsCanceled) return;
+
             var login = Context.GetModule<LoginModule>(QQModuleType.LOGIN);
-            if(Context.Account.Status == QQStatus.OFFLINE) Context.Account.Status = QQStatus.ONLINE;
+            if (Context.Account.Status == QQStatus.OFFLINE) Context.Account.Status = QQStatus.ONLINE;
 
             login.ChannelLogin(Context.Account.Status, (sender, Event) =>
             {
@@ -290,7 +300,7 @@ namespace iQQ.Net.WebQQCore.Im.Module
         {
             Context.Logger.Info("begin to poll...");
             var login = Context.GetModule<LoginModule>(QQModuleType.LOGIN);
-            login.PollMsg((sender, Event) =>
+            _pollFuture = login.PollMsg((sender, Event) =>
             {
                 // 回调通知事件函数
                 if (Event.Type == QQActionEventType.EvtOK)
@@ -318,7 +328,7 @@ namespace iQQ.Net.WebQQCore.Im.Module
                 {
                     var ex = (QQException)Event.Target;
                     var code = ex.ErrorCode;
-                    if (code == QQErrorCode.IO_TIMEOUT)
+                    if (code == QQErrorCode.IOTimeout)
                     {
                         DoPollMsg();
                         return; // 心跳超时是正常的
@@ -329,23 +339,33 @@ namespace iQQ.Net.WebQQCore.Im.Module
                     var account = Context.Account;
                     session.State = QQSessionState.Offline;
 
-                    if (code == QQErrorCode.INVALID_LOGIN_AUTH)
+                    switch (code)
                     {
-                        Relogin();
-                        return;
-                    }
-                    else if (code == QQErrorCode.IO_ERROR || code == QQErrorCode.IO_TIMEOUT || code == QQErrorCode.INVALID_RESPONSE)
-                    {
-                        account.Status = QQStatus.OFFLINE;
-                        //粗线了IO异常，直接报网络错误
-                        Context.FireNotify(new QQNotifyEvent(QQNotifyEventType.NetError, ex));
-                        return;
-                    }
-                    else
-                    {
-                        Context.Logger.Info("poll msg unexpected error, ignore it ...", ex);
-                        Relogin();
-                        return;
+                        case QQErrorCode.NeedToLogin:
+                        {
+                            DoGetVFWebqq(new ProcActionFuture(null, true));
+                            return;
+                        }
+                        case QQErrorCode.InvalidLoginAuth:
+                        {
+                            Relogin();
+                            return;
+                        }
+                        case QQErrorCode.IOError:
+                        case QQErrorCode.IOTimeout:
+                        case QQErrorCode.InvalidResponse:
+                        {
+                            account.Status = QQStatus.OFFLINE;
+                            //粗线了IO异常，直接报网络错误
+                            Context.FireNotify(new QQNotifyEvent(QQNotifyEventType.NetError, ex));
+                            return;
+                        }
+                        default:
+                        {
+                            Context.Logger.Info("poll msg unexpected error, ignore it ...", ex);
+                            Relogin();
+                            return;
+                        }
                     }
                 }
                 else if (Event.Type == QQActionEventType.EvtRetry)
@@ -356,6 +376,11 @@ namespace iQQ.Net.WebQQCore.Im.Module
             });
         }
 
+        public void CancelPoll()
+        {
+            _pollFuture?.Cancel();
+        }
+
         /// <summary>
         /// 退出，下线
         /// </summary>
@@ -363,6 +388,7 @@ namespace iQQ.Net.WebQQCore.Im.Module
         /// <returns></returns>
         public IQQActionFuture DoLogout(QQActionListener listener)
         {
+            CancelPoll();
             var login = Context.GetModule<LoginModule>(QQModuleType.LOGIN);
             return login.Logout(listener);
         }

@@ -64,7 +64,7 @@ namespace iQQ.Net.WebQQCore
 
         public static void Main(string[] args)
         {
-            var threadActorDispatcher = new ThreadActorDispatcher();
+            var threadActorDispatcher = new SimpleActorDispatcher();
             IQQClient client = null;
 
             start:

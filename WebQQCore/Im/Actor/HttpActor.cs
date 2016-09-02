@@ -10,13 +10,13 @@ namespace iQQ.Net.WebQQCore.Im.Actor
 {
     public enum HttpActorType
     {
-        BUILD_REQUEST,
-        CANCEL_REQUEST,
-        ON_HTTP_ERROR,
-        ON_HTTP_FINISH,
-        ON_HTTP_HEADER,
-        ON_HTTP_WRITE,
-        ON_HTTP_READ
+        BuildRequest,
+        CancelRequest,
+        OnHttpError,
+        OnHttpFinish,
+        OnHttpHeader,
+        OnHttpWrite,
+        OnHttpRead
     }
 
     public class HttpActor : IQQActor
@@ -39,34 +39,34 @@ namespace iQQ.Net.WebQQCore.Im.Actor
             {
                 switch (_type)
                 {
-                    case HttpActorType.BUILD_REQUEST:
+                    case HttpActorType.BuildRequest:
                         var service = _context.GetSerivce<IHttpService>(QQServiceType.HTTP);
                         var adaptor = new HttpAdaptor(_context, _action);
                         var request = _action.BuildRequest();
                         service.ExecuteHttpRequest(request, adaptor);
                         break;
 
-                    case HttpActorType.CANCEL_REQUEST:
+                    case HttpActorType.CancelRequest:
                         _action.CancelRequest();
                         break;
 
-                    case HttpActorType.ON_HTTP_ERROR:
+                    case HttpActorType.OnHttpError:
                         _action.OnHttpError(_throwable);
                         break;
 
-                    case HttpActorType.ON_HTTP_FINISH:
+                    case HttpActorType.OnHttpFinish:
                         _action.OnHttpFinish(_response);
                         break;
 
-                    case HttpActorType.ON_HTTP_HEADER:
+                    case HttpActorType.OnHttpHeader:
                         _action.OnHttpHeader(_response);
                         break;
 
-                    case HttpActorType.ON_HTTP_READ:
+                    case HttpActorType.OnHttpRead:
                         _action.OnHttpRead(_current, _total);
                         break;
 
-                    case HttpActorType.ON_HTTP_WRITE:
+                    case HttpActorType.OnHttpWrite:
                         _action.OnHttpWrite(_current, _total);
                         break;
                 }
@@ -126,27 +126,27 @@ namespace iQQ.Net.WebQQCore.Im.Actor
 
             public void OnHttpFinish(QQHttpResponse response)
             {
-                _context.PushActor(new HttpActor(HttpActorType.ON_HTTP_FINISH, _context, _action, response));
+                _context.PushActor(new HttpActor(HttpActorType.OnHttpFinish, _context, _action, response));
             }
 
             public void OnHttpError(Exception t)
             {
-                _context.PushActor(new HttpActor(HttpActorType.ON_HTTP_ERROR, _context, _action, t));
+                _context.PushActor(new HttpActor(HttpActorType.OnHttpError, _context, _action, t));
             }
 
             public void OnHttpHeader(QQHttpResponse response)
             {
-                _context.PushActor(new HttpActor(HttpActorType.ON_HTTP_HEADER, _context, _action, response));
+                _context.PushActor(new HttpActor(HttpActorType.OnHttpHeader, _context, _action, response));
             }
 
             public void OnHttpWrite(long current, long total)
             {
-                _context.PushActor(new HttpActor(HttpActorType.ON_HTTP_WRITE, _context, _action, current, total));
+                _context.PushActor(new HttpActor(HttpActorType.OnHttpWrite, _context, _action, current, total));
             }
 
             public void OnHttpRead(long current, long total)
             {
-                _context.PushActor(new HttpActor(HttpActorType.ON_HTTP_READ, _context, _action, current, total));
+                _context.PushActor(new HttpActor(HttpActorType.OnHttpRead, _context, _action, current, total));
             }
         }
 
@@ -174,9 +174,6 @@ namespace iQQ.Net.WebQQCore.Im.Actor
             }
         }
 
-        public Task ExecuteAsync()
-        {
-            throw new NotImplementedException();
-        }
+        public Task ExecuteAsync() => Task.Run(() => Execute());
     }
 }

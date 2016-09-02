@@ -40,7 +40,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
             else
             {
                 // NotifyActionEvent(QQActionEventType.EVT_ERROR, new QQException(QQErrorCode.INVALID_RESPONSE));    //TODO ..
-                throw new QQException(QQErrorCode.INVALID_RESPONSE, str);
+                throw new QQException(QQErrorCode.InvalidResponse, str);
             }
         }
     }

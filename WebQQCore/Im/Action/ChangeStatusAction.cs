@@ -48,7 +48,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
             else
             {
                 // NotifyActionEvent(QQActionEventType.EVT_ERROR, new QQException(QQErrorCode.UNEXPECTED_RESPONSE, response.GetResponseString()));
-                throw new QQException(QQErrorCode.UNEXPECTED_RESPONSE, response.GetResponseString());
+                throw new QQException(QQErrorCode.UnexpectedResponse, response.GetResponseString());
             }
         }
 

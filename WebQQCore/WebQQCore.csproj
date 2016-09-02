@@ -62,6 +62,9 @@
     <Compile Include="Im\Action\GetSelfInfoAction.cs" />
     <Compile Include="Im\Action\GetVFWebqq.cs" />
     <Compile Include="Im\Action\GetWebqq.cs" />
+    <Compile Include="Im\Actor\SimpleActorDispatcher.cs" />
+    <Compile Include="Im\Actor\ExitActor.cs" />
+    <Compile Include="Im\QQErrorCode.cs" />
     <Compile Include="Im\Service\EmptyLoggerService.cs" />
     <Compile Include="Im\Service\ILoggerService.cs" />
     <Compile Include="Im\Service\NLoggerService.cs" />
@@ -135,9 +138,9 @@
     <Compile Include="Im\Action\UploadOfflinePictureAction.cs" />
     <Compile Include="Im\Action\WebLoginAction.cs" />
     <Compile Include="Im\Action\WebLogoutAction.cs" />
-    <Compile Include="Im\Actor\QQActor.cs" />
+    <Compile Include="Im\Actor\IQQActor.cs" />
     <Compile Include="Im\Actor\IQQActorDispatcher.cs" />
-    <Compile Include="Im\Actor\ThreadActorDispatcher.cs" />
+    <Compile Include="Im\Actor\MutipleActorDispatcher.cs" />
     <Compile Include="Im\Bean\Content\CFaceItem.cs" />
     <Compile Include="Im\Bean\Content\ContentItem.cs" />
     <Compile Include="Im\Bean\Content\FaceItem.cs" />

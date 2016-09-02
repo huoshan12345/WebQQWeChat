@@ -91,7 +91,7 @@ namespace iQQ.Net.WebQQCore
                 }
             }
 
-        }, new ThreadActorDispatcher());
+        }, new SimpleActorDispatcher());
 
         public static void Main(string[] args)
         {

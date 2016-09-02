@@ -99,7 +99,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
             // 失败后返回路径
             pic.FileName = file;
             pic.IsSuccess = false;
-            NotifyActionEvent(QQActionEventType.EvtError, new QQException(QQErrorCode.UNEXPECTED_RESPONSE, "CFace: " + response.GetResponseString()));
+            NotifyActionEvent(QQActionEventType.EvtError, new QQException(QQErrorCode.UnexpectedResponse, "CFace: " + response.GetResponseString()));
         }
     }
 }

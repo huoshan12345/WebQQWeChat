@@ -34,7 +34,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
             }
             else
             {
-                NotifyActionEvent(QQActionEventType.EvtError, new QQException(QQErrorCode.INVALID_RESPONSE, "Login Sig Not Found!!"));
+                NotifyActionEvent(QQActionEventType.EvtError, new QQException(QQErrorCode.InvalidResponse, "Login Sig Not Found!!"));
             }
         }
 
