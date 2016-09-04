@@ -20,7 +20,8 @@ Useage
 
 * mac平台（基于mono 4.0）（过时）  
 ![webqqcore-ubuntu](https://raw.githubusercontent.com/huoshan12345/iQQ.Net/master/pic/webqqcore-mac.png)
-------------
+------------  
+
 #### BatchHangQQ（还未切换到二维码登录）
 一个基于winform的简单批量挂qq程序
 * win平台（基于.net framework 4.5）  
