@@ -1,0 +1,67 @@
+{
+
+  "version": "1.0.0-*",
+
+  "configurations": {
+    "Debug": {
+      "buildOptions": {
+        "define": [ "DEBUG" ]
+      }
+    },
+    "Release": {
+      "buildOptions": {
+        "optimize": true
+      }
+    }
+  },
+
+  "buildOptions": {
+    "emitEntryPoint": true,
+    "copyToOutput": {
+      "include": [ "Resources/hash.js" ],
+      "exclude": [ "" ],
+      "excludeFiles": [ "" ],
+      "builtIns": {},
+      "mappings": {}
+    }
+  },
+
+  "dependencies": {
+    "Newtonsoft.Json": "9.0.1",
+    "Microsoft.Extensions.Logging.Console": "1.0.0",
+    "Microsoft.Extensions.Logging": "1.0.0",
+  },
+
+  "frameworks": {
+    "net451": {
+      "frameworkAssemblies": {
+        "System.Drawing": "4.0.0.0",
+      },
+      "dependencies": {
+        "System.Net.Http": "4.0.0",
+        "Jint": "2.9.1"
+      },
+      "buildOptions": {
+        "define": [ "NET" ]
+      }
+    },
+    "netcoreapp1.0": {
+      "dependencies": {
+        "Microsoft.NETCore.App": {
+          "version": "1.0.0-*",
+          "type": "platform"
+        },
+        "System.Collections.NonGeneric": "4.0.1",
+        "System.ComponentModel.Primitives": "4.1.0",
+        "Jint-netcore": "2.7.1-final",
+        "System.Text.Encoding.CodePages": "4.0.1",
+        "CoreCompat.System.Drawing": "1.0.0-*"
+      },
+      "buildOptions": {
+        "define": [ "NETCORE" ],
+        "debugType": "portable"
+      }
+    }
+
+  }
+}

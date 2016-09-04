@@ -26,7 +26,7 @@ Useage
 * win平台（基于.net framework 4.5）  
 ![BatchHangQQ](https://raw.githubusercontent.com/huoshan12345/iQQ.Net/master/pic/BatchHangQQ.png)
 
-Next Step...
+Next Step
 ------------
 Move WebQQCore to .Net Core
 
