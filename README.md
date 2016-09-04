@@ -18,7 +18,7 @@ Useage
 * linux平台（基于mono 4.0）（过时）  
 ![webqqcore-ubuntu](https://raw.githubusercontent.com/huoshan12345/iQQ.Net/master/pic/webqqcore-ubuntu.png)
 
-* mac平台（基于mono 4.0）（过时）
+* mac平台（基于mono 4.0）（过时）  
 ![webqqcore-ubuntu](https://raw.githubusercontent.com/huoshan12345/iQQ.Net/master/pic/webqqcore-mac.png)
 
 ----
