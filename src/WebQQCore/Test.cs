@@ -13,7 +13,7 @@ namespace iQQ.Net.WebQQCore
     [Obsolete("验证码登录方式已经不可用，请使用二维码登录")]
     class Test
     {
-        private static readonly QQNotifyListener _listener = (client, Event) =>
+        private static readonly QQNotifyListener Listener = (client, Event) =>
         {
             //var client = sender as IQQClient;
             //if (client == null) return;
@@ -74,7 +74,7 @@ namespace iQQ.Net.WebQQCore
             var username = Console.ReadLine();
             Console.Write("请输入QQ密码：");
             var password = Console.ReadLine();
-            client = new WebQQClient(username, password, _listener, threadActorDispatcher);
+            client = new WebQQClient(username, password, Listener, threadActorDispatcher);
 
 
             //测试同步模式登录

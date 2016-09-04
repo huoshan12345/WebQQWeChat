@@ -55,7 +55,9 @@
         "System.ComponentModel.Primitives": "4.1.0",
         "Jint-netcore": "2.7.1-final",
         "System.Text.Encoding.CodePages": "4.0.1",
-        "CoreCompat.System.Drawing": "1.0.0-*"
+        "CoreCompat.System.Drawing": "1.0.0-*",
+        "runtime.linux-x64.CoreCompat.System.Drawing": "1.0.0-beta009",
+        "runtime.osx.10.10-x64.CoreCompat.System.Drawing": "1.0.1-beta004"
       },
       "buildOptions": {
         "define": [ "NETCORE" ],

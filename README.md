@@ -1,6 +1,6 @@
 iQQ.Net
 =======
-这个项目是是基于IQQ项目（其中的Webqq-Core）的.Net移植版。
+这个项目是是基于IQQ项目（其中的Webqq-Core）的.Net Core移植版。
 和基于此的一些功能组件。
 
 IQQ项目
@@ -15,16 +15,18 @@ Useage
 * win平台（基于.net core）  
 ![webqqcore-win](https://raw.githubusercontent.com/huoshan12345/iQQ.Net/master/pic/webqqcore-win.png)
 
-* linux平台（基于mono 4.0）（过时）  
+* linux平台（[基于.Net Core on Unbuntu](https://www.microsoft.com/net/core#ubuntu)）  
 ![webqqcore-ubuntu](https://raw.githubusercontent.com/huoshan12345/iQQ.Net/master/pic/webqqcore-ubuntu.png)
 
-* mac平台（基于mono 4.0）（过时）  
+
+* mac平台（[基于.Net Core on Mac](https://www.microsoft.com/net/core#macos)）  
 ![webqqcore-ubuntu](https://raw.githubusercontent.com/huoshan12345/iQQ.Net/master/pic/webqqcore-mac.png)
 ------------  
 
 #### BatchHangQQ（还未切换到二维码登录）
 一个基于winform的简单批量挂qq程序
-* win平台（基于.net framework 4.5）  
+* win平台（基于.net framework 4.5.1）  
+（由于目前还不能直接引用.net core的程序集，所以此处引用的是dll）
 ![BatchHangQQ](https://raw.githubusercontent.com/huoshan12345/iQQ.Net/master/pic/BatchHangQQ.png)
 
 Develop

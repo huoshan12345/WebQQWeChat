@@ -522,6 +522,68 @@
           "lib/netstandard1.0/Newtonsoft.Json.dll": {}
         }
       },
+      "runtime.linux-x64.CoreCompat.System.Drawing/1.0.0-beta009": {
+        "type": "package",
+        "dependencies": {
+          "System.Runtime": "4.1.0"
+        },
+        "compile": {
+          "lib/netstandard1.5/runtime.linux-x64.CoreCompat.System.Drawing.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard1.5/runtime.linux-x64.CoreCompat.System.Drawing.dll": {}
+        },
+        "runtimeTargets": {
+          "runtimes/linux-x64/native/libcairo.so.2": {
+            "assetType": "native",
+            "rid": "linux-x64"
+          },
+          "runtimes/linux-x64/native/libexif.so.12": {
+            "assetType": "native",
+            "rid": "linux-x64"
+          },
+          "runtimes/linux-x64/native/libfontconfig.so.1": {
+            "assetType": "native",
+            "rid": "linux-x64"
+          },
+          "runtimes/linux-x64/native/libfreetype.so.6": {
+            "assetType": "native",
+            "rid": "linux-x64"
+          },
+          "runtimes/linux-x64/native/libgdiplus.so": {
+            "assetType": "native",
+            "rid": "linux-x64"
+          },
+          "runtimes/linux-x64/native/libgif.so.7": {
+            "assetType": "native",
+            "rid": "linux-x64"
+          },
+          "runtimes/linux-x64/native/libglib-2.0.so.0": {
+            "assetType": "native",
+            "rid": "linux-x64"
+          },
+          "runtimes/linux-x64/native/libjbig.so.0": {
+            "assetType": "native",
+            "rid": "linux-x64"
+          },
+          "runtimes/linux-x64/native/libjpeg.so.8": {
+            "assetType": "native",
+            "rid": "linux-x64"
+          },
+          "runtimes/linux-x64/native/libpixman-1.so.0": {
+            "assetType": "native",
+            "rid": "linux-x64"
+          },
+          "runtimes/linux-x64/native/libpng12.so.0": {
+            "assetType": "native",
+            "rid": "linux-x64"
+          },
+          "runtimes/linux-x64/native/libtiff.so.5": {
+            "assetType": "native",
+            "rid": "linux-x64"
+          }
+        }
+      },
       "runtime.native.System/4.0.0": {
         "type": "package",
         "dependencies": {
@@ -585,6 +647,59 @@
         },
         "runtime": {
           "lib/netstandard1.0/_._": {}
+        }
+      },
+      "runtime.osx.10.10-x64.CoreCompat.System.Drawing/1.0.1-beta004": {
+        "type": "package",
+        "runtimeTargets": {
+          "runtimes/osx-x64/native/libcairo.2.dylib": {
+            "assetType": "native",
+            "rid": "osx-x64"
+          },
+          "runtimes/osx-x64/native/libfontconfig.1.dylib": {
+            "assetType": "native",
+            "rid": "osx-x64"
+          },
+          "runtimes/osx-x64/native/libfreetype.6.dylib": {
+            "assetType": "native",
+            "rid": "osx-x64"
+          },
+          "runtimes/osx-x64/native/libgdiplus.dylib": {
+            "assetType": "native",
+            "rid": "osx-x64"
+          },
+          "runtimes/osx-x64/native/libgif.4.dylib": {
+            "assetType": "native",
+            "rid": "osx-x64"
+          },
+          "runtimes/osx-x64/native/libglib-2.0.0.dylib": {
+            "assetType": "native",
+            "rid": "osx-x64"
+          },
+          "runtimes/osx-x64/native/libintl.8.dylib": {
+            "assetType": "native",
+            "rid": "osx-x64"
+          },
+          "runtimes/osx-x64/native/libjpeg.8.dylib": {
+            "assetType": "native",
+            "rid": "osx-x64"
+          },
+          "runtimes/osx-x64/native/libpcre.1.dylib": {
+            "assetType": "native",
+            "rid": "osx-x64"
+          },
+          "runtimes/osx-x64/native/libpixman-1.0.dylib": {
+            "assetType": "native",
+            "rid": "osx-x64"
+          },
+          "runtimes/osx-x64/native/libpng16.16.dylib": {
+            "assetType": "native",
+            "rid": "osx-x64"
+          },
+          "runtimes/osx-x64/native/libtiff.5.dylib": {
+            "assetType": "native",
+            "rid": "osx-x64"
+          }
         }
       },
       "System.AppContext/4.1.0": {
@@ -2497,6 +2612,59 @@
           "lib/net45/Newtonsoft.Json.dll": {}
         }
       },
+      "runtime.osx.10.10-x64.CoreCompat.System.Drawing/1.0.1-beta004": {
+        "type": "package",
+        "runtimeTargets": {
+          "runtimes/osx-x64/native/libcairo.2.dylib": {
+            "assetType": "native",
+            "rid": "osx-x64"
+          },
+          "runtimes/osx-x64/native/libfontconfig.1.dylib": {
+            "assetType": "native",
+            "rid": "osx-x64"
+          },
+          "runtimes/osx-x64/native/libfreetype.6.dylib": {
+            "assetType": "native",
+            "rid": "osx-x64"
+          },
+          "runtimes/osx-x64/native/libgdiplus.dylib": {
+            "assetType": "native",
+            "rid": "osx-x64"
+          },
+          "runtimes/osx-x64/native/libgif.4.dylib": {
+            "assetType": "native",
+            "rid": "osx-x64"
+          },
+          "runtimes/osx-x64/native/libglib-2.0.0.dylib": {
+            "assetType": "native",
+            "rid": "osx-x64"
+          },
+          "runtimes/osx-x64/native/libintl.8.dylib": {
+            "assetType": "native",
+            "rid": "osx-x64"
+          },
+          "runtimes/osx-x64/native/libjpeg.8.dylib": {
+            "assetType": "native",
+            "rid": "osx-x64"
+          },
+          "runtimes/osx-x64/native/libpcre.1.dylib": {
+            "assetType": "native",
+            "rid": "osx-x64"
+          },
+          "runtimes/osx-x64/native/libpixman-1.0.dylib": {
+            "assetType": "native",
+            "rid": "osx-x64"
+          },
+          "runtimes/osx-x64/native/libpng16.16.dylib": {
+            "assetType": "native",
+            "rid": "osx-x64"
+          },
+          "runtimes/osx-x64/native/libtiff.5.dylib": {
+            "assetType": "native",
+            "rid": "osx-x64"
+          }
+        }
+      },
       "System.Collections/4.0.11": {
         "type": "package",
         "frameworkAssemblies": [
@@ -3173,6 +3341,28 @@
         "tools/install.ps1"
       ]
     },
+    "runtime.linux-x64.CoreCompat.System.Drawing/1.0.0-beta009": {
+      "sha512": "6t5B23rZDy6xXWKWZ34Tj2mVeq+CCW4nFZmBCcC1U4lbdhWu2KCQi6Mr1fPJ0F8LErfT7ict8yL0MXL/xBvswQ==",
+      "type": "package",
+      "path": "runtime.linux-x64.CoreCompat.System.Drawing/1.0.0-beta009",
+      "files": [
+        "lib/netstandard1.5/runtime.linux-x64.CoreCompat.System.Drawing.dll",
+        "runtime.linux-x64.corecompat.system.drawing.1.0.0-beta009.nupkg.sha512",
+        "runtime.linux-x64.corecompat.system.drawing.nuspec",
+        "runtimes/linux-x64/native/libcairo.so.2",
+        "runtimes/linux-x64/native/libexif.so.12",
+        "runtimes/linux-x64/native/libfontconfig.so.1",
+        "runtimes/linux-x64/native/libfreetype.so.6",
+        "runtimes/linux-x64/native/libgdiplus.so",
+        "runtimes/linux-x64/native/libgif.so.7",
+        "runtimes/linux-x64/native/libglib-2.0.so.0",
+        "runtimes/linux-x64/native/libjbig.so.0",
+        "runtimes/linux-x64/native/libjpeg.so.8",
+        "runtimes/linux-x64/native/libpixman-1.so.0",
+        "runtimes/linux-x64/native/libpng12.so.0",
+        "runtimes/linux-x64/native/libtiff.so.5"
+      ]
+    },
     "runtime.native.System/4.0.0": {
       "sha512": "QfS/nQI7k/BLgmLrw7qm7YBoULEvgWnPI+cYsbfCVFTW8Aj+i8JhccxcFMu1RWms0YZzF+UHguNBK4Qn89e2Sg==",
       "type": "package",
@@ -3231,6 +3421,27 @@
         "lib/netstandard1.0/_._",
         "runtime.native.System.Security.Cryptography.4.0.0.nupkg.sha512",
         "runtime.native.System.Security.Cryptography.nuspec"
+      ]
+    },
+    "runtime.osx.10.10-x64.CoreCompat.System.Drawing/1.0.1-beta004": {
+      "sha512": "vveZKAKegavlE6OshTH/3YJbi1vUfF+6nGGYd66iUAmUtu7+z8yRc0Q/csemk2+Rgymzxk6hFhEkMPPmihSZOw==",
+      "type": "package",
+      "path": "runtime.osx.10.10-x64.CoreCompat.System.Drawing/1.0.1-beta004",
+      "files": [
+        "runtime.osx.10.10-x64.corecompat.system.drawing.1.0.1-beta004.nupkg.sha512",
+        "runtime.osx.10.10-x64.corecompat.system.drawing.nuspec",
+        "runtimes/osx-x64/native/libcairo.2.dylib",
+        "runtimes/osx-x64/native/libfontconfig.1.dylib",
+        "runtimes/osx-x64/native/libfreetype.6.dylib",
+        "runtimes/osx-x64/native/libgdiplus.dylib",
+        "runtimes/osx-x64/native/libgif.4.dylib",
+        "runtimes/osx-x64/native/libglib-2.0.0.dylib",
+        "runtimes/osx-x64/native/libintl.8.dylib",
+        "runtimes/osx-x64/native/libjpeg.8.dylib",
+        "runtimes/osx-x64/native/libpcre.1.dylib",
+        "runtimes/osx-x64/native/libpixman-1.0.dylib",
+        "runtimes/osx-x64/native/libpng16.16.dylib",
+        "runtimes/osx-x64/native/libtiff.5.dylib"
       ]
     },
     "System.AppContext/4.1.0": {
@@ -7738,7 +7949,8 @@
     "": [
       "Microsoft.Extensions.Logging >= 1.0.0",
       "Microsoft.Extensions.Logging.Console >= 1.0.0",
-      "Newtonsoft.Json >= 9.0.1"
+      "Newtonsoft.Json >= 9.0.1",
+      "runtime.osx.10.10-x64.CoreCompat.System.Drawing >= 1.0.1-beta004"
     ],
     ".NETCoreApp,Version=v1.0": [
       "CoreCompat.System.Drawing >= 1.0.0-*",
@@ -7746,7 +7958,8 @@
       "Microsoft.NETCore.App >= 1.0.0-*",
       "System.Collections.NonGeneric >= 4.0.1",
       "System.ComponentModel.Primitives >= 4.1.0",
-      "System.Text.Encoding.CodePages >= 4.0.1"
+      "System.Text.Encoding.CodePages >= 4.0.1",
+      "runtime.linux-x64.CoreCompat.System.Drawing >= 1.0.0-beta009"
     ],
     ".NETFramework,Version=v4.5.1": [
       "Jint >= 2.9.1",
