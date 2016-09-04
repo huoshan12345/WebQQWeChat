@@ -12,12 +12,11 @@ Useage
 ------------
 #### WebQQCore（可用，已切换到二维码登录）
 编译为dll即可引用到别的项目中；编译为exe则是一个控制台程序，可演示qq登录等基本功能。
-* win平台（基于.net core）  
+* win平台（[基于.net core on Win](https://www.microsoft.com/net/core#windows)）  
 ![webqqcore-win](https://raw.githubusercontent.com/huoshan12345/iQQ.Net/master/pic/webqqcore-win.png)
 
 * linux平台（[基于.Net Core on Unbuntu](https://www.microsoft.com/net/core#ubuntu)）  
 ![webqqcore-ubuntu](https://raw.githubusercontent.com/huoshan12345/iQQ.Net/master/pic/webqqcore-ubuntu.png)
-
 
 * mac平台（[基于.Net Core on Mac](https://www.microsoft.com/net/core#macos)）  
 ![webqqcore-ubuntu](https://raw.githubusercontent.com/huoshan12345/iQQ.Net/master/pic/webqqcore-mac.png)
