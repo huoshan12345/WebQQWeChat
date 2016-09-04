@@ -19,7 +19,8 @@ Useage
 ![webqqcore-ubuntu](https://raw.githubusercontent.com/huoshan12345/iQQ.Net/master/pic/webqqcore-ubuntu.png)
 
 * mac平台（[基于.Net Core on Mac](https://www.microsoft.com/net/core#macos)）  
-![webqqcore-ubuntu](https://raw.githubusercontent.com/huoshan12345/iQQ.Net/master/pic/webqqcore-mac.png)
+![webqqcore-mac](https://raw.githubusercontent.com/huoshan12345/iQQ.Net/master/pic/webqqcore-mac.png)
+
 ------------  
 
 #### BatchHangQQ（还未切换到二维码登录）
