@@ -14,32 +14,32 @@ namespace iQQ.Net.WebQQCore.Im.Action
     /// </summary>
     public class GetUserLevelAction : AbstractHttpAction
     {
-        private QQUser user;
+        private readonly QQUser _user;
  
         public GetUserLevelAction(IQQContext context, QQActionListener listener, QQUser user)
             : base(context, listener)
         {
 
-            this.user = user;
+            _user = user;
         }
 
         public override void OnHttpStatusOK(QQHttpResponse response)
         {
-            var json = JObject.Parse(response.GetResponseString());
+            var str = response.ResponseString;
+            var json = JObject.Parse(str);
             if (json["retcode"].ToString() == "0")
             {
                 var result = json["result"].ToObject<JObject>();
-                var level = user.LevelInfo;
+                var level = _user.LevelInfo;
                 level.Level = result["level"].ToObject<int>();
                 level.Days = result["days"].ToObject<int>();
                 level.Hours = result["hours"].ToObject<int>();
                 level.RemainDays = result["remainDays"].ToObject<int>();
-                NotifyActionEvent(QQActionEventType.EvtOK, user);
+                NotifyActionEvent(QQActionEventType.EvtOK, _user);
             }
             else
             {
-                NotifyActionEvent(QQActionEventType.EvtError,
-                        new QQException(QQErrorCode.UnexpectedResponse, response.GetResponseString()));
+                throw new QQException(QQErrorCode.UnexpectedResponse, str);
             }
         }
 
@@ -47,7 +47,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
         {
             var req = CreateHttpRequest(HttpConstants.Get, QQConstants.URL_GET_USER_LEVEL);
             var session = Context.Session;
-            req.AddGetValue("tuin", user.Uin);
+            req.AddGetValue("tuin", _user.Uin);
             req.AddGetValue("t", DateTime.Now.CurrentTimeMillis());
             req.AddGetValue("vfwebqq", session.Vfwebqq);
             return req;

@@ -49,10 +49,8 @@
             this.label7 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
             this.tbMessage = new System.Windows.Forms.RichTextBox();
-            this.btnAddQQ = new System.Windows.Forms.Button();
             this.btnClearQQlist = new System.Windows.Forms.Button();
             this.btnExportQQlist = new System.Windows.Forms.Button();
-            this.btnImportQQlist = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pbQRCode)).BeginInit();
@@ -239,41 +237,25 @@
             this.tbMessage.Text = "";
             this.tbMessage.WordWrap = false;
             // 
-            // btnAddQQ
-            // 
-            this.btnAddQQ.Location = new System.Drawing.Point(358, 12);
-            this.btnAddQQ.Name = "btnAddQQ";
-            this.btnAddQQ.Size = new System.Drawing.Size(70, 35);
-            this.btnAddQQ.TabIndex = 10;
-            this.btnAddQQ.Text = "手动添加";
-            this.btnAddQQ.UseVisualStyleBackColor = true;
-            // 
             // btnClearQQlist
             // 
-            this.btnClearQQlist.Location = new System.Drawing.Point(247, 12);
+            this.btnClearQQlist.Location = new System.Drawing.Point(132, 12);
             this.btnClearQQlist.Name = "btnClearQQlist";
             this.btnClearQQlist.Size = new System.Drawing.Size(70, 35);
             this.btnClearQQlist.TabIndex = 9;
             this.btnClearQQlist.Text = "清空列表";
             this.btnClearQQlist.UseVisualStyleBackColor = true;
+            this.btnClearQQlist.Click += new System.EventHandler(this.btnClearQQlist_Click);
             // 
             // btnExportQQlist
             // 
-            this.btnExportQQlist.Location = new System.Drawing.Point(132, 12);
+            this.btnExportQQlist.Location = new System.Drawing.Point(12, 12);
             this.btnExportQQlist.Name = "btnExportQQlist";
             this.btnExportQQlist.Size = new System.Drawing.Size(70, 35);
             this.btnExportQQlist.TabIndex = 8;
             this.btnExportQQlist.Text = "导出列表";
             this.btnExportQQlist.UseVisualStyleBackColor = true;
-            // 
-            // btnImportQQlist
-            // 
-            this.btnImportQQlist.Location = new System.Drawing.Point(12, 12);
-            this.btnImportQQlist.Name = "btnImportQQlist";
-            this.btnImportQQlist.Size = new System.Drawing.Size(70, 35);
-            this.btnImportQQlist.TabIndex = 7;
-            this.btnImportQQlist.Text = "导入列表";
-            this.btnImportQQlist.UseVisualStyleBackColor = true;
+            this.btnExportQQlist.Click += new System.EventHandler(this.btnExportQQlist_Click);
             // 
             // FmQQList
             // 
@@ -281,10 +263,8 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(684, 561);
             this.Controls.Add(this.tbMessage);
-            this.Controls.Add(this.btnAddQQ);
             this.Controls.Add(this.btnClearQQlist);
             this.Controls.Add(this.btnExportQQlist);
-            this.Controls.Add(this.btnImportQQlist);
             this.Controls.Add(this.groupBox5);
             this.Controls.Add(this.groupBox4);
             this.Controls.Add(this.groupBox3);
@@ -297,7 +277,7 @@
             this.MinimumSize = new System.Drawing.Size(700, 600);
             this.Name = "FmQQList";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "MyWebQQ";
+            this.Text = "BatchHangQQ";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.fmQQList_FormClosing);
             this.Load += new System.EventHandler(this.fmQQList_Load);
             this.SizeChanged += new System.EventHandler(this.fmQQList_SizeChanged);
@@ -336,9 +316,7 @@
         private System.Windows.Forms.RichTextBox tbMessage;
         private System.Windows.Forms.CheckBox chkUseRobot;
         private System.Windows.Forms.ColumnHeader columnHeader7;
-        private System.Windows.Forms.Button btnAddQQ;
         private System.Windows.Forms.Button btnClearQQlist;
         private System.Windows.Forms.Button btnExportQQlist;
-        private System.Windows.Forms.Button btnImportQQlist;
     }
 }

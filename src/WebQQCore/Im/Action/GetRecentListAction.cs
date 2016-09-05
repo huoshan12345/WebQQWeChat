@@ -20,10 +20,12 @@ namespace iQQ.Net.WebQQCore.Im.Action
         {
             var session = Context.Session;
 
-            var json = new JObject();
-            json.Add("vfwebqq", session.Vfwebqq);
-            json.Add("clientid", session.ClientId);
-            json.Add("psessionid", session.SessionId);
+            var json = new JObject
+            {
+                {"vfwebqq", session.Vfwebqq},
+                {"clientid", session.ClientId},
+                {"psessionid", session.SessionId}
+            };
 
             var req = CreateHttpRequest("POST", QQConstants.URL_GET_RECENT_LIST);
             req.AddPostValue("r", JsonConvert.SerializeObject(json));

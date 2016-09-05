@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 using iQQ.Net.WebQQCore.Im.Actor;
 using iQQ.Net.WebQQCore.Im.Bean;
 using iQQ.Net.WebQQCore.Im.Core;
@@ -238,9 +239,10 @@ namespace iQQ.Net.WebQQCore.Im.Action
                     //return;
                     throw new QQException(QQErrorCode.InvalidLoginAuth);
                 }
-
-                case 103: // 未知，暂且重新登录
+                
+                case 103: // 此时需要登录Smart QQ，确认能收到消息后点击设置-退出登录，就会恢复正常了
                 {
+                    Thread.Sleep(1000 * 30);
                     Context.Session.State = QQSessionState.Offline;
                     throw new QQException(QQErrorCode.NeedToLogin, str);
                 }

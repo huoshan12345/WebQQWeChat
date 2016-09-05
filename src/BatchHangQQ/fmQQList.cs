@@ -113,7 +113,7 @@ namespace iQQ.Net.BatchHangQQ
                                     From = client.Account,
                                     Date = DateTime.Now,
                                 };
-                                var replyEvent = await client.GetRobotReply(revMsg, RobotType.Tuling).WhenFinalEvent(10000);
+                                var replyEvent = await client.GetRobotReply(revMsg, RobotType.Tuling).WhenFinalEvent();
                                 if (replyEvent.Type == QQActionEventType.EvtOK)
                                 {
                                     var text = new TextItem((string)replyEvent.Target);
@@ -208,16 +208,16 @@ namespace iQQ.Net.BatchHangQQ
         }
 
 
-        private void AddQQToLv(IQQClient qq)
+        private async void AddQQToLv(IQQClient qq)
         {
             var index = lvQQList.FindFirstItemIndex(qq.Account.QQ.ToString(), new[] { 1 });
             if (index < 0)
             {
+                await qq.GetUserLevel(qq.Account).WhenFinalEvent();
                 var subitems = new[]
                 {
                     lvQQList.Items.Count.ToString(),
                     qq.Account.QQ.ToString(),
-                    "",
                     qq.Account.ClientType.ToString(),
                     qq.Account.Status.ToString(),
                     qq.Account.LevelInfo.Level.ToString(),
@@ -269,6 +269,20 @@ namespace iQQ.Net.BatchHangQQ
         private void fmQQList_FormClosing(object sender, FormClosingEventArgs e)
         {
             _notifyIcon.Visible = false;
+        }
+
+        private void btnClearQQlist_Click(object sender, EventArgs e)
+        {
+            foreach (var qq in _qqClients)
+            {
+                qq.Value.Destroy();
+            }
+            lvQQList.Items.Clear();
+        }
+
+        private void btnExportQQlist_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

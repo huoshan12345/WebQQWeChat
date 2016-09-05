@@ -46,19 +46,43 @@ namespace iQQ.Net.WebQQCore.Im.Action
 
         public override void OnHttpStatusOK(QQHttpResponse response)
         {
+            /*
+                 {
+                    "retcode": 0,
+                    "result": {
+                        "face": 603,
+                        "birthday": {
+                            "month": 8,
+                            "year": 1895,
+                            "day": 15
+                        },
+                        "occupation": "其他",
+                        "phone": "110",
+                        "allow": 1,
+                        "college": "aaa",
+                        "uin": 1382902354,
+                        "constel": 7,
+                        "blood": 5,
+                        "homepage": "木有",
+                        "stat": 20,
+                        "vip_info": 6,
+                        "country": "乍得",
+                        "city": "",
+                        "personal": "这是简介",
+                        "nick": "ABCD",
+                        "shengxiao": 11,
+                        "email": "352323245@qq.com",
+                        "province": "",
+                        "gender": "female",
+                        "mobile": "139********"
+                    }
+                }             
+            */
             var json = JObject.Parse(response.GetResponseString());
             if (json["retcode"].ToString() == "0")
             {
                 var obj = json["result"].ToObject<JObject>();
-                try
-                {
-                    buddy.Birthday = DateUtils.Parse(obj["birthday"].ToObject<JObject>());
-                }
-                catch (FormatException e)
-                {
-                    Context.Logger.LogWarning($"日期转换失败：{obj["birthday"]}", e);
-                    buddy.Birthday = null;
-                }
+                buddy.Birthday = DateUtils.Parse(obj["birthday"].ToObject<JObject>());
                 buddy.Occupation = obj["occupation"].ToString();
                 buddy.Phone = obj["phone"].ToString();
                 buddy.Allow = (QQAllow)obj["allow"].ToObject<int>();

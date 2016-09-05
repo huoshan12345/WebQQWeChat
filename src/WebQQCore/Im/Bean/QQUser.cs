@@ -84,7 +84,7 @@ namespace iQQ.Net.WebQQCore.Im.Bean
         public string College { get; set; }
 
         /// <summary>
-        /// 註冊時間
+        /// 注册时间
         /// </summary>
         public int RegTime { get; set; }
 
