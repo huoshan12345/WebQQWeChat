@@ -32,7 +32,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
             var session = Context.Session;
 
             var req = CreateHttpRequest("POST", QQConstants.URL_UPLOAD_CUSTOM_FACE);
-            req.AddGetValue("time", DateTime.Now.CurrentTimeSeconds());
+            req.AddGetValue("time", DateTime.Now.CurrentTimeMillis());
             req.AddPostValue("from", "control");
             req.AddPostValue("f", "EQQ.Model.ChatMsg.callbackSendPicGroup");
             req.AddPostValue("vfwebqq", session.Vfwebqq);

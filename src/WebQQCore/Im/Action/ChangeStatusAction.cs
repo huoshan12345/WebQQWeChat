@@ -31,7 +31,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
             req.AddGetValue("newstatus", _status.Value);
             req.AddGetValue("clientid", session.ClientId);
             req.AddGetValue("psessionid", session.SessionId);
-            req.AddGetValue("t", DateTime.Now.CurrentTimeSeconds());
+            req.AddGetValue("t", DateTime.Now.CurrentTimeMillis());
 
             req.AddHeader("Referer", QQConstants.REFFER);
             return req;

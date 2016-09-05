@@ -36,7 +36,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
             var session = Context.Session;
 
             var req = CreateHttpRequest("POST", QQConstants.URL_UPLOAD_OFFLINE_PICTURE);
-            req.AddGetValue("time", DateTime.Now.CurrentTimeSeconds());
+            req.AddGetValue("time", DateTime.Now.CurrentTimeMillis());
             req.AddPostFile("file", _file);
             req.AddPostValue("callback", "parent.EQQ.Model.ChatMsg.callbackSendPic");
             req.AddPostValue("locallangid", "2052");

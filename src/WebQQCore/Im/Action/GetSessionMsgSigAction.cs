@@ -52,7 +52,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
             req.AddGetValue("to_uin", _user.Uin);
             req.AddGetValue("clientid", session.ClientId);
             req.AddGetValue("psessionid", session.SessionId);
-            req.AddGetValue("t", DateTime.Now.CurrentTimeSeconds());
+            req.AddGetValue("t", DateTime.Now.CurrentTimeMillis());
             return req;
         }
 

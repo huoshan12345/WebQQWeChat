@@ -81,7 +81,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
             var parts = _cface.Server.Split(':');
             req.AddGetValue("rip", parts[0]);
             req.AddGetValue("rport", parts[1]);
-            req.AddGetValue("t", DateTime.Now.CurrentTimeSeconds());
+            req.AddGetValue("t", DateTime.Now.CurrentTimeMillis());
             req.AddGetValue("type", _msg.Group != null ? "0" : "1");
             req.AddGetValue("uin", _msg.From.Uin);
             req.AddGetValue("vfwebqq", session.Vfwebqq);

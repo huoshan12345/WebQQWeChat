@@ -22,7 +22,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
             request.AddGetValue("ptwebqq", httpService.GetCookie("ptwebqq", QQConstants.URL_CHANNEL_LOGIN).Value);
             request.AddGetValue("clientid", session.ClientId);
             request.AddGetValue("psessionid", "");
-            request.AddGetValue("t", DateTime.Now.CurrentTimeSeconds());
+            request.AddGetValue("t", DateTime.Now.CurrentTimeMillis());
             return request;
         }
 

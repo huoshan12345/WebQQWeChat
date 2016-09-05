@@ -30,7 +30,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
             req.AddGetValue("clientid", session.ClientId);
             req.AddGetValue("psessionid", session.SessionId);
             req.AddGetValue("vfwebqq", session.Vfwebqq);
-            req.AddGetValue("t", DateTime.Now.CurrentTimeSeconds());
+            req.AddGetValue("t", DateTime.Now.CurrentTimeMillis());
             req.AddGetValue("did", discuz.Did);
             return req;
         }

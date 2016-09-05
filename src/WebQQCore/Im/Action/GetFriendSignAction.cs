@@ -32,7 +32,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
                     QQConstants.URL_GET_USER_SIGN);
             req.AddGetValue("tuin", _buddy.Uin);
             req.AddGetValue("vfwebqq", session.Vfwebqq);
-            req.AddGetValue("t", DateTime.Now.CurrentTimeSeconds());
+            req.AddGetValue("t", DateTime.Now.CurrentTimeMillis());
 
             req.AddHeader("Referer", QQConstants.REFFER);
             return req;

@@ -34,7 +34,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
                     QQConstants.URL_GET_USER_FACE);
             req.AddGetValue("uin", _group.Code);
             req.AddGetValue("vfwebqq", session.Vfwebqq);
-            req.AddGetValue("t", DateTime.Now.CurrentTimeSeconds());
+            req.AddGetValue("t", DateTime.Now.CurrentTimeMillis());
             req.AddGetValue("cache", "0");
             req.AddGetValue("type", "4");
             req.AddGetValue("fid", "0");

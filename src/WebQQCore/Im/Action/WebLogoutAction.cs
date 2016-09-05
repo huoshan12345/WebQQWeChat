@@ -24,7 +24,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
             req.AddGetValue("ids", ""); // 产生过会话才出现ID，如何获取？？
             req.AddGetValue("clientid", session.ClientId);
             req.AddGetValue("psessionid", session.SessionId);
-            req.AddGetValue("t", DateTime.Now.CurrentTimeSeconds());
+            req.AddGetValue("t", DateTime.Now.CurrentTimeMillis());
 
             req.AddHeader("Referer", QQConstants.REFFER);
             return req;

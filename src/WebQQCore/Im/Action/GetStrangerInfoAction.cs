@@ -35,7 +35,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
             req.AddGetValue("gid", "0");
             req.AddGetValue("code", "");
             req.AddGetValue("vfwebqq", session.Vfwebqq);
-            req.AddGetValue("t", DateTime.Now.CurrentTimeSeconds());
+            req.AddGetValue("t", DateTime.Now.CurrentTimeMillis());
             return req;
         }
 

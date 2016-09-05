@@ -24,7 +24,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
             req.AddGetValue("vfwebqq", session.Vfwebqq);
             req.AddGetValue("clientid", session.ClientId);
             req.AddGetValue("psessionid", session.SessionId);
-            req.AddGetValue("t", DateTime.Now.CurrentTimeSeconds());
+            req.AddGetValue("t", DateTime.Now.CurrentTimeMillis());
             req.AddHeader("Referer", QQConstants.REFFER);
             return req;
         }
@@ -44,8 +44,11 @@ namespace iQQ.Net.WebQQCore.Im.Action
                     var status = obj["status"].ToString();
                     var clientType = obj["client_type"].ToObject<int>();
                     var buddy = store.GetBuddyByUin(uin);
-                    buddy.Status = QQStatus.ValueOfRaw(status);
-                    buddy.ClientType = QQClientTypeInfo.ValueOfRaw(clientType);
+                    if (buddy != null)
+                    {
+                        buddy.Status = QQStatus.ValueOfRaw(status);
+                        buddy.ClientType = QQClientTypeInfo.ValueOfRaw(clientType);
+                    }
                 }
                 NotifyActionEvent(QQActionEventType.EvtOK, null);
             }

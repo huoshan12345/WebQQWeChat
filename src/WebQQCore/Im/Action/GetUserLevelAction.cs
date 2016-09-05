@@ -48,7 +48,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
             var req = CreateHttpRequest(HttpConstants.Get, QQConstants.URL_GET_USER_LEVEL);
             var session = Context.Session;
             req.AddGetValue("tuin", user.Uin);
-            req.AddGetValue("t", DateTime.Now.CurrentTimeSeconds());
+            req.AddGetValue("t", DateTime.Now.CurrentTimeMillis());
             req.AddGetValue("vfwebqq", session.Vfwebqq);
             return req;
         }

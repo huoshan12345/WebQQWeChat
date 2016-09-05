@@ -33,7 +33,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
                     QQConstants.URL_GET_USER_ACCOUNT);
             req.AddGetValue("tuin", buddy.Uin);
             req.AddGetValue("vfwebqq", session.Vfwebqq);
-            req.AddGetValue("t", DateTime.Now.CurrentTimeSeconds());
+            req.AddGetValue("t", DateTime.Now.CurrentTimeMillis());
             req.AddGetValue("verifysession", ""); // 验证码？？
             req.AddGetValue("type", 1);
             req.AddGetValue("code", "");

@@ -42,7 +42,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
             req.AddGetValue("all", _buddy.KeyStr);
 
             req.AddGetValue("vfwebqq", session.Vfwebqq);
-            req.AddGetValue("t", DateTime.Now.CurrentTimeSeconds());
+            req.AddGetValue("t", DateTime.Now.CurrentTimeMillis());
             req.AddGetValue("type", 1);
             req.AddGetValue("vfcode", "");
 

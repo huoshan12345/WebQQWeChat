@@ -38,7 +38,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
             req.AddGetValue("verifysession", "");	//难道有验证码？？？
             req.AddGetValue("code", "");
             req.AddGetValue("vfwebqq", session.Vfwebqq);
-            req.AddGetValue("t", DateTime.Now.CurrentTimeSeconds());
+            req.AddGetValue("t", DateTime.Now.CurrentTimeMillis());
 
             req.AddHeader("Referer", QQConstants.REFFER);
             return req;
