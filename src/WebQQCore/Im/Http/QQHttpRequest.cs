@@ -124,7 +124,7 @@ namespace iQQ.Net.WebQQCore.Im.Http
             set { HeaderMap[HttpConstants.ContentType] = value; }
         }
 
-        public string Refer
+        public string Referer
         {
             get { return HeaderMap[HttpConstants.Referer]; }
             set { HeaderMap[HttpConstants.Referer] = value; }

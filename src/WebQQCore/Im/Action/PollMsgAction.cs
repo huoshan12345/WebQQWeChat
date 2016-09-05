@@ -43,7 +43,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
             req.Timeout = 60 * 1000;
             req.ReadTimeout = 60 * 1000;
             req.ConnectTimeout = 60 * 1000;
-            req.Refer = "https://d1.web2.qq.com/cfproxy.html?v=20151105001&callback=1";
+            req.Referer = "https://d1.web2.qq.com/cfproxy.html?v=20151105001&callback=1";
             req.Origin = "https://d1.web2.qq.com";
             return req;
         }
@@ -69,7 +69,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
             if (!ActionFuture.IsCanceled && (ex as QQException)?.ErrorCode == QQErrorCode.IOTimeout)
             {
                 Context.PushActor(new HttpActor(HttpActorType.BuildRequest, Context, this));
-                Context.Logger.LogInformation("polling...");
+                Context.Logger.LogInformation("continue polling...");
                 return;
             }
             else base.OnHttpError(ex);
@@ -274,7 +274,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
                 var status = pollData["status"].ToString();
                 var clientType = pollData["client_type"].ToObject<int>();
                 buddy.Status = QQStatus.ValueOfRaw(status);
-                buddy.ClientType = QQClientType.ValueOfRaw(clientType);
+                buddy.ClientType = QQClientTypeInfo.ValueOfRaw(clientType);
                 return new QQNotifyEvent(QQNotifyEventType.BuddyStatusChange, buddy);
             }
             catch (Exception ex)

@@ -21,6 +21,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
         {
             var session = Context.Session;
             var req = CreateHttpRequest(HttpConstants.Get, QQConstants.URL_GET_ONLINE_BUDDY_LIST);
+            req.AddGetValue("vfwebqq", session.Vfwebqq);
             req.AddGetValue("clientid", session.ClientId);
             req.AddGetValue("psessionid", session.SessionId);
             req.AddGetValue("t", DateTime.Now.CurrentTimeSeconds());
@@ -30,7 +31,8 @@ namespace iQQ.Net.WebQQCore.Im.Action
 
         public override void OnHttpStatusOK(QQHttpResponse response)
         {
-            var json = JObject.Parse(response.GetResponseString());
+            var str = response.ResponseString;
+            var json = JObject.Parse(str);
             var store = Context.Store;
             if (json["retcode"].ToString() == "0")
             {
@@ -43,14 +45,14 @@ namespace iQQ.Net.WebQQCore.Im.Action
                     var clientType = obj["client_type"].ToObject<int>();
                     var buddy = store.GetBuddyByUin(uin);
                     buddy.Status = QQStatus.ValueOfRaw(status);
-                    buddy.ClientType = QQClientType.ValueOfRaw(clientType);
+                    buddy.ClientType = QQClientTypeInfo.ValueOfRaw(clientType);
                 }
-
+                NotifyActionEvent(QQActionEventType.EvtOK, null);
             }
-
-            NotifyActionEvent(QQActionEventType.EvtOK, store.GetOnlineBuddyList());
+            else
+            {
+                throw new QQException(QQErrorCode.InvalidResponse, str);
+            }
         }
-
     }
-
 }

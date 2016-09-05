@@ -6,6 +6,7 @@ using System.Net;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using iQQ.Net.WebQQCore.Im.Http;
 
 namespace iQQ.Net.WebQQCore.Util.Extensions
 {
@@ -39,15 +40,16 @@ namespace iQQ.Net.WebQQCore.Util.Extensions
         //}
 
 
-        //public static string GetRequestHeader(this HttpItem request)
-        //{
-        //    var sb = new StringBuilder();
-        //    sb.AppendLineIf($"{HttpConstants.Referer}: {request.Referer}", !request.Referer.IsNullOrEmpty());
-        //    sb.AppendLineIf($"{HttpConstants.UserAgent}: {request.UserAgent}", !request.UserAgent.IsNullOrEmpty());
-        //    sb.AppendLineIf($"{HttpConstants.ContentType}: {request.ContentType}", !request.ContentType.IsNullOrEmpty());
-        //    sb.AppendLineIf($"{HttpConstants.Cookie}: {string.Join("; ", request.CookieContainer.GetAllCookies())}", !request.CookieContainer.IsNullOrEmpty());
-        //    return sb.ToString();
-        //}
+        public static string GetRequestHeader(this QQHttpRequest request, CookieContainer cc)
+        {
+            var sb = new StringBuilder();
+            sb.AppendLineIf($"{HttpConstants.Referer}: {request.Referer}", !request.Referer.IsNullOrEmpty());
+            sb.AppendLineIf($"{HttpConstants.UserAgent}: {request.UserAgent}", !request.UserAgent.IsNullOrEmpty());
+            sb.AppendLineIf($"{HttpConstants.ContentType}: {request.ContentType}", !request.ContentType.IsNullOrEmpty());
+            var cookies = cc.GetCookies(new Uri(request.Url)).OfType<Cookie>();
+            sb.AppendLine($"{HttpConstants.Cookie}: {string.Join("; ", cookies)}");
+            return sb.ToString();
+        }
 
         public static bool IsNullOrEmpty(this CookieContainer col)
         {

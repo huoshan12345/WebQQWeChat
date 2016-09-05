@@ -16,7 +16,7 @@ namespace iQQ.Net.WebQQCore.Util.Extensions
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        public static byte[] Md5ToArray(this string input)
+        public static byte[] Md5ToBytes(this string input)
         {
             return MD5.Create().ComputeHash(Encoding.UTF8.GetBytes(input));
         }
@@ -35,6 +35,16 @@ namespace iQQ.Net.WebQQCore.Util.Extensions
                 builder.Append(i.ToString("X2"));
             }
             return builder.ToString();
+        }
+
+        public static byte[] ToUTF8Bytes(this string input)
+        {
+            return Encoding.UTF8.GetBytes(input);
+        }
+
+        public static byte[] ToBytes(this string input, Encoding encoding)
+        {
+            return encoding.GetBytes(input);
         }
 
 

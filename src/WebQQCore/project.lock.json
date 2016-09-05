@@ -2971,7 +2971,7 @@
     "Microsoft.Extensions.Configuration.Abstractions/1.0.0": {
       "sha512": "nJ+Et/rnDMDmGhxvFAKdN3va7y+YDPICv1nUEP8I4IKgOkWwr/dCZHMqxVhJFrkbW9ux8Kd7erC4mvxfZh0WnA==",
       "type": "package",
-      "path": "microsoft.extensions.configuration.abstractions/1.0.0",
+      "path": "Microsoft.Extensions.Configuration.Abstractions/1.0.0",
       "files": [
         "Microsoft.Extensions.Configuration.Abstractions.1.0.0.nupkg.sha512",
         "Microsoft.Extensions.Configuration.Abstractions.nuspec",
@@ -3015,7 +3015,7 @@
     "Microsoft.Extensions.Logging.Console/1.0.0": {
       "sha512": "GN4gFFONP12KbFEG9rNFpXuz6D2Tybcm8+c1wilaQ1eSl9zVX0gVRrKw/YRwxdwbM3eK7nWfRRqJaQPzOjtLnA==",
       "type": "package",
-      "path": "microsoft.extensions.logging.console/1.0.0",
+      "path": "Microsoft.Extensions.Logging.Console/1.0.0",
       "files": [
         "Microsoft.Extensions.Logging.Console.1.0.0.nupkg.sha512",
         "Microsoft.Extensions.Logging.Console.nuspec",
@@ -3028,7 +3028,7 @@
     "Microsoft.Extensions.Primitives/1.0.0": {
       "sha512": "3q2vzfKEDjL6JFkRpk5SFA3zarYsO6+ZYgoucNImrUMzDn0mFbEOL5p9oPoWiypwypbJVVjWTf557bXZ0YFLig==",
       "type": "package",
-      "path": "microsoft.extensions.primitives/1.0.0",
+      "path": "Microsoft.Extensions.Primitives/1.0.0",
       "files": [
         "Microsoft.Extensions.Primitives.1.0.0.nupkg.sha512",
         "Microsoft.Extensions.Primitives.nuspec",
@@ -7911,7 +7911,8 @@
     ".NETFramework,Version=v4.5.1": [
       "Jint >= 2.9.1",
       "System.Drawing >= 4.0.0",
-      "System.Net.Http >= 4.0.0"
+      "System.Net.Http >= 4.0.0",
+      "System.Runtime >= 4.0.10"
     ]
   },
   "tools": {},

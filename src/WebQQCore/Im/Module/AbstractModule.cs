@@ -14,12 +14,12 @@ namespace iQQ.Net.WebQQCore.Im.Module
     {
         public IQQContext Context { get; private set; }
 
-        public void Init(IQQContext context)
+        public virtual void Init(IQQContext context)
         {
             Context = context;
         }
         
-        public void Destroy()
+        public virtual void Destroy()
         {
         }
 

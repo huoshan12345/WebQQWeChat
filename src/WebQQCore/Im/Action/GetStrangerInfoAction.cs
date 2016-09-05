@@ -92,7 +92,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
                     user.Mobile = obj["mobile"].ToString();
                     if (obj["client_type"] != null)
                     {
-                        user.ClientType = QQClientType.ValueOfRaw(obj["client_type"].ToObject<int>());
+                        user.ClientType = QQClientTypeInfo.ValueOfRaw(obj["client_type"].ToObject<int>());
                     }
                 }
             }

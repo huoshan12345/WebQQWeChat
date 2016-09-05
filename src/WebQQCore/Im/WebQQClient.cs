@@ -182,7 +182,6 @@ namespace iQQ.Net.WebQQCore.Im
                 {
                     service.Destroy();
                 }
-
                 // _actorDispatcher.Destroy();
                 Store.Destroy();
             }
@@ -255,12 +254,12 @@ namespace iQQ.Net.WebQQCore.Im
         /// <summary>
         /// 通知事件
         /// </summary>
-        /// <param name="Event"></param>
-        public void FireNotify(QQNotifyEvent Event)
+        /// <param name="qqNotifyEvent"></param>
+        public void FireNotify(QQNotifyEvent qqNotifyEvent)
         {
             try
             {
-                NotifyListener?.Invoke(this, Event);
+                NotifyListener?.Invoke(this, qqNotifyEvent);
             }
             catch (Exception ex)
             {

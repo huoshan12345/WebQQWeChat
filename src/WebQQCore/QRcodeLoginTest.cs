@@ -24,8 +24,10 @@ namespace iQQ.Net.WebQQCore
             switch (notifyEvent.Type)
             {
                 case QQNotifyEventType.LoginSuccess:
-                client.Logger.LogInformation("登录成功");
-                break;
+                {
+                    client.Logger.LogInformation("登录成功");
+                    break;
+                }
 
                 case QQNotifyEventType.GroupMsg:
                 {

@@ -54,10 +54,17 @@ namespace iQQ.Net.WebQQCore.Im.Action
 
         public virtual void OnHttpError(Exception ex)
         {
-            var qqEx = ex as QQException ?? new QQException(ex);
-            if (!DoRetryIt(qqEx, QQConstants.MAX_RETRY_TIMES))
+            if (ex is OperationCanceledException)
             {
-                NotifyActionEvent(QQActionEventType.EvtError, qqEx);
+                NotifyActionEvent(QQActionEventType.EvtCanceled, this);
+            }
+            else
+            {
+                var qqEx = ex as QQException ?? new QQException(ex);
+                if (!DoRetryIt(qqEx, QQConstants.MAX_RETRY_TIMES))
+                {
+                    NotifyActionEvent(QQActionEventType.EvtError, qqEx);
+                }
             }
         }
 
@@ -85,8 +92,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
 
         public virtual void CancelRequest()
         {
-            ActionFuture.Cancel();
-            NotifyActionEvent(QQActionEventType.EvtCanceled, null);
+            NotifyActionEvent(QQActionEventType.EvtCanceled, this);
         }
 
         public virtual void NotifyActionEvent(QQActionEventType type, object target)
@@ -97,6 +103,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
                 {
                     var ex = (QQException)target;
                     Context.Logger.LogError($"[Action={GetType().Name}, Type={type}, {ex}");
+                    Context.FireNotify(new QQNotifyEvent(QQNotifyEventType.NetError, ex));
                     break;
                 }
                 case QQActionEventType.EvtRetry:

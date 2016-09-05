@@ -47,8 +47,8 @@ namespace iQQ.Net.WebQQCore.Im.Action
             req.AddPostValue("peeruin", _user.Uin); // 图片对方UIN
             req.AddPostValue("fileid", "1");
             req.AddPostValue("vfwebqq", session.Vfwebqq);
-            req.AddPostValue("senderviplevel", Context.Account.Level.Level);
-            req.AddPostValue("reciverviplevel", _user.Level.Level);
+            req.AddPostValue("senderviplevel", Context.Account.LevelInfo.Level);
+            req.AddPostValue("reciverviplevel", _user.LevelInfo.Level);
             return req;
         }
 

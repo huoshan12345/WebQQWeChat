@@ -42,7 +42,7 @@ namespace iQQ.Net.WebQQCore.Im.Service
             {
                 Headers =
                 {
-                    Referrer = new Uri(qqRequest.Refer),
+                    Referrer = new Uri(qqRequest.Referer),
                     //UserAgent =
                     //{
                     //    new ProductInfoHeaderValue(qqRequest.UserAgent)
@@ -75,7 +75,7 @@ namespace iQQ.Net.WebQQCore.Im.Service
             try
             {
 #if DEBUG
-                if (request.RawUrl == QQConstants.URL_POLL_MSG)
+                if (request.RawUrl == QQConstants.URL_ROBOT_TULING)
                 {
                     //var str = httpItem.GetRequestHeader();
                     //var count = str.Length;
@@ -83,13 +83,20 @@ namespace iQQ.Net.WebQQCore.Im.Service
 #endif
                 var httpRequest = GetHttpRequest(request);
                 var result = await _httpClient.SendAsync(httpRequest, HttpCompletionOption.ResponseHeadersRead, token);
-
-                if (!result.IsSuccessStatusCode) throw new QQException(QQErrorCode.ErrorHttpStatus, result.StatusCode.ToString());
+#if DEBUG
+                if (request.RawUrl == QQConstants.URL_ROBOT_TULING)
+                {
+                    var str = request.GetRequestHeader(_cc);
+                    var count = str.Length;
+                }
+#endif
+                if (!result.IsSuccessStatusCode)
+                    throw new QQException(QQErrorCode.ErrorHttpStatus, result.StatusCode.ToString());
 
                 var response = new QQHttpResponse
                 {
                     ResponseMessage = result.ReasonPhrase,
-                    ResponseCode = (int)result.StatusCode,
+                    ResponseCode = (int) result.StatusCode,
                     Headers = new Dictionary<string, List<string>>(),
                     ResultType = request.ResultType,
                 };

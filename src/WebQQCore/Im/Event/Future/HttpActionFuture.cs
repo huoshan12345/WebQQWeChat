@@ -34,6 +34,7 @@ namespace iQQ.Net.WebQQCore.Im.Event.Future
         public override void Cancel()
         {
             _httpAction.CancelRequest();
+            base.Cancel();
         }
     }
 

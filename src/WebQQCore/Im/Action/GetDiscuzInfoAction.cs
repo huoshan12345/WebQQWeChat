@@ -76,7 +76,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
                     QQUser member = discuz.GetMemberByUin(statjson["uin"].ToObject<long>());
                     if (statjson["client_type"] != null && member != null)
                     {
-                        member.ClientType = QQClientType.ValueOfRaw(statjson["client_type"].ToObject<int>());
+                        member.ClientType = QQClientTypeInfo.ValueOfRaw(statjson["client_type"].ToObject<int>());
                         member.Status = QQStatus.ValueOfRaw(statjson["status"].ToString());
                     }
                 }

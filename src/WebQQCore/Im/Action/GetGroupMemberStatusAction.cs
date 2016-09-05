@@ -45,7 +45,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
                     var member = _group.GetMemberByUin(stat["uin"].ToObject<long>());
                     if (member != null)
                     {
-                        member.ClientType = QQClientType.ValueOfRaw(stat["client_type"].ToObject<int>());
+                        member.ClientType = QQClientTypeInfo.ValueOfRaw(stat["client_type"].ToObject<int>());
                         member.Status = QQStatus.ValueOfRaw(stat["stat"].ToObject<int>());
                     }
                 }

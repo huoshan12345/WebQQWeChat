@@ -29,7 +29,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
             if (json["retcode"].ToString() == "0")
             {
                 var result = json["result"].ToObject<JObject>();
-                var level = user.Level;
+                var level = user.LevelInfo;
                 level.Level = result["level"].ToObject<int>();
                 level.Days = result["days"].ToObject<int>();
                 level.Hours = result["hours"].ToObject<int>();

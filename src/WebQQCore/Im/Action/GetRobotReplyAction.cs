@@ -11,26 +11,26 @@ namespace iQQ.Net.WebQQCore.Im.Action
 
     public class GetRobotReplyAction : AbstractHttpAction
     {
-        private QQMsg input;
-        private RobotType robotType;
+        private readonly QQMsg _input;
+        private readonly RobotType _robotType;
 
         public GetRobotReplyAction(IQQContext context, QQActionListener listener, QQMsg input, RobotType robotType)
             : base(context, listener)
         {
-            this.input = input;
-            this.robotType = robotType;
+            _input = input;
+            _robotType = robotType;
         }
 
         public override QQHttpRequest OnBuildRequest()
         {
             QQHttpRequest req = null;
-            switch (robotType)
+            switch (_robotType)
             {
                 case RobotType.Tuling:
                 {
                     req = CreateHttpRequest(HttpConstants.Get, QQConstants.URL_ROBOT_TULING);
                     req.AddGetValue("key", QQConstants.ROBOT_TULING_KEY);
-                    req.AddGetValue("info", input.GetText());
+                    req.AddGetValue("info", _input.GetText());
                     // req.AddGetValue("userid", input.From.Uin.ToString());
                     break;
                 }
@@ -39,7 +39,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
                 {
                     req = CreateHttpRequest(HttpConstants.Get, QQConstants.URL_ROBOT_MOLI);
                     req.AddGetValue("limit", "5");
-                    req.AddGetValue("question", input.GetText());
+                    req.AddGetValue("question", _input.GetText());
                     req.AddGetValue("api_key", QQConstants.ROBOT_MOLI_KEY);
                     req.AddGetValue("api_secret", QQConstants.ROBOT_MOLI_SECRET);
                     // req.AddGetValue("type", "json");
@@ -52,7 +52,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
 
         public override void OnHttpStatusOK(QQHttpResponse response)
         {
-            switch (robotType)
+            switch (_robotType)
             {
                 case RobotType.Tuling:
                 {

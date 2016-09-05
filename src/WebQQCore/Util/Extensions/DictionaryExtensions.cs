@@ -19,6 +19,13 @@ namespace iQQ.Net.WebQQCore.Util.Extensions
             NotIgnoreDuplication,
         }
 
+
+        public static void AddOrDo<TKey, TValue>(this IDictionary<TKey, TValue> dic, TKey key, TValue value, Action<TKey> action = null)
+        {
+            if (dic.ContainsKey(key)) action?.Invoke(key);
+            else dic.Add(key, value);
+        }
+
         public static TValue GetValueOrDefault<TKey, TValue>(this Dictionary<TKey, TValue> dict, TKey key, TValue defaultValue = default(TValue))
         {
             return dict.ContainsKey(key) ? dict[key] : defaultValue;

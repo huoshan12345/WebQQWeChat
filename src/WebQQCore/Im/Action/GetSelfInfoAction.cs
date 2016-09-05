@@ -71,14 +71,17 @@ namespace iQQ.Net.WebQQCore.Im.Action
                 account.Gender = obj["gender"].ToString();
                 account.Mobile = obj["mobile"].ToString();
                 account.Vfwebqq = obj["vfwebqq"].ToString(); // 重要
-                if (obj["client_type"]!=null)
+                var clientType = obj["client_type"];
+                if (clientType != null)
                 {
-                    account.ClientType = QQClientType.ValueOfRaw(obj["client_type"].ToString());
+                    account.ClientType = QQClientTypeInfo.ValueOfRaw(clientType.ToString());
                 }
-
+                NotifyActionEvent(QQActionEventType.EvtOK, account);
             }
-
-            NotifyActionEvent(QQActionEventType.EvtOK, account);
+            else
+            {
+                throw new QQException(QQErrorCode.InvalidResponse, response.ResponseString);
+            }
         }
 
     }

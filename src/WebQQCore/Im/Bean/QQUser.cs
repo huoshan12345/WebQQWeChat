@@ -36,7 +36,7 @@ namespace iQQ.Net.WebQQCore.Im.Bean
         /// <summary>
         /// 等级
         /// </summary>
-        public QQLevel Level { get; set; } = new QQLevel();
+        public QQLevel LevelInfo { get; set; } = new QQLevel();
 
         /// <summary>
         /// 登录时间
@@ -201,7 +201,7 @@ namespace iQQ.Net.WebQQCore.Im.Bean
             }
             if (json["client_type"] != null)
             {
-                ClientType = QQClientType.ValueOfRaw(json["client_type"].ToObject<int>());
+                ClientType = QQClientTypeInfo.ValueOfRaw(json["client_type"].ToObject<int>());
             }
             if (json["birthday"] != null)
             {

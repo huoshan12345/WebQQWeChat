@@ -31,13 +31,13 @@ namespace iQQ.Net.WebQQCore.Im.Event
         /// <summary>
         /// 给定一个超时时间，等待最终的事件
         /// </summary>
-        /// <param name="timeoutMs"></param>
+        /// <param name="millisecond"></param>
         /// <returns></returns>
-        QQActionEvent WaitFinalEvent(long timeoutMs);
+        QQActionEvent WaitFinalEvent(int millisecond);
 
         Task<QQActionEvent> WhenFinalEvent();
 
-        Task<QQActionEvent> WhenFinalEvent(long timeoutMs);
+        Task<QQActionEvent> WhenFinalEvent(int millisecond);
 
         CancellationToken Token { get; }
     }

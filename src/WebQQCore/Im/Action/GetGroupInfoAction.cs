@@ -83,7 +83,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
                     // 下面重新设置最新状态
                     var stat = stats[i].ToObject<JObject>();
                     var member = _group.GetMemberByUin(stat["uin"].ToObject<long>());
-                    member.ClientType = QQClientType.ValueOfRaw(stat["client_type"].ToObject<int>());
+                    member.ClientType = QQClientTypeInfo.ValueOfRaw(stat["client_type"].ToObject<int>());
                     member.Status = QQStatus.ValueOfRaw(stat["stat"].ToObject<int>());
                 }
 

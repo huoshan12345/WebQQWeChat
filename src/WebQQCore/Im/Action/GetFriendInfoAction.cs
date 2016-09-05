@@ -85,7 +85,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
                 buddy.Mobile = obj["mobile"].ToString();
                 if (obj["client_type"] != null)
                 {
-                    buddy.ClientType = QQClientType.ValueOfRaw(obj["client_type"].ToObject<int>());
+                    buddy.ClientType = QQClientTypeInfo.ValueOfRaw(obj["client_type"].ToObject<int>());
                 }
             }
 

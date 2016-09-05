@@ -7,7 +7,6 @@ using System.Text;
 using System.Threading.Tasks;
 using iQQ.Net.WebQQCore.Util.Extensions;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Logging.Console.Internal;
 using Microsoft.Extensions.Logging.Console;
 
 namespace iQQ.Net.WebQQCore.Util
@@ -86,7 +85,7 @@ namespace iQQ.Net.WebQQCore.Util
 
         public virtual string GetMessage(string msg, Exception exception)
         {
-            return $"{DateTime.Now:hh:mm:ss}> {msg}";
+            return $"{DateTime.Now:HH:mm:ss}> {msg}";
         }
 
         public virtual bool IsEnabled(string msg, LogLevel level)

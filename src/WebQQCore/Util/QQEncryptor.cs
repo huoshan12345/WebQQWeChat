@@ -33,23 +33,7 @@ namespace iQQ.Net.WebQQCore.Util
         /// <returns></returns>
         public static string Md5(string input)
         {
-            return Md5(Encoding.UTF8.GetBytes(input));
-        }
-
-        /// <summary>
-        /// 对一个字节数组加密，并转换十六进制表示的字符串
-        /// </summary>
-        /// <param name="input"></param>
-        /// <returns></returns>
-        public static string Md5(byte[] input)
-        {
-            var buffer = MD5.Create().ComputeHash(input);
-            var builder = new StringBuilder();
-            for (var i = 0; i < buffer.Length; i++)
-            {
-                builder.Append(buffer[i].ToString("X2"));
-            }
-            return builder.ToString();
+            return Encoding.UTF8.GetBytes(input).ToMd5String();
         }
 
         /// <summary>
@@ -61,7 +45,7 @@ namespace iQQ.Net.WebQQCore.Util
         /// <returns></returns>
         private static string Md5QQ(long uin, string password, string verifyCode)
         {
-            return Md5QQ(uin, password.Md5ToArray(), verifyCode);
+            return Md5QQ(uin, password.Md5ToBytes(), verifyCode);
         }
 
         /// <summary>
@@ -79,7 +63,7 @@ namespace iQQ.Net.WebQQCore.Util
             {
                 Array.Reverse(b2); // 此处要用大端模式
             }
-            var s1 = Md5(JoinBytes(b1, b2));
+            var s1 = JoinBytes(b1, b2).ToMd5String();
             return Md5(s1 + verifyCode.ToUpper());
         }
 

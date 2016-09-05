@@ -63,6 +63,18 @@
     <ApplicationIcon>icon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.Extensions.DependencyInjection.Abstractions, Version=1.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>C:\Users\user\.nuget\packages\Microsoft.Extensions.DependencyInjection.Abstractions.1.0.0\lib\netstandard1.0\Microsoft.Extensions.DependencyInjection.Abstractions.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.Logging, Version=1.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>C:\Users\user\.nuget\packages\Microsoft.Extensions.Logging.1.0.0\lib\netstandard1.1\Microsoft.Extensions.Logging.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.Logging.Abstractions, Version=1.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>C:\Users\user\.nuget\packages\Microsoft.Extensions.Logging.Abstractions.1.0.0\lib\netstandard1.1\Microsoft.Extensions.Logging.Abstractions.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
@@ -74,12 +86,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="fmAddQQ.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="fmAddQQ.Designer.cs">
-      <DependentUpon>fmAddQQ.cs</DependentUpon>
-    </Compile>
+    <Compile Include="Extensions\ControlExtensions.cs" />
     <Compile Include="fmQQList.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -94,9 +101,7 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="fmAddQQ.resx">
-      <DependentUpon>fmAddQQ.cs</DependentUpon>
-    </EmbeddedResource>
+    <Compile Include="Util\RichTextBoxLogger.cs" />
     <EmbeddedResource Include="fmQQList.resx">
       <DependentUpon>fmQQList.cs</DependentUpon>
     </EmbeddedResource>
@@ -117,6 +122,7 @@
       <DesignTime>True</DesignTime>
     </Compile>
     <None Include="app.config" />
+    <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

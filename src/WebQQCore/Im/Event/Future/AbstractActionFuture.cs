@@ -12,18 +12,18 @@ namespace iQQ.Net.WebQQCore.Im.Event.Future
         private volatile bool _isCanceled;
 
         // BlockingCollection<T> is a thread-safe collection
-        protected BlockingCollection<QQActionEvent> EventQueue { get;  }
+        protected BlockingCollection<QQActionEvent> EventQueue { get; }
 
         protected bool HasEvent
         {
             get { return _hasEvent; }
-            private set { _hasEvent = value; } 
+            private set { _hasEvent = value; }
         }
 
         public bool IsCanceled
         {
-            get { return _isCanceled; } 
-            private set { _isCanceled = value; } 
+            get { return _isCanceled; }
+            private set { _isCanceled = value; }
         }
 
         protected CancellationTokenSource Cts
@@ -79,9 +79,9 @@ namespace iQQ.Net.WebQQCore.Im.Event.Future
             return new QQActionEvent(QQActionEventType.EvtCanceled, this);
         }
 
-        public QQActionEvent WaitFinalEvent(long timeoutMs)
+        public QQActionEvent WaitFinalEvent(int millisecond)
         {
-            _cts = new CancellationTokenSource(new TimeSpan(timeoutMs));
+            _cts = new CancellationTokenSource(new TimeSpan(0, 0, 0, 0, millisecond));
             return WaitFinalEvent();
         }
 
@@ -90,9 +90,9 @@ namespace iQQ.Net.WebQQCore.Im.Event.Future
             return Task.Run(() => WaitFinalEvent(), _cts.Token);
         }
 
-        public Task<QQActionEvent> WhenFinalEvent(long timeoutMs)
+        public Task<QQActionEvent> WhenFinalEvent(int millisecond)
         {
-            _cts = new CancellationTokenSource(new TimeSpan(timeoutMs));
+            _cts = new CancellationTokenSource(new TimeSpan(0, 0, 0, 0, millisecond));
             return WhenFinalEvent();
         }
 
@@ -115,12 +115,12 @@ namespace iQQ.Net.WebQQCore.Im.Event.Future
 
         public virtual void Cancel()
         {
-            if (IsCancelable() && !IsCanceled)
+            if (IsCancelable() && IsCanceled)
             {
                 IsCanceled = true;
                 Cts.Cancel();
-                NotifyActionEvent(QQActionEventType.EvtCanceled, this);
             }
+
         }
     }
 }

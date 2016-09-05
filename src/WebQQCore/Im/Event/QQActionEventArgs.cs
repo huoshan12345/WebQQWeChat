@@ -20,6 +20,24 @@ namespace iQQ.Net.WebQQCore.Im.Event
         }
     }
 
+    public class CancelArgs : QQActionEventArgs
+    {
+        public CancelResult Result { get; }
+
+        public CancelArgs(CancelResult result)
+        {
+            Result = result;
+        }
+    }
+
+    public enum CancelResult
+    {
+        Disabled,
+        Error,
+        Successful,
+        AlreadyCanceld
+    }
+
     public class CheckVerifyArgs : QQActionEventArgs
     {
         public int Result { get; set; }
@@ -43,11 +61,11 @@ namespace iQQ.Net.WebQQCore.Im.Event
         /// 二维码失效
         /// </summary>
         QRCODE_INVALID,
-        
+
         /// <summary>
         /// 二维码认证中
         /// </summary>
-        QRCODE_AUTH,  
+        QRCODE_AUTH,
     }
 
     public class CheckQRCodeArgs : QQActionEventArgs

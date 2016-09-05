@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Threading;
+using System.Threading.Tasks;
 using iQQ.Net.WebQQCore.Im.Bean;
 using iQQ.Net.WebQQCore.Im.Core;
 using iQQ.Net.WebQQCore.Im.Event;
@@ -33,7 +34,7 @@ namespace iQQ.Net.WebQQCore.Im.Module
                 }
                 else if (@event.Type == QQActionEventType.EvtError)
                 {
-                    future.NotifyActionEvent(QQActionEventType.EvtError, "获取二维码失败");
+                    future.NotifyActionEvent(QQActionEventType.EvtError, @event.Target);
                 }
             });
             return future;
@@ -234,33 +235,36 @@ namespace iQQ.Net.WebQQCore.Im.Module
             var login = Context.GetModule<LoginModule>(QQModuleType.LOGIN);
             if (Context.Account.Status == QQStatus.OFFLINE) Context.Account.Status = QQStatus.ONLINE;
 
-            login.ChannelLogin(Context.Account.Status, (sender, Event) =>
+            login.ChannelLogin(Context.Account.Status, async (sender, Event) =>
             {
                 if (Event.Type == QQActionEventType.EvtOK)
                 {
                     future.NotifyActionEvent(QQActionEventType.EvtOK, null);
                     Context.FireNotify(new QQNotifyEvent(QQNotifyEventType.LoginSuccess));
-                    Context.GetModule<GroupModule>(QQModuleType.GROUP).GetGroupList((s, e) =>
+                    var task1 = Context.GetModule<GroupModule>(QQModuleType.GROUP).GetGroupList((s, e) =>
                     {
                         if (e.Type == QQActionEventType.EvtOK)
                         {
                             Context.Logger.LogInformation($"获取群列表成功，共{Context.Store.GroupCount}个群");
                         }
-                    });
-                    Context.GetModule<CategoryModule>(QQModuleType.CATEGORY).GetBuddyList((s, e) =>
+                    }).WhenFinalEvent();
+                    var task2 = Context.GetModule<CategoryModule>(QQModuleType.CATEGORY).GetBuddyList((s, e) =>
                     {
                         if (e.Type == QQActionEventType.EvtOK)
                         {
                             Context.Logger.LogInformation($"获取好友列表成功，共{Context.Store.BuddyCount}个好友");
                         }
-                    });
-                    Context.GetModule<LoginModule>(QQModuleType.LOGIN).GetSelfInfo((s, e) =>
+                    }).WhenFinalEvent();
+                    var task3 = Context.GetModule<LoginModule>(QQModuleType.LOGIN).GetSelfInfo((s, e) =>
                     {
-                        if (e.Type == QQActionEventType.EvtOK)
-                        {
-                            Context.Logger.LogInformation($"获取个人信息成功");
-                        }
-                    });
+                        if (e.Type == QQActionEventType.EvtOK) Context.Logger.LogInformation("获取个人信息成功");
+                    }).WhenFinalEvent();
+                    var task4 = Context.GetModule<BuddyModule>(QQModuleType.BUDDY).GetOnlineBuddy((s, e) =>
+                    {
+                        if (e.Type == QQActionEventType.EvtOK) Context.Logger.LogInformation("获取在线好友信息成功");
+                    }).WhenFinalEvent();
+
+                    await Task.WhenAll(task1, task2, task3, task4);
                     DoPollMsg();
                 }
                 else if (Event.Type == QQActionEventType.EvtError)
@@ -301,12 +305,12 @@ namespace iQQ.Net.WebQQCore.Im.Module
                 if (Event.Type == QQActionEventType.EvtOK)
                 {
                     // 重新登录成功重新POLL
-                    Context.FireNotify(new QQNotifyEvent(QQNotifyEventType.ReloginSuccess, null));
+                    Context.FireNotify(new QQNotifyEvent(QQNotifyEventType.ReloginSuccess));
                     DoPollMsg();
                 }
                 else if (Event.Type == QQActionEventType.EvtError)
                 {
-                    Context.FireNotify(new QQNotifyEvent(QQNotifyEventType.UnknownError, Event));
+                    Context.FireNotify(new QQNotifyEvent(QQNotifyEventType.NetError, Event.Target));
                 }
             });
         }
@@ -409,6 +413,12 @@ namespace iQQ.Net.WebQQCore.Im.Module
             CancelPoll();
             var login = Context.GetModule<LoginModule>(QQModuleType.LOGIN);
             return login.Logout(listener);
+        }
+
+        public override void Destroy()
+        {
+            CancelPoll();
+            base.Destroy();
         }
     }
 
