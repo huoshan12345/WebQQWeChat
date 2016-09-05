@@ -7,6 +7,7 @@ using iQQ.Net.WebQQCore.Im.Actor;
 using iQQ.Net.WebQQCore.Im.Bean;
 using iQQ.Net.WebQQCore.Im.Bean.Content;
 using iQQ.Net.WebQQCore.Im.Event;
+using iQQ.Net.WebQQCore.Im.Log;
 using iQQ.Net.WebQQCore.Util;
 using iQQ.Net.WebQQCore.Util.Extensions;
 using Microsoft.Extensions.Logging;
@@ -18,7 +19,7 @@ namespace iQQ.Net.WebQQCore
     /// </summary>
     public class QRcodeLoginTest
     {
-        private static readonly IQQClient MClient = new WebQQClient("", "", (client, notifyEvent) =>
+        private static readonly QQNotifyListener Listener = (client, notifyEvent) =>
         {
             switch (notifyEvent.Type)
             {
@@ -79,8 +80,7 @@ namespace iQQ.Net.WebQQCore
                     break;
                 }
             }
-
-        }, new SimpleActorDispatcher());
+        };
 
         public static void Main(string[] args)
         {
@@ -97,7 +97,8 @@ namespace iQQ.Net.WebQQCore
             //Console.ReadKey();
 
             // 获取二维码
-            MClient.LoginWithQRCode(); // 登录之后自动开始轮训
+            var qq = new WebQQClient("", "", Listener, new SimpleActorDispatcher(), new QQConsoleLogger());
+            qq.LoginWithQRCode(); // 登录之后自动开始轮训
             Console.ReadKey();
         }
     }

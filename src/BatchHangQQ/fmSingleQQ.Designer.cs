@@ -1,6 +1,6 @@
 ﻿namespace iQQ.Net.BatchHangQQ
 {
-    partial class fmSingleQQ
+    partial class FmSingleQQ
     {
         /// <summary>
         /// 必需的设计器变量。
@@ -137,7 +137,7 @@
             this.Controls.Add(this.tbQQNum);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.btnLogin);
-            this.Name = "fmSingleQQ";
+            this.Name = "FmSingleQQ";
             this.Text = "MyWebQQ";
             ((System.ComponentModel.ISupportInitialize)(this.VerifyPic)).EndInit();
             this.ResumeLayout(false);

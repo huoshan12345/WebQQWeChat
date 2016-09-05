@@ -15,6 +15,9 @@ EndProject
 Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "WebQQCore", "src\WebQQCore\WebQQCore.xproj", "{B4E0B5E6-9BBD-4437-B8CC-B19D17EFEDAB}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BatchHangQQ", "src\BatchHangQQ\BatchHangQQ.csproj", "{30DBEE89-93AB-4FD8-9867-2628311808C6}"
+	ProjectSection(ProjectDependencies) = postProject
+		{B4E0B5E6-9BBD-4437-B8CC-B19D17EFEDAB} = {B4E0B5E6-9BBD-4437-B8CC-B19D17EFEDAB}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -3,19 +3,19 @@ using System.Windows.Forms;
 
 namespace iQQ.Net.BatchHangQQ
 {
-    public partial class fmTalkToFriend : Form
+    public partial class FmTalkToFriend : Form
     {
-        public fmQQList parent;
-        public  string qqNum = "";
+        public FmQQList _parent;
+        public  string _qqNum = "";
 
-        public fmTalkToFriend()
+        public FmTalkToFriend()
         {
             InitializeComponent();
         }
 
         private void TalkToFriend_Load(object sender, EventArgs e)
         {
-            this.lab_friend_num.Text = qqNum;
+            this.lab_friend_num.Text = _qqNum;
         }
 
         private void btSend_Click(object sender, EventArgs e)
@@ -29,7 +29,7 @@ namespace iQQ.Net.BatchHangQQ
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void closeTalk(object sender, FormClosedEventArgs e)
+        private void CloseTalk(object sender, FormClosedEventArgs e)
         {
 
         }

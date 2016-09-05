@@ -6,7 +6,7 @@ using iQQ.Net.WebQQCore.Im.Event;
 using iQQ.Net.WebQQCore.Im.Service;
 using iQQ.Net.WebQQCore.Util;
 using iQQ.Net.WebQQCore.Im.Core;
-using Microsoft.Extensions.Logging;
+using iQQ.Net.WebQQCore.Im.Log;
 
 namespace iQQ.Net.WebQQCore.Im
 {
@@ -17,7 +17,7 @@ namespace iQQ.Net.WebQQCore.Im
     /// </summary>
     public interface IQQClient
     {
-        ILogger Logger { get; }
+        IQQLogger Logger { get; }
 
         /// <summary>
         /// 获取账号信息

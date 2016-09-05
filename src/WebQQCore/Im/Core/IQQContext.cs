@@ -1,8 +1,7 @@
 ﻿using iQQ.Net.WebQQCore.Im.Actor;
 using iQQ.Net.WebQQCore.Im.Bean;
 using iQQ.Net.WebQQCore.Im.Event;
-using iQQ.Net.WebQQCore.Im.Service;
-using Microsoft.Extensions.Logging;
+using iQQ.Net.WebQQCore.Im.Log;
 
 namespace iQQ.Net.WebQQCore.Im.Core
 {
@@ -11,7 +10,7 @@ namespace iQQ.Net.WebQQCore.Im.Core
     /// </summary>
     public interface IQQContext
     {
-        ILogger Logger { get; }
+        IQQLogger Logger { get; }
 
         void PushActor(IQQActor actor);
 

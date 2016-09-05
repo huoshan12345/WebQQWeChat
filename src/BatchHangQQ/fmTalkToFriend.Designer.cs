@@ -1,6 +1,6 @@
 ﻿namespace iQQ.Net.BatchHangQQ
 {
-    partial class fmTalkToFriend
+    partial class FmTalkToFriend
     {
         /// <summary>
         /// Required designer variable.
@@ -89,10 +89,10 @@
             this.Controls.Add(this.btSend);
             this.Controls.Add(this.sendmsg);
             this.Controls.Add(this.txt_client);
-            this.Name = "fmTalkToFriend";
+            this.Name = "FmTalkToFriend";
             this.Text = "fmTalkToFriend";
             this.Load += new System.EventHandler(this.TalkToFriend_Load);
-            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.closeTalk);
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.CloseTalk);
             this.ResumeLayout(false);
             this.PerformLayout();
 

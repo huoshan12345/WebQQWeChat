@@ -8,6 +8,7 @@ using iQQ.Net.WebQQCore.Im.Bean.Content;
 using iQQ.Net.WebQQCore.Im.Core;
 using iQQ.Net.WebQQCore.Im.Event;
 using iQQ.Net.WebQQCore.Im.Event.Future;
+using iQQ.Net.WebQQCore.Im.Log;
 using iQQ.Net.WebQQCore.Im.Module;
 using iQQ.Net.WebQQCore.Im.Service;
 using iQQ.Net.WebQQCore.Util;
@@ -24,11 +25,13 @@ namespace iQQ.Net.WebQQCore.Im
         /// <summary>
         /// 构造方法，初始化模块和服务
         /// </summary>
-        /// <param name="username">账号</param>
-        /// <param name="password">密码</param>
+        /// <param name="username">账号(二维码登录留空)</param>
+        /// <param name="password">密码(二维码登录留空)</param>
         /// <param name="notifyListener">监听器</param>
         /// <param name="actorDispatcher">线程执行器</param>
-        public WebQQClient(string username, string password, QQNotifyListener notifyListener, IQQActorDispatcher actorDispatcher)
+        /// <param name="logger">日志记录器</param>
+        public WebQQClient(string username = null, string password = null, QQNotifyListener notifyListener = null, 
+            IQQActorDispatcher actorDispatcher = null, IQQLogger logger = null)
         {
             _modules = new Dictionary<QQModuleType, IQQModule>();
             _services = new Dictionary<QQServiceType, IQQService>();
@@ -46,14 +49,15 @@ namespace iQQ.Net.WebQQCore.Im
 
             Account = new QQAccount
             {
-                Username = username,
-                Password = password
+                Username = username ?? string.Empty,
+                Password = password ?? string.Empty
             };
             Session = new QQSession();
             Store = new QQStore();
             NotifyListener = notifyListener;
-            _actorDispatcher = actorDispatcher;
-            Logger = new QQLogger(this);
+            _actorDispatcher = actorDispatcher ?? new SimpleActorDispatcher();
+            Logger = logger ?? new EmptyQQLogger();
+            Logger.Context = this;
             Init();
         }
 
@@ -106,7 +110,7 @@ namespace iQQ.Net.WebQQCore.Im
 
         public QQClientType ClientType => QQClientType.WebQQ;
 
-        public ILogger Logger { get; }
+        public IQQLogger Logger { get; }
 
         /// <summary>
         /// 获取自己的账号实体
@@ -747,7 +751,7 @@ namespace iQQ.Net.WebQQCore.Im
         /// 获取登录二维码
         /// </summary>
         /// <param name="qqActionListener"></param>
-        public IQQActionFuture LoginWithQRCode(QQActionListener qqActionListener)
+        public IQQActionFuture LoginWithQRCode(QQActionListener qqActionListener = null)
         {
             var login = GetModule<ProcModule>(QQModuleType.PROC);
             return login.LoginWithQRCode(qqActionListener);

@@ -6,14 +6,14 @@ using System.Windows.Forms;
 
 namespace iQQ.Net.BatchHangQQ
 {
-    public partial class fmSingleQQ : Form
+    public partial class FmSingleQQ : Form
     {
-        private static readonly string[] LoginProtocol = { "WebQQ", "MobileQQ" };
+        private static readonly string[] _loginProtocol = { "WebQQ", "MobileQQ" };
 
-        public fmSingleQQ()
+        public FmSingleQQ()
         {
             InitializeComponent();
-            cboLoginProtocol.Items.AddRange(LoginProtocol.Cast<object>().ToArray());
+            cboLoginProtocol.Items.AddRange(_loginProtocol.Cast<object>().ToArray());
             cboLoginProtocol.SelectedIndex = 1;
         }
 

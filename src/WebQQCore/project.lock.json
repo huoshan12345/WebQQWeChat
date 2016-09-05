@@ -2612,59 +2612,6 @@
           "lib/net45/Newtonsoft.Json.dll": {}
         }
       },
-      "runtime.osx.10.10-x64.CoreCompat.System.Drawing/1.0.1-beta004": {
-        "type": "package",
-        "runtimeTargets": {
-          "runtimes/osx-x64/native/libcairo.2.dylib": {
-            "assetType": "native",
-            "rid": "osx-x64"
-          },
-          "runtimes/osx-x64/native/libfontconfig.1.dylib": {
-            "assetType": "native",
-            "rid": "osx-x64"
-          },
-          "runtimes/osx-x64/native/libfreetype.6.dylib": {
-            "assetType": "native",
-            "rid": "osx-x64"
-          },
-          "runtimes/osx-x64/native/libgdiplus.dylib": {
-            "assetType": "native",
-            "rid": "osx-x64"
-          },
-          "runtimes/osx-x64/native/libgif.4.dylib": {
-            "assetType": "native",
-            "rid": "osx-x64"
-          },
-          "runtimes/osx-x64/native/libglib-2.0.0.dylib": {
-            "assetType": "native",
-            "rid": "osx-x64"
-          },
-          "runtimes/osx-x64/native/libintl.8.dylib": {
-            "assetType": "native",
-            "rid": "osx-x64"
-          },
-          "runtimes/osx-x64/native/libjpeg.8.dylib": {
-            "assetType": "native",
-            "rid": "osx-x64"
-          },
-          "runtimes/osx-x64/native/libpcre.1.dylib": {
-            "assetType": "native",
-            "rid": "osx-x64"
-          },
-          "runtimes/osx-x64/native/libpixman-1.0.dylib": {
-            "assetType": "native",
-            "rid": "osx-x64"
-          },
-          "runtimes/osx-x64/native/libpng16.16.dylib": {
-            "assetType": "native",
-            "rid": "osx-x64"
-          },
-          "runtimes/osx-x64/native/libtiff.5.dylib": {
-            "assetType": "native",
-            "rid": "osx-x64"
-          }
-        }
-      },
       "System.Collections/4.0.11": {
         "type": "package",
         "frameworkAssemblies": [
@@ -7949,8 +7896,7 @@
     "": [
       "Microsoft.Extensions.Logging >= 1.0.0",
       "Microsoft.Extensions.Logging.Console >= 1.0.0",
-      "Newtonsoft.Json >= 9.0.1",
-      "runtime.osx.10.10-x64.CoreCompat.System.Drawing >= 1.0.1-beta004"
+      "Newtonsoft.Json >= 9.0.1"
     ],
     ".NETCoreApp,Version=v1.0": [
       "CoreCompat.System.Drawing >= 1.0.0-*",
@@ -7959,7 +7905,8 @@
       "System.Collections.NonGeneric >= 4.0.1",
       "System.ComponentModel.Primitives >= 4.1.0",
       "System.Text.Encoding.CodePages >= 4.0.1",
-      "runtime.linux-x64.CoreCompat.System.Drawing >= 1.0.0-beta009"
+      "runtime.linux-x64.CoreCompat.System.Drawing >= 1.0.0-beta009",
+      "runtime.osx.10.10-x64.CoreCompat.System.Drawing >= 1.0.1-beta004"
     ],
     ".NETFramework,Version=v4.5.1": [
       "Jint >= 2.9.1",

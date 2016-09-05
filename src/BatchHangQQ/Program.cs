@@ -13,7 +13,7 @@ namespace iQQ.Net.BatchHangQQ
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new fmQQList());
+            Application.Run(new FmQQList());
         }
     }
 }

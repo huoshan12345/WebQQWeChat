@@ -16,14 +16,13 @@ using iQQ.Net.WebQQCore.Util.Extensions;
 
 namespace iQQ.Net.BatchHangQQ
 {
-    public partial class fmQQList : Form
+    public partial class FmQQList : Form
     {
-        private readonly SimpleActorDispatcher _threadActorDispatcher = new SimpleActorDispatcher();
         private readonly AutoResetEvent _verifyCodeInputed = new AutoResetEvent(false);
         private readonly Dictionary<string, IQQClient> _qqClients = new Dictionary<string, IQQClient>();
         private QQNotifyListener _notifyListener;
         private QQActionListener _eventHandler;
-        private static readonly string rexQQNumPwd = @"^\d{5,}----.+$";
+        private static readonly string _rexQQNumPwd = @"^\d{5,}----.+$";
         private readonly NotifyIcon _notifyIcon;// 创建NotifyIcon对象 
 
         protected override void WndProc(ref Message m)
@@ -33,7 +32,7 @@ namespace iQQ.Net.BatchHangQQ
             base.WndProc(ref m);
         }
 
-        public fmQQList()
+        public FmQQList()
         {
             this.SetStyle(ControlStyles.DoubleBuffer
                 | ControlStyles.UserPaint
@@ -43,9 +42,9 @@ namespace iQQ.Net.BatchHangQQ
 
             InitializeComponent();
             tbVerifyCode.Enabled = false;
-            cboLoginStatus.Items.AddRange(LoginStatus[0].Cast<object>().ToArray());
-            cboLoginProtocol.Items.AddRange(LoginProtocol.Cast<object>().ToArray());
-            cboVerifyCodeDigit.Items.AddRange(VerifyCodeDigit.Cast<object>().ToArray());
+            cboLoginStatus.Items.AddRange(_loginStatus[0].Cast<object>().ToArray());
+            cboLoginProtocol.Items.AddRange(_loginProtocol.Cast<object>().ToArray());
+            cboVerifyCodeDigit.Items.AddRange(_verifyCodeDigit.Cast<object>().ToArray());
             cboLoginStatus.SelectedIndex = 0;
             cboLoginProtocol.SelectedIndex = 0;
             cboVerifyCodeDigit.SelectedIndex = 0;
@@ -82,9 +81,6 @@ namespace iQQ.Net.BatchHangQQ
         private void fmQQList_Load(object sender, EventArgs e)
         {
             AfterInitialize();
-#if DEBUG
-            AddQQToList("2027044668", "19FDCB35E0946A62E84C8C9B9B34DFF1");
-#endif
         }
 
         private void AfterInitialize()
@@ -95,138 +91,130 @@ namespace iQQ.Net.BatchHangQQ
                 {
                     case QQActionEventType.EvtCanceled:
                     case QQActionEventType.EvtError:
-                        ShowMessage(Event.ToString());
-                        break;
+                    ShowMessage(Event.ToString());
+                    break;
                 }
             };
 
-            _notifyListener = (sender, Event) =>
+            _notifyListener = (client, notifyEvent) =>
             {
-                var client = sender as IQQClient;
-                if (client == null) return;
-
                 try
                 {
-                    switch (Event.Type)
+                    switch (notifyEvent.Type)
                     {
                         case QQNotifyEventType.BuddyInput:
                         case QQNotifyEventType.BuddyStatusChange:
-                            {
-                                break;
-                            }
+                        {
+                            break;
+                        }
 
                         case QQNotifyEventType.ChatMsg:
+                        {
+                            var msg = (QQMsg)notifyEvent.Target;
+                            switch (msg.Type)
                             {
-                                var msg = Event.Target as QQMsg;
-                                switch (msg.Type)
+                                case QQMsgType.SESSION_MSG:
+                                case QQMsgType.BUDDY_MSG:
                                 {
-                                    case QQMsgType.SESSION_MSG:
-                                    case QQMsgType.BUDDY_MSG:
+                                    if (msg.From.QQ == default(long))
+                                    {
+                                        client.GetUserInfo(msg.From);
+                                    }
+                                    ShowMessage($"{client.Account.QQ}：【{msg.From.Nickname}】消息：{msg.GetText()}");
+
+                                    if (chkAutoReply.Checked)
+                                    {
+                                        var msgReply = new QQMsg()
                                         {
-                                            if (msg.From.QQ == default(long))
-                                            {
-                                                client.GetUserInfo(msg.From);
-                                            }
-                                            ShowMessage(string.Format("{0}：【{1}】消息：{2}",
-                                                client.Account.QQ, msg.From.Nickname, msg.GetText()));
+                                            Type = QQMsgType.BUDDY_MSG,
+                                            To = msg.From,
+                                            From = client.Account,
+                                            Date = DateTime.Now,
+                                        };
+                                        TextItem text = null;
 
-                                            if (chkAutoReply.Checked)
-                                            {
-                                                var msgReply = new QQMsg()
-                                                {
-                                                    Type = QQMsgType.BUDDY_MSG,
-                                                    To = msg.From,
-                                                    From = client.Account,
-                                                    Date = DateTime.Now,
-                                                };
-                                                TextItem text = null;
-
-                                                if (chkUseRobot.Checked)
-                                                {
-                                                    var replyEvent = client.GetRobotReply(msg,
-                                                        RobotType.Tuling).WaitFinalEvent(10000);
-                                                    text = replyEvent.Type == QQActionEventType.EvtOK ? new TextItem(replyEvent.Target as string)
-                                                    : new TextItem("这是自动回复");
-                                                }
-                                                else
-                                                {
-                                                    text = new TextItem("这是自动回复");
-                                                }
-                                                Thread.Sleep(3000);
-                                                msgReply.ContentList.Add(text);
-                                                client.SendMsg(msgReply);
-                                                ShowMessage(string.Format("{0}：自动回复给【{1}】：{2}",
-                                                    client.Account.QQ, msg.From.Nickname, text.ToText()));
-                                            }
-                                            break;
-                                        }
-
-                                    case QQMsgType.DISCUZ_MSG:
+                                        if (chkUseRobot.Checked)
                                         {
-                                            ShowMessage(string.Format("{0}：讨论组【{1}】来自【{2}】消息：{3}",
-                                                client.Account.QQ, msg.Discuz, msg.From.Nickname, msg.GetText()));
-                                            break;
+                                            var replyEvent = client.GetRobotReply(msg, RobotType.Tuling).WaitFinalEvent(10000);
+                                            text = replyEvent.Type == QQActionEventType.EvtOK ? new TextItem(replyEvent.Target as string)
+                                            : new TextItem("这是自动回复");
                                         }
-
-                                    case QQMsgType.GROUP_MSG:
+                                        else
                                         {
-                                            ShowMessage(string.Format("{0}：群【{1}】来自【{2}】消息：{3}",
-                                                client.Account.QQ, msg.Group, msg.From.Nickname, msg.GetText()));
-                                            break;
+                                            text = new TextItem("这是自动回复");
                                         }
+                                        Thread.Sleep(3000);
+                                        msgReply.ContentList.Add(text);
+                                        client.SendMsg(msgReply);
+                                        ShowMessage($"{client.Account.QQ}：自动回复给【{msg.From.Nickname}】：{text.ToText()}");
+                                    }
+                                    break;
                                 }
-                                break;
+
+                                case QQMsgType.DISCUZ_MSG:
+                                {
+                                    ShowMessage($"{client.Account.QQ}：讨论组【{msg.Discuz}】来自【{msg.From.Nickname}】消息：{msg.GetText()}");
+                                    break;
+                                }
+
+                                case QQMsgType.GROUP_MSG:
+                                {
+                                    ShowMessage($"{client.Account.QQ}：群【{msg.Group}】来自【{msg.From.Nickname}】消息：{msg.GetText()}");
+                                    break;
+                                }
                             }
+                            break;
+                        }
 
                         case QQNotifyEventType.KickOffline:
-                            ShowMessage(client.Account.QQ + "：被踢下线-" + (String)Event.Target);
-                            break;
+                        ShowMessage(client.Account.QQ + "：被踢下线-" + (String)notifyEvent.Target);
+                        break;
 
                         case QQNotifyEventType.CapachaVerify:
+                        {
+                            var verify = (ImageVerify)notifyEvent.Target;
+                            this.Invoke(new MethodInvoker(() =>
                             {
-                                var verify = (ImageVerify)Event.Target;
-                                this.Invoke(new MethodInvoker(() =>
-                                {
-                                    pbVerifyPic.Image = verify.Image;
-                                    tbVerifyCode.Enabled = true;
-                                    tbVerifyCode.Text = "";
-                                    tbVerifyCode.Focus();
-                                }));
+                                pbVerifyPic.Image = verify.Image;
+                                tbVerifyCode.Enabled = true;
+                                tbVerifyCode.Text = "";
+                                tbVerifyCode.Focus();
+                            }));
 
-                                ShowMessage(verify.Reason);
-                                ShowMessage(client.Account.Username + "：请输入验证码：");
-                                _verifyCodeInputed.WaitOne();
-                                client.SubmitVerify(tbVerifyCode.Text, Event);
-                                tbVerifyCode.Invoke(new MethodInvoker(() =>
-                                {
-                                    tbVerifyCode.Enabled = false;
-                                }));
-                                break;
-                            }
+                            ShowMessage(verify.Reason);
+                            ShowMessage(client.Account.Username + "：请输入验证码：");
+                            _verifyCodeInputed.WaitOne();
+                            client.SubmitVerify(tbVerifyCode.Text, notifyEvent);
+                            tbVerifyCode.Invoke(new MethodInvoker(() =>
+                            {
+                                tbVerifyCode.Enabled = false;
+                            }));
+                            break;
+                        }
 
                         case QQNotifyEventType.ShakeWindow:
+                        {
+                            var buddy = notifyEvent.Target as QQBuddy;
+                            if (buddy?.QQ == default(long))
                             {
-                                var buddy = Event.Target as QQBuddy;
-                                if (buddy?.QQ == default(long))
-                                {
-                                    client.GetUserQQ(buddy, null);
-                                }
-                                ShowMessage(string.Format("{0}：【{1}】发来抖动屏幕", client.Account.QQ, buddy?.ShowName));
-                                if (chkAutoReply.Checked)
-                                {
-                                    client.SendShake(buddy);
-                                }
-                                break;
+                                client.GetUserQQ(buddy, null);
                             }
+                            ShowMessage($"{client.Account.QQ}：【{buddy?.ShowName}】发来抖动屏幕");
+                            if (chkAutoReply.Checked)
+                            {
+                                client.SendShake(buddy);
+                            }
+                            break;
+                        }
 
                         case QQNotifyEventType.NetError:
                         case QQNotifyEventType.UnknownError:
-                            ShowMessage(client.Account.QQ + "：出错-" + Event.Target.ToString());
-                            break;
+                        ShowMessage(client.Account.QQ + "：出错-" + notifyEvent.Target.ToString());
+                        break;
 
                         default:
-                            ShowMessage(client.Account.QQ + "：" + Event.Type + ", " + Event.Target);
-                            break;
+                        ShowMessage(client.Account.QQ + "：" + notifyEvent.Type + ", " + notifyEvent.Target);
+                        break;
                     }
                     UpdateQQInfo(client);
                 }
@@ -240,30 +228,30 @@ namespace iQQ.Net.BatchHangQQ
                 }
             };
 
-            var rightButtonCMS = new ContextMenuStrip();
+            var rightButtonCms = new ContextMenuStrip();
 
-            var TSMIRemove = new ToolStripMenuItem() { Text = "移除" };
-            TSMIRemove.Click += (sender, e) =>
+            var tsmiRemove = new ToolStripMenuItem() { Text = "移除" };
+            tsmiRemove.Click += (sender, e) =>
             {
-                var TSMI = sender as ToolStripMenuItem;
-                var CMS = TSMI?.Owner as ContextMenuStrip;
-                if (CMS != null)
+                var tsmi = sender as ToolStripMenuItem;
+                var cms = tsmi?.Owner as ContextMenuStrip;
+                if (cms != null)
                 {
-                    var LV = CMS.SourceControl as ListView;
-                    if (LV == lvQQList)
+                    var lv = cms.SourceControl as ListView;
+                    if (lv == lvQQList)
                     {
                         RemoveSelectedQQFromList();
                     }
                 }
             };
-            rightButtonCMS.Items.Add(TSMIRemove);
-            lvQQList.ContextMenuStrip = rightButtonCMS;
+            rightButtonCms.Items.Add(tsmiRemove);
+            lvQQList.ContextMenuStrip = rightButtonCms;
         }
 
         public void ShowMessage(string msg)
         {
             var time = DateTime.Now.ToString("HH:mm:ss");
-            var text = string.Format("[{0}] {1}{2}", time, msg, Environment.NewLine);
+            var text = $"[{time}] {msg}{Environment.NewLine}";
             if (tbMessage.InvokeRequired)
             {
                 tbMessage.Invoke(new MethodInvoker(() =>
@@ -281,19 +269,19 @@ namespace iQQ.Net.BatchHangQQ
             }
         }
 
-        private static readonly string[][] LoginStatus =
+        private static readonly string[][] _loginStatus =
         {
             new []{"在线", "隐身", "离开", "隐身", "忙碌", "Q我吧", "请勿打扰"},
             new []{"online", "hidden", "away","hidden","busy","callme", "silent"}
         };
 
-        private static readonly string[] LoginProtocol = { "WebQQ" };
-        private static readonly string[] VerifyCodeDigit = { "4", "5" };
+        private static readonly string[] _loginProtocol = { "WebQQ" };
+        private static readonly string[] _verifyCodeDigit = { "4", "5" };
 
         private void btnAddQQ_Click(object sender, EventArgs e)
         {
-            var addQQForm = new fmAddQQ();
-            addQQForm.addQQ = AddQQToList;
+            var addQQForm = new FmAddQQ();
+            addQQForm._addQQ = AddQQToList;
             addQQForm.ShowDialog();
         }
 
@@ -303,12 +291,12 @@ namespace iQQ.Net.BatchHangQQ
             switch (type.ToLower())
             {
                 case "webqq":
-                    iqqClient = new WebQQClient(qqNum, qqPassword, _notifyListener, _threadActorDispatcher);
-                    break;
+                iqqClient = new WebQQClient(qqNum, qqPassword, _notifyListener, _threadActorDispatcher);
+                break;
 
                 default:
-                    iqqClient = new WebQQClient(qqNum, qqPassword, _notifyListener, _threadActorDispatcher);
-                    break;
+                iqqClient = new WebQQClient(qqNum, qqPassword, _notifyListener, _threadActorDispatcher);
+                break;
             }
             _qqClients[qqNum] = iqqClient;
             AddQQInfo(iqqClient);
@@ -344,7 +332,7 @@ namespace iQQ.Net.BatchHangQQ
             {
                 loginStatusIndex = cboLoginStatus.SelectedIndex;
             }));
-            var status = QQStatus.ValueOfRaw(LoginStatus[1][loginStatusIndex]);
+            var status = QQStatus.ValueOfRaw(_loginStatus[1][loginStatusIndex]);
 
             var qqCount = 0;
             lvQQList.Invoke(new MethodInvoker(() =>
@@ -390,7 +378,7 @@ namespace iQQ.Net.BatchHangQQ
                     {
                         if (QQActionEventType.EvtOK == client.GetBuddyList(_eventHandler).WaitFinalEvent().Type)
                         {
-                            ShowMessage(string.Format("{0}-好友数量：{1}", client.Account.Username, client.GetBuddyList().Count));
+                            ShowMessage($"{client.Account.Username}-好友数量：{client.GetBuddyList().Count}");
                         }
                         else
                         {
@@ -399,7 +387,7 @@ namespace iQQ.Net.BatchHangQQ
 
                         if (QQActionEventType.EvtOK == client.GetGroupList(_eventHandler).WaitFinalEvent().Type)
                         {
-                            ShowMessage(string.Format("{0}-群数量：{1}", client.Account.Username, client.GetGroupList().Count));
+                            ShowMessage($"{client.Account.Username}-群数量：{client.GetGroupList().Count}");
                         }
                         else
                         {
@@ -436,7 +424,7 @@ namespace iQQ.Net.BatchHangQQ
             {
                 loginStatusIndex = cboLoginStatus.SelectedIndex;
             }));
-            var status = QQStatus.ValueOfRaw(LoginStatus[1][loginStatusIndex]);
+            var status = QQStatus.ValueOfRaw(_loginStatus[1][loginStatusIndex]);
 
             var qqCount = 0;
             lvQQList.Invoke(new MethodInvoker(() =>
@@ -517,7 +505,7 @@ namespace iQQ.Net.BatchHangQQ
 
         private void AddQQInfo(IQQClient iqqClient)
         {
-            var index = GetIndexInLV(iqqClient.Account.Username);
+            var index = GetIndexInLv(iqqClient.Account.Username);
             if (index >= 0)
             {
                 UpdateQQInfo(iqqClient, index);
@@ -543,10 +531,10 @@ namespace iQQ.Net.BatchHangQQ
             }
         }
 
-        private void UpdateQQInfo(IQQClient iqqClient, int indexInLV = -1)
+        private void UpdateQQInfo(IQQClient iqqClient, int indexInLv = -1)
         {
             var qqAccount = iqqClient.Account;
-            var index = indexInLV >= 0 ? indexInLV : GetIndexInLV(qqAccount.Username);
+            var index = indexInLv >= 0 ? indexInLv : GetIndexInLv(qqAccount.Username);
             if (index < 0) return;
 
             if (lvQQList.InvokeRequired)
@@ -572,9 +560,9 @@ namespace iQQ.Net.BatchHangQQ
             }
         }
 
-        private void SelectQQLVItem(string qqNumber = "", int indexInLV = -1)
+        private void SelectQqlvItem(string qqNumber = "", int indexInLv = -1)
         {
-            var index = indexInLV > 0 ? indexInLV : GetIndexInLV(qqNumber);
+            var index = indexInLv > 0 ? indexInLv : GetIndexInLv(qqNumber);
             if (index < 0)
             {
                 return;
@@ -598,7 +586,7 @@ namespace iQQ.Net.BatchHangQQ
             }
         }
 
-        private int GetIndexInLV(string qqNumber)
+        private int GetIndexInLv(string qqNumber)
         {
             var index = -1;
             lvQQList.Invoke(new MethodInvoker(() =>
@@ -616,7 +604,7 @@ namespace iQQ.Net.BatchHangQQ
 
         private void tbVerifyCode_TextChanged(object sender, EventArgs e)
         {
-            var verifyCodeDigit = Int32.Parse(VerifyCodeDigit[cboVerifyCodeDigit.SelectedIndex]);
+            var verifyCodeDigit = Int32.Parse(_verifyCodeDigit[cboVerifyCodeDigit.SelectedIndex]);
             if (tbVerifyCode.Text.Length >= verifyCodeDigit)
             {
                 _verifyCodeInputed.Set();                      // 当输入的文本为5位，发一个通知
@@ -646,7 +634,7 @@ namespace iQQ.Net.BatchHangQQ
             var fs = new FileStream(fileName, FileMode.Open, FileAccess.Read);//读取文件设定
             var sr = new StreamReader(fs);//设定读写的编码
             var strLine = "";
-            var rex = new Regex(rexQQNumPwd);
+            var rex = new Regex(_rexQQNumPwd);
             while ((strLine = sr.ReadLine()) != null)
             {
                 var m = rex.Match(strLine);
@@ -699,8 +687,8 @@ namespace iQQ.Net.BatchHangQQ
             if (lvQQList.SelectedIndices.Count > 0)
             {
                 var lvi = lvQQList.Items[lvQQList.SelectedIndices[0]];
-                var addQQForm = new fmAddQQ(lvi.SubItems[1].Text, lvi.SubItems[2].Text, lvi.SubItems[3].Text);
-                addQQForm.addQQ = AddQQToList;
+                var addQQForm = new FmAddQQ(lvi.SubItems[1].Text, lvi.SubItems[2].Text, lvi.SubItems[3].Text);
+                addQQForm._addQQ = AddQQToList;
                 addQQForm.ShowDialog();
             }
         }

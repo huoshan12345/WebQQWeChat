@@ -1,6 +1,6 @@
 ﻿namespace iQQ.Net.BatchHangQQ
 {
-    partial class fmQQList
+    partial class FmQQList
     {
         /// <summary>
         /// Required designer variable.
@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(fmQQList));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FmQQList));
             this.lvQQList = new System.Windows.Forms.ListView();
             this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -443,7 +443,7 @@
             this.MaximizeBox = false;
             this.MaximumSize = new System.Drawing.Size(700, 600);
             this.MinimumSize = new System.Drawing.Size(700, 600);
-            this.Name = "fmQQList";
+            this.Name = "FmQQList";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "MyWebQQ";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.fmQQList_FormClosing);

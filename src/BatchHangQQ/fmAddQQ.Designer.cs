@@ -1,6 +1,6 @@
 ﻿namespace iQQ.Net.BatchHangQQ
 {
-    partial class fmAddQQ
+    partial class FmAddQQ
     {
         /// <summary>
         /// Required designer variable.
@@ -122,7 +122,7 @@
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.btnConfirm);
             this.MaximizeBox = false;
-            this.Name = "fmAddQQ";
+            this.Name = "FmAddQQ";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "添加一个QQ";
             this.ResumeLayout(false);

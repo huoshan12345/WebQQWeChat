@@ -5,16 +5,16 @@ using iQQ.Net.WebQQCore.Im.Bean;
 
 namespace iQQ.Net.BatchHangQQ
 {
-    public partial class fmAddQQ : Form
+    public partial class FmAddQQ : Form
     {
-        public fmAddQQ()
+        public FmAddQQ()
         {
             InitializeComponent();
             cboLoginProtocol.Items.AddRange(QQClientType.QQClientAllTypes.Select(type => type.Value).Cast<object>().ToArray());
             cboLoginProtocol.SelectedIndex = 0;
         }
 
-        public fmAddQQ(string qqNum, string qqPwd, string typeName):this()
+        public FmAddQQ(string qqNum, string qqPwd, string typeName):this()
         {
             textBox_QQNum.Text = qqNum;
             textBox2_QQPassword.Text = qqPwd;
@@ -28,11 +28,11 @@ namespace iQQ.Net.BatchHangQQ
 
         private void btnConfirm_Click(object sender, EventArgs e)
         {
-            addQQ(textBox_QQNum.Text, textBox2_QQPassword.Text, cboLoginProtocol.Text);
+            _addQQ(textBox_QQNum.Text, textBox2_QQPassword.Text, cboLoginProtocol.Text);
             Close();
         }
 
         public delegate void AddQQ(string qqNum, string qqPassword, string clientType);
-        public AddQQ addQQ;
+        public AddQQ _addQQ;
     }
 }
