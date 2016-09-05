@@ -257,6 +257,7 @@ namespace iQQ.Net.BatchHangQQ
         {
             _cts.Cancel();
             btnLogin.InvokeIfRequired(() => btnLogin.Text = "登录");
+            pbQRCode.InvokeIfRequired(()=> pbQRCode.Image = null);
             _isLogining = false;
         }
 
