@@ -123,9 +123,10 @@ namespace iQQ.Net.BatchHangQQ
                                 var replyEvent = await client.GetRobotReply(revMsg, RobotType.Tuling).WhenFinalEvent();
                                 if (replyEvent.Type == QQActionEventType.EvtOK)
                                 {
-                                    var text = new TextItem((string)replyEvent.Target);
+                                    var str = (string) replyEvent.Target;
+                                    var text = new TextItem($"{str} --来自机器人");
                                     msgReply.AddContentItem(text);
-                                    msgReply.AddContentItem(new FontItem());             // 使用默认字体，不加这句对方收不到信息
+                                    msgReply.AddContentItem(new FontItem()); // 使用默认字体，不加这句对方收不到信息
                                     var result = await client.SendMsg(msgReply).WhenFinalEvent().ConfigureAwait(false);
                                     if (result.Type == QQActionEventType.EvtOK)
                                     {
@@ -133,8 +134,12 @@ namespace iQQ.Net.BatchHangQQ
                                     }
                                     else
                                     {
-                                        client.Logger.LogInformation($"自动回复给[{revMsg.From.Nickname}]发送失败");
+                                        client.Logger.LogWarning($"自动回复给[{revMsg.From.Nickname}]发送失败");
                                     }
+                                }
+                                else
+                                {
+                                    client.Logger.LogWarning("获取机器人回复失败");
                                 }
                             }
                             break;
