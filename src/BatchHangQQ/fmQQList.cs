@@ -24,9 +24,16 @@ namespace iQQ.Net.BatchHangQQ
     {
         private readonly Dictionary<string, IQQClient> _qqClients = new Dictionary<string, IQQClient>();
         private QQNotifyListener _notifyListener;
-        private readonly NotifyIcon _notifyIcon;// 创建NotifyIcon对象 
+        private readonly NotifyIcon _notifyIcon; // 创建NotifyIcon对象 
         private volatile bool _isLogining;
         private CancellationTokenSource _cts;
+        private readonly object _syncObj = new object();
+
+        public bool IsLogining
+        {
+            get { lock (_syncObj) { return _isLogining; } }
+            set { lock (_syncObj) { _isLogining = value; } }
+        }
 
         protected override void WndProc(ref Message m)
         {   // 原来底层重绘每次会清除画布，然后再全部重新绘制，导致闪烁
@@ -117,9 +124,17 @@ namespace iQQ.Net.BatchHangQQ
                                 if (replyEvent.Type == QQActionEventType.EvtOK)
                                 {
                                     var text = new TextItem((string)replyEvent.Target);
-                                    msgReply.ContentList.Add(text);
-                                    await client.SendMsg(msgReply).WhenFinalEvent().ConfigureAwait(false);
-                                    client.Logger.LogInformation($"自动回复给[{revMsg.From.Nickname}]：{text.ToText()}");
+                                    msgReply.AddContentItem(text);
+                                    msgReply.AddContentItem(new FontItem());             // 使用默认字体，不加这句对方收不到信息
+                                    var result = await client.SendMsg(msgReply).WhenFinalEvent().ConfigureAwait(false);
+                                    if (result.Type == QQActionEventType.EvtOK)
+                                    {
+                                        client.Logger.LogInformation($"自动回复给[{revMsg.From.Nickname}]：{text.ToText()}");
+                                    }
+                                    else
+                                    {
+                                        client.Logger.LogInformation($"自动回复给[{revMsg.From.Nickname}]发送失败");
+                                    }
                                 }
                             }
                             break;
@@ -230,11 +245,12 @@ namespace iQQ.Net.BatchHangQQ
 
         private async void Login()
         {
+            IsLogining = true;
             _cts = new CancellationTokenSource();
             btnLogin.InvokeIfRequired(() => btnLogin.Text = "取消登录");
             while (!_cts.IsCancellationRequested)
             {
-                var client = new WebQQClient(notifyListener: _notifyListener, logger:new RichTextBoxLogger(tbMessage));
+                var client = new WebQQClient(notifyListener: _notifyListener, logger: new RichTextBoxLogger(tbMessage));
                 var result = await client.LoginWithQRCode().WhenFinalEvent().ConfigureAwait(false);
                 if (result.Type == QQActionEventType.EvtOK)
                 {
@@ -257,13 +273,13 @@ namespace iQQ.Net.BatchHangQQ
         {
             _cts.Cancel();
             btnLogin.InvokeIfRequired(() => btnLogin.Text = "登录");
-            pbQRCode.InvokeIfRequired(()=> pbQRCode.Image = null);
-            _isLogining = false;
+            pbQRCode.InvokeIfRequired(() => pbQRCode.Image = null);
+            IsLogining = false;
         }
 
         private void btnLogin_Click(object sender, EventArgs e)
         {
-            if (!_isLogining) Login();
+            if (!IsLogining) Login();
             else CancelLogin();
         }
 
