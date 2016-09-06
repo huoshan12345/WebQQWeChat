@@ -43,7 +43,7 @@ namespace iQQ.Net.WebQQCore.Util.Extensions
         public static string GetRequestHeader(this QQHttpRequest request, CookieContainer cc)
         {
             var sb = new StringBuilder();
-            sb.AppendLineIf($"{HttpConstants.Referer}: {request.Referer}", !request.Referer.IsNullOrEmpty());
+            sb.AppendLineIf($"{HttpConstants.Referrer}: {request.Referrer}", !request.Referrer.IsNullOrEmpty());
             sb.AppendLineIf($"{HttpConstants.UserAgent}: {request.UserAgent}", !request.UserAgent.IsNullOrEmpty());
             sb.AppendLineIf($"{HttpConstants.ContentType}: {request.ContentType}", !request.ContentType.IsNullOrEmpty());
             var cookies = cc.GetCookies(new Uri(request.Url)).OfType<Cookie>();

@@ -7,6 +7,9 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using AngleSharp;
+using AngleSharp.Extensions;
+using AngleSharp.Parser.Html;
 using iQQ.Net.BatchHangQQ.Extensions;
 using iQQ.Net.BatchHangQQ.Util;
 using iQQ.Net.WebQQCore.Im;
@@ -23,16 +26,28 @@ namespace iQQ.Net.BatchHangQQ
     public partial class FmQQList : Form
     {
         private readonly Dictionary<string, IQQClient> _qqClients = new Dictionary<string, IQQClient>();
+        private readonly object _syncObj = new object();
+        private readonly HttpCilentHelper _httpCilent = new HttpCilentHelper();
         private QQNotifyListener _notifyListener;
         private readonly NotifyIcon _notifyIcon; // 创建NotifyIcon对象 
         private volatile bool _isLogining;
         private CancellationTokenSource _cts;
-        private readonly object _syncObj = new object();
 
         public bool IsLogining
         {
             get { lock (_syncObj) { return _isLogining; } }
             set { lock (_syncObj) { _isLogining = value; } }
+        }
+
+        private async void GetIpInfo()
+        {
+            var result = await _httpCilent.GetAsync("http://ip.cn/").ConfigureAwait(false);
+            var document = await new HtmlParser().ParseAsync(result.ResponseString).ConfigureAwait(false);
+            var items = document.QuerySelectorAll("#result .well p").ToList();
+            var ip = items[0].QuerySelector("code").Text().Trim();
+            var address = items[1].QuerySelector("code").Text().Trim();
+            lbIp.InvokeIfRequired(() => lbIp.Text = ip);
+            lbAddress.InvokeIfRequired(() => lbAddress.Text = address);
         }
 
         protected override void WndProc(ref Message m)
@@ -83,6 +98,7 @@ namespace iQQ.Net.BatchHangQQ
         private void fmQQList_Load(object sender, EventArgs e)
         {
             AfterInitialize();
+            GetIpInfo();
         }
 
         private void AfterInitialize()
@@ -120,10 +136,10 @@ namespace iQQ.Net.BatchHangQQ
                                     From = client.Account,
                                     Date = DateTime.Now,
                                 };
-                                var replyEvent = await client.GetRobotReply(revMsg, RobotType.Tuling).WhenFinalEvent();
+                                var replyEvent = await client.GetRobotReply(revMsg, RobotType.Turing).WhenFinalEvent();
                                 if (replyEvent.Type == QQActionEventType.EvtOK)
                                 {
-                                    var str = (string) replyEvent.Target;
+                                    var str = (string)replyEvent.Target;
                                     var text = new TextItem($"{str} --来自机器人");
                                     msgReply.AddContentItem(text);
                                     msgReply.AddContentItem(new FontItem()); // 使用默认字体，不加这句对方收不到信息
@@ -168,7 +184,7 @@ namespace iQQ.Net.BatchHangQQ
                         case QQNotifyEventType.ShakeWindow:
                         {
                             var buddy = (QQBuddy)notifyEvent.Target;
-                            if (buddy.QQ.IsDefault()) await client.GetUserQQ(buddy).WhenFinalEvent();
+                            if (buddy.QQ.IsDefault()) await client.GetUserQQ(buddy).WhenFinalEvent().ConfigureAwait(false);
                             client.Logger.LogInformation($"[{buddy.ShowName}]发来抖动屏幕");
                             break;
                         }
@@ -227,15 +243,11 @@ namespace iQQ.Net.BatchHangQQ
             }
         }
 
-
         private async void AddQQToLv(IQQClient qq)
         {
-            var index = lvQQList.FindFirstItemIndex(qq.Account.QQ.ToString(), new[] { 1 });
-            if (index < 0)
+            await qq.GetUserLevel(qq.Account).WhenFinalEvent().ConfigureAwait(false);
+            var subitems = new[]
             {
-                await qq.GetUserLevel(qq.Account).WhenFinalEvent();
-                var subitems = new[]
-                {
                     lvQQList.Items.Count.ToString(),
                     qq.Account.QQ.ToString(),
                     qq.Account.ClientType.ToString(),
@@ -243,8 +255,22 @@ namespace iQQ.Net.BatchHangQQ
                     qq.Account.LevelInfo.Level.ToString(),
                     qq.Account.LevelInfo.RemainDays.ToString(),
                 };
-                var item = new ListViewItem(subitems) { Selected = true };
-                lvQQList.Items.Add(item);
+            var item = new ListViewItem(subitems) { Selected = true };
+
+            var index = lvQQList.FindFirstItemIndex(qq.Account.QQ.ToString(), new[] { 1 });
+            if (index < 0)
+            {
+                lvQQList.InvokeIfRequired(() =>
+                {
+                    lvQQList.Items.Add(item);
+                });
+            }
+            else
+            {
+                lvQQList.InvokeIfRequired(() =>
+                {
+                    lvQQList.UpdateItem(index, item, new[] { 2, 3, 4, 5 });
+                });
             }
         }
 

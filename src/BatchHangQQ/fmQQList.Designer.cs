@@ -51,6 +51,8 @@
             this.tbMessage = new System.Windows.Forms.RichTextBox();
             this.btnClearQQlist = new System.Windows.Forms.Button();
             this.btnExportQQlist = new System.Windows.Forms.Button();
+            this.lbIp = new System.Windows.Forms.Label();
+            this.lbAddress = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pbQRCode)).BeginInit();
@@ -149,6 +151,8 @@
             // 
             // groupBox3
             // 
+            this.groupBox3.Controls.Add(this.lbAddress);
+            this.groupBox3.Controls.Add(this.lbIp);
             this.groupBox3.Controls.Add(this.label5);
             this.groupBox3.Controls.Add(this.label4);
             this.groupBox3.Location = new System.Drawing.Point(534, 378);
@@ -257,6 +261,24 @@
             this.btnExportQQlist.UseVisualStyleBackColor = true;
             this.btnExportQQlist.Click += new System.EventHandler(this.btnExportQQlist_Click);
             // 
+            // lbIp
+            // 
+            this.lbIp.AutoSize = true;
+            this.lbIp.Location = new System.Drawing.Point(29, 17);
+            this.lbIp.Name = "lbIp";
+            this.lbIp.Size = new System.Drawing.Size(29, 12);
+            this.lbIp.TabIndex = 2;
+            this.lbIp.Text = "未知";
+            // 
+            // lbAddress
+            // 
+            this.lbAddress.AutoSize = true;
+            this.lbAddress.Location = new System.Drawing.Point(39, 38);
+            this.lbAddress.Name = "lbAddress";
+            this.lbAddress.Size = new System.Drawing.Size(29, 12);
+            this.lbAddress.TabIndex = 3;
+            this.lbAddress.Text = "未知";
+            // 
             // FmQQList
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -318,5 +340,7 @@
         private System.Windows.Forms.ColumnHeader columnHeader7;
         private System.Windows.Forms.Button btnClearQQlist;
         private System.Windows.Forms.Button btnExportQQlist;
+        private System.Windows.Forms.Label lbAddress;
+        private System.Windows.Forms.Label lbIp;
     }
 }

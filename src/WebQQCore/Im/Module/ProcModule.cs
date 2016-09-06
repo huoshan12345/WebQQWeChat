@@ -264,7 +264,7 @@ namespace iQQ.Net.WebQQCore.Im.Module
                         if (e.Type == QQActionEventType.EvtOK) Context.Logger.LogInformation("获取在线好友信息成功");
                     }).WhenFinalEvent();
 
-                    await Task.WhenAll(task1, task2, task3, task4);
+                    await Task.WhenAll(task1, task2, task3, task4).ConfigureAwait(false);
                     DoPollMsg();
                 }
                 else if (Event.Type == QQActionEventType.EvtError)

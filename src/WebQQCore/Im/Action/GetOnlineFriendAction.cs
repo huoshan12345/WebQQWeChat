@@ -37,18 +37,15 @@ namespace iQQ.Net.WebQQCore.Im.Action
             if (json["retcode"].ToString() == "0")
             {
                 var result = json["result"].ToObject<JArray>();
-                for (var i = 0; i < result.Count; i++)
+                foreach (var token in result)
                 {
-                    var obj = result[i].ToObject<JObject>();
+                    var obj = token.ToObject<JObject>();
                     var uin = obj["uin"].ToObject<long>();
                     var status = obj["status"].ToString();
                     var clientType = obj["client_type"].ToObject<int>();
-                    var buddy = store.GetBuddyByUin(uin);
-                    if (buddy != null)
-                    {
-                        buddy.Status = QQStatus.ValueOfRaw(status);
-                        buddy.ClientType = QQClientTypeInfo.ValueOfRaw(clientType);
-                    }
+                    var buddy = store.GetBuddyByUinOrAdd(uin);
+                    buddy.Status = QQStatus.ValueOfRaw(status);
+                    buddy.ClientType = QQClientTypeInfo.ValueOfRaw(clientType);
                 }
                 NotifyActionEvent(QQActionEventType.EvtOK, null);
             }

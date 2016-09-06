@@ -135,23 +135,23 @@ namespace iQQ.Net.WebQQCore.Im.Bean
                     if (t is JArray)
                     {
                         var items = t.ToObject<JArray>();
-                        var contentItemType = ContentItemType.ValueOfRaw(items[0].ToString());
+                        var contentItemType = ContentItemTypeInfo.ValueOfRaw(items[0].ToString());
                         var item = JsonConvert.SerializeObject(items);
-                        switch (contentItemType.Name.ToUpper())
+                        switch (contentItemType)
                         {
-                            case "FACE":
+                            case ContentItemType.Face:
                             AddContentItem(new FaceItem(item));
                             break;
 
-                            case "FONT":
+                            case ContentItemType.Font:
                             AddContentItem(new FontItem(item));
                             break;
 
-                            case "CFACE":
+                            case ContentItemType.Cface:
                             AddContentItem(new CFaceItem(item));
                             break;
 
-                            case "OFFPIC":
+                            case ContentItemType.Offpic:
                             AddContentItem(new OffPicItem(item));
                             break;
 

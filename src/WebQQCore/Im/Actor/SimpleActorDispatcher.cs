@@ -37,7 +37,7 @@ namespace iQQ.Net.WebQQCore.Im.Actor
         {
             if (actor == null) return true;
             if (_asyncExcute) actor.ExecuteAsync();
-            else actor.Execute();;
+            else actor.Execute();
             return !(actor is ExitActor);
         }
 

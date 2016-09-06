@@ -44,7 +44,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
             req.Timeout = 60 * 1000;
             req.ReadTimeout = 60 * 1000;
             req.ConnectTimeout = 60 * 1000;
-            req.Referer = "https://d1.web2.qq.com/cfproxy.html?v=20151105001&callback=1";
+            req.Referrer = "https://d1.web2.qq.com/cfproxy.html?v=20151105001&callback=1";
             req.Origin = "https://d1.web2.qq.com";
             return req;
         }

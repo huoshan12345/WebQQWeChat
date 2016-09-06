@@ -7,16 +7,6 @@ namespace iQQ.Net.WebQQCore.Im.Http
 {
 
     /// <summary>
-    /// 返回类型
-    /// </summary>
-    public enum ResponseResultType
-    {
-        String,
-        Byte,
-        Stream,
-    }
-
-    /// <summary>
     /// HTTP回复
     /// </summary>
     public class QQHttpResponse

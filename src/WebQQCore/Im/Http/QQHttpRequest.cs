@@ -17,9 +17,6 @@ namespace iQQ.Net.WebQQCore.Im.Http
      */
     public class QQHttpRequest
     {
-        private const string DefaultGetContentType = "application/json; charset=utf-8";
-        private const string DefaultPostContentType = "application/x-www-form-urlencoded";
-
         private Stream _inputStream;
 
         public QQHttpRequest(string rawUrl, string method)
@@ -30,9 +27,9 @@ namespace iQQ.Net.WebQQCore.Im.Http
             PostMap = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
             GetMap = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
             FileMap = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
-            HeaderMap[HttpConstants.ContentType] = Method == HttpConstants.Post ? DefaultPostContentType : DefaultGetContentType;
+            HeaderMap[HttpConstants.ContentType] = Method == HttpConstants.Post ? HttpConstants.DefaultPostContentType : HttpConstants.DefaultGetContentType;
             HeaderMap[HttpConstants.UserAgent] = QQConstants.USER_AGENT;
-            HeaderMap[HttpConstants.Referer] = QQConstants.REFFER;
+            HeaderMap[HttpConstants.Referrer] = QQConstants.REFFER;
         }
 
         public ResponseResultType ResultType { set; get; } = ResponseResultType.String;
@@ -124,10 +121,10 @@ namespace iQQ.Net.WebQQCore.Im.Http
             set { HeaderMap[HttpConstants.ContentType] = value; }
         }
 
-        public string Referer
+        public string Referrer
         {
-            get { return HeaderMap[HttpConstants.Referer]; }
-            set { HeaderMap[HttpConstants.Referer] = value; }
+            get { return HeaderMap[HttpConstants.Referrer]; }
+            set { HeaderMap[HttpConstants.Referrer] = value; }
         }
 
         public string UserAgent

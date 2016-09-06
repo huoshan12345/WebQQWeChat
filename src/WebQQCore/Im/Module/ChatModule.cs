@@ -24,7 +24,7 @@ namespace iQQ.Net.WebQQCore.Im.Module
 
         public IQQActionFuture GetRobotReply(QQMsg input, RobotType robotType, QQActionListener listener)
         {
-            return PushHttpAction(new GetRobotReplyAction(Context, listener, input, robotType));
+            return PushHttpAction(new GetTuringRobotReplyAction(Context, listener, input));
         }
 
         public IQQActionFuture SendMsg(QQMsg msg, QQActionListener listener)
@@ -40,10 +40,7 @@ namespace iQQ.Net.WebQQCore.Im.Module
                     {
                         if (Event.Type == QQActionEventType.EvtOK)
                         {
-                            if (!future.IsCanceled)
-                            {
-                                DoSendMsg(msg, future.Listener);
-                            }
+                            DoSendMsg(msg, future.Listener);
                         }
                         else if (Event.Type == QQActionEventType.EvtError)
                         {
@@ -60,11 +57,6 @@ namespace iQQ.Net.WebQQCore.Im.Module
                     if (msg.Group.Gin == 0)
                     {
                         msg.Group = Context.Store.GetGroupByCode(msg.Group.Code);
-                        if (msg == null)
-                        {
-                            // update group list
-                            // sendMsg(msg, future);
-                        }
                         return future;
                     }
                 }
@@ -74,47 +66,47 @@ namespace iQQ.Net.WebQQCore.Im.Module
 
         public IQQActionFuture GetSessionMsgSig(QQStranger user, QQActionListener listener)
         {
-            return PushHttpAction(new GetSessionMsgSigAction(this.Context, listener, user));
+            return PushHttpAction(new GetSessionMsgSigAction(Context, listener, user));
         }
 
         public IQQActionFuture UploadOffPic(QQUser user, string file, QQActionListener listener)
         {
-            return PushHttpAction(new UploadOfflinePictureAction(this.Context, listener, user, file));
+            return PushHttpAction(new UploadOfflinePictureAction(Context, listener, user, file));
         }
 
         public IQQActionFuture UploadCFace(string file, QQActionListener listener)
         {
-            return PushHttpAction(new UploadCustomFaceAction(this.Context, listener, file));
+            return PushHttpAction(new UploadCustomFaceAction(Context, listener, file));
         }
 
         public IQQActionFuture GetCFaceSig(QQActionListener listener)
         {
-            return PushHttpAction(new GetCustomFaceSigAction(this.Context, listener));
+            return PushHttpAction(new GetCustomFaceSigAction(Context, listener));
         }
 
         public IQQActionFuture SendShake(QQUser user, QQActionListener listener)
         {
-            return PushHttpAction(new ShakeWindowAction(this.Context, listener, user));
+            return PushHttpAction(new ShakeWindowAction(Context, listener, user));
         }
 
         public IQQActionFuture GetOffPic(OffPicItem offpic, QQMsg msg, Stream picout, QQActionListener listener)
         {
-            return PushHttpAction(new GetOffPicAction(this.Context, listener, offpic, msg, picout));
+            return PushHttpAction(new GetOffPicAction(Context, listener, offpic, msg, picout));
         }
 
         public IQQActionFuture GetUserPic(CFaceItem cface, QQMsg msg, Stream picout, QQActionListener listener)
         {
-            return PushHttpAction(new GetUserPicAction(this.Context, listener, cface, msg, picout));
+            return PushHttpAction(new GetUserPicAction(Context, listener, cface, msg, picout));
         }
 
         public IQQActionFuture GetGroupPic(CFaceItem cface, QQMsg msg, Stream picout, QQActionListener listener)
         {
-            return PushHttpAction(new GetGroupPicAction(this.Context, listener, cface, msg, picout));
+            return PushHttpAction(new GetGroupPicAction(Context, listener, cface, msg, picout));
         }
 
         public IQQActionFuture SendInputNotify(QQUser user, QQActionListener listener)
         {
-            return PushHttpAction(new SendInputNotifyAction(this.Context, listener, user));
+            return PushHttpAction(new SendInputNotifyAction(Context, listener, user));
         }
     }
 }

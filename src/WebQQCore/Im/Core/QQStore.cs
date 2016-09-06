@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Linq;
 using iQQ.Net.WebQQCore.Im.Bean;
 using iQQ.Net.WebQQCore.Im.Bean.Content;
@@ -13,11 +14,11 @@ namespace iQQ.Net.WebQQCore.Im.Core
     /// </summary>
     public class QQStore : IQQLifeCycle
     {
-        private readonly Dictionary<long, QQBuddy> _buddyMap; // uin => QQBudy, 快速通过uin查找QQ好友
-        private readonly Dictionary<long, QQStranger> _strangerMap; // uin => QQStranger, 快速通过uin查找临时会话用户
-        private readonly Dictionary<long, QQCategory> _categoryMap; // index => QQCategory
-        private readonly Dictionary<long, QQDiscuz> _discuzMap;		// did = > QQDiscuz
-        private readonly Dictionary<long, QQGroup> _groupMap; // code => QQGroup, 快速通过群ID查找群
+        private readonly ConcurrentDictionary<long, QQBuddy> _buddyMap; // uin => QQBudy, 快速通过uin查找QQ好友
+        private readonly ConcurrentDictionary<long, QQStranger> _strangerMap; // uin => QQStranger, 快速通过uin查找临时会话用户
+        private readonly ConcurrentDictionary<long, QQCategory> _categoryMap; // index => QQCategory
+        private readonly ConcurrentDictionary<long, QQDiscuz> _discuzMap;		// did = > QQDiscuz
+        private readonly ConcurrentDictionary<long, QQGroup> _groupMap; // code => QQGroup, 快速通过群ID查找群
         private readonly List<IContentItem> _pictureItemList; // filename -> PicItem 上传图片列表
 
         /**
@@ -25,11 +26,11 @@ namespace iQQ.Net.WebQQCore.Im.Core
          */
         public QQStore()
         {
-            this._buddyMap = new Dictionary<long, QQBuddy>();
-            this._strangerMap = new Dictionary<long, QQStranger>();
-            this._categoryMap = new Dictionary<long, QQCategory>();
-            this._groupMap = new Dictionary<long, QQGroup>();
-            this._discuzMap = new Dictionary<long, QQDiscuz>();
+            this._buddyMap = new ConcurrentDictionary<long, QQBuddy>();
+            this._strangerMap = new ConcurrentDictionary<long, QQStranger>();
+            this._categoryMap = new ConcurrentDictionary<long, QQCategory>();
+            this._groupMap = new ConcurrentDictionary<long, QQGroup>();
+            this._discuzMap = new ConcurrentDictionary<long, QQDiscuz>();
             this._pictureItemList = new List<IContentItem>();
         }
 
@@ -74,22 +75,22 @@ namespace iQQ.Net.WebQQCore.Im.Core
 
         public void DeleteBuddy(QQBuddy buddy)
         {
-            _buddyMap.Remove(buddy.Uin);
+            _buddyMap.TryRemove(buddy.Uin, out buddy);
         }
 
         public void DeleteStranger(QQStranger stranger)
         {
-            _strangerMap.Remove(stranger.Uin);
+            _strangerMap.TryRemove(stranger.Uin, out stranger);
         }
 
         public void DeleteCategory(QQCategory category)
         {
-            _categoryMap.Remove(category.Index);
+            _categoryMap.TryRemove(category.Index, out category);
         }
 
         public void DeleteGroup(QQGroup group)
         {
-            _groupMap.Remove(group.Gin);
+            _groupMap.TryRemove(group.Gin, out group);
         }
 
         public void DeletePicItem(IContentItem picItem)
@@ -99,12 +100,17 @@ namespace iQQ.Net.WebQQCore.Im.Core
 
         public void DeleteDiscuz(QQDiscuz discuz)
         {
-            _discuzMap.Remove(discuz.Did);
+            _discuzMap.TryRemove(discuz.Did, out discuz);
         }
 
         public QQBuddy GetBuddyByUin(long uin)
         {
             return _buddyMap.ContainsKey(uin) ? _buddyMap[uin] : null;
+        }
+
+        public QQBuddy GetBuddyByUinOrAdd(long uin)
+        {
+            return _buddyMap.GetOrAdd(uin, (key) => new QQBuddy {Uin = uin});
         }
 
         public QQStranger GetStrangerByUin(long uin)

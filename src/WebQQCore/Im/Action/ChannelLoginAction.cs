@@ -36,7 +36,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
 
             var req = CreateHttpRequest("POST", QQConstants.URL_CHANNEL_LOGIN);
             req.AddPostValue("r", json);
-            req.AddHeader(HttpConstants.Referer, QQConstants.REFFER);
+            req.AddHeader(HttpConstants.Referrer, QQConstants.REFFER);
             req.AddHeader(HttpConstants.Origin, QQConstants.ORIGIN);
 
             // req.AddHeader("Connection", "Keep-Alive");

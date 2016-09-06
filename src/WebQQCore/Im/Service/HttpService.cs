@@ -42,7 +42,7 @@ namespace iQQ.Net.WebQQCore.Im.Service
             {
                 Headers =
                 {
-                    Referrer = new Uri(qqRequest.Referer),
+                    Referrer = new Uri(qqRequest.Referrer),
                     //UserAgent =
                     //{
                     //    new ProductInfoHeaderValue(qqRequest.UserAgent)
@@ -82,7 +82,7 @@ namespace iQQ.Net.WebQQCore.Im.Service
                 }
 #endif
                 var httpRequest = GetHttpRequest(request);
-                var result = await _httpClient.SendAsync(httpRequest, HttpCompletionOption.ResponseHeadersRead, token);
+                var result = await _httpClient.SendAsync(httpRequest, HttpCompletionOption.ResponseHeadersRead, token).ConfigureAwait(false);
 #if DEBUG
                 if (request.RawUrl == QQConstants.URL_ROBOT_TULING)
                 {
@@ -105,17 +105,17 @@ namespace iQQ.Net.WebQQCore.Im.Service
                 {
                     case ResponseResultType.String:
                     {
-                        response.ResponseString = await result.Content.ReadAsStringAsync();
+                        response.ResponseString = await result.Content.ReadAsStringAsync().ConfigureAwait(false);
                         break;
                     }
                     case ResponseResultType.Byte:
                     {
-                        response.ResponseBytes = await result.Content.ReadAsByteArrayAsync();
+                        response.ResponseBytes = await result.Content.ReadAsByteArrayAsync().ConfigureAwait(false);
                         break;
                     }
                     case ResponseResultType.Stream:
                     {
-                        response.ResponseStream = new MemoryStream(await result.Content.ReadAsByteArrayAsync());
+                        response.ResponseStream = new MemoryStream(await result.Content.ReadAsByteArrayAsync().ConfigureAwait(false));
                         break;
                     }
                 }
@@ -166,14 +166,12 @@ namespace iQQ.Net.WebQQCore.Im.Service
             try
             {
                 _cc = new CookieContainer();
-                var handler = new HttpClientHandler()
+                var handler = new HttpClientHandler
                 {
                     AllowAutoRedirect = true,
                     CookieContainer = _cc,
                 };
-                _httpClient = new HttpClient(handler)
-                {
-                };
+                _httpClient = new HttpClient(handler);
                 _httpClient.DefaultRequestHeaders.Add(HttpConstants.UserAgent, QQConstants.USER_AGENT);
             }
             catch (Exception e)

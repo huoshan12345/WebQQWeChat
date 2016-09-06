@@ -169,7 +169,7 @@ namespace iQQ.Net.WebQQCore.Im.Actor
                 {
                     return QQActorType.PollMsgActor;
                 }
-                else if (_action is GetRobotReplyAction)
+                else if (_action is GetTuringRobotReplyAction)
                 {
                     return QQActorType.GetRobotReply;
                 }

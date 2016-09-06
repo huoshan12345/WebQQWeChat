@@ -8,31 +8,27 @@
         string ToText();
     }
 
-    public sealed class ContentItemType
+
+    public enum ContentItemType
     {
-        /** 字体 */
-        public static readonly ContentItemType Font = new ContentItemType("font");
-        public static readonly ContentItemType Text = new ContentItemType("text");/** 文字 */
-        public static readonly ContentItemType Face = new ContentItemType("face");/** 表情 */
-        public static readonly ContentItemType Offpic = new ContentItemType("offpic");/** 离线图片 */
-        public static readonly ContentItemType Cface = new ContentItemType("cface");/** 群图片 */
+        Font,
+        Face,
+        Offpic,
+        Cface,
+        Text
+    }
 
-        public string Name { get; set; }
-
-        ContentItemType(string name)
-        {
-            Name = name;
-        }
-
+    public sealed class ContentItemTypeInfo
+    {
         public static ContentItemType ValueOfRaw(string txt)
         {
-            switch (txt)
+            switch (txt.ToLower())
             {
-                case "font": return Font;
-                case "face": return Face;
-                case "offpic": return Offpic;
-                case "cface": return Cface;
-                default: return Text;
+                case "font": return ContentItemType.Font;
+                case "face": return ContentItemType.Face;
+                case "offpic": return ContentItemType.Offpic;
+                case "cface": return ContentItemType.Cface;
+                default: return ContentItemType.Text;
             }
         }
 

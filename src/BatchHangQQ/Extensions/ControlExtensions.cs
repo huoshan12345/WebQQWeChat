@@ -36,6 +36,15 @@ namespace iQQ.Net.BatchHangQQ.Extensions
             return -1;
         }
 
+        public static void UpdateItem(this ListView lv, int itemIndex, ListViewItem item, int[] updateSubItemIndexes)
+        {
+            var oldItem = lv.Items[itemIndex];
+            foreach (var subIndex in updateSubItemIndexes)
+            {
+                oldItem.SubItems[subIndex] = item.SubItems[subIndex];
+            }
+        }
+
         public static void AppendText(this RichTextBox box, string text, Color color)
         {
             box.SelectionStart = box.TextLength;
