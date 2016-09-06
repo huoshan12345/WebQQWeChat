@@ -15,12 +15,12 @@ namespace iQQ.Net.WebQQCore.Im.Action
     /// </summary>
     public class GetFriendInfoAction : AbstractHttpAction
     {
-        private QQUser buddy;
+        private readonly QQUser _buddy;
 
         public GetFriendInfoAction(IQQContext context, QQActionListener listener, QQUser buddy)
             : base(context, listener)
         {
-            this.buddy = buddy;
+            _buddy = buddy;
         }
 
         public override QQHttpRequest OnBuildRequest()
@@ -34,7 +34,7 @@ namespace iQQ.Net.WebQQCore.Im.Action
              */
             var session = Context.Session;
             var req = CreateHttpRequest(HttpConstants.Get, QQConstants.URL_GET_FRIEND_INFO);
-            req.AddGetValue("tuin", buddy.Uin);
+            req.AddGetValue("tuin", _buddy.Uin);
             req.AddGetValue("verifysession", "");	//难道有验证码？？？
             req.AddGetValue("code", "");
             req.AddGetValue("vfwebqq", session.Vfwebqq);
@@ -82,38 +82,38 @@ namespace iQQ.Net.WebQQCore.Im.Action
             if (json["retcode"].ToString() == "0")
             {
                 var obj = json["result"].ToObject<JObject>();
-                buddy.Birthday = DateUtils.Parse(obj["birthday"].ToObject<JObject>());
-                buddy.Occupation = obj["occupation"].ToString();
-                buddy.Phone = obj["phone"].ToString();
-                buddy.Allow = (QQAllow)obj["allow"].ToObject<int>();
+                _buddy.Birthday = DateUtils.Parse(obj["birthday"].ToObject<JObject>());
+                _buddy.Occupation = obj["occupation"].ToString();
+                _buddy.Phone = obj["phone"].ToString();
+                _buddy.Allow = (QQAllow)obj["allow"].ToObject<int>();
 
-                buddy.College = obj["college"].ToString();
+                _buddy.College = obj["college"].ToString();
                 if (obj["reg_time"] != null)
                 {
-                    buddy.RegTime = obj["reg_time"].ToObject<int>();
+                    _buddy.RegTime = obj["reg_time"].ToObject<int>();
                 }
-                buddy.Uin = obj["uin"].ToObject<long>();
-                buddy.Constel = obj["constel"].ToObject<int>();
-                buddy.Blood = obj["blood"].ToObject<int>();
-                buddy.Homepage = obj["homepage"].ToString();
-                buddy.Stat = obj["stat"].ToObject<int>();
-                buddy.VipLevel = obj["vip_info"].ToObject<int>(); // VIP等级 0为非VIP
-                buddy.Country = obj["country"].ToString();
-                buddy.City = obj["city"].ToString();
-                buddy.Personal = obj["personal"].ToString();
-                buddy.Nickname = obj["nick"].ToString();
-                buddy.ChineseZodiac = obj["shengxiao"].ToObject<int>();
-                buddy.Email = obj["email"].ToString();
-                buddy.Province = obj["province"].ToString();
-                buddy.Gender = obj["gender"].ToString();
-                buddy.Mobile = obj["mobile"].ToString();
+                _buddy.Uin = obj["uin"].ToObject<long>();
+                _buddy.Constel = obj["constel"].ToObject<int>();
+                _buddy.Blood = obj["blood"].ToObject<int>();
+                _buddy.Homepage = obj["homepage"].ToString();
+                _buddy.Stat = obj["stat"].ToObject<int>();
+                _buddy.VipLevel = obj["vip_info"].ToObject<int>(); // VIP等级 0为非VIP
+                _buddy.Country = obj["country"].ToString();
+                _buddy.City = obj["city"].ToString();
+                _buddy.Personal = obj["personal"].ToString();
+                _buddy.Nickname = obj["nick"].ToString();
+                _buddy.ChineseZodiac = obj["shengxiao"].ToObject<int>();
+                _buddy.Email = obj["email"].ToString();
+                _buddy.Province = obj["province"].ToString();
+                _buddy.Gender = obj["gender"].ToString();
+                _buddy.Mobile = obj["mobile"].ToString();
                 if (obj["client_type"] != null)
                 {
-                    buddy.ClientType = QQClientTypeInfo.ValueOfRaw(obj["client_type"].ToObject<int>());
+                    _buddy.ClientType = QQClientTypeInfo.ValueOfRaw(obj["client_type"].ToObject<int>());
                 }
             }
 
-            NotifyActionEvent(QQActionEventType.EvtOK, buddy);
+            NotifyActionEvent(QQActionEventType.EvtOK, _buddy);
         }
     }
 }
