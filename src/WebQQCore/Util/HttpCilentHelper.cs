@@ -82,7 +82,8 @@ namespace iQQ.Net.WebQQCore.Util
         public Dictionary<string, List<string>> Headers { set; get; } = new Dictionary<string, List<string>>();
         public Uri Location { set; get; }
         public Exception Exception { set; get; }
-        public bool Success => Exception != null;
+        public bool Success => Exception == null && StatusCode == HttpStatusCode.OK;
+        public HttpStatusCode StatusCode { set; get; }
     }
 
 
@@ -114,10 +115,9 @@ namespace iQQ.Net.WebQQCore.Util
             try
             {
                 var httpRequest = GetHttpRequest(requestItem);
-                var result =
-                    await
-                        _httpClient.SendAsync(httpRequest, HttpCompletionOption.ResponseHeadersRead, token)
-                            .ConfigureAwait(false);
+                var result = await _httpClient.SendAsync(httpRequest, HttpCompletionOption.ResponseHeadersRead, token).ConfigureAwait(false);
+                responseItem.StatusCode = result.StatusCode;
+                if (!result.IsSuccessStatusCode) throw new WebException($"Unexpected Status Code: {result.StatusCode}");
                 responseItem = await GetHttpResponseItem(result, requestItem.ResultType).ConfigureAwait(false);
             }
             catch (Exception ex)
@@ -127,19 +127,33 @@ namespace iQQ.Net.WebQQCore.Util
             return responseItem;
         }
 
+        public async Task<HttpResponseItem> GetResponseAsync(HttpRequestItem requestItem, int retryTimes, CancellationToken token)
+        {
+            for (var i = 0; i < retryTimes; i++)
+            {
+                var result = await GetResponseAsync(requestItem, token);
+                if (result.Success) return result;
+                Thread.Sleep(1000 * i);
+            }
+            Thread.Sleep(1000 * retryTimes);
+            return await GetResponseAsync(requestItem, token);
+        }
+
         public async Task<HttpResponseItem> GetAsync(string url)
         {
-            var responseItem = new HttpResponseItem() { ResultType = ResponseResultType.String };
-            try
+            return await GetResponseAsync(new HttpRequestItem(url, HttpMethodType.Get));
+        }
+
+        public async Task<HttpResponseItem> GetAsync(string url, int retryTimes)
+        {
+            for (var i = 0; i < retryTimes; i++)
             {
-                var result = await _httpClient.GetAsync(url).ConfigureAwait(false);
-                responseItem = await GetHttpResponseItem(result, ResponseResultType.String);
+                var result = await GetAsync(url);
+                if (result.Success) return result;
+                Thread.Sleep(1000 * i);
             }
-            catch (Exception ex)
-            {
-                responseItem.Exception = ex;
-            }
-            return responseItem;
+            Thread.Sleep(1000 * retryTimes);
+            return await GetAsync(url);
         }
 
         private static HttpRequestMessage GetHttpRequest(HttpRequestItem item)
@@ -168,7 +182,8 @@ namespace iQQ.Net.WebQQCore.Util
             var responseItem = new HttpResponseItem
             {
                 ResultType = resultType,
-                Location = response.Headers.Location
+                Location = response.Headers.Location,
+                StatusCode = response.StatusCode
             };
             switch (resultType)
             {

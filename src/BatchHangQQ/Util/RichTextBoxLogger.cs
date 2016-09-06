@@ -54,12 +54,8 @@ namespace iQQ.Net.BatchHangQQ.Util
 
         public string GetMessage(string message, Exception exception)
         {
-            if (!message.IsNullOrEmpty() && Context?.Account != null)
-            {
-                var qqStr = Context.Account.QQ.IsDefault() ? string.Empty : $"[{Context.Account.QQ}] ";
-                return $"{DateTime.Now:HH:mm:ss}> {qqStr}{message}{Environment.NewLine}";
-            }
-            else return message;
+            var qqStr = (Context?.Account.QQ).IsNullOrDefault() ? string.Empty : $"[{Context.Account.QQ}] ";
+            return $"{DateTime.Now:HH:mm:ss}> {qqStr}{message}{Environment.NewLine}";
         }
 
         public bool IsEnabled(string msg, LogLevel level)

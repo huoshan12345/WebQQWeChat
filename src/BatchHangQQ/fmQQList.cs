@@ -32,6 +32,7 @@ namespace iQQ.Net.BatchHangQQ
         private readonly NotifyIcon _notifyIcon; // 创建NotifyIcon对象 
         private volatile bool _isLogining;
         private CancellationTokenSource _cts;
+        private readonly RichTextBoxLogger _logger;
 
         public bool IsLogining
         {
@@ -41,13 +42,20 @@ namespace iQQ.Net.BatchHangQQ
 
         private async void GetIpInfo()
         {
-            var result = await _httpCilent.GetAsync("http://ip.cn/").ConfigureAwait(false);
-            var document = await new HtmlParser().ParseAsync(result.ResponseString).ConfigureAwait(false);
-            var items = document.QuerySelectorAll("#result .well p").ToList();
-            var ip = items[0].QuerySelector("code").Text().Trim();
-            var address = items[1].QuerySelector("code").Text().Trim();
-            lbIp.InvokeIfRequired(() => lbIp.Text = ip);
-            lbAddress.InvokeIfRequired(() => lbAddress.Text = address);
+            var result = await _httpCilent.GetAsync("http://ip.cn/", 3).ConfigureAwait(false);
+            if (result.Success)
+            {
+                var document = await new HtmlParser().ParseAsync(result.ResponseString).ConfigureAwait(false);
+                var items = document.QuerySelectorAll("#result .well p").ToList();
+                var ip = items[0].QuerySelector("code").Text().Trim();
+                var address = items[1].QuerySelector("code").Text().Trim();
+                lbIp.InvokeIfRequired(() => lbIp.Text = ip);
+                lbAddress.InvokeIfRequired(() => lbAddress.Text = address);
+            }
+            else
+            {
+                _logger.LogInformation("获取ip地址失败");
+            }
         }
 
         protected override void WndProc(ref Message m)
@@ -67,6 +75,7 @@ namespace iQQ.Net.BatchHangQQ
 
             InitializeComponent();
             chkUseRobot.Checked = false;
+            _logger = new RichTextBoxLogger(tbMessage);
 
             _notifyIcon = new NotifyIcon() { Text = this.Text, Visible = true, Icon = Icon };
 

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using iQQ.Net.WebQQCore.Im.Bean;
@@ -261,7 +262,7 @@ namespace iQQ.Net.WebQQCore.Im.Module
                     }).WhenFinalEvent();
                     var task4 = Context.GetModule<BuddyModule>(QQModuleType.BUDDY).GetOnlineBuddy((s, e) =>
                     {
-                        if (e.Type == QQActionEventType.EvtOK) Context.Logger.LogInformation("获取在线好友信息成功");
+                        if (e.Type == QQActionEventType.EvtOK) Context.Logger.LogInformation($"获取在线好友信息成功，共{Context.Store.GetOnlineBuddyList().Count()}个好友");
                     }).WhenFinalEvent();
 
                     await Task.WhenAll(task1, task2, task3, task4).ConfigureAwait(false);

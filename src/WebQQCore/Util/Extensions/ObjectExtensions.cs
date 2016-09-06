@@ -22,6 +22,11 @@ namespace iQQ.Net.WebQQCore.Util.Extensions
         {
             return obj == null;
         }
+
+        public static bool IsNullOrDefault<T>(this T? obj) where T :struct 
+        {
+            return obj == null || obj.Value.Equals(default(T));
+        }
     }
 }
 
