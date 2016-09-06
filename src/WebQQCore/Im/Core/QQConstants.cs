@@ -75,9 +75,6 @@
 
         public const string URL_ROBOT_TULING = "http://www.tuling123.com/openapi/api";
         public const string ROBOT_TULING_KEY = "a94f7f3e48c331e86316b9522e552f80";
-
-        public const string URL_ROBOT_MOLI = "http://i.itpk.cn/api.php";
-        public const string ROBOT_MOLI_KEY = "b70d2e4162c3683c64a145b3806bad68";
-        public const string ROBOT_MOLI_SECRET = "x1yeyia5wrq2";
+        public const string ROBOT_TULING_SECRET = "";
     }
 }
