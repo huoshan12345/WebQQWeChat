@@ -13,47 +13,68 @@ namespace HttpActionTools.Action
     public abstract class AbstractHttpAction : IHttpAction
     {
         private readonly ActionEventListener _listener;
-        private readonly IActorDispatcher _dispatcher;
+        private readonly IActionCotext _actionCotext;
         private readonly object _syncObj = new object();
         private bool _isWaiting;
         private ActionEvent _finalEvent;
         protected CancellationTokenSource _cts;
+        private int _retryTimes;
+        protected virtual int MaxReTryTimes { get; set; } = 3;
+        protected ManualResetEvent _waitHandle;
 
-        protected AbstractHttpAction(IActorDispatcher dispatcher, ActionEventListener listener)
+        protected AbstractHttpAction(IActionCotext actionCotext, ActionEventListener listener)
         {
-            _dispatcher = dispatcher;
+            _actionCotext = actionCotext;
             _listener = listener;
         }
-
-        protected BlockingCollection<ActionEvent> EventQueue { get; private set; } = new BlockingCollection<ActionEvent>();
 
         public abstract HttpRequestItem BuildRequest();
 
         public void NotifyActionEvent(ActionEvent actionEvent)
         {
-            EventQueue.Add(actionEvent);
             _listener?.Invoke(actionEvent);
         }
-
-        public IHttpService HttpService { get; }
 
         public void Cancel()
         {
             _cts.Cancel();
             IsCanceled = true;
+            NotifyActionEvent(new ActionEvent(ActionEventType.EvtCanceled, this));
         }
 
-        private ActionEvent WaitEvent(CancellationToken token)
+        public void Execute()
         {
-            if (EventQueue.IsAddingCompleted) return _finalEvent;
-            var Event = EventQueue.Take(token);
-            return Event;
+            ExecuteAsync().RunSynchronously();
+        }
+
+        public async Task ExecuteAsync()
+        {
+            try
+            {
+                var requestItem = BuildRequest();
+                var responseItem = await _actionCotext.HttpService.ExecuteHttpRequestAsync(requestItem, Token, this);
+                NotifyActionEvent(new ActionEvent(ActionEventType.EvtOK, responseItem));
+                _finalEvent = new ActionEvent(ActionEventType.EvtOK, responseItem);
+            }
+            catch (OperationCanceledException)
+            {
+                NotifyActionEvent(new ActionEvent(ActionEventType.EvtCanceled, this));
+            }
+            catch (Exception ex)
+            {
+                OnHttpError(ex);
+            }
+            finally
+            {
+                _waitHandle.Set();
+            }
         }
 
         public IAction Begin()
         {
-            EventQueue = new BlockingCollection<ActionEvent>();
+            _waitHandle = new ManualResetEvent(false);
             _cts = new CancellationTokenSource();
+            _actionCotext.ActorDispatcher.PushActor(this);
             return this;
         }
 
@@ -72,41 +93,13 @@ namespace HttpActionTools.Action
 
         public ActionEvent WaitFinalEvent(CancellationToken token)
         {
-            // double-check
-            if (_isWaiting) throw new Exception("The action is already waiting...");
+            if (_isWaiting) throw new Exception("this action is still waiting...");
             lock (_syncObj)
             {
-                if (_isWaiting) throw new Exception("The action is already waiting...");
-                _isWaiting = true;
+                if (_isWaiting) throw new Exception("this action is still waiting...");
+                _waitHandle.WaitOne();
+                return _finalEvent;
             }
-            _cts = CancellationTokenSource.CreateLinkedTokenSource(_cts.Token, token);
-            // 保证以下代码是单线程执行
-            if (!EventQueue.IsAddingCompleted)
-            {
-                while (!_cts.Token.IsCancellationRequested)
-                {
-                    try
-                    {
-                        var Event = WaitEvent(token);
-                        if (IsFinalEvent(Event))
-                        {
-                            EventQueue.CompleteAdding();
-                            _finalEvent = Event;
-                        }
-                    }
-                    catch (OperationCanceledException)
-                    {
-                        _finalEvent = new ActionEvent(ActionEventType.EvtCanceled, this);
-                    }
-                    catch (Exception ex)
-                    {
-                        _finalEvent = new ActionEvent(ActionEventType.EvtError, ex);
-                    }
-                }
-                _finalEvent = new ActionEvent(ActionEventType.EvtCanceled, this);
-            }
-            _isWaiting = false;
-            return _finalEvent;
         }
 
         public Task<ActionEvent> WaitFinalEventAsync()
@@ -135,29 +128,31 @@ namespace HttpActionTools.Action
                     || type == ActionEventType.EvtOK;
         }
 
-        public void OnHttpHeader(HttpResponseItem responseItem)
+        public virtual void OnHttpHeader(HttpResponseItem responseItem)
         {
-            throw new NotImplementedException();
         }
 
-        public void OnHttpContent(HttpResponseItem responseItem)
+        public virtual void OnHttpContent(HttpResponseItem responseItem)
         {
-            throw new NotImplementedException();
         }
 
-        public void OnHttpRead(ProgressEventArgs args)
+        public virtual void OnHttpRead(ProgressEventArgs args)
         {
-            throw new NotImplementedException();
+            NotifyActionEvent(new ActionEvent(ActionEventType.EvtRead, args));
         }
 
-        public void OnHttpWrite(ProgressEventArgs args)
+        public virtual void OnHttpWrite(ProgressEventArgs args)
         {
-            throw new NotImplementedException();
+            NotifyActionEvent(new ActionEvent(ActionEventType.EvtWrite, args));
         }
 
-        public void OnHttpError(Exception ex)
+        public virtual void OnHttpError(Exception ex)
         {
-            throw new NotImplementedException();
+            if (++_retryTimes < MaxReTryTimes)
+            {
+                _actionCotext.ActorDispatcher.PushActor(this);
+            }
+            else NotifyActionEvent(new ActionEvent(ActionEventType.EvtError, ex));
         }
     }
 }

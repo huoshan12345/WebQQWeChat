@@ -1,4 +1,8 @@
-﻿using System.Text;
+﻿using System;
+using System.Net;
+using System.Text;
+using HttpActionTools.Core;
+using System.Linq;
 
 namespace HttpActionTools.Extensions
 {
@@ -32,13 +36,12 @@ namespace HttpActionTools.Extensions
         //}
 
 
-        public static string GetRequestHeader(this QQHttpRequest request, CookieContainer cc)
+        public static string GetRequestHeader(this HttpRequestItem request, CookieContainer cc)
         {
             var sb = new StringBuilder();
             sb.AppendLineIf($"{HttpConstants.Referrer}: {request.Referrer}", !request.Referrer.IsNullOrEmpty());
-            sb.AppendLineIf($"{HttpConstants.UserAgent}: {request.UserAgent}", !request.UserAgent.IsNullOrEmpty());
             sb.AppendLineIf($"{HttpConstants.ContentType}: {request.ContentType}", !request.ContentType.IsNullOrEmpty());
-            var cookies = cc.GetCookies(new Uri(request.Url)).OfType<Cookie>();
+            var cookies = cc.GetCookies(new Uri(request.GetUrl())).OfType<Cookie>();
             sb.AppendLine($"{HttpConstants.Cookie}: {string.Join("; ", cookies)}");
             return sb.ToString();
         }

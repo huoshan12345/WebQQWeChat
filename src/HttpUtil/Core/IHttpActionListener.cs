@@ -19,6 +19,8 @@ namespace HttpActionTools.Core
 
         void OnHttpError(Exception ex);
 
+
+
         //event EventHandler<Exception> OnHttpError;
 
         //event EventHandler<ProgressEventArgs> OnHttpRead;

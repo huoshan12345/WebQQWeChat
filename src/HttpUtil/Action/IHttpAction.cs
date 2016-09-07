@@ -14,6 +14,6 @@ namespace HttpActionTools.Action
 
         void NotifyActionEvent(ActionEvent actionEvent);
 
-        IHttpService HttpService { get; }
+
     }
 }
