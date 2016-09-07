@@ -91,17 +91,17 @@ namespace iQQ.Net.WebQQCore
 #endif
 
             // 测试每一种控制台颜色
-            //foreach (var @enum in EnumExtension.GetValues<ConsoleColor>())
-            //{
-            //    Console.ForegroundColor = @enum;
-            //    Console.WriteLine("Exception thrown: 'iQQ.Net.WebQQCore.Im.QQException' in WebQQCore.exe");
-            //}
+            foreach (var @enum in EnumExtension.GetValues<ConsoleColor>())
+            {
+               Console.ForegroundColor = @enum;
+               Console.WriteLine("test");
+            }
             //Console.ReadKey();
 
             // 获取二维码
             var qq = new WebQQClient("", "", Listener, new SimpleActorDispatcher(), new QQConsoleLogger());
             qq.LoginWithQRCode(); // 登录之后自动开始轮训
-            Console.ReadKey();
+            Console.Read();
         }
     }
 }
