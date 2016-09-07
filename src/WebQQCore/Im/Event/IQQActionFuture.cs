@@ -39,6 +39,8 @@ namespace iQQ.Net.WebQQCore.Im.Event
 
         Task<QQActionEvent> WhenFinalEvent(int millisecond);
 
+        Task<QQActionEvent> WhenFinalEvent(CancellationToken token);
+
         CancellationToken Token { get; }
     }
 }

@@ -12,12 +12,12 @@ namespace iQQ.Net.WebQQCore.Im.Module
     {
         public IQQActionFuture GetOnlineBuddy(QQActionListener listener)
         {
-            return PushHttpAction(new GetOnlineFriendAction(this.Context, listener));
+            return PushHttpAction(new GetOnlineFriendAction(Context, listener));
         }
 
         public IQQActionFuture GetRecentList(QQActionListener listener)
         {
-            return PushHttpAction(new GetRecentListAction(this.Context, listener));
+            return PushHttpAction(new GetRecentListAction(Context, listener));
         }
 
         public IQQActionFuture AddBuddy(QQActionListener listener, string account)

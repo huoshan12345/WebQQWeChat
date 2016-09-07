@@ -30,15 +30,8 @@ namespace iQQ.Net.BatchHangQQ
         private readonly HttpCilentHelper _httpCilent = new HttpCilentHelper();
         private QQNotifyListener _notifyListener;
         private readonly NotifyIcon _notifyIcon; // 创建NotifyIcon对象 
-        private volatile bool _isLogining;
         private CancellationTokenSource _cts;
         private readonly RichTextBoxLogger _logger;
-
-        public bool IsLogining
-        {
-            get { lock (_syncObj) { return _isLogining; } }
-            set { lock (_syncObj) { _isLogining = value; } }
-        }
 
         private async void GetIpInfo()
         {
@@ -67,29 +60,29 @@ namespace iQQ.Net.BatchHangQQ
 
         public FmQQList()
         {
-            this.SetStyle(ControlStyles.DoubleBuffer
+            SetStyle(ControlStyles.DoubleBuffer
                 | ControlStyles.UserPaint
                 | ControlStyles.AllPaintingInWmPaint,
                 true);
-            this.UpdateStyles();
+            UpdateStyles();
 
             InitializeComponent();
             chkUseRobot.Checked = false;
             _logger = new RichTextBoxLogger(tbMessage);
 
-            _notifyIcon = new NotifyIcon() { Text = this.Text, Visible = true, Icon = Icon };
+            _notifyIcon = new NotifyIcon() { Text = Text, Visible = true, Icon = Icon };
 
             _notifyIcon.DoubleClick += (sender, args) =>
             {
-                if (this.WindowState == FormWindowState.Minimized)
+                if (WindowState == FormWindowState.Minimized)
                 {
-                    this.Show();
-                    this.WindowState = FormWindowState.Normal;
+                    Show();
+                    WindowState = FormWindowState.Normal;
                     // this.ShowInTaskbar = true;
                 }
                 else
                 {
-                    this.WindowState = FormWindowState.Minimized;
+                    WindowState = FormWindowState.Minimized;
                 }
             };
             _notifyIcon.ContextMenu = new ContextMenu();
@@ -97,9 +90,9 @@ namespace iQQ.Net.BatchHangQQ
 
         private void fmQQList_SizeChanged(object sender, EventArgs e)
         {
-            if (this.WindowState == FormWindowState.Minimized)
+            if (WindowState == FormWindowState.Minimized)
             {
-                this.Hide();
+                Hide();
                 // this.ShowInTaskbar = false;
             }
         }
@@ -292,13 +285,12 @@ namespace iQQ.Net.BatchHangQQ
 
         private async void Login()
         {
-            IsLogining = true;
             _cts = new CancellationTokenSource();
             btnLogin.InvokeIfRequired(() => btnLogin.Text = "取消登录");
             while (!_cts.IsCancellationRequested)
             {
                 var client = new WebQQClient(notifyListener: _notifyListener, logger: new RichTextBoxLogger(tbMessage));
-                var result = await client.LoginWithQRCode().WhenFinalEvent().ConfigureAwait(false);
+                var result = await client.LoginWithQRCode().WhenFinalEvent(_cts.Token).ConfigureAwait(false);
                 if (result.Type == QQActionEventType.EvtOK)
                 {
                     var key = client.Account.QQ.ToString();
@@ -313,6 +305,7 @@ namespace iQQ.Net.BatchHangQQ
                     }
                 }
             }
+            _cts = null;
         }
 
         private void CancelLogin()
@@ -320,12 +313,11 @@ namespace iQQ.Net.BatchHangQQ
             _cts.Cancel();
             btnLogin.InvokeIfRequired(() => btnLogin.Text = "登录");
             pbQRCode.InvokeIfRequired(() => pbQRCode.Image = null);
-            IsLogining = false;
         }
 
         private void btnLogin_Click(object sender, EventArgs e)
         {
-            if (!IsLogining) Login();
+            if (_cts == null) Login();
             else CancelLogin();
         }
 
