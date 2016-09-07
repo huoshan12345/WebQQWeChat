@@ -101,14 +101,22 @@ namespace HttpActionTools.Core
         public virtual async Task<HttpResponseItem> ExecuteHttpRequestAsync(HttpRequestItem requestItem, CancellationToken token, IHttpActionListener actionListener = null)
         {
             var responseItem = new HttpResponseItem() { RequestItem = requestItem };
-            var httpRequest = GetHttpRequest(requestItem);
-            var response = await _httpClient.SendAsync(httpRequest, HttpCompletionOption.ResponseHeadersRead, token).ConfigureAwait(false);
-            response.EnsureSuccessStatusCode();
-            responseItem.StatusCode = response.StatusCode;
-            ReadHeader(response, responseItem);
-            actionListener?.OnHttpHeader(responseItem);
-            await ReadContentAsync(response, responseItem).ConfigureAwait(false);
-            actionListener?.OnHttpContent(responseItem);
+            try
+            {
+                var httpRequest = GetHttpRequest(requestItem);
+                var response = await _httpClient.SendAsync(httpRequest, HttpCompletionOption.ResponseHeadersRead, token).ConfigureAwait(false);
+                response.EnsureSuccessStatusCode();
+                responseItem.StatusCode = response.StatusCode;
+                ReadHeader(response, responseItem);
+                actionListener?.OnHttpHeader(responseItem);
+                await ReadContentAsync(response, responseItem).ConfigureAwait(false);
+                actionListener?.OnHttpContent(responseItem);
+            }
+            catch (Exception ex)
+            {
+                responseItem.Exception = ex;
+                actionListener?.OnHttpError(ex);
+            }
             return responseItem;
         }
 

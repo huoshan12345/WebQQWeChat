@@ -16,7 +16,7 @@ namespace HttpActionTools.Core
         public Dictionary<string, List<string>> Headers { set; get; } = new Dictionary<string, List<string>>(StringComparer.OrdinalIgnoreCase);
         public string Location => Headers.GetValueOrDefault(HttpConstants.Location).FirstOrDefault();
         public Exception Exception { set; get; }
-        public bool Success => Exception == null && StatusCode == HttpStatusCode.OK;
+        public bool Success => Exception == null;
         public HttpStatusCode StatusCode { set; get; }
     }
 }

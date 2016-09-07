@@ -32,6 +32,11 @@ namespace HttpActionTools.Action
 
         public void NotifyActionEvent(ActionEvent actionEvent)
         {
+            if (IsFinalEvent(actionEvent))
+            {
+                _finalEvent = actionEvent;
+                _waitHandle.Set();
+            }
             _listener?.Invoke(actionEvent);
         }
 
@@ -53,8 +58,14 @@ namespace HttpActionTools.Action
             {
                 var requestItem = BuildRequest();
                 var responseItem = await _actionCotext.HttpService.ExecuteHttpRequestAsync(requestItem, Token, this);
-                NotifyActionEvent(new ActionEvent(ActionEventType.EvtOK, responseItem));
-                _finalEvent = new ActionEvent(ActionEventType.EvtOK, responseItem);
+                if (responseItem.Success)
+                {
+                    NotifyActionEvent(new ActionEvent(ActionEventType.EvtOK, responseItem));
+                }
+            }
+            catch (TaskCanceledException)
+            {
+                NotifyActionEvent(new ActionEvent(ActionEventType.EvtCanceled, this));
             }
             catch (OperationCanceledException)
             {
@@ -63,10 +74,6 @@ namespace HttpActionTools.Action
             catch (Exception ex)
             {
                 OnHttpError(ex);
-            }
-            finally
-            {
-                _waitHandle.Set();
             }
         }
 
