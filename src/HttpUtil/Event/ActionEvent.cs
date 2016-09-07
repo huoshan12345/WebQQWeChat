@@ -14,10 +14,10 @@ namespace HttpActionTools.Event
         EvtOK,
         [Description("错误")]
         EvtError,
-        [Description("写入")]
-        EvtWrite,
-        [Description("读取")]
-        EvtRead,
+        //[Description("写入")]
+        //EvtWrite,
+        //[Description("读取")]
+        //EvtRead,
         [Description("取消")]
         EvtCanceled,
         [Description("重试")]

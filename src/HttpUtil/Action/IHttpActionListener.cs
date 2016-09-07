@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using HttpActionTools.Action;
+using HttpActionTools.Core;
 using HttpActionTools.Event;
 
-namespace HttpActionTools.Core
+namespace HttpActionTools.Action
 {
     public interface IHttpActionListener
     {

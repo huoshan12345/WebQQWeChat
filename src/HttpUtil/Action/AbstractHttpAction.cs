@@ -13,38 +13,38 @@ namespace HttpActionTools.Action
     public abstract class AbstractHttpAction : IHttpAction
     {
         private readonly ActionEventListener _listener;
-        private readonly IActionCotext _actionCotext;
-        private readonly object _syncObj = new object();
-        private bool _isWaiting;
-        private ActionEvent _finalEvent;
-        protected CancellationTokenSource _cts;
+        private readonly IHttpActionCotext _actionCotext;
+        private readonly IActionLink _actionLink;
         private int _retryTimes;
         protected virtual int MaxReTryTimes { get; set; } = 3;
-        protected ManualResetEvent _waitHandle;
 
-        protected AbstractHttpAction(IActionCotext actionCotext, ActionEventListener listener)
+        protected AbstractHttpAction(IActionLink actionLink, IHttpActionCotext actionCotext, ActionEventListener listener)
         {
+            _actionLink = actionLink;
             _actionCotext = actionCotext;
             _listener = listener;
+            OnActionEvent += listener;
         }
 
         public abstract HttpRequestItem BuildRequest();
 
         public void NotifyActionEvent(ActionEvent actionEvent)
         {
-            if (IsFinalEvent(actionEvent))
+            switch (actionEvent.Type)
             {
-                _finalEvent = actionEvent;
-                _waitHandle.Set();
+                case ActionEventType.EvtOK:
+                    break;
+                case ActionEventType.EvtError:
+                    break;
+                case ActionEventType.EvtCanceled:
+                _actionLink.Terminate(this, actionEvent);
+                    break;
+                case ActionEventType.EvtRetry:
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
-            _listener?.Invoke(actionEvent);
-        }
-
-        public void Cancel()
-        {
-            _cts.Cancel();
-            IsCanceled = true;
-            NotifyActionEvent(new ActionEvent(ActionEventType.EvtCanceled, this));
+            OnActionEvent?.Invoke(this, actionEvent);
         }
 
         public void Execute()
@@ -57,7 +57,7 @@ namespace HttpActionTools.Action
             try
             {
                 var requestItem = BuildRequest();
-                var responseItem = await _actionCotext.HttpService.ExecuteHttpRequestAsync(requestItem, Token, this);
+                var responseItem = await _actionCotext.HttpService.ExecuteHttpRequestAsync(requestItem, _actionLink.Token, this);
                 if (responseItem.Success)
                 {
                     NotifyActionEvent(new ActionEvent(ActionEventType.EvtOK, responseItem));
@@ -77,62 +77,9 @@ namespace HttpActionTools.Action
             }
         }
 
-        public IAction Begin()
+        public void Begin()
         {
-            _waitHandle = new ManualResetEvent(false);
-            _cts = new CancellationTokenSource();
             _actionCotext.ActorDispatcher.PushActor(this);
-            return this;
-        }
-
-        public bool IsCanceled { get; private set; }
-
-        public ActionEvent WaitFinalEvent()
-        {
-            return WaitFinalEvent(CancellationToken.None);
-        }
-
-        public ActionEvent WaitFinalEvent(int second)
-        {
-            var token = new CancellationTokenSource(second * 1000).Token;
-            return WaitFinalEvent(token);
-        }
-
-        public ActionEvent WaitFinalEvent(CancellationToken token)
-        {
-            if (_isWaiting) throw new Exception("this action is still waiting...");
-            lock (_syncObj)
-            {
-                if (_isWaiting) throw new Exception("this action is still waiting...");
-                _waitHandle.WaitOne();
-                return _finalEvent;
-            }
-        }
-
-        public Task<ActionEvent> WaitFinalEventAsync()
-        {
-            return Task.Run(() => WaitFinalEvent(), CancellationToken.None);
-        }
-
-        public Task<ActionEvent> WaitFinalEventAsync(int second)
-        {
-            var token = new CancellationTokenSource(second * 1000).Token;
-            return WaitFinalEventAsync(token);
-        }
-
-        public Task<ActionEvent> WaitFinalEventAsync(CancellationToken token)
-        {
-            return Task.Run(() => WaitFinalEvent(token), token);
-        }
-
-        public CancellationToken Token => _cts.Token;
-
-        protected virtual bool IsFinalEvent(ActionEvent Event)
-        {
-            var type = Event.Type;
-            return type == ActionEventType.EvtCanceled
-                    || type == ActionEventType.EvtError
-                    || type == ActionEventType.EvtOK;
         }
 
         public virtual void OnHttpHeader(HttpResponseItem responseItem)
@@ -157,9 +104,12 @@ namespace HttpActionTools.Action
         {
             if (++_retryTimes < MaxReTryTimes)
             {
+                NotifyActionEvent(new ActionEvent(ActionEventType.EvtRetry, ex));
                 _actionCotext.ActorDispatcher.PushActor(this);
             }
             else NotifyActionEvent(new ActionEvent(ActionEventType.EvtError, ex));
         }
+
+        public event ActionEventListener OnActionEvent;
     }
 }
