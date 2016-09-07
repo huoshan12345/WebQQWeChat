@@ -9,7 +9,7 @@ namespace iQQ.Net.WebQQCore.Im.Actor
     public interface IQQActorDispatcher : IQQLifeCycle
     {
         /// <summary>
-        /// 把一个Event放入线程安全的事件队列的末尾等待处理
+        /// 把一个Actor放入线程安全的事件队列的末尾等待处理
         /// </summary>
         /// <param name="actor"></param>
         void PushActor(IQQActor actor);
