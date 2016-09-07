@@ -112,7 +112,30 @@ namespace iQQ.Net.BatchHangQQ
 
         private void AfterInitialize()
         {
-            _notifyListener = async (client, notifyEvent) =>
+            _notifyListener = GetListener();
+
+            var rightButtonCms = new ContextMenuStrip();
+            var tsmiRemove = new ToolStripMenuItem() { Text = "移除" };
+            tsmiRemove.Click += (sender, e) =>
+            {
+                var tsmi = sender as ToolStripMenuItem;
+                var cms = tsmi?.Owner as ContextMenuStrip;
+                if (cms != null)
+                {
+                    var lv = cms.SourceControl as ListView;
+                    if (lv == lvQQList)
+                    {
+                        RemoveSelectedQQFromList();
+                    }
+                }
+            };
+            rightButtonCms.Items.Add(tsmiRemove);
+            lvQQList.ContextMenuStrip = rightButtonCms;
+        }
+
+        private QQNotifyListener GetListener()
+        {
+            return async (client, notifyEvent) =>
             {
                 try
                 {
@@ -214,25 +237,6 @@ namespace iQQ.Net.BatchHangQQ
                     client.Logger.LogError(ex.ToString());
                 }
             };
-
-            var rightButtonCms = new ContextMenuStrip();
-
-            var tsmiRemove = new ToolStripMenuItem() { Text = "移除" };
-            tsmiRemove.Click += (sender, e) =>
-            {
-                var tsmi = sender as ToolStripMenuItem;
-                var cms = tsmi?.Owner as ContextMenuStrip;
-                if (cms != null)
-                {
-                    var lv = cms.SourceControl as ListView;
-                    if (lv == lvQQList)
-                    {
-                        RemoveSelectedQQFromList();
-                    }
-                }
-            };
-            rightButtonCms.Items.Add(tsmiRemove);
-            lvQQList.ContextMenuStrip = rightButtonCms;
         }
 
         private void RemoveSelectedQQFromList()
@@ -244,9 +248,12 @@ namespace iQQ.Net.BatchHangQQ
                 var qqNum = lvQQList.Items[index].SubItems[1].Text;
                 try
                 {
-                    _qqClients[qqNum].Logout();
+                    _qqClients[qqNum].Destroy();
                 }
-                catch { }
+                catch
+                {
+                    _logger.LogError($"QQ[{qqNum}]关闭失败");
+                }
                 if (_qqClients.ContainsKey(qqNum)) _qqClients.Remove(qqNum);
                 lvQQList.Items.RemoveAt(index);
             }
@@ -305,7 +312,6 @@ namespace iQQ.Net.BatchHangQQ
                         });
                     }
                 }
-
             }
         }
 
