@@ -114,12 +114,12 @@ namespace iQQ.Net.WebQQCore.Im.Action
                 }
                 case QQActionEventType.EvtCanceled:
                 {
-                    Context.Logger.LogInformation($"[Action={GetType().Name}{GetType().Name}, Type={type}, Target={target}]");
+                    Context.Logger.LogInformation($"[Action={GetType().Name}, Type={type}, Target={target}]");
                     break;
                 }
                 default:
                 {
-                    Context.Logger.LogDebug($"[Action={GetType().Name}{GetType().Name}, Type={type}");
+                    Context.Logger.LogDebug($"[Action={GetType().Name}, Type={type}");
                     break;
                 }
             }

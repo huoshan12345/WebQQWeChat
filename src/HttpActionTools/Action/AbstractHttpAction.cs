@@ -12,38 +12,22 @@ namespace HttpActionTools.Action
 {
     public abstract class AbstractHttpAction : IHttpAction
     {
-        private readonly ActionEventListener _listener;
-        private readonly IHttpActionCotext _actionCotext;
-        private readonly IActionLink _actionLink;
-        private int _retryTimes;
+        // private readonly ActionEventListener _listener;
+        protected readonly IHttpActionLink _actionLink;
+        protected int _retryTimes;
         protected virtual int MaxReTryTimes { get; set; } = 3;
 
-        protected AbstractHttpAction(IActionLink actionLink, IHttpActionCotext actionCotext, ActionEventListener listener)
+        protected AbstractHttpAction(IHttpActionLink actionLink, ActionEventListener listener)
         {
             _actionLink = actionLink;
-            _actionCotext = actionCotext;
-            _listener = listener;
+            // _listener = listener;
             OnActionEvent += listener;
         }
 
         public abstract HttpRequestItem BuildRequest();
 
-        public void NotifyActionEvent(ActionEvent actionEvent)
+        public virtual void NotifyActionEvent(ActionEvent actionEvent)
         {
-            switch (actionEvent.Type)
-            {
-                case ActionEventType.EvtOK:
-                    break;
-                case ActionEventType.EvtError:
-                    break;
-                case ActionEventType.EvtCanceled:
-                _actionLink.Terminate(this, actionEvent);
-                    break;
-                case ActionEventType.EvtRetry:
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException();
-            }
             OnActionEvent?.Invoke(this, actionEvent);
         }
 
@@ -57,7 +41,7 @@ namespace HttpActionTools.Action
             try
             {
                 var requestItem = BuildRequest();
-                var responseItem = await _actionCotext.HttpService.ExecuteHttpRequestAsync(requestItem, _actionLink.Token, this);
+                var responseItem = await _actionLink.HttpService.ExecuteHttpRequestAsync(requestItem, _actionLink.Token, this);
                 if (responseItem.Success)
                 {
                     NotifyActionEvent(new ActionEvent(ActionEventType.EvtOK, responseItem));
@@ -75,11 +59,6 @@ namespace HttpActionTools.Action
             {
                 OnHttpError(ex);
             }
-        }
-
-        public void Begin()
-        {
-            _actionCotext.ActorDispatcher.PushActor(this);
         }
 
         public virtual void OnHttpHeader(HttpResponseItem responseItem)
@@ -105,7 +84,7 @@ namespace HttpActionTools.Action
             if (++_retryTimes < MaxReTryTimes)
             {
                 NotifyActionEvent(new ActionEvent(ActionEventType.EvtRetry, ex));
-                _actionCotext.ActorDispatcher.PushActor(this);
+                _actionLink.PushAction(this);
             }
             else NotifyActionEvent(new ActionEvent(ActionEventType.EvtError, ex));
         }

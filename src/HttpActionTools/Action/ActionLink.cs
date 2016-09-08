@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using HttpActionTools.Actor;
 using HttpActionTools.Event;
 
 namespace HttpActionTools.Action
@@ -13,13 +14,15 @@ namespace HttpActionTools.Action
         private readonly object _syncObj = new object();
         private bool _isWaiting;
         private ActionEvent _finalEvent;
-        private readonly ActionEventListener _listener;
+        // private readonly ActionEventListener _listener;
         private CancellationTokenSource _cts;
+        public IActorDispatcher ActorDispatcher { get; }
 
-        public ActionLink(ActionEventListener listener)
+        public ActionLink(IActorDispatcher actorDispatcher, ActionEventListener listener)
         {
             _cts = new CancellationTokenSource();
-            _listener = listener;
+            ActorDispatcher = actorDispatcher;
+            // _listener = listener;
             OnActionEvent += listener;
         }
 
@@ -30,11 +33,44 @@ namespace HttpActionTools.Action
 
         public CancellationToken Token => _cts.Token;
 
+        public void PushAction(IAction action)
+        {
+            ActorDispatcher.PushActor(action);
+            action.OnActionEvent += SendEventToLink;
+        }
+
         public void Terminate(IAction sender, ActionEvent actionEvent)
         {
             _finalEvent = actionEvent;
-            OnActionEvent?.Invoke(sender, actionEvent);
             _waitHandle.Set();
+        }
+
+        private void SendEventToLink(IAction sender, ActionEvent actionEvent)
+        {
+            switch (actionEvent.Type)
+            {
+                case ActionEventType.EvtOK:
+                    break;
+                case ActionEventType.EvtError:
+                {
+                    Terminate(sender, actionEvent);
+                    break;
+                }
+                case ActionEventType.EvtWrite:
+                    break;
+                case ActionEventType.EvtRead:
+                    break;
+                case ActionEventType.EvtCanceled:
+                {
+                    Terminate(sender, actionEvent);
+                    break;
+                }
+                case ActionEventType.EvtRetry:
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+            OnActionEvent?.Invoke(sender, actionEvent);
         }
 
         public ActionEvent WaitFinalEvent()

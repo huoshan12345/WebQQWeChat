@@ -1,5 +1,6 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
+using HttpActionTools.Actor;
 using HttpActionTools.Event;
 
 namespace HttpActionTools.Action
@@ -9,6 +10,8 @@ namespace HttpActionTools.Action
         void Cancel();
 
         CancellationToken Token { get; }
+
+        void PushAction(IAction action);
 
         void Terminate(IAction sender, ActionEvent actionEvent);
 

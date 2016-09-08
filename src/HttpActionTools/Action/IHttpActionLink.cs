@@ -6,7 +6,7 @@ using HttpActionTools.Core;
 
 namespace HttpActionTools.Action
 {
-    public interface IHttpActionCotext : IActionCotext
+    public interface IHttpActionLink: IActionLink
     {
         IHttpService HttpService { get; }
     }
