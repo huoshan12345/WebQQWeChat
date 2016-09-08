@@ -7921,8 +7921,8 @@
     },
     "HttpActionTools/1.0.0": {
       "type": "project",
-      "path": "d:\\Users\\user\\Documents\\projects\\iQQ.Net\\src\\HttpActionTools\\project.json",
-      "msbuildProject": "d:\\Users\\user\\Documents\\projects\\iQQ.Net\\src\\HttpActionTools\\HttpActionTools.xproj"
+      "path": "../HttpActionTools/project.json",
+      "msbuildProject": "../HttpActionTools/HttpActionTools.xproj"
     }
   },
   "projectFileDependencyGroups": {
