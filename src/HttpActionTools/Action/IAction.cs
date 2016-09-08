@@ -10,5 +10,8 @@ namespace HttpActionTools.Action
 {
     public interface IAction : IActor, IActionEventHandler
     {
+        void NotifyActionEvent(ActionEvent actionEvent);
+
+        IActionLink ActionLink { get; set; }
     }
 }

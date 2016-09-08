@@ -1,5 +1,7 @@
-﻿using iQQ.Net.WebQQCore.Im.Bean;
+﻿using HttpActionTools.Actor;
+using iQQ.Net.WebQQCore.Im.Bean;
 using iQQ.Net.WebQQCore.Im.Event;
+using iQQ.Net.WebQQCore.Im.Module;
 
 namespace iQQ.Net.WebQQCore.Im.Core
 {

@@ -13,13 +13,14 @@ namespace HttpActionTools.Action
     public abstract class AbstractHttpAction : IHttpAction
     {
         // private readonly ActionEventListener _listener;
-        protected readonly IHttpActionLink _actionLink;
         protected int _retryTimes;
         protected virtual int MaxReTryTimes { get; set; } = 3;
+        public IActionLink ActionLink { get; set; }
+        protected readonly IHttpService _httpService;
 
-        protected AbstractHttpAction(IHttpActionLink actionLink, ActionEventListener listener)
+        protected AbstractHttpAction(IHttpService httpService, ActionEventListener listener)
         {
-            _actionLink = actionLink;
+            _httpService = httpService;
             // _listener = listener;
             OnActionEvent += listener;
         }
@@ -33,7 +34,7 @@ namespace HttpActionTools.Action
 
         public void Execute()
         {
-            ExecuteAsync().RunSynchronously();
+            ExecuteAsync().Wait();
         }
 
         public async Task ExecuteAsync()
@@ -41,11 +42,7 @@ namespace HttpActionTools.Action
             try
             {
                 var requestItem = BuildRequest();
-                var responseItem = await _actionLink.HttpService.ExecuteHttpRequestAsync(requestItem, _actionLink.Token, this);
-                if (responseItem.Success)
-                {
-                    NotifyActionEvent(new ActionEvent(ActionEventType.EvtOK, responseItem));
-                }
+                await _httpService.ExecuteHttpRequestAsync(requestItem, ActionLink?.Token ?? CancellationToken.None, this);
             }
             catch (TaskCanceledException)
             {
@@ -84,7 +81,8 @@ namespace HttpActionTools.Action
             if (++_retryTimes < MaxReTryTimes)
             {
                 NotifyActionEvent(new ActionEvent(ActionEventType.EvtRetry, ex));
-                _actionLink.PushAction(this);
+                if (ActionLink != null) ActionLink.PushAction(this);
+                else Execute();
             }
             else NotifyActionEvent(new ActionEvent(ActionEventType.EvtError, ex));
         }

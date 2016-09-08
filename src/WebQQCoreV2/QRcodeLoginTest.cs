@@ -1,14 +1,15 @@
 ﻿using System;
 using System.Drawing;
-using HttpActionTools.Actor;
 using HttpActionTools.Extensions;
 using iQQ.Net.WebQQCore.Im.Bean;
 using iQQ.Net.WebQQCore.Im.Bean.Content;
 using iQQ.Net.WebQQCore.Im.Core;
 using iQQ.Net.WebQQCore.Im.Event;
-using iQQ.Net.WebQQCore.Im.Log;
 using Microsoft.Extensions.Logging;
+using iQQ.Net.WebQQCore.Im.Service.Log;
 using System.Text;
+using HttpActionTools.Event;
+using iQQ.Net.WebQQCore.Im;
 
 namespace iQQ.Net.WebQQCore
 {
@@ -51,7 +52,7 @@ namespace iQQ.Net.WebQQCore
                     msgReply.AddContentItem(new FaceItem(0));            // QQ id为0的表情
                     msgReply.AddContentItem(new FontItem());             // 使用默认字体
 
-                    client.SendMsg(msgReply);
+                    // client.SendMsg(msgReply);
                     break;
                 }
 
@@ -93,13 +94,21 @@ namespace iQQ.Net.WebQQCore
             foreach (var @enum in EnumExtension.GetValues<ConsoleColor>())
             {
                 Console.ForegroundColor = @enum;
-                Console.WriteLine("test");
+                Console.WriteLine("颜色和编码测试");
             }
             //Console.ReadKey();
 
             // 获取二维码
-            //var qq = new WebQQClient("", "", Listener, new SimpleActorDispatcher(), new QQConsoleLogger());
-            //qq.LoginWithQRCode(); // 登录之后自动开始轮训
+            var qq = new WebQQClient("", "", Listener, null, new QQConsoleLogger());
+            var @event = qq.LoginWithQRCode().WaitFinalEvent(); // 登录之后自动开始轮训
+            if (@event.Type == ActionEventType.EvtOK)
+            {
+                Console.WriteLine("Wait成功");
+            }
+            else
+            {
+                Console.WriteLine("Wait失败");
+            }
             Console.Read();
         }
     }

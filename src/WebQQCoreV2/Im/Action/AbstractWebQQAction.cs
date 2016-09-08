@@ -3,18 +3,19 @@ using HttpActionTools.Action;
 using HttpActionTools.Event;
 using iQQ.Net.WebQQCore.Im.Core;
 using iQQ.Net.WebQQCore.Im.Event;
-using iQQ.Net.WebQQCore.Im.Log;
+using iQQ.Net.WebQQCore.Im.Service.Http;
+using iQQ.Net.WebQQCore.Im.Service.Log;
 using Microsoft.Extensions.Logging;
 
 namespace iQQ.Net.WebQQCore.Im.Action
 {
-    public abstract class AbstractWebQQAction: AbstractHttpAction
+    public abstract class AbstractWebQQAction : AbstractHttpAction
     {
         protected readonly IQQContext _context;
         protected readonly IQQLogger _logger;
 
-        protected AbstractWebQQAction(IQQContext context, IHttpActionLink actionLink, ActionEventListener listener)
-            : base(actionLink, listener)
+        protected AbstractWebQQAction(IQQContext context, ActionEventListener listener)
+            : base(context.GetSerivce<IQQHttpService>(QQServiceType.Http), listener)
         {
             _context = context;
             _logger = context.GetSerivce<IQQLogger>(QQServiceType.Log);
@@ -52,6 +53,11 @@ namespace iQQ.Net.WebQQCore.Im.Action
                 }
             }
             base.NotifyActionEvent(actionEvent);
+        }
+
+        protected void NotifyActionEvent(ActionEventType type, object target)
+        {
+            NotifyActionEvent(new ActionEvent(type, target));
         }
 
         public override void OnHttpError(Exception ex)

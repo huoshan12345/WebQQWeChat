@@ -11,9 +11,5 @@ namespace HttpActionTools.Action
     public interface IHttpAction : IAction, IHttpActionListener
     {
         HttpRequestItem BuildRequest();
-
-        void NotifyActionEvent(ActionEvent actionEvent);
-
-
     }
 }

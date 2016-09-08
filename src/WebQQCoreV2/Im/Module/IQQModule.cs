@@ -1,4 +1,6 @@
-﻿namespace iQQ.Net.WebQQCore.Im.Core
+﻿using iQQ.Net.WebQQCore.Im.Core;
+
+namespace iQQ.Net.WebQQCore.Im.Module
 {
     public enum QQModuleType
     {

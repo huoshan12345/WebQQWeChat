@@ -18,8 +18,7 @@ namespace HttpActionTools.Core
         /// <param name="proxyPort">代理端口</param>
         /// <param name="proxyAuthUser">认证用户名， 如果不需要认证，设置为null</param>
         /// <param name="proxyAuthPassword">认证密码，如果不需要认证，设置为null</param>
-        void SetHttpProxy(ProxyType proxyType, string proxyHost,
-                int proxyPort, string proxyAuthUser, string proxyAuthPassword);
+        void SetHttpProxy(ProxyType proxyType, string proxyHost, int proxyPort, string proxyAuthUser, string proxyAuthPassword);
 
         /// <summary>
         /// 执行一个HTTP请求

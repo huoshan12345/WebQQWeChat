@@ -38,14 +38,13 @@ namespace HttpActionTools.Actor
             return !(actor is ExitActor);
         }
 
-        public void Run()
+        public virtual void BeginExcute()
         {
-            while (DispatchAction(_actorQueue.Take())) { };
-        }
-
-        public void BeginExcute()
-        {
-            Task.Run(() => Run());
+            Task.Run(() =>
+            {
+                while (DispatchAction(_actorQueue.Take())) { }
+                _actorQueue.Dispose();
+            });
         }
 
         public void Dispose()

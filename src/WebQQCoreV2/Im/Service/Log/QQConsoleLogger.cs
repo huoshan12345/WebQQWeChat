@@ -1,9 +1,9 @@
 ﻿using System;
+using HttpActionTools.Extensions;
 using iQQ.Net.WebQQCore.Im.Core;
 using iQQ.Net.WebQQCore.Util;
-using HttpActionTools.Extensions;
 
-namespace iQQ.Net.WebQQCore.Im.Log
+namespace iQQ.Net.WebQQCore.Im.Service.Log
 {
     public class QQConsoleLogger : SimpleConsoleLogger, IQQLogger
     {

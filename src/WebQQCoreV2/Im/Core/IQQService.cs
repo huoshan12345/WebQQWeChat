@@ -16,6 +16,7 @@
         Task, //异步任务，可以执行比较耗时的操作
         Udp,
         Log,
+        Actor
     };
 
     public interface IQQService : IQQLifeCycle

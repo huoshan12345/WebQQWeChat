@@ -3,7 +3,7 @@ using iQQ.Net.WebQQCore.Im.Core;
 using iQQ.Net.WebQQCore.Util;
 using Microsoft.Extensions.Logging;
 
-namespace iQQ.Net.WebQQCore.Im.Log
+namespace iQQ.Net.WebQQCore.Im.Service.Log
 {
     public class EmptyQQLogger : IQQLogger
     {

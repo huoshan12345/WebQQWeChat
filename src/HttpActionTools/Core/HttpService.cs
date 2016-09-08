@@ -11,10 +11,11 @@ using HttpActionTools.Action;
 
 namespace HttpActionTools.Core
 {
-    public class HttpService : IHttpService
+    public class HttpService : IHttpService, IDisposable
     {
         protected readonly CookieContainer _cc;
         protected readonly HttpClient _httpClient;
+        private static readonly string[] NotAddHeaderNames = { HttpConstants.ContentType };
 
         public HttpService()
         {
@@ -45,7 +46,7 @@ namespace HttpActionTools.Core
                 default:
                 break;
             }
-            foreach (var header in item.HeaderMap)
+            foreach (var header in item._headerMap.Where(h => !NotAddHeaderNames.Contains(h.Key)))
             {
                 request.Headers.Add(header.Key, header.Value);
             }
@@ -124,6 +125,11 @@ namespace HttpActionTools.Core
         public virtual Cookie GetCookie(string name, string url)
         {
             return _cc.GetCookies(new Uri(url))[name];
+        }
+
+        public void Dispose()
+        {
+            _httpClient.Dispose();
         }
     }
 }
