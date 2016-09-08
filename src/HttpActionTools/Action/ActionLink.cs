@@ -52,7 +52,6 @@ namespace HttpActionTools.Action
             switch (actionEvent.Type)
             {
                 case ActionEventType.EvtOK: break; // 不转发给_outerListener
-
                 case ActionEventType.EvtCanceled:
                 case ActionEventType.EvtError:
                 {

@@ -14,7 +14,13 @@ namespace iQQ.Net.WebQQCore.Im.Module
     /// </summary>
     public class LoginModule : AbstractModule
     {
-        public IActionLink GetQRCode(ActionEventListener listener)
+        public IActionLink LoginWithQRCode(ActionEventListener listener)
+        {
+            return GetQRCode(listener);
+        }
+
+        // 1.获取二维码
+        private IActionLink GetQRCode(ActionEventListener listener)
         {
             var actionLink = new ActionLink(ActorDispatcher, listener);
             actionLink.PushAction(new GetQRCodeAction(Context, (sender, @event) =>
@@ -24,13 +30,11 @@ namespace iQQ.Net.WebQQCore.Im.Module
                     var verify = (Image)@event.Target;
                     Context.FireNotify(new QQNotifyEvent(QQNotifyEventType.QrcodeReady, verify));
                 }
-                else if (@event.Type == ActionEventType.EvtError)
-                {
-                    actionLink.Terminate(sender, @event);
-                }
             }));
             return actionLink;
         }
+
+
     }
 
 }
