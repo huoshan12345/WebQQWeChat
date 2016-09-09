@@ -26,10 +26,11 @@ namespace iQQ.Net.WebQQCore.Im.Module
             {
                 if (@event.Type == ActionEventType.EvtOK)
                 {
-                    var verify = (Image)@event.Target;
+                    var verify = (Image) @event.Target;
                     Context.FireNotify(new QQNotifyEvent(QQNotifyEventType.QrcodeReady, verify));
+                    actionLink.Terminate(sender, @event);
                 }
-            })).ExcuteAsync();
+            }));// .ExcuteAsync();
             return actionLink;
         }
 

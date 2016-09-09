@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Drawing;
 using HttpActionTools.Extensions;
 using iQQ.Net.WebQQCore.Im.Bean;
@@ -84,6 +85,18 @@ namespace iQQ.Net.WebQQCore
             }
         };
 
+        private static TimeSpan TestAction(Action action, int times)
+        {
+            var watch = new Stopwatch();
+            watch.Start();
+            for (var i = 0; i < times; i++)
+            {
+                action();
+            }
+            watch.Stop();
+            return watch.Elapsed;
+        }
+
         public static void Main(string[] args)
         {
 #if NETCORE
@@ -91,16 +104,27 @@ namespace iQQ.Net.WebQQCore
 #endif
 
             // 测试每一种控制台颜色
-            foreach (var @enum in EnumExtension.GetValues<ConsoleColor>())
-            {
-                Console.ForegroundColor = @enum;
-                Console.WriteLine("颜色和编码测试");
-            }
-            //Console.ReadKey();
+            //foreach (var @enum in EnumExtension.GetValues<ConsoleColor>())
+            //{
+            //    Console.ForegroundColor = @enum;
+            //    Console.WriteLine("颜色和编码测试");
+            //}
 
             // 获取二维码
-            var qq = new WebQQClient("", "", Listener, null, new QQConsoleLogger());
-            qq.LoginWithQRCode(); // 登录之后自动开始轮训
+            // var qq = new WebQQClient("", "", Listener, null, new QQConsoleLogger());
+            var qq = new WebQQClient();
+
+            var timeSpan = TestAction(() =>
+            {
+                var @event = qq.LoginWithQRCode().WaitFinalEvent();
+                if (@event.Type != ActionEventType.EvtOK)
+                {
+                    Console.WriteLine("xxxxxxxxxxxxxx");
+                }
+            }, 1000);
+
+            Console.WriteLine(timeSpan.TotalMilliseconds);
+            
             Console.Read();
         }
     }

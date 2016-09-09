@@ -8,7 +8,7 @@ namespace HttpActionTools.Action
 {
     public interface IActionLink: IActionResult
     {
-        void ExcuteAsync();
+        // void ExcuteAsync();
 
         CancellationToken Token { get; }
 
