@@ -11,12 +11,10 @@ namespace HttpActionTools.Actor
     /// </summary>
     public class SimpleActorDispatcher : IActorDispatcher, IDisposable
     {
-        private readonly bool _asyncExcute;
         private readonly BlockingCollection<IActor> _actorQueue;
 
-        public SimpleActorDispatcher(bool asyncExcute = false)
+        public SimpleActorDispatcher()
         {
-            _asyncExcute = asyncExcute;
             _actorQueue = new BlockingCollection<IActor>();
         }
 
@@ -33,8 +31,7 @@ namespace HttpActionTools.Actor
         private bool DispatchAction(IActor actor)
         {
             if (actor == null) return true;
-            if (_asyncExcute) actor.ExecuteAsync();
-            else actor.Execute();
+            actor.ExecuteAsync();
             return !(actor is ExitActor);
         }
 

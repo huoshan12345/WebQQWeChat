@@ -237,10 +237,7 @@ namespace iQQ.Net.WebQQCore.Im
         //    loginModule.GetCaptcha(Account.Uin, listener);
         //}
 
-        /// <summary>
-        /// 通知事件
-        /// </summary>
-        /// <param name="qqNotifyEvent"></param>
+        /// <inheritdoc />
         public void FireNotify(QQNotifyEvent qqNotifyEvent)
         {
             try
@@ -733,10 +730,10 @@ namespace iQQ.Net.WebQQCore.Im
         //}
 
         /// <inheritdoc />
-        public IActionLink LoginWithQRCode(ActionEventListener listener = null)
+        public IActionResult LoginWithQRCode(ActionEventListener listener = null)
         {
             var login = GetModule<LoginModule>(QQModuleType.Login);
-            return login.GetQRCode(listener);
+            return login.LoginWithQRCode(listener);
         }
     }
 }

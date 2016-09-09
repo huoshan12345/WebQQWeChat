@@ -10,22 +10,22 @@ namespace iQQ.Net.WebQQCore.Im.Event
         /// <summary>
         /// 扫码成功
         /// </summary>
-        QRCodeOK,
+        OK,
 
         /// <summary>
         /// 二维码未失效
         /// </summary>
-        QRCodeValid,
+        Valid,
 
         /// <summary>
         /// 二维码失效
         /// </summary>
-        QRCodeInvalid,
+        Invalid,
 
         /// <summary>
         /// 二维码认证中
         /// </summary>
-        QRCodeAuth,
+        Auth,
     }
 
     public class CheckQRCodeArgs : EventArgs

@@ -100,15 +100,7 @@ namespace iQQ.Net.WebQQCore
 
             // 获取二维码
             var qq = new WebQQClient("", "", Listener, null, new QQConsoleLogger());
-            var @event = qq.LoginWithQRCode().WaitFinalEvent(); // 登录之后自动开始轮训
-            if (@event.Type == ActionEventType.EvtOK)
-            {
-                Console.WriteLine("Wait成功");
-            }
-            else
-            {
-                Console.WriteLine("Wait失败");
-            }
+            qq.LoginWithQRCode(); // 登录之后自动开始轮训
             Console.Read();
         }
     }

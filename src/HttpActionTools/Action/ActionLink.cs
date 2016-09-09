@@ -11,16 +11,20 @@ namespace HttpActionTools.Action
     public class ActionLink : IActionLink, IActionEventHandler
     {
         private readonly ManualResetEvent _waitHandle = new ManualResetEvent(false);
+        private readonly ManualResetEvent _excuteHandle = new ManualResetEvent(false);
         private readonly object _syncObj = new object();
         private bool _isWaiting;
         private ActionEvent _finalEvent;
         private readonly ActionEventListener _outerListener;
         private CancellationTokenSource _cts;
         public IActorDispatcher ActorDispatcher { get; }
+        private readonly Queue<IAction> _actions;
+
 
         public ActionLink(IActorDispatcher actorDispatcher, ActionEventListener listener = null)
         {
             _cts = new CancellationTokenSource();
+            _actions = new Queue<IAction>();
             ActorDispatcher = actorDispatcher;
             _outerListener = listener;
             OnActionEvent += listener;
@@ -31,42 +35,75 @@ namespace HttpActionTools.Action
             _cts.Cancel();
         }
 
+        private void Excute()
+        {
+            while (_actions.Count != 0)
+            {
+                var action = _actions.Dequeue();
+                ActorDispatcher.PushActor(action);
+                action.OnActionEvent += SendEventToLink;
+                _excuteHandle.WaitOne();
+                action.OnActionEvent -= SendEventToLink;
+            }
+            _waitHandle.Set();
+        }
+
+        public void ExcuteAsync()
+        {
+            /*
+             * Passing this token into the Task constructor associates it with this task.
+                1. If the token has cancellation requested prior to the Task starting to execute, the Task won't execute. 
+                    Rather than transitioning to Running, it'll immediately transition to Canceled. 
+                    This avoids the costs of running the task if it would just be canceled while running anyway.
+                2. If the body of the task is also monitoring the cancellation token and throws an OperationCanceledException containing that token 
+                    (which is what ThrowIfCancellationRequested does), then when the task sees that OCE, it checks whether the OCE's token matches the Task's token. 
+                    If it does, that exception is viewed as an acknowledgement of cooperative cancellation and the Task transitions to the Canceled state 
+                    (rather than the Faulted state).             
+             */
+            Task.Run(() => Excute(), Token);
+        }
+
         public CancellationToken Token => _cts.Token;
 
-        public void PushAction(IAction action)
+        public IActionLink PushAction(IAction action)
         {
             action.ActionLink = this;
-            ActorDispatcher.PushActor(action);
-            action.OnActionEvent += SendEventToLink;
+            _actions.Enqueue(action);
+            return this;
         }
 
         public void Terminate(IAction sender, ActionEvent actionEvent)
         {
+            _actions.Clear();
             _finalEvent = actionEvent;
             _waitHandle.Set();
-            OnActionEvent?.Invoke(sender, actionEvent); // 转发最终事件
+            _excuteHandle.Set();
         }
 
         private void SendEventToLink(IAction sender, ActionEvent actionEvent)
         {
             switch (actionEvent.Type)
             {
-                case ActionEventType.EvtOK: break; // 不转发给_outerListener
+                case ActionEventType.EvtOK:
+                {
+                    _excuteHandle.Set();
+                    break;
+                }
                 case ActionEventType.EvtCanceled:
                 case ActionEventType.EvtError:
                 {
                     Terminate(sender, actionEvent);
-                    break;                         // 不转发给_outerListener
+                    break;
                 }
                 case ActionEventType.EvtWrite:
                 case ActionEventType.EvtRead:
                 case ActionEventType.EvtRetry:
                 default:
                 {
-                    OnActionEvent?.Invoke(sender, actionEvent);
                     break;
                 }
             }
+            OnActionEvent?.Invoke(sender, actionEvent);
         }
 
         public ActionEvent WaitFinalEvent()

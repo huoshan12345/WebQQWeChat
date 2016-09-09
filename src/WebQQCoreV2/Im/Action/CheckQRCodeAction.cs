@@ -2,6 +2,7 @@
 using HttpActionTools.Core;
 using HttpActionTools.Event;
 using iQQ.Net.WebQQCore.Im.Core;
+using iQQ.Net.WebQQCore.Im.Event;
 
 namespace iQQ.Net.WebQQCore.Im.Action
 {
@@ -48,10 +49,10 @@ namespace iQQ.Net.WebQQCore.Im.Action
                     //case "0": NotifyActionEvent(QQActionEventType.EVT_OK, m.Groups[3].Value); break;
                     //case "66": throw new QQException(QQErrorCode.QRCODE_OK, m.Groups[5].Value);
                     //case "67": throw new QQException(QQErrorCode.QRCODE_AUTH, m.Groups[5].Value);
-                    case "0": NotifyActionEvent(ActionEventType.EvtOK, new CheckQRCodeArgs(QRCodeStatus.QRCODE_OK, m.Groups[3].Value)); break;
-                    case "66": NotifyActionEvent(ActionEventType.EvtOK, new CheckQRCodeArgs(QRCodeStatus.QRCODE_VALID, m.Groups[5].Value)); break;
-                    case "67": NotifyActionEvent(ActionEventType.EvtOK, new CheckQRCodeArgs(QRCodeStatus.QRCODE_AUTH, m.Groups[5].Value)); break;
-                    case "65":NotifyActionEvent(ActionEventType.EvtOK, new CheckQRCodeArgs(QRCodeStatus.QRCODE_INVALID, m.Groups[5].Value)); break;
+                    case "0": NotifyActionEvent(ActionEventType.EvtOK, new CheckQRCodeArgs(QRCodeStatus.OK, m.Groups[3].Value)); break;
+                    case "66": NotifyActionEvent(ActionEventType.EvtOK, new CheckQRCodeArgs(QRCodeStatus.Valid, m.Groups[5].Value)); break;
+                    case "67": NotifyActionEvent(ActionEventType.EvtOK, new CheckQRCodeArgs(QRCodeStatus.Auth, m.Groups[5].Value)); break;
+                    case "65":NotifyActionEvent(ActionEventType.EvtOK, new CheckQRCodeArgs(QRCodeStatus.Invalid, m.Groups[5].Value)); break;
 
                     default: throw new QQException(QQErrorCode.InvalidUser, m.Groups[5].Value);
                 }

@@ -15,10 +15,6 @@ namespace iQQ.Net.WebQQCore.Im.Actor
     /// </summary>
     public class QQActorDispatcher : SimpleActorDispatcher, IQQActorDispatcher
     {
-        public QQActorDispatcher(bool asyncExcute = false) : base(asyncExcute)
-        {
-        }
-
         public void Init(IQQContext context)
         {
             BeginExcute();

@@ -26,7 +26,7 @@ namespace iQQ.Net.WebQQCore.Im
 
         void InitExtendQQModel(IQQModule qqModule);
 
-        IActionLink LoginWithQRCode(ActionEventListener listener = null);
+        IActionResult LoginWithQRCode(ActionEventListener listener = null);
 
         ///// <summary>
         ///// 获取个人信息
