@@ -8,25 +8,20 @@ using HttpActionTools.Event;
 
 namespace HttpActionTools.Action
 {
-    public class ActionLink : IActionLink, IActionEventHandler
+    public class ActionLink : IActionLink
     {
         private readonly ManualResetEvent _waitHandle = new ManualResetEvent(false);
-        // private readonly ManualResetEvent _excuteHandle = new ManualResetEvent(false);
-        private readonly object _syncObj = new object();
-        // private bool _isWaiting;
         private ActionEvent _finalEvent;
         private readonly ActionEventListener _outerListener;
-        private CancellationTokenSource _cts;
+        private readonly CancellationTokenSource _cts;
         public IActorDispatcher ActorDispatcher { get; }
-        // private readonly Queue<IAction> _actions;
+
 
         public ActionLink(IActorDispatcher actorDispatcher, ActionEventListener listener = null)
         {
-            _cts = new CancellationTokenSource();
-            // _actions = new Queue<IAction>();
-            ActorDispatcher = actorDispatcher;
             _outerListener = listener;
-            OnActionEvent += listener;
+            _cts = new CancellationTokenSource();
+            ActorDispatcher = actorDispatcher;
         }
 
         public void Cancel()
@@ -39,8 +34,23 @@ namespace HttpActionTools.Action
         public IActionLink PushAction(IAction action)
         {
             action.ActionLink = this;
+            action.OnActionEvent += _outerListener;
+            action.OnActionEvent += SendEventToLink;
             ActorDispatcher.PushActor(action);
             return this;
+        }
+
+        private void SendEventToLink(IAction sender, ActionEvent actionEvent)
+        {
+            switch (actionEvent.Type)
+            {
+                case ActionEventType.EvtCanceled:
+                case ActionEventType.EvtError:
+                {
+                    Terminate(sender, actionEvent);
+                    break;
+                }
+            }
         }
 
         public void Terminate(IAction sender, ActionEvent actionEvent)
@@ -68,7 +78,7 @@ namespace HttpActionTools.Action
 
         public Task<ActionEvent> WaitFinalEventAsync()
         {
-            return Task.Run(() => WaitFinalEvent(), CancellationToken.None);
+            return WaitFinalEventAsync(CancellationToken.None);
         }
 
         public Task<ActionEvent> WaitFinalEventAsync(int second)
@@ -89,7 +99,5 @@ namespace HttpActionTools.Action
                     || type == ActionEventType.EvtError
                     || type == ActionEventType.EvtOK;
         }
-
-        public event ActionEventListener OnActionEvent;
     }
 }
