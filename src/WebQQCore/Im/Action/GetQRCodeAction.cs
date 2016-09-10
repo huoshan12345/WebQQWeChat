@@ -9,13 +9,6 @@ namespace iQQ.Net.WebQQCore.Im.Action
 {
     public class GetQRCodeAction : AbstractHttpAction
     {
-
-        /**
-         * <p>Constructor for AbstractHttpAction.</p>
-         *
-         * @param context  a {@link IQQContext} object.
-         * @param listener a {@link QQActionListener} object.
-         */
         public GetQRCodeAction(IQQContext context, QQActionListener listener) : base(context, listener) { }
 
 

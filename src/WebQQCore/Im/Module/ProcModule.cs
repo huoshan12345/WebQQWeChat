@@ -32,6 +32,7 @@ namespace iQQ.Net.WebQQCore.Im.Module
                     var verify = (Image)@event.Target;
                     Context.FireNotify(new QQNotifyEvent(QQNotifyEventType.QrcodeReady, verify));
                     DoCheckQRCode(future);
+                    // future.NotifyActionEvent(QQActionEventType.EvtOK, @event.Target);
                 }
                 else if (@event.Type == QQActionEventType.EvtError)
                 {
