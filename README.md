@@ -21,7 +21,7 @@ Useage
 * mac平台（[基于.Net Core on Mac](https://www.microsoft.com/net/core#macos)）  
 ![webqqcore-mac](https://raw.githubusercontent.com/huoshan12345/iQQ.Net/master/pic/webqqcore-mac.png)
 
-#### BatchHangQQ（还未切换到二维码登录）
+#### BatchHangQQ（已切换到二维码登录）
 一个基于winform的简单批量挂qq程序
 * win平台（基于.net framework 4.5.1）  
 （由于目前还不能直接引用.net core的程序集，所以此处引用的是dll）
