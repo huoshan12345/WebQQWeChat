@@ -1,6 +1,6 @@
 ﻿using System;
-using HttpActionTools.Action;
-using HttpActionTools.Event;
+using HttpActionFrame.Action;
+using HttpActionFrame.Event;
 using iQQ.Net.WebQQCore.Im.Core;
 using iQQ.Net.WebQQCore.Im.Event;
 using iQQ.Net.WebQQCore.Im.Service.Http;

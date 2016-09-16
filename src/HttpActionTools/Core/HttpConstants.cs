@@ -1,4 +1,4 @@
-﻿namespace HttpActionTools.Core
+﻿namespace HttpActionFrame.Core
 {
     public abstract class HttpConstants
     {

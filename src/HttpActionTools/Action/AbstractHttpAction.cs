@@ -1,21 +1,17 @@
 ﻿using System;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using HttpActionTools.Actor;
-using HttpActionTools.Core;
-using HttpActionTools.Event;
+using HttpActionFrame.Core;
+using HttpActionFrame.Event;
 
-namespace HttpActionTools.Action
+namespace HttpActionFrame.Action
 {
     public abstract class AbstractHttpAction : IHttpAction
     {
         // private readonly ActionEventListener _listener;
         protected int _retryTimes;
         protected virtual int MaxReTryTimes { get; set; } = 3;
-        public IActionLink ActionLink { get; set; }
+        public IActionFuture ActionFuture { get; set; }
         protected readonly IHttpService _httpService;
 
         protected AbstractHttpAction(IHttpService httpService, ActionEventListener listener)
@@ -42,7 +38,7 @@ namespace HttpActionTools.Action
             try
             {
                 var requestItem = BuildRequest();
-                await _httpService.ExecuteHttpRequestAsync(requestItem, ActionLink?.Token ?? CancellationToken.None, this);
+                await _httpService.ExecuteHttpRequestAsync(requestItem, ActionFuture?.Token ?? CancellationToken.None, this);
             }
             catch (TaskCanceledException)
             {
@@ -81,7 +77,7 @@ namespace HttpActionTools.Action
             if (++_retryTimes < MaxReTryTimes)
             {
                 NotifyActionEvent(new ActionEvent(ActionEventType.EvtRetry, ex));
-                if (ActionLink != null) ActionLink.PushAction(this);
+                if (ActionFuture != null) ActionFuture.PushAction(this);
                 else Execute();
             }
             else NotifyActionEvent(new ActionEvent(ActionEventType.EvtError, ex));

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Text;
 
-namespace HttpActionTools.Extensions
+namespace HttpActionFrame.Extensions
 {
     public static class ByteExtensions
     {

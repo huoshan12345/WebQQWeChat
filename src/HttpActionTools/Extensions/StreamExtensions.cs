@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using System.Text;
 
-namespace HttpActionTools.Extensions
+namespace HttpActionFrame.Extensions
 {
     public static class StreamExtensions
     {

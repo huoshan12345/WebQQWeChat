@@ -1,4 +1,4 @@
-﻿using HttpActionTools.Actor;
+﻿using HttpActionFrame.Actor;
 using iQQ.Net.WebQQCore.Im.Core;
 
 namespace iQQ.Net.WebQQCore.Im.Actor

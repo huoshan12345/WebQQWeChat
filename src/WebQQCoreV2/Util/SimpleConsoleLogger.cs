@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Concurrent;
+using HttpActionFrame.Extensions;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Console;
-using HttpActionTools.Extensions;
 
 namespace iQQ.Net.WebQQCore.Util
 {

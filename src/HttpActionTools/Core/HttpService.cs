@@ -1,15 +1,13 @@
-﻿using HttpActionTools.Extensions;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.IO;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
-using HttpActionTools.Action;
+using HttpActionFrame.Action;
+using System.Net;
+using System.Net.Http;
+using System.Linq;
 
-namespace HttpActionTools.Core
+namespace HttpActionFrame.Core
 {
     public class HttpService : IHttpService, IDisposable
     {
@@ -107,11 +105,14 @@ namespace HttpActionTools.Core
             {
                 var httpRequest = GetHttpRequest(requestItem);
                 var response = await _httpClient.SendAsync(httpRequest, HttpCompletionOption.ResponseHeadersRead, token).ConfigureAwait(false);
+                token.ThrowIfCancellationRequested();
                 response.EnsureSuccessStatusCode();
                 responseItem.StatusCode = response.StatusCode;
                 ReadHeader(response, responseItem);
+                token.ThrowIfCancellationRequested();
                 actionListener?.OnHttpHeader(responseItem);
                 await ReadContentAsync(response, responseItem).ConfigureAwait(false);
+                token.ThrowIfCancellationRequested();
                 actionListener?.OnHttpContent(responseItem);
             }
             catch (Exception ex)

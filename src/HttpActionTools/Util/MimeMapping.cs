@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
-using HttpActionTools.Extensions;
+using HttpActionFrame.Extensions;
 
-namespace HttpActionTools.Util
+namespace HttpActionFrame.Util
 {
     public static class MimeMapping
     {

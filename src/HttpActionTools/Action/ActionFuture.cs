@@ -1,14 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
-using HttpActionTools.Actor;
-using HttpActionTools.Event;
+using HttpActionFrame.Actor;
+using HttpActionFrame.Event;
 
-namespace HttpActionTools.Action
+namespace HttpActionFrame.Action
 {
-    public class ActionLink : IActionLink
+    public class ActionFuture : IActionFuture
     {
         private readonly ManualResetEvent _waitHandle = new ManualResetEvent(false);
         private ActionEvent _finalEvent;
@@ -17,7 +14,7 @@ namespace HttpActionTools.Action
         public IActorDispatcher ActorDispatcher { get; }
 
 
-        public ActionLink(IActorDispatcher actorDispatcher, ActionEventListener listener = null)
+        public ActionFuture(IActorDispatcher actorDispatcher, ActionEventListener listener = null)
         {
             _outerListener = listener;
             _cts = new CancellationTokenSource();
@@ -31,13 +28,12 @@ namespace HttpActionTools.Action
 
         public CancellationToken Token => _cts.Token;
 
-        public IActionLink PushAction(IAction action)
+        public void PushAction(IAction action)
         {
-            action.ActionLink = this;
+            action.ActionFuture = this;
             action.OnActionEvent += _outerListener;
             action.OnActionEvent += SendEventToLink;
             ActorDispatcher.PushActor(action);
-            return this;
         }
 
         private void SendEventToLink(IAction sender, ActionEvent actionEvent)

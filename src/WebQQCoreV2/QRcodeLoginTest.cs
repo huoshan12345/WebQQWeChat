@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Drawing;
-using HttpActionTools.Extensions;
 using iQQ.Net.WebQQCore.Im.Bean;
 using iQQ.Net.WebQQCore.Im.Bean.Content;
 using iQQ.Net.WebQQCore.Im.Core;
@@ -9,7 +8,8 @@ using iQQ.Net.WebQQCore.Im.Event;
 using Microsoft.Extensions.Logging;
 using iQQ.Net.WebQQCore.Im.Service.Log;
 using System.Text;
-using HttpActionTools.Event;
+using HttpActionFrame.Event;
+using HttpActionFrame.Extensions;
 using iQQ.Net.WebQQCore.Im;
 
 namespace iQQ.Net.WebQQCore

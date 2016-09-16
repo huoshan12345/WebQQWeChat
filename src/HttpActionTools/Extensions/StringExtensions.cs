@@ -3,7 +3,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
 
-namespace HttpActionTools.Extensions
+namespace HttpActionFrame.Extensions
 {
     public static class StringExtensions
     {

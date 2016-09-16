@@ -1,6 +1,6 @@
 ﻿using System.Text.RegularExpressions;
-using HttpActionTools.Core;
-using HttpActionTools.Event;
+using HttpActionFrame.Core;
+using HttpActionFrame.Event;
 using iQQ.Net.WebQQCore.Im.Core;
 using iQQ.Net.WebQQCore.Im.Event;
 

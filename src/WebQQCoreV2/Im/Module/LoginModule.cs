@@ -1,6 +1,6 @@
 ﻿using System.Drawing;
-using HttpActionTools.Action;
-using HttpActionTools.Event;
+using HttpActionFrame.Action;
+using HttpActionFrame.Event;
 using iQQ.Net.WebQQCore.Im.Action;
 using iQQ.Net.WebQQCore.Im.Bean;
 using iQQ.Net.WebQQCore.Im.Core;
@@ -21,7 +21,7 @@ namespace iQQ.Net.WebQQCore.Im.Module
         // 1.获取二维码
         private IActionResult GetQRCode(ActionEventListener listener)
         {
-            var actionLink = new ActionLink(ActorDispatcher, listener);
+            var actionLink = new ActionFuture(ActorDispatcher, listener);
             actionLink.PushAction(new GetQRCodeAction(Context, (sender, @event) =>
             {
                 if (@event.Type == ActionEventType.EvtOK)
@@ -32,6 +32,11 @@ namespace iQQ.Net.WebQQCore.Im.Module
                 }
             }));// .ExcuteAsync();
             return actionLink;
+        }
+
+        private void DoCheckQRCode(IActionFuture future)
+        {
+            
         }
 
 
