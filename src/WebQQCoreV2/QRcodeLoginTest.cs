@@ -121,7 +121,7 @@ namespace iQQ.Net.WebQQCore
                 {
                     Console.WriteLine("xxxxxxxxxxxxxx");
                 }
-            }, 1000);
+            }, 100);
 
             Console.WriteLine(timeSpan.TotalMilliseconds);
             
