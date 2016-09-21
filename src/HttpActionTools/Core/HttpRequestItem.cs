@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using HttpActionTools.Extensions;
+using HttpActionFrame.Extensions;
+using System.Linq;
 
-namespace HttpActionTools.Core
+namespace HttpActionFrame.Core
 {
     public class HttpRequestItem
     {

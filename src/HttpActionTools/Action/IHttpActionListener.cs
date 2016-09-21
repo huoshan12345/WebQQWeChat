@@ -1,8 +1,8 @@
 ﻿using System;
-using HttpActionTools.Core;
-using HttpActionTools.Event;
+using HttpActionFrame.Core;
+using HttpActionFrame.Event;
 
-namespace HttpActionTools.Action
+namespace HttpActionFrame.Action
 {
     public interface IHttpActionListener
     {

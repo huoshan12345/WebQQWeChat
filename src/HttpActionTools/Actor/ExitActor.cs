@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 
-namespace HttpActionTools.Actor
+namespace HttpActionFrame.Actor
 {
     /// <summary>
     /// 一个伪Actor只是为了让ActorLoop停下来

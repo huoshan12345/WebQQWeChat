@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Net;
-using HttpActionTools.Extensions;
+using HttpActionFrame.Extensions;
+using System.Linq;
 
-namespace HttpActionTools.Core
+namespace HttpActionFrame.Core
 {
     public class HttpResponseItem
     {

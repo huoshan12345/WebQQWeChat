@@ -3,8 +3,8 @@ using System;
 using System.IO;
 using System.Net;
 using System.Text;
+using HttpActionFrame.Extensions;
 using Newtonsoft.Json;
-using HttpActionTools.Extensions;
 
 namespace iQQ.Net.WebQQCore.Im
 {

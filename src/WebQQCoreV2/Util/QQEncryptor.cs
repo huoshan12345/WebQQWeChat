@@ -1,8 +1,8 @@
-﻿using HttpActionTools.Extensions;
-using System;
+﻿using System;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
+using HttpActionFrame.Extensions;
 
 namespace iQQ.Net.WebQQCore.Util
 {

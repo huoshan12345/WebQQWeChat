@@ -3,9 +3,8 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Threading.Tasks;
-using HttpActionTools.Action;
-using HttpActionTools.Core;
-using HttpActionTools.Event;
+using HttpActionFrame.Core;
+using HttpActionFrame.Event;
 using iQQ.Net.WebQQCore.Im.Core;
 
 namespace iQQ.Net.WebQQCore.Im.Action

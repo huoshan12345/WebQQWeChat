@@ -2500,7 +2500,7 @@
           "lib/netstandard1.3/System.Xml.XPath.XDocument.dll": {}
         }
       },
-      "HttpActionTools/1.0.0": {
+      "HttpActionFrame/1.0.0": {
         "type": "project",
         "framework": ".NETStandard,Version=v1.6",
         "dependencies": {
@@ -2509,10 +2509,10 @@
           "System.Reflection.TypeExtensions": "4.1.0"
         },
         "compile": {
-          "netstandard1.6/HttpActionTools.dll": {}
+          "netstandard1.6/HttpActionFrame.dll": {}
         },
         "runtime": {
-          "netstandard1.6/HttpActionTools.dll": {}
+          "netstandard1.6/HttpActionFrame.dll": {}
         }
       }
     },
@@ -2810,17 +2810,17 @@
           "lib/net45/_._": {}
         }
       },
-      "HttpActionTools/1.0.0": {
+      "HttpActionFrame/1.0.0": {
         "type": "project",
         "framework": ".NETFramework,Version=v4.5.1",
         "dependencies": {
           "System.Net.Http": "4.0.0"
         },
         "compile": {
-          "net451/HttpActionTools.dll": {}
+          "net451/HttpActionFrame.dll": {}
         },
         "runtime": {
-          "net451/HttpActionTools.dll": {}
+          "net451/HttpActionFrame.dll": {}
         }
       }
     }
@@ -7919,15 +7919,15 @@
         "ref/xamarinwatchos10/_._"
       ]
     },
-    "HttpActionTools/1.0.0": {
+    "HttpActionFrame/1.0.0": {
       "type": "project",
       "path": "../HttpActionTools/project.json",
-      "msbuildProject": "../HttpActionTools/HttpActionTools.xproj"
+      "msbuildProject": "../HttpActionTools/HttpActionFrame.xproj"
     }
   },
   "projectFileDependencyGroups": {
     "": [
-      "HttpActionTools >= 1.0.0-*",
+      "HttpActionFrame >= 1.0.0-*",
       "Microsoft.Extensions.Logging >= 1.0.0",
       "Microsoft.Extensions.Logging.Console >= 1.0.0",
       "Newtonsoft.Json >= 9.0.1"

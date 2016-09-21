@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Threading.Tasks;
-using HttpActionTools.Extensions;
+﻿using System.ComponentModel;
+using HttpActionFrame.Extensions;
 
-namespace HttpActionTools.Event
+namespace HttpActionFrame.Event
 {
     [Description("动作事件类型")]
     public enum ActionEventType

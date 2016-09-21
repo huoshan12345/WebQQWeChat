@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Net;
 using System.Text;
-using HttpActionTools.Core;
+using HttpActionFrame.Core;
 using System.Linq;
 
-namespace HttpActionTools.Extensions
+namespace HttpActionFrame.Extensions
 {
     public static class HttpExtensions
     {

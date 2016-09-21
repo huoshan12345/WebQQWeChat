@@ -110,22 +110,19 @@ namespace iQQ.Net.WebQQCore
             //}
 
             // 获取二维码
-            //var qq = new WebQQClient("", "", Listener, new SimpleActorDispatcher(), new QQConsoleLogger());
-            //qq.LoginWithQRCode(); // 登录之后自动开始轮训
+            var qq = new WebQQClient("", "", Listener, new SimpleActorDispatcher(), new QQConsoleLogger());
+            qq.LoginWithQRCode(); // 登录之后自动开始轮训
 
-            var qq = new WebQQClient();
-
-            var timeSpan = TestAction(() =>
-            {
-                var @event = qq.LoginWithQRCode().WaitFinalEvent();
-                if (@event.Type != QQActionEventType.EvtOK)
-                {
-                    Console.WriteLine("xxxxxxxxxxxxxx");
-                }
-            }, 1000);
-
-            Console.WriteLine(timeSpan.TotalMilliseconds);
-
+            //var qq = new WebQQClient();
+            //var timeSpan = TestAction(() =>
+            //{
+            //    var @event = qq.LoginWithQRCode().WaitFinalEvent();
+            //    if (@event.Type != QQActionEventType.EvtOK)
+            //    {
+            //        Console.WriteLine("xxxxxxxxxxxxxx");
+            //    }
+            //}, 100);
+            //Console.WriteLine(timeSpan.TotalMilliseconds);
 
             Console.Read();
         }

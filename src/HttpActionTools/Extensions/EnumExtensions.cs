@@ -5,7 +5,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
 
-namespace HttpActionTools.Extensions
+namespace HttpActionFrame.Extensions
 {
     public static class EnumExtension
     {
