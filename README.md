@@ -1,15 +1,15 @@
-iQQ.Net
-=======
-这个项目是是基于IQQ项目（其中的Webqq-Core）的.Net Core移植版。
+# iQQ.Net [![star this repo](http://github-svg-buttons.herokuapp.com/star.svg?user=huoshan12345&repo=iQQ.Net&style=flat&background=1081C1)](https://github.com/huoshan12345/iQQ.Net)[![fork this repo](http://github-svg-buttons.herokuapp.com/fork.svg?user=huoshan12345&repo=iQQ.Net&style=flat&background=1081C1)](https://github.com/huoshan12345/iQQ.Net/fork)[![license](https://img.shields.io/github/license/mashape/apistatus.svg?maxAge=2592000)](https://github.com/huoshan12345/iQQ.Net/blob/master/LICENSE.TXT)
+
+这个项目是是基于iqq项目（其中的webqq-core）的.Net Core移植版。
 和基于此的一些功能组件。
 
-IQQ项目
----
-* IQQ UI: https://github.com/im-qq/iqq.git
-* IQQ Webqq-Core: https://github.com/im-qq/webqq-core.git
+## iqq项目
 
-Useage
-------------
+* iqq ui: https://github.com/im-qq/iqq.git
+* iqq webqq-core: https://github.com/im-qq/webqq-core.git
+
+## Useage
+
 #### WebQQCore（可用，已切换到二维码登录）
 编译为dll即可引用到别的项目中；编译为exe则是一个控制台程序，可演示qq登录等基本功能。
 * win平台（[基于.net core on Win](https://www.microsoft.com/net/core#windows)）  
@@ -27,10 +27,5 @@ Useage
 （由于目前还不能直接引用.net core的程序集，所以此处引用的是dll）
 ![BatchHangQQ](https://raw.githubusercontent.com/huoshan12345/iQQ.Net/master/pic/BatchHangQQ.png)
 
-Develop
-------------
+## Develop
 Visual Studio 2015 is recommended.
-
-License
-------------
-Apache License
