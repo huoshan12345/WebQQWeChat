@@ -22,13 +22,12 @@ namespace iQQ.Net.WebQQCore.Im.Module
         private IActionResult GetQRCode(ActionEventListener listener)
         {
             var actionLink = new ActionFuture(ActorDispatcher, listener);
-            actionLink.PushAction(new GetQRCodeAction(Context, (sender, @event) =>
+            actionLink.PushEndAction(new GetQRCodeAction(Context, (sender, @event) =>
             {
                 if (@event.Type == ActionEventType.EvtOK)
                 {
                     var verify = (Image) @event.Target;
                     Context.FireNotify(new QQNotifyEvent(QQNotifyEventType.QrcodeReady, verify));
-                    actionLink.Terminate(sender, @event);
                 }
             }));// .ExcuteAsync();
             return actionLink;
