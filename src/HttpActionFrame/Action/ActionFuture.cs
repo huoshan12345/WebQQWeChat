@@ -32,11 +32,33 @@ namespace HttpActionFrame.Action
         {
             action.ActionFuture = this;
             action.OnActionEvent += _outerListener;
-            action.OnActionEvent += SendEventToLink;
+            action.OnActionEvent += SendEventToFuture;
             ActorDispatcher.PushActor(action);
         }
 
-        private void SendEventToLink(IAction sender, ActionEvent actionEvent)
+        public void PushEndAction(IAction action)
+        {
+            action.ActionFuture = this;
+            action.OnActionEvent += _outerListener;
+            action.OnActionEvent += SendEndEventToFuture;
+            ActorDispatcher.PushActor(action);
+        }
+
+        private void SendEndEventToFuture(IAction sender, ActionEvent actionEvent)
+        {
+            switch (actionEvent.Type)
+            {
+                case ActionEventType.EvtOK:
+                case ActionEventType.EvtCanceled:
+                case ActionEventType.EvtError:
+                {
+                    Terminate(sender, actionEvent);
+                    break;
+                }
+            }
+        }
+
+        private void SendEventToFuture(IAction sender, ActionEvent actionEvent)
         {
             switch (actionEvent.Type)
             {
