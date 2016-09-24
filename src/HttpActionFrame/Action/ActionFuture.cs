@@ -7,17 +7,15 @@ namespace HttpActionFrame.Action
 {
     public class ActionFuture : IActionFuture
     {
-        private readonly ManualResetEvent _waitHandle = new ManualResetEvent(false);
         private ActionEvent _finalEvent;
         private readonly ActionEventListener _outerListener;
-        private readonly CancellationTokenSource _cts;
+        private readonly ManualResetEvent _waitHandle = new ManualResetEvent(false);
+        private readonly CancellationTokenSource _cts = new CancellationTokenSource();
         public IActorDispatcher ActorDispatcher { get; }
-
-
+        
         public ActionFuture(IActorDispatcher actorDispatcher, ActionEventListener listener = null)
         {
             _outerListener = listener;
-            _cts = new CancellationTokenSource();
             ActorDispatcher = actorDispatcher;
         }
 
@@ -32,7 +30,7 @@ namespace HttpActionFrame.Action
         {
             action.ActionFuture = this;
             action.OnActionEvent += _outerListener;
-            action.OnActionEvent += SendEventToFuture;
+            action.OnActionEvent += SendNonLastEventToFuture;
             ActorDispatcher.PushActor(action);
         }
 
@@ -40,25 +38,21 @@ namespace HttpActionFrame.Action
         {
             action.ActionFuture = this;
             action.OnActionEvent += _outerListener;
-            action.OnActionEvent += SendEndEventToFuture;
+            action.OnActionEvent += SendLastEventToFuture;
             ActorDispatcher.PushActor(action);
         }
 
-        private void SendEndEventToFuture(IAction sender, ActionEvent actionEvent)
+        private void SendLastEventToFuture(IAction sender, ActionEvent actionEvent)
         {
-            switch (actionEvent.Type)
-            {
-                case ActionEventType.EvtOK:
-                case ActionEventType.EvtCanceled:
-                case ActionEventType.EvtError:
-                {
-                    Terminate(sender, actionEvent);
-                    break;
-                }
-            }
+            SendEventToFuture(sender, actionEvent, true);
         }
 
-        private void SendEventToFuture(IAction sender, ActionEvent actionEvent)
+        private void SendNonLastEventToFuture(IAction sender, ActionEvent actionEvent)
+        {
+            SendEventToFuture(sender, actionEvent, false);
+        }
+
+        private void SendEventToFuture(IAction sender, ActionEvent actionEvent, bool terminateWhenOk)
         {
             switch (actionEvent.Type)
             {
@@ -69,6 +63,7 @@ namespace HttpActionFrame.Action
                     break;
                 }
             }
+            if(terminateWhenOk && actionEvent.Type == ActionEventType.EvtOK) Terminate(sender, actionEvent);
         }
 
         public void Terminate(IAction sender, ActionEvent actionEvent)
