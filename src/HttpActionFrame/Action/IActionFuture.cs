@@ -9,6 +9,10 @@ namespace HttpActionFrame.Action
 
         void PushAction(IAction action);
 
+        void PushEndAction(IAction action, bool autoExcute = true);
+
         void Terminate(IAction sender, ActionEvent actionEvent);
+
+        void BeginExcute();
     }
 }

@@ -18,9 +18,9 @@
   "buildOptions": {
     "emitEntryPoint": true,
     "copyToOutput": {
-      "include": [ "Resources/hash.js" ],
-      "exclude": [ "" ],
-      "excludeFiles": [ "" ],
+      "include": [],
+      "exclude": [],
+      "excludeFiles": [],
       "builtIns": {},
       "mappings": {}
     }
@@ -41,7 +41,6 @@
       },
       "dependencies": {
         "System.Net.Http": "4.0.0",
-        "Jint": "2.9.1"
       },
       "buildOptions": {
         "define": [ "NET" ],
@@ -56,7 +55,6 @@
         },
         "System.Collections.NonGeneric": "4.0.1",
         "System.ComponentModel.Primitives": "4.1.0",
-        "Jint-netcore": "2.7.1-final",
         "System.Text.Encoding.CodePages": "4.0.1",
         "CoreCompat.System.Drawing": "1.0.0-*",
         "runtime.linux-x64.CoreCompat.System.Drawing": "1.0.0-*",

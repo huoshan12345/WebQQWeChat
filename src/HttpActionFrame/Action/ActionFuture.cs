@@ -1,4 +1,6 @@
-﻿using System.Threading;
+﻿using System;
+using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using HttpActionFrame.Actor;
 using HttpActionFrame.Event;
@@ -7,17 +9,18 @@ namespace HttpActionFrame.Action
 {
     public class ActionFuture : IActionFuture
     {
-        private readonly ManualResetEvent _waitHandle = new ManualResetEvent(false);
         private ActionEvent _finalEvent;
         private readonly ActionEventListener _outerListener;
-        private readonly CancellationTokenSource _cts;
+        private readonly ManualResetEvent _waitHandle = new ManualResetEvent(false);
+        private readonly ManualResetEvent _excuteHandle = new ManualResetEvent(false);
+        private readonly CancellationTokenSource _cts = new CancellationTokenSource();
+        private readonly Queue<IAction> _queue = new Queue<IAction>();
+
         public IActorDispatcher ActorDispatcher { get; }
-
-
+        
         public ActionFuture(IActorDispatcher actorDispatcher, ActionEventListener listener = null)
         {
             _outerListener = listener;
-            _cts = new CancellationTokenSource();
             ActorDispatcher = actorDispatcher;
         }
 
@@ -32,11 +35,39 @@ namespace HttpActionFrame.Action
         {
             action.ActionFuture = this;
             action.OnActionEvent += _outerListener;
-            action.OnActionEvent += SendEventToLink;
-            ActorDispatcher.PushActor(action);
+            action.OnActionEvent += SendNonLastEventToFuture;
+            _queue.Enqueue(action);
         }
 
-        private void SendEventToLink(IAction sender, ActionEvent actionEvent)
+        public void PushEndAction(IAction action, bool autoExcute = true)
+        {
+            action.ActionFuture = this;
+            action.OnActionEvent += _outerListener;
+            action.OnActionEvent += SendLastEventToFuture;
+            _queue.Enqueue(action);
+            if (autoExcute) BeginExcute();
+        }
+
+        private void ExcuteNextAction()
+        {
+            if (_queue.Count != 0)
+            {
+                var action = _queue.Dequeue();
+                ActorDispatcher.PushActor(action);
+            }
+        }
+
+        private void SendLastEventToFuture(IAction sender, ActionEvent actionEvent)
+        {
+            SendEventToFuture(sender, actionEvent, true);
+        }
+
+        private void SendNonLastEventToFuture(IAction sender, ActionEvent actionEvent)
+        {
+            SendEventToFuture(sender, actionEvent, false);
+        }
+
+        private void SendEventToFuture(IAction sender, ActionEvent actionEvent, bool terminateWhenOk)
         {
             switch (actionEvent.Type)
             {
@@ -46,13 +77,28 @@ namespace HttpActionFrame.Action
                     Terminate(sender, actionEvent);
                     break;
                 }
+                case ActionEventType.EvtOK:
+                {
+                    if (terminateWhenOk) Terminate(sender, actionEvent);
+                    else ExcuteNextAction();
+                    break;
+                }
             }
+            // sender.OnActionEvent -= _outerListener;
+            // sender.OnActionEvent -= SendLastEventToFuture;
+            // sender.OnActionEvent -= SendNonLastEventToFuture;
         }
 
         public void Terminate(IAction sender, ActionEvent actionEvent)
         {
+            _queue.Clear();
             _finalEvent = actionEvent;
             _waitHandle.Set();
+        }
+
+        public void BeginExcute()
+        {
+            ExcuteNextAction();
         }
 
         public ActionEvent WaitFinalEvent()
