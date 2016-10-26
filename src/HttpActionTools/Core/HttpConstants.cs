@@ -14,7 +14,7 @@
         public const string Cookie = "Cookie";
         public const string DefaultGetContentType = "text/html";
         public const string DefaultPostContentType = "application/x-www-form-urlencoded";
-        public const string DefaultUserAgent = "application/x-www-form-urlencoded";
+        public const string DefaultUserAgent = "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 UBrowser/5.7.15319.202 Safari/537.36";
     }
 
     public enum HttpMethodType
