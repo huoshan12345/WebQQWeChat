@@ -34,10 +34,10 @@
   },
 
   "frameworks": {
-    "net451": {
+    "net461": {
       "frameworkAssemblies": {
         "System.Drawing": "4.0.0.0",
-        "System.Runtime": "4.0.10.0"
+        "System.Runtime": "4.0.20.0"
       },
       "dependencies": {
         "System.Net.Http": "4.0.0",
@@ -47,10 +47,10 @@
         "platform": "anycpu"
       }
     },
-    "netcoreapp1.0": {
+    "netcoreapp1.1": {
       "dependencies": {
         "Microsoft.NETCore.App": {
-          "version": "1.0.0-*",
+          "version": "1.0.1-*",
           "type": "platform"
         },
         "System.Collections.NonGeneric": "4.0.1",

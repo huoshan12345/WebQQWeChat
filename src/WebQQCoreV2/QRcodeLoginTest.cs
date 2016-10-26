@@ -9,8 +9,8 @@ using Microsoft.Extensions.Logging;
 using iQQ.Net.WebQQCore.Im.Service.Log;
 using System.Text;
 using HttpActionFrame.Event;
-using HttpActionFrame.Extensions;
 using iQQ.Net.WebQQCore.Im;
+using Utility.Extensions;
 
 namespace iQQ.Net.WebQQCore
 {

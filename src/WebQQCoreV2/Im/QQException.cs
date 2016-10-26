@@ -1,10 +1,9 @@
-﻿using iQQ.Net.WebQQCore.Util;
-using System;
+﻿using System;
 using System.IO;
 using System.Net;
 using System.Text;
-using HttpActionFrame.Extensions;
 using Newtonsoft.Json;
+using Utility.Extensions;
 
 namespace iQQ.Net.WebQQCore.Im
 {

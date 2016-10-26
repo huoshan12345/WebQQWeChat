@@ -1,7 +1,10 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
-namespace HttpActionFrame.Extensions
+namespace Utility.Extensions
 {
     public static class CollectionExtensions
     {
@@ -12,12 +15,12 @@ namespace HttpActionFrame.Extensions
 
         public static void AddWhenNotNull<T>(this ICollection<T> col, T item)
         {
-            if(item != null) col.Add(item);
+            if (item != null) col.Add(item);
         }
 
         public static void AddRangeSafely<T>(this ICollection<T> col, IEnumerable<T> items)
         {
-            if(items == null) return;
+            if (items == null) return;
 
             var list = col as List<T>;
             if (list != null)

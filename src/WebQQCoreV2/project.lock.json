@@ -2,7 +2,7 @@
   "locked": false,
   "version": 2,
   "targets": {
-    ".NETCoreApp,Version=v1.0": {
+    ".NETCoreApp,Version=v1.1": {
       "CoreCompat.System.Drawing/1.0.0-beta006": {
         "type": "package",
         "dependencies": {
@@ -278,7 +278,7 @@
           "lib/netstandard1.0/Microsoft.Extensions.Primitives.dll": {}
         }
       },
-      "Microsoft.NETCore.App/1.0.0": {
+      "Microsoft.NETCore.App/1.0.1": {
         "type": "package",
         "dependencies": {
           "Libuv": "1.9.0",
@@ -286,7 +286,7 @@
           "Microsoft.CodeAnalysis.CSharp": "1.3.0",
           "Microsoft.CodeAnalysis.VisualBasic": "1.3.0",
           "Microsoft.NETCore.DotNetHostPolicy": "1.0.1",
-          "Microsoft.NETCore.Runtime.CoreCLR": "1.0.2",
+          "Microsoft.NETCore.Runtime.CoreCLR": "1.0.4",
           "Microsoft.VisualBasic": "10.0.1",
           "NETStandard.Library": "1.6.0",
           "System.Buffers": "4.0.0",
@@ -345,7 +345,7 @@
           "Microsoft.NETCore.DotNetHost": "1.0.1"
         }
       },
-      "Microsoft.NETCore.Jit/1.0.2": {
+      "Microsoft.NETCore.Jit/1.0.4": {
         "type": "package"
       },
       "Microsoft.NETCore.Platforms/1.0.1": {
@@ -357,10 +357,10 @@
           "lib/netstandard1.0/_._": {}
         }
       },
-      "Microsoft.NETCore.Runtime.CoreCLR/1.0.2": {
+      "Microsoft.NETCore.Runtime.CoreCLR/1.0.4": {
         "type": "package",
         "dependencies": {
-          "Microsoft.NETCore.Jit": "1.0.2",
+          "Microsoft.NETCore.Jit": "1.0.4",
           "Microsoft.NETCore.Windows.ApiSets": "1.0.1"
         }
       },
@@ -2506,7 +2506,8 @@
         "dependencies": {
           "NETStandard.Library": "1.6.0",
           "System.ComponentModel.Primitives": "4.1.0",
-          "System.Reflection.TypeExtensions": "4.1.0"
+          "System.Reflection.TypeExtensions": "4.1.0",
+          "Utility": "1.0.0"
         },
         "compile": {
           "netstandard1.6/HttpActionFrame.dll": {}
@@ -2514,9 +2515,26 @@
         "runtime": {
           "netstandard1.6/HttpActionFrame.dll": {}
         }
+      },
+      "Utility/1.0.0": {
+        "type": "project",
+        "framework": ".NETStandard,Version=v1.6",
+        "dependencies": {
+          "Microsoft.Extensions.Logging.Abstractions": "1.0.0",
+          "NETStandard.Library": "1.6.0",
+          "System.ComponentModel.Annotations": "4.1.0",
+          "System.ComponentModel.Primitives": "4.1.0",
+          "System.Linq.Queryable": "4.0.1"
+        },
+        "compile": {
+          "netstandard1.6/Utility.dll": {}
+        },
+        "runtime": {
+          "netstandard1.6/Utility.dll": {}
+        }
       }
     },
-    ".NETFramework,Version=v4.5.1": {
+    ".NETFramework,Version=v4.6.1": {
       "Jint/2.9.1": {
         "type": "package",
         "compile": {
@@ -2662,6 +2680,19 @@
         },
         "runtime": {
           "lib/net45/_._": {}
+        }
+      },
+      "System.ComponentModel.Annotations/4.1.0": {
+        "type": "package",
+        "frameworkAssemblies": [
+          "System.ComponentModel.DataAnnotations",
+          "mscorlib"
+        ],
+        "compile": {
+          "ref/net461/System.ComponentModel.Annotations.dll": {}
+        },
+        "runtime": {
+          "lib/net461/System.ComponentModel.Annotations.dll": {}
         }
       },
       "System.Diagnostics.Debug/4.0.11": {
@@ -2812,15 +2843,34 @@
       },
       "HttpActionFrame/1.0.0": {
         "type": "project",
-        "framework": ".NETFramework,Version=v4.5.1",
+        "framework": ".NETFramework,Version=v4.6.1",
         "dependencies": {
-          "System.Net.Http": "4.0.0"
+          "System.Net.Http": "4.0.0",
+          "Utility": "1.0.0"
         },
         "compile": {
-          "net451/HttpActionFrame.dll": {}
+          "net461/HttpActionFrame.dll": {}
         },
         "runtime": {
-          "net451/HttpActionFrame.dll": {}
+          "net461/HttpActionFrame.dll": {}
+        }
+      },
+      "Utility/1.0.0": {
+        "type": "project",
+        "framework": ".NETFramework,Version=v4.6.1",
+        "dependencies": {
+          "Microsoft.Extensions.Logging.Abstractions": "1.0.0",
+          "System.ComponentModel.Annotations": "4.1.0",
+          "System.Net.Http": "4.1.0"
+        },
+        "frameworkAssemblies": [
+          "System.Runtime"
+        ],
+        "compile": {
+          "net461/Utility.dll": {}
+        },
+        "runtime": {
+          "net461/Utility.dll": {}
         }
       }
     }
@@ -3064,12 +3114,12 @@
         "lib/netstandard1.0/Microsoft.Extensions.Primitives.xml"
       ]
     },
-    "Microsoft.NETCore.App/1.0.0": {
-      "sha512": "Bv40dLDrT+Igcg1e6otW3D8voeJCfcAxOlsxSVlDz+J+cdWls5kblZvPHHvx7gX3/oJoQVIkEeO3sMyv5PSVJA==",
+    "Microsoft.NETCore.App/1.0.1": {
+      "sha512": "Magix7ezmhzMc1pNIH7an8vkZYd7a5JjAhXJoYUw3ukRzRfYN2SLetRtQXe/3X9/otnMH1K1J5oOP/q5Mpv7Lg==",
       "type": "package",
-      "path": "Microsoft.NETCore.App/1.0.0",
+      "path": "Microsoft.NETCore.App/1.0.1",
       "files": [
-        "Microsoft.NETCore.App.1.0.0.nupkg.sha512",
+        "Microsoft.NETCore.App.1.0.1.nupkg.sha512",
         "Microsoft.NETCore.App.nuspec",
         "ThirdPartyNotices.txt",
         "dotnet_library_license.txt",
@@ -3112,12 +3162,12 @@
         "runtime.json"
       ]
     },
-    "Microsoft.NETCore.Jit/1.0.2": {
-      "sha512": "Ok2vWofa6X8WD9vc4pfLHwvJz1/B6t3gOAoZcjrjrQf7lQOlNIuZIZtLn3wnWX28DuQGpPJkRlBxFj7Z5txNqw==",
+    "Microsoft.NETCore.Jit/1.0.4": {
+      "sha512": "E3N/4tY7denm+CdHVnxLrdARQsUSjSZzd1pjUwSlGvGf9yDM6S8XcFWz9K7dFnB/g39ovTRjKEoXZWE3fX55gQ==",
       "type": "package",
-      "path": "Microsoft.NETCore.Jit/1.0.2",
+      "path": "Microsoft.NETCore.Jit/1.0.4",
       "files": [
-        "Microsoft.NETCore.Jit.1.0.2.nupkg.sha512",
+        "Microsoft.NETCore.Jit.1.0.4.nupkg.sha512",
         "Microsoft.NETCore.Jit.nuspec",
         "ThirdPartyNotices.txt",
         "dotnet_library_license.txt",
@@ -3137,12 +3187,12 @@
         "runtime.json"
       ]
     },
-    "Microsoft.NETCore.Runtime.CoreCLR/1.0.2": {
-      "sha512": "A0x1xtTjYJWZr2DRzgfCOXgB0JkQg8twnmtTJ79wFje+IihlLbXtx6Z2AxyVokBM5ruwTedR6YdCmHk39QJdtQ==",
+    "Microsoft.NETCore.Runtime.CoreCLR/1.0.4": {
+      "sha512": "Bgou+2REFu7mW/gh7f3LUIpvnCHqdOxCgIYMnSM6MtmqthleuFXSuDjub5zlT0G78sHPhnPqUYA+j1J6hZK/8Q==",
       "type": "package",
-      "path": "Microsoft.NETCore.Runtime.CoreCLR/1.0.2",
+      "path": "Microsoft.NETCore.Runtime.CoreCLR/1.0.4",
       "files": [
-        "Microsoft.NETCore.Runtime.CoreCLR.1.0.2.nupkg.sha512",
+        "Microsoft.NETCore.Runtime.CoreCLR.1.0.4.nupkg.sha512",
         "Microsoft.NETCore.Runtime.CoreCLR.nuspec",
         "ThirdPartyNotices.txt",
         "dotnet_library_license.txt",
@@ -7923,6 +7973,11 @@
       "type": "project",
       "path": "../HttpActionFrame/project.json",
       "msbuildProject": "../HttpActionFrame/HttpActionFrame.xproj"
+    },
+    "Utility/1.0.0": {
+      "type": "project",
+      "path": "../Utility/project.json",
+      "msbuildProject": "../Utility/Utility.xproj"
     }
   },
   "projectFileDependencyGroups": {
@@ -7930,23 +7985,24 @@
       "HttpActionFrame >= 1.0.0-*",
       "Microsoft.Extensions.Logging >= 1.0.0",
       "Microsoft.Extensions.Logging.Console >= 1.0.0",
-      "Newtonsoft.Json >= 9.0.1"
+      "Newtonsoft.Json >= 9.0.1",
+      "Utility >= 1.0.0-*"
     ],
-    ".NETCoreApp,Version=v1.0": [
+    ".NETCoreApp,Version=v1.1": [
       "CoreCompat.System.Drawing >= 1.0.0-*",
       "Jint-netcore >= 2.7.1-final",
-      "Microsoft.NETCore.App >= 1.0.0-*",
+      "Microsoft.NETCore.App >= 1.0.1-*",
       "System.Collections.NonGeneric >= 4.0.1",
       "System.ComponentModel.Primitives >= 4.1.0",
       "System.Text.Encoding.CodePages >= 4.0.1",
       "runtime.linux-x64.CoreCompat.System.Drawing >= 1.0.0-*",
       "runtime.osx.10.10-x64.CoreCompat.System.Drawing >= 1.0.1-*"
     ],
-    ".NETFramework,Version=v4.5.1": [
+    ".NETFramework,Version=v4.6.1": [
       "Jint >= 2.9.1",
       "System.Drawing >= 4.0.0",
       "System.Net.Http >= 4.0.0",
-      "System.Runtime >= 4.0.10"
+      "System.Runtime >= 4.0.20"
     ]
   },
   "tools": {},

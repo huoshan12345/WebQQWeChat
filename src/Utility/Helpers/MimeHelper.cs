@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using HttpActionFrame.Extensions;
+using Utility.Extensions;
 
-namespace HttpActionFrame.Util
+namespace Utility.Helpers
 {
-    public static class MimeMapping
+    public static class MimeHelper
     {
         private static readonly Dictionary<string, string> MimeMap;
 
@@ -13,13 +13,13 @@ namespace HttpActionFrame.Util
         {
             var ext = Path.GetExtension(fileName);
             var key = string.IsNullOrEmpty(ext) ? ".*" : ext;
-            var text = MimeMap.GetValueOrDefault(key) ?? MimeMap[".*"];
+            var text = MimeMap.GetOrDefault(key, MimeMap[".*"]);
             return text;
         }
 
-        static MimeMapping()
+        static MimeHelper()
         {
-            MimeMap = new Dictionary<string, string>(StringComparer.CurrentCultureIgnoreCase)
+            MimeMap = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
             {
                 {".323", "text/h323"},
                 {".asx", "video/x-ms-asf"},

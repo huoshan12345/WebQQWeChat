@@ -1,32 +1,9 @@
 ﻿using System;
-using System.Collections.Concurrent;
-using HttpActionFrame.Extensions;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Logging.Console;
+using Utility.Extensions;
 
-namespace iQQ.Net.WebQQCore.Util
+namespace Utility.Logger
 {
-    public class SimpleConsoleLoggerProvider : ILoggerProvider
-    {
-        private readonly LogLevel _minLevel;
-        private readonly ConcurrentDictionary<string, SimpleConsoleLogger> _loggers = new ConcurrentDictionary<string, SimpleConsoleLogger>();
-
-        public SimpleConsoleLoggerProvider(LogLevel minLevel = LogLevel.Information)
-        {
-            _minLevel = minLevel;
-        }
-
-        public void Dispose()
-        {
-            _loggers.Clear();
-        }
-
-        public ILogger CreateLogger(string categoryName)
-        {
-            return _loggers.GetOrAdd(categoryName, (name) => new SimpleConsoleLogger(name, _minLevel));
-        }
-    }
-
     public class SimpleConsoleLogger : ILogger
     {
         private readonly LogLevel _minLevel;
@@ -61,7 +38,7 @@ namespace iQQ.Net.WebQQCore.Util
         {
             if (state == null) throw new ArgumentNullException(nameof(state));
 
-            return ConsoleLogScope.Push(Name, state);
+            return SimpleConsoleLogScope.Push(Name, state);
         }
 
         public virtual ConsoleColor GetColor(LogLevel logLevel)

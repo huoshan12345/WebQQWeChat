@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using iQQ.Net.WebQQCore.Im;
 using Microsoft.Extensions.Logging;
+using Utility.Logger;
 
 namespace iQQ.Net.WebQQCore.Util
 {

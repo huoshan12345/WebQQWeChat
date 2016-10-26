@@ -1,4 +1,9 @@
-﻿namespace HttpActionFrame.Extensions
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+
+namespace Utility.Extensions
 {
     public static class ObjectExtensions
     {
@@ -17,10 +22,9 @@
             return obj == null;
         }
 
-        public static bool IsNullOrDefault<T>(this T? obj) where T :struct 
+        public static bool IsNullOrDefault<T>(this T? obj) where T : struct
         {
             return obj == null || obj.Value.Equals(default(T));
         }
     }
 }
-

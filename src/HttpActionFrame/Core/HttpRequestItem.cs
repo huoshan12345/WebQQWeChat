@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using HttpActionFrame.Extensions;
 using System.Linq;
+using Utility.Extensions;
 
 namespace HttpActionFrame.Core
 {
@@ -23,13 +23,13 @@ namespace HttpActionFrame.Core
 
         public string Referrer
         {
-            get { return _headerMap.GetValueOrDefault(HttpConstants.Referrer); }
+            get { return _headerMap.GetOrDefault(HttpConstants.Referrer); }
             set { _headerMap[HttpConstants.Referrer] = value; }
         }
 
         public string Origin
         {
-            get { return _headerMap.GetValueOrDefault(HttpConstants.Origin); }
+            get { return _headerMap.GetOrDefault(HttpConstants.Origin); }
             set { _headerMap[HttpConstants.Origin] = value; }
         }
 

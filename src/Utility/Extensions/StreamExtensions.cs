@@ -1,7 +1,11 @@
-﻿using System.IO;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
-namespace HttpActionFrame.Extensions
+namespace Utility.Extensions
 {
     public static class StreamExtensions
     {

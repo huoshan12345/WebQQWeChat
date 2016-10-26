@@ -1,39 +1,17 @@
-﻿using System.Net;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 
-namespace HttpActionFrame.Extensions
+namespace Utility.Extensions
 {
     public static class StringExtensions
     {
-        /// <summary>
-        /// 将字符串MD5加密为字节数组
-        /// </summary>
-        /// <param name="input"></param>
-        /// <returns></returns>
-        public static byte[] Md5ToBytes(this string input)
-        {
-            return MD5.Create().ComputeHash(Encoding.UTF8.GetBytes(input));
-        }
-
-        /// <summary>
-        /// 将字符串MD5加密为字符串
-        /// </summary>
-        /// <param name="input"></param>
-        /// <returns></returns>
-        public static string Md5ToString(this string input)
-        {
-            var buffer = MD5.Create().ComputeHash(Encoding.UTF8.GetBytes(input));
-            var builder = new StringBuilder();
-            for (var i = 0; i < buffer.Length; i++)
-            {
-                builder.Append(i.ToString("X2"));
-            }
-            return builder.ToString();
-        }
-
-        public static byte[] ToUTF8Bytes(this string input)
+        public static byte[] ToUtf8Bytes(this string input)
         {
             return Encoding.UTF8.GetBytes(input);
         }
@@ -43,10 +21,14 @@ namespace HttpActionFrame.Extensions
             return encoding.GetBytes(input);
         }
 
-
         public static string UrlEncode(this string url)
         {
             return WebUtility.UrlEncode(url);
+        }
+
+        public static string UrlDecode(this string url)
+        {
+            return WebUtility.UrlDecode(url);
         }
 
         public static bool IsNullOrEmpty(this string str)
@@ -68,5 +50,6 @@ namespace HttpActionFrame.Extensions
         {
             return str ?? "";
         }
+
     }
 }

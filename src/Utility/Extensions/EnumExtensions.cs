@@ -4,10 +4,11 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
+using System.Threading.Tasks;
 
-namespace HttpActionFrame.Extensions
+namespace Utility.Extensions
 {
-    public static class EnumExtension
+    public static class EnumExtensions
     {
         private static readonly ConcurrentDictionary<Enum, string> EnumDic = new ConcurrentDictionary<Enum, string>();
         private static readonly ConcurrentDictionary<Type, string> TypeDic = new ConcurrentDictionary<Type, string>();
@@ -22,7 +23,7 @@ namespace HttpActionFrame.Extensions
             return EnumDic.GetOrAdd(@enum, (key) =>
             {
                 var type = key.GetType();
-                var field = type.GetField(key.ToString());
+                var field = type.GetTypeInfo().GetField(key.ToString());
                 //如果field为null则应该是组合位域值，
                 return field == null ? key.ToString() : GetDescription(field);
             });
@@ -54,9 +55,9 @@ namespace HttpActionFrame.Extensions
             return $"{typeDesc}-{enumDesc}";
         }
 
-        public static IEnumerable<T> GetValues<T>()
+        public static int ToInt(this Enum @enum)
         {
-            return Enum.GetValues(typeof(T)).Cast<T>();
+            return Convert.ToInt32(@enum);
         }
 
 

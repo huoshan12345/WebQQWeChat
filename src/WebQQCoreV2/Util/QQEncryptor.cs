@@ -2,7 +2,7 @@
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
-using HttpActionFrame.Extensions;
+using Utility.Extensions;
 
 namespace iQQ.Net.WebQQCore.Util
 {
@@ -45,7 +45,7 @@ namespace iQQ.Net.WebQQCore.Util
         /// <returns></returns>
         private static string Md5QQ(long uin, string password, string verifyCode)
         {
-            return Md5QQ(uin, password.Md5ToBytes(), verifyCode);
+            return Md5QQ(uin, password.ToUtf8Bytes().ToMd5(), verifyCode);
         }
 
         /// <summary>
