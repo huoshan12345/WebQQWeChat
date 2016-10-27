@@ -1,32 +1,8 @@
 ﻿using System;
-using System.ComponentModel;
 using Utility.Extensions;
 
 namespace WebWeChat.Im.Event
-{    /// <summary>
-     /// QQ通知事件类型
-     /// </summary>
-    [Description("微信通知事件类型")]
-    public enum WeChatNotifyEventType
-    {
-        /// <summary>
-        /// 二维码已就绪
-        /// </summary>
-        [Description("二维码已就绪")]
-        QRcodeReady,
-
-        /// <summary>
-        /// 二维码失效
-        /// </summary>
-        [Description("二维码失效")]
-        QRcodeInvalid,
-
-        /// <summary>
-        /// 二维码验证成功
-        /// </summary>
-        [Description("二维码验证成功")]
-        QRcodeSuccess
-    }
+{    
 
     public class WeChatNotifyEvent : EventArgs
     {

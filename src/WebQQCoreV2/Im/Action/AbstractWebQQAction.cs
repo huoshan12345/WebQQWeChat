@@ -55,11 +55,6 @@ namespace iQQ.Net.WebQQCore.Im.Action
             base.NotifyActionEvent(actionEvent);
         }
 
-        protected void NotifyActionEvent(ActionEventType type, object target)
-        {
-            NotifyActionEvent(new ActionEvent(type, target));
-        }
-
         public override void OnHttpError(Exception ex)
         {
             var qqEx = ex as QQException ?? new QQException(ex);

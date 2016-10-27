@@ -14,7 +14,7 @@ namespace HttpActionFrame.Action
         public IActionFuture ActionFuture { get; set; }
         protected readonly IHttpService _httpService;
 
-        protected AbstractHttpAction(IHttpService httpService, ActionEventListener listener)
+        protected AbstractHttpAction(IHttpService httpService, ActionEventListener listener = null)
         {
             _httpService = httpService;
             // _listener = listener;
@@ -28,11 +28,10 @@ namespace HttpActionFrame.Action
             OnActionEvent?.Invoke(this, actionEvent);
         }
 
-        public void NotifyActionEvent(ActionEventType type, object target)
+        public void NotifyActionEvent(ActionEventType type, object target = null)
         {
             NotifyActionEvent(new ActionEvent(type, target));
         }
-
 
         public async Task ExecuteAsync()
         {

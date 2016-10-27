@@ -39,6 +39,16 @@ namespace HttpActionFrame.Action
             return this;
         }
 
+        public IActionFuture PushLastAction(IAction action)
+        {
+            action.ActionFuture = this;
+            action.OnActionEvent += _outerListener;
+            action.OnActionEvent += SendLastEventToFuture;
+            _queue.Enqueue(action);
+            ExecuteAsync();
+            return this;
+        }
+
         public void ExcuteAction(IAction action)
         {
             ActorDispatcher.PushActor(action);

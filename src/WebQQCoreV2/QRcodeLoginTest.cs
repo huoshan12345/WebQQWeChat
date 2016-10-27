@@ -25,63 +25,63 @@ namespace iQQ.Net.WebQQCore
             switch (notifyEvent.Type)
             {
                 case QQNotifyEventType.LoginSuccess:
-                {
-                    logger.LogInformation("登录成功");
-                    break;
-                }
+                    {
+                        logger.LogInformation("登录成功");
+                        break;
+                    }
 
                 case QQNotifyEventType.GroupMsg:
-                {
-                    var revMsg = (QQMsg)notifyEvent.Target;
-                    logger.LogInformation($"群[{revMsg.Group.Name}]-好友[{revMsg.From.Nickname}]：{revMsg.GetText()}");
-                    break;
-                }
+                    {
+                        var revMsg = (QQMsg)notifyEvent.Target;
+                        logger.LogInformation($"群[{revMsg.Group.Name}]-好友[{revMsg.From.Nickname}]：{revMsg.GetText()}");
+                        break;
+                    }
 
                 case QQNotifyEventType.ChatMsg:
-                {
-                    var revMsg = (QQMsg)notifyEvent.Target;
-                    logger.LogInformation($"好友[{revMsg.From.Nickname}]：{revMsg.GetText()}");
-
-                    var msgReply = new QQMsg()
                     {
-                        Type = QQMsgType.BUDDY_MSG,
-                        To = revMsg.From,
-                        From = client.Account,
-                        Date = DateTime.Now,
-                    };
-                    msgReply.AddContentItem(new TextItem("hello from iqq")); // 添加文本内容
-                    msgReply.AddContentItem(new FaceItem(0));            // QQ id为0的表情
-                    msgReply.AddContentItem(new FontItem());             // 使用默认字体
+                        var revMsg = (QQMsg)notifyEvent.Target;
+                        logger.LogInformation($"好友[{revMsg.From.Nickname}]：{revMsg.GetText()}");
 
-                    // client.SendMsg(msgReply);
-                    break;
-                }
+                        var msgReply = new QQMsg()
+                        {
+                            Type = QQMsgType.BUDDY_MSG,
+                            To = revMsg.From,
+                            From = client.Account,
+                            Date = DateTime.Now,
+                        };
+                        msgReply.AddContentItem(new TextItem("hello from iqq")); // 添加文本内容
+                        msgReply.AddContentItem(new FaceItem(0));            // QQ id为0的表情
+                        msgReply.AddContentItem(new FontItem());             // 使用默认字体
+
+                        // client.SendMsg(msgReply);
+                        break;
+                    }
 
                 case QQNotifyEventType.QrcodeReady:
-                {
-                    var verify = (Image)notifyEvent.Target;
-                    const string path = "verify.png";
-                    verify.Save(path);
-                    logger.LogInformation("请扫描在项目根目录下qrcode.png图片");
-                    break;
-                }
+                    {
+                        var verify = (Image)notifyEvent.Target;
+                        const string path = "verify.png";
+                        verify.Save(path);
+                        logger.LogInformation("请扫描在项目根目录下qrcode.png图片");
+                        break;
+                    }
 
                 case QQNotifyEventType.QrcodeSuccess:
-                {
-                    break;
-                }
+                    {
+                        break;
+                    }
 
                 case QQNotifyEventType.QrcodeInvalid:
-                {
-                    logger.LogWarning("二维码已失效");
-                    break;
-                }
+                    {
+                        logger.LogWarning("二维码已失效");
+                        break;
+                    }
 
                 default:
-                {
-                    logger.LogInformation(notifyEvent.Type.GetFullDescription());
-                    break;
-                }
+                    {
+                        logger.LogInformation(notifyEvent.Type.GetFullDescription());
+                        break;
+                    }
             }
         };
 
@@ -124,7 +124,7 @@ namespace iQQ.Net.WebQQCore
             }, 100);
 
             Console.WriteLine(timeSpan.TotalMilliseconds);
-            
+
             Console.Read();
         }
     }

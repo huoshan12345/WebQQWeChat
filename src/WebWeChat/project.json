@@ -18,7 +18,7 @@
   "buildOptions": {
     "emitEntryPoint": true,
     "copyToOutput": {
-      "include": [ "project.json" ],
+      "include": [],
       "exclude": [],
       "excludeFiles": [],
       "builtIns": {},
@@ -35,13 +35,16 @@
     "Microsoft.Extensions.Configuration.Json": "1.0.0",
     "Microsoft.Extensions.Configuration.UserSecrets": "1.0.0",
     "Microsoft.Extensions.DependencyInjection": "1.0.0",
+
   },
 
   "frameworks": {
     "net461": {
       "frameworkAssemblies": {
         "System.Drawing": "4.0.0.0",
-        "System.Runtime": "4.0.20.0"
+        "System.Runtime": "4.0.20.0",
+        "System.Xml.Linq": "4.0.0.0",
+        "System.Xml": "4.0.0.0"
       },
       "dependencies": {
         "System.Net.Http": "4.0.0",
@@ -62,7 +65,8 @@
         "System.Text.Encoding.CodePages": "4.0.1",
         "CoreCompat.System.Drawing": "1.0.0-*",
         "runtime.linux-x64.CoreCompat.System.Drawing": "1.0.0-*",
-        "runtime.osx.10.10-x64.CoreCompat.System.Drawing": "1.0.1-*"
+        "runtime.osx.10.10-x64.CoreCompat.System.Drawing": "1.0.1-*",
+        "System.Xml.XDocument": "4.0.11"
       },
       "buildOptions": {
         "define": [ "NETCORE" ],

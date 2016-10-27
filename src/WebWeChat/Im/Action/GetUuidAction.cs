@@ -11,7 +11,7 @@ namespace WebWeChat.Im.Action
     {
         private readonly Regex _reg = new Regex(@"window.QRLogin.code = (\d+); window.QRLogin.uuid = ""(\S+?)""");
 
-        public GetUuidAction(IWeChatContext context, ActionEventListener listener) : base(context, listener)
+        public GetUuidAction(IWeChatContext context, ActionEventListener listener = null) : base(context, listener)
         {
         }
 

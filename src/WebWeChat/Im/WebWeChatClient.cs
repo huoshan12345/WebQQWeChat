@@ -15,7 +15,7 @@ using WebWeChat.Im.Module.Interface;
 
 namespace WebWeChat.Im
 {
-    public class WebWeChatClient : IWebWeChatClient, IWeChatContext
+    public class WebWeChatClient : IWebWeChatClient
     {
         private readonly Dictionary<Type, IWeChatModule> _modules;
         private readonly WeChatNotifyEventListener _notifyListener;

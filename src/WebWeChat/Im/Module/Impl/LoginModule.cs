@@ -9,7 +9,7 @@ using WebWeChat.Im.Module.Interface;
 
 namespace WebWeChat.Im.Module.Impl
 {
-    public class LoginModule: AbstractModule, ILoginModule
+    public class LoginModule : AbstractModule, ILoginModule
     {
         protected IActorDispatcher ActorDispatcher { get; private set; }
 
@@ -22,23 +22,31 @@ namespace WebWeChat.Im.Module.Impl
         public IActionResult Login(ActionEventListener listener)
         {
             var future = new ActionFuture(ActorDispatcher, listener);
-            future.PushAction(new GetUuidAction(Context, null));
-            future.PushAction(GetQRCode());
-            future.ExecuteAsync();
-            return future;
-        }
-
-        // 0.获取二维码
-        private IAction GetQRCode()
-        {
-            return new GetQRCodeAction(Context, (sender, @event) =>
+            future.PushAction(new GetUuidAction(Context));
+            future.PushAction(new GetQRCodeAction(Context, (sender, @event) =>
             {
                 if (@event.Type == ActionEventType.EvtOK)
                 {
-                    var verify = (Image) @event.Target;
-                    Context.FireNotify(new WeChatNotifyEvent(WeChatNotifyEventType.QRcodeReady, verify));
+                    var verify = (Image)@event.Target;
+                    Context.FireNotify(new WeChatNotifyEvent(WeChatNotifyEventType.QRCodeReady, verify));
                 }
-            });
+            }));
+            future.PushAction(new CheckQRCodeAction(1, Context, (sender, @event) =>
+            {
+                if (@event.Type == ActionEventType.EvtOK)
+                {
+                    Context.FireNotify(new WeChatNotifyEvent(WeChatNotifyEventType.QRCodeSuccess, null));
+                }
+            }));
+            future.PushAction(new CheckQRCodeAction(0, Context));
+            future.PushLastAction(new WebLoginAction(Context, (sender, @event) =>
+            {
+                if (@event.Type == ActionEventType.EvtOK)
+                {
+                    Context.FireNotify(new WeChatNotifyEvent(WeChatNotifyEventType.LoginSuccess));
+                }
+            }));
+            return future;
         }
     }
 }
