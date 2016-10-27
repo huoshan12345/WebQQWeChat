@@ -19,6 +19,7 @@ namespace HttpActionFrame
 
         public static void Configure(IServiceProvider provider)
         {
+            provider.GetService<IActorDispatcher>().BeginExcute();
         }
     }
 }

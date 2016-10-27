@@ -6,6 +6,7 @@ namespace WebWeChat.Im.Module.Impl
 {
     public abstract class AbstractModule : IWeChatModule
     {
+
         public virtual void Init(IWeChatContext context)
         {
             if (context == null) throw new ArgumentNullException(nameof(context));

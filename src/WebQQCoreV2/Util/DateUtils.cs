@@ -35,12 +35,12 @@ namespace iQQ.Net.WebQQCore.Util
         /// <returns></returns>
         public static long CurrentTimeMillis(this DateTime d)
         {
-            return (long)((DateTime.UtcNow - Jan1St1970).TotalMilliseconds);
+            return (long)(DateTime.UtcNow - Jan1St1970).TotalMilliseconds;
         }
 
         public static long CurrentTimeSeconds(this DateTime d)
         {
-            return CurrentTimeMillis(d) / 1000;
+            return (long)(DateTime.UtcNow - Jan1St1970).TotalSeconds;
         }
     }
 

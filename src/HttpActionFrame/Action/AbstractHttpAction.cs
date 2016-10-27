@@ -28,10 +28,11 @@ namespace HttpActionFrame.Action
             OnActionEvent?.Invoke(this, actionEvent);
         }
 
-        public void Execute()
+        public void NotifyActionEvent(ActionEventType type, object target)
         {
-            ExecuteAsync().Wait();
+            NotifyActionEvent(new ActionEvent(type, target));
         }
+
 
         public async Task ExecuteAsync()
         {
@@ -60,6 +61,7 @@ namespace HttpActionFrame.Action
 
         public virtual void OnHttpContent(HttpResponseItem responseItem)
         {
+
         }
 
         public virtual void OnHttpRead(ProgressEventArgs args)
@@ -72,13 +74,13 @@ namespace HttpActionFrame.Action
             NotifyActionEvent(new ActionEvent(ActionEventType.EvtWrite, args));
         }
 
-        public virtual void OnHttpError(Exception ex)
+        public virtual async void OnHttpError(Exception ex)
         {
             if (++_retryTimes < MaxReTryTimes)
             {
                 NotifyActionEvent(new ActionEvent(ActionEventType.EvtRetry, ex));
-                if (ActionFuture != null) ActionFuture.PushAction(this);
-                else Execute();
+                if (ActionFuture != null) ActionFuture.ExcuteAction(this);
+                else await ExecuteAsync();
             }
             else NotifyActionEvent(new ActionEvent(ActionEventType.EvtError, ex));
         }

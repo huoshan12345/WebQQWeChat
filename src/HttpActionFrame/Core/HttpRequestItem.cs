@@ -69,13 +69,13 @@ namespace HttpActionFrame.Core
             _queryMap[key] = value?.ToString() ?? string.Empty;
         }
 
-        // [Obsolete]
+        [Obsolete]
         public void AddGetValue(string key, object value)
         {
             AddQueryValue(key, value);
         }
         
-        // [Obsolete]
+        [Obsolete]
         public void AddPostValue(string key, object value)
         {
             AddQueryValue(key, value);

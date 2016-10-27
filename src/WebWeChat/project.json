@@ -1,4 +1,4 @@
-﻿{
+{
 
   "version": "1.0.0-*",
 
@@ -18,7 +18,7 @@
   "buildOptions": {
     "emitEntryPoint": true,
     "copyToOutput": {
-      "include": [],
+      "include": [ "project.json" ],
       "exclude": [],
       "excludeFiles": [],
       "builtIns": {},
@@ -31,6 +31,10 @@
     "Microsoft.Extensions.Logging": "1.0.0",
     "HttpActionFrame": "1.0.0-*",
     "Utility": "1.0.0-*",
+    "Microsoft.Extensions.Configuration": "1.0.0",
+    "Microsoft.Extensions.Configuration.Json": "1.0.0",
+    "Microsoft.Extensions.Configuration.UserSecrets": "1.0.0",
+    "Microsoft.Extensions.DependencyInjection": "1.0.0",
   },
 
   "frameworks": {
@@ -66,5 +70,6 @@
       }
     }
 
-  }
+  },
+  "userSecretsId": "aspnet-WebWeChat-20161027025319"
 }

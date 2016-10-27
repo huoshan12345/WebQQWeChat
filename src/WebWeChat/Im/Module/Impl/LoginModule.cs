@@ -21,22 +21,24 @@ namespace WebWeChat.Im.Module.Impl
 
         public IActionResult Login(ActionEventListener listener)
         {
-            return GetQRCode(listener);
+            var future = new ActionFuture(ActorDispatcher, listener);
+            future.PushAction(new GetUuidAction(Context, null));
+            future.PushAction(GetQRCode());
+            future.ExecuteAsync();
+            return future;
         }
 
-        // 1.获取二维码
-        private IActionResult GetQRCode(ActionEventListener listener)
+        // 0.获取二维码
+        private IAction GetQRCode()
         {
-            var actionLink = new ActionFuture(ActorDispatcher, listener);
-            actionLink.PushEndAction(new GetQRCodeAction(Context, (sender, @event) =>
+            return new GetQRCodeAction(Context, (sender, @event) =>
             {
                 if (@event.Type == ActionEventType.EvtOK)
                 {
-                    var verify = (Image)@event.Target;
+                    var verify = (Image) @event.Target;
                     Context.FireNotify(new WeChatNotifyEvent(WeChatNotifyEventType.QRcodeReady, verify));
                 }
-            }));// .ExcuteAsync();
-            return actionLink;
+            });
         }
     }
 }

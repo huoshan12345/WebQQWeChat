@@ -27,7 +27,7 @@ namespace WebWeChat.Im.Module.Impl
 
         public override string GetMessage(string message, Exception exception)
         {
-            var userName = Context.Account.Username;
+            var userName = Context.GetModule<AccountModule>().Username;
             if (!message.IsNullOrEmpty() && !userName.IsNullOrEmpty())
             {
                 return $"{userName}{message}";

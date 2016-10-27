@@ -30,30 +30,25 @@ namespace HttpActionFrame.Action
 
         public CancellationToken Token => _cts.Token;
 
-        public void PushAction(IAction action)
+        public IActionFuture PushAction(IAction action)
         {
             action.ActionFuture = this;
             action.OnActionEvent += _outerListener;
             action.OnActionEvent += SendNonLastEventToFuture;
             _queue.Enqueue(action);
+            return this;
         }
 
-        public void PushEndAction(IAction action, bool autoExcute = true)
+        public void ExcuteAction(IAction action)
         {
-            action.ActionFuture = this;
-            action.OnActionEvent += _outerListener;
-            action.OnActionEvent += SendLastEventToFuture;
-            _queue.Enqueue(action);
-            if (autoExcute) BeginExcute();
+            ActorDispatcher.PushActor(action);
         }
 
         private void ExcuteNextAction()
         {
-            if (_queue.Count != 0)
-            {
-                var action = _queue.Dequeue();
-                ActorDispatcher.PushActor(action);
-            }
+            if (_queue.Count == 0) return;
+            var action = _queue.Dequeue();
+            ActorDispatcher.PushActor(action);
         }
 
         private void SendLastEventToFuture(IAction sender, ActionEvent actionEvent)
@@ -94,12 +89,7 @@ namespace HttpActionFrame.Action
             _finalEvent = actionEvent;
             _waitHandle.Set();
         }
-
-        public void BeginExcute()
-        {
-            ExcuteNextAction();
-        }
-
+        
         public ActionEvent WaitFinalEvent()
         {
             return WaitFinalEvent(CancellationToken.None);
@@ -140,6 +130,12 @@ namespace HttpActionFrame.Action
             return type == ActionEventType.EvtCanceled
                     || type == ActionEventType.EvtError
                     || type == ActionEventType.EvtOK;
+        }
+
+        public Task ExecuteAsync()
+        {
+            ExcuteNextAction();
+            return Task.CompletedTask;
         }
     }
 }

@@ -5,5 +5,5 @@ using System.Threading.Tasks;
 
 namespace WebWeChat.Im.Event
 {
-    public delegate void WeChatNotifyEventListener(IWeChatClient sender, WeChatNotifyEvent e);
+    public delegate void WeChatNotifyEventListener(IWebWeChatClient sender, WeChatNotifyEvent e);
 }

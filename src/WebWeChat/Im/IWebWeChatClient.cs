@@ -7,8 +7,8 @@ using HttpActionFrame.Event;
 
 namespace WebWeChat.Im
 {
-    public interface IWeChatClient
+    public interface IWebWeChatClient
     {
-        IActionResult Login(ActionEventListener listener);
+        IActionResult Login(ActionEventListener listener = null);
     }
 }

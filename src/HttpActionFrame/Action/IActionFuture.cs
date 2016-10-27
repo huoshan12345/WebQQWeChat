@@ -1,18 +1,17 @@
 ﻿using System.Threading;
+using HttpActionFrame.Actor;
 using HttpActionFrame.Event;
 
 namespace HttpActionFrame.Action
 {
-    public interface IActionFuture: IActionResult
+    public interface IActionFuture: IActionResult, IActor
     {
         CancellationToken Token { get; }
 
-        void PushAction(IAction action);
+        IActionFuture PushAction(IAction action);
 
-        void PushEndAction(IAction action, bool autoExcute = true);
+        void ExcuteAction(IAction action);
 
         void Terminate(IAction sender, ActionEvent actionEvent);
-
-        void BeginExcute();
     }
 }

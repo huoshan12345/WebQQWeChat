@@ -7,7 +7,6 @@ using HttpActionFrame.Actor;
 using HttpActionFrame.Event;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using WebWeChat.Im.Bean;
 using WebWeChat.Im.Core;
 using WebWeChat.Im.Event;
 using WebWeChat.Im.Module;
@@ -16,29 +15,34 @@ using WebWeChat.Im.Module.Interface;
 
 namespace WebWeChat.Im
 {
-    public class WeChatClient : IWeChatClient, IWeChatContext
+    public class WebWeChatClient : IWebWeChatClient, IWeChatContext
     {
         private readonly Dictionary<Type, IWeChatModule> _modules;
         private readonly WeChatNotifyEventListener _notifyListener;
         private readonly IServiceProvider _services;
-        private readonly ILogger _logger;
+        private readonly ILoggerModule _logger;
 
-        public WeChatAccount Account { get; set; }
-
-        public WeChatClient(IServiceProvider services, WeChatNotifyEventListener notifyListener = null)
+        public WebWeChatClient(IServiceProvider services, WeChatNotifyEventListener notifyListener = null)
         {
+            if(services == null) throw new ArgumentNullException(nameof(services));
             _services = services;
             _notifyListener = notifyListener;
             _modules = new Dictionary<Type, IWeChatModule>
             {
                 [typeof(ILoginModule)] = GetSerivce<ILoginModule>(),
                 [typeof(ILoggerModule)] = GetSerivce<ILoggerModule>(),
-                [typeof(IHttpModule)] = GetSerivce<HttpModule>(),
+                [typeof(IHttpModule)] = GetSerivce<IHttpModule>(),
+
+                [typeof(StoreModule)] = GetSerivce<StoreModule>(),
+                [typeof(SessionModule)] = GetSerivce<SessionModule>(),
+                [typeof(AccountModule)] = GetSerivce<AccountModule>(),
             };
             _logger = GetModule<ILoggerModule>();
+
+            Init();
         }
 
-        public IActionResult Login(ActionEventListener listener)
+        public IActionResult Login(ActionEventListener listener = null)
         {
             var login = GetModule<ILoginModule>();
             return login.Login(listener);
@@ -83,7 +87,7 @@ namespace WebWeChat.Im
             }
             catch (Exception e)
             {
-                _logger.LogError(0, e, $"初始化模块和服务失败{e}");
+                _logger?.LogError(0, e, $"初始化模块和服务失败{e}");
             }
         }
 
@@ -103,6 +107,11 @@ namespace WebWeChat.Im
             {
                 _logger.LogError($"销毁所有模块和服务失败: {e}");
             }
+        }
+
+        public void Dispose()
+        {
+            Destroy();
         }
     }
 }
