@@ -1,6 +1,8 @@
-﻿namespace HttpActionFrame.Actor
+﻿using System;
+
+namespace HttpActionFrame.Actor
 {
-    public interface IActorDispatcher
+    public interface IActorDispatcher: IDisposable
     {
         /// <summary>
         /// 把一个Actor放入线程安全的事件队列的末尾等待处理

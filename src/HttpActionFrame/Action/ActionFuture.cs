@@ -12,8 +12,7 @@ namespace HttpActionFrame.Action
         private ActionEvent _finalEvent;
         private readonly ActionEventListener _outerListener;
         private readonly ManualResetEvent _waitHandle = new ManualResetEvent(false);
-        private readonly ManualResetEvent _excuteHandle = new ManualResetEvent(false);
-        private readonly CancellationTokenSource _cts = new CancellationTokenSource();
+        private CancellationTokenSource _cts = new CancellationTokenSource();
         private readonly Queue<IAction> _queue = new Queue<IAction>();
 
         public IActorDispatcher ActorDispatcher { get; }
@@ -114,6 +113,7 @@ namespace HttpActionFrame.Action
 
         public ActionEvent WaitFinalEvent(CancellationToken token)
         {
+            _cts = CancellationTokenSource.CreateLinkedTokenSource(token);
             _waitHandle.WaitOne();
             return _finalEvent;
         }

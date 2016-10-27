@@ -7,7 +7,7 @@ namespace HttpActionFrame.Actor
     /// <summary>
     /// <para>单线程的QQ内部分发器，可以同时使用多个QQ实例里</para>
     /// </summary>
-    public class SimpleActorDispatcher : IActorDispatcher, IDisposable
+    public class SimpleActorDispatcher : IActorDispatcher
     {
         private readonly BlockingCollection<IActor> _actorQueue;
 
@@ -26,7 +26,7 @@ namespace HttpActionFrame.Actor
         /// </summary>
         /// <param name="actor"></param>
         /// <returns></returns>
-        private bool DispatchAction(IActor actor)
+        private static bool DispatchAction(IActor actor)
         {
             if (actor == null) return true;
             actor.ExecuteAsync();
