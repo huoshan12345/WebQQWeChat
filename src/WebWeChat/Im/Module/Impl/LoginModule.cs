@@ -9,19 +9,11 @@ using WebWeChat.Im.Module.Interface;
 
 namespace WebWeChat.Im.Module.Impl
 {
-    public class LoginModule : AbstractModule, ILoginModule
+    public class LoginModule : WeChatModule, ILoginModule
     {
-        protected IActorDispatcher ActorDispatcher { get; private set; }
-
-        public override void Init(IWeChatContext context)
+        public IActionResult Login(ActionEventListener listener = null)
         {
-            base.Init(context);
-            ActorDispatcher = context.GetSerivce<IActorDispatcher>();
-        }
-
-        public IActionResult Login(ActionEventListener listener)
-        {
-            var future = new ActionFuture(ActorDispatcher, listener)
+            var future = new WebWeChatActionFuture(Context, listener)
                 .PushAction(new GetUuidAction(Context))
                 .PushAction(new GetQRCodeAction(Context, (sender, @event) =>
                 {
@@ -31,14 +23,14 @@ namespace WebWeChat.Im.Module.Impl
                         Context.FireNotify(new WeChatNotifyEvent(WeChatNotifyEventType.QRCodeReady, verify));
                     }
                 }))
-                .PushAction(new CheckQRCodeAction(1, Context, (sender, @event) =>
+                .PushAction(new WatiForLoginAction(1, Context, (sender, @event) =>
                 {
                     if (@event.Type == ActionEventType.EvtOK)
                     {
                         Context.FireNotify(new WeChatNotifyEvent(WeChatNotifyEventType.QRCodeSuccess, null));
                     }
                 }))
-                .PushAction(new CheckQRCodeAction(0, Context))
+                .PushAction(new WatiForLoginAction(0, Context))
                 .PushLastAction(new WebLoginAction(Context, (sender, @event) =>
                 {
                     if (@event.Type == ActionEventType.EvtOK)
@@ -52,10 +44,11 @@ namespace WebWeChat.Im.Module.Impl
 
         private void AfterLogin()
         {
-            var future = new ActionFuture(ActorDispatcher)
+            var future = new WebWeChatActionFuture(Context)
                 .PushAction(new WebwxInitAction(Context))
                 .PushAction(new StatusNotifyAction(Context))
                 .PushAction(new GetContactAction(Context))
+                .PushAction(new BatchGetContactAction())
                 .ExecuteAsync();
         }
     }

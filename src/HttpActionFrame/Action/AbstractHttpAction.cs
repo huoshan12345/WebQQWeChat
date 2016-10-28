@@ -12,11 +12,11 @@ namespace HttpActionFrame.Action
         protected int _retryTimes;
         protected virtual int MaxReTryTimes { get; set; } = 3;
         public IActionFuture ActionFuture { get; set; }
-        protected readonly IHttpService _httpService;
+        protected IHttpService HttpService { get; set; }
 
-        protected AbstractHttpAction(IHttpService httpService, ActionEventListener listener = null)
+        protected AbstractHttpAction(IHttpService httpHttpService, ActionEventListener listener = null)
         {
-            _httpService = httpService;
+            HttpService = httpHttpService;
             // _listener = listener;
             OnActionEvent += listener;
         }
@@ -39,7 +39,7 @@ namespace HttpActionFrame.Action
             {
                 var requestItem = BuildRequest();
                 var token = ActionFuture?.Token ?? CancellationToken.None;
-                await _httpService.ExecuteHttpRequestAsync(requestItem, token, this);
+                await HttpService.ExecuteHttpRequestAsync(requestItem, token, this);
             }
             catch (TaskCanceledException)
             {

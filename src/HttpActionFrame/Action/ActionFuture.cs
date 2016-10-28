@@ -23,14 +23,14 @@ namespace HttpActionFrame.Action
             ActorDispatcher = actorDispatcher;
         }
 
-        public void Cancel()
+        public virtual void Cancel()
         {
             _cts.Cancel();
         }
 
         public CancellationToken Token => _cts.Token;
 
-        public IActionFuture PushAction(IAction action)
+        public virtual IActionFuture PushAction(IAction action)
         {
             action.ActionFuture = this;
             action.OnActionEvent += _outerListener;
@@ -39,7 +39,7 @@ namespace HttpActionFrame.Action
             return this;
         }
 
-        public IActionFuture PushLastAction(IAction action)
+        public virtual IActionFuture PushLastAction(IAction action)
         {
             action.ActionFuture = this;
             action.OnActionEvent += _outerListener;
@@ -49,7 +49,7 @@ namespace HttpActionFrame.Action
             return this;
         }
 
-        public void ExcuteAction(IAction action)
+        public virtual void ExcuteAction(IAction action)
         {
             ActorDispatcher.PushActor(action);
         }

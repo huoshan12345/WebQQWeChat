@@ -11,6 +11,10 @@ using Utility.Extensions;
 
 namespace WebWeChat.Im.Action
 {
+    /// <summary>
+    /// 微信初始化
+    /// 获取初始化信息（账号头像信息、聊天好友、阅读等）
+    /// </summary>
     public class WebwxInitAction : WebWeChatAction
     {
         public WebwxInitAction(IWeChatContext context, ActionEventListener listener = null) : base(context, listener)
@@ -88,6 +92,12 @@ namespace WebWeChat.Im.Action
                     "MPSubscribeMsgList": [...],
                     "ClickReportInterval": 600000
                 } 
+             */
+            /*
+                本次ContactList里只有10个好友or群组，应该是最近的10个活跃对象（个数不是固定的）；
+                另外，可以通过UserName来区分好友or群组，一个”@”为好友，两个”@”为群组。
+                MPSubscribeMsg为公众号推送的阅读文章
+                User其实就是自己账号信息（用在顶部的头像） 
              */
             var str = responseItem.ResponseString;
             if (!str.IsNullOrEmpty())

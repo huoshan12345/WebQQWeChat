@@ -7,6 +7,11 @@ namespace WebWeChat.Im.Action
 {
     public class GetQRCodeAction : WebWeChatAction
     {
+        /// <summary>
+        /// 显示二维码
+        /// </summary>
+        /// <param name="context"></param>
+        /// <param name="listener"></param>
         public GetQRCodeAction(IWeChatContext context, ActionEventListener listener) : base(context, listener)
         {
         }

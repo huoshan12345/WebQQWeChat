@@ -33,7 +33,7 @@ namespace WebWeChat
             HttpActionFrame.Initializer.ConfigureServices(services, config);
 
             services.AddTransient<IHttpModule, HttpModule>();
-            services.AddTransient<ILoggerModule>(provider => new LoggerModule(LogLevel.Debug));
+            services.AddTransient<ILoggerModule>(provider => new LoggerModule(LogLevel.Information));
             services.AddTransient<ILoginModule, LoginModule>();
 
             // 以下三个就不以接口形式添加了

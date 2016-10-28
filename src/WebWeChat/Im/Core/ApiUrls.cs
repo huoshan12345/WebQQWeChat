@@ -14,5 +14,7 @@ namespace WebWeChat.Im.Core
         public const string WebwxInit = "{0}/webwxinit";
         public const string StatusNotify = "{0}/webwxstatusnotify";
         public const string GetContact = "{0}/webwxgetcontact";
+        public const string BatchGetContact = "{0}/webwxbatchgetcontact";
+        
     }
 }

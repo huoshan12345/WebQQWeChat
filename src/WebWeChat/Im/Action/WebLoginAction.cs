@@ -12,7 +12,13 @@ namespace WebWeChat.Im.Action
 {
     public class WebLoginAction : WebWeChatAction
     {
-        public WebLoginAction(IWeChatContext context, ActionEventListener listener = null) : base(context, listener)
+        /// <summary>
+        /// 获取登录参数
+        /// </summary>
+        /// <param name="context"></param>
+        /// <param name="listener"></param>
+        public WebLoginAction(IWeChatContext context, ActionEventListener listener = null)
+            : base(context, listener)
         {
         }
 

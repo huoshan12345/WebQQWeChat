@@ -1,7 +1,9 @@
-﻿namespace WebWeChat.Im.Module.Impl
+﻿using WebWeChat.Im.Bean;
+
+namespace WebWeChat.Im.Module.Impl
 {
-    public class AccountModule : AbstractModule
+    public class AccountModule : WeChatModule
     {
-        public string Username { get; set; }
+        public ContactMember User { get; set; }
     }
 }

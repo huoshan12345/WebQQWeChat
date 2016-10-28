@@ -17,6 +17,7 @@ namespace HttpActionFrame.Action
 
         /// <summary>
         /// 放入最后一个action，并执行Future
+        /// 注意调用了此方法后就不要再调用ExecuteAsync了
         /// </summary>
         /// <param name="action"></param>
         /// <returns></returns>

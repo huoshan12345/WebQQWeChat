@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Threading.Tasks;
@@ -32,6 +33,7 @@ namespace WebWeChat
                         const string path = "verify.png";
                         verify.Save(path);
                         logger.LogInformation($"请扫描在项目根目录下{path}图片");
+                        Process.Start(path);
                         break;
                     }
 

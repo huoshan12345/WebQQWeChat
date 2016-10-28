@@ -9,7 +9,7 @@ using WebWeChat.Im.Core;
 
 namespace WebWeChat.Im.Module.Impl
 {
-    public class SessionModule : AbstractModule
+    public class SessionModule : WeChatModule
     {
         public SessionModule()
         {

@@ -2,62 +2,57 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using HttpActionFrame.Action;
 using HttpActionFrame.Core;
 using HttpActionFrame.Event;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using WebWeChat.Im.Bean;
 using WebWeChat.Im.Core;
+using Microsoft.Extensions.Logging;
 using Utility.Extensions;
 
 namespace WebWeChat.Im.Action
 {
     /// <summary>
-    /// 开启微信状态通知
+    /// 用于获取群成员
     /// </summary>
-    public class StatusNotifyAction : WebWeChatAction
+    public class BatchGetContactAction : WebWeChatAction
     {
-        public StatusNotifyAction(IWeChatContext context, ActionEventListener listener = null)
-            : base(context, listener)
+        public BatchGetContactAction(ActionEventListener listener = null)
+            : base(listener)
         {
         }
 
         public override HttpRequestItem BuildRequest()
         {
-            var url = string.Format(ApiUrls.StatusNotify, Session.BaseUrl, Session.PassTicket);
+            var url = string.Format(ApiUrls.BatchGetContact, Session.BaseUrl);
             var obj = new
             {
                 Session.BaseRequest,
-                Code = 3,
-                FromUserName = Session.User["UserName"],
-                ToUserName = Session.User["UserName"],
-                ClientMsgId = Timestamp
+                Count = Store.GroupCount,
+                List = Store.Groups.Select(m => new { m.UserName, EncryChatRoomId = "" })
             };
             var req = new HttpRequestItem(HttpMethodType.Post, url)
             {
-                RawData = JsonConvert.SerializeObject(obj),
                 ContentType = HttpConstants.JsonContentType,
+                RawData = JsonConvert.SerializeObject(obj)
             };
             return req;
         }
 
         public override void OnHttpContent(HttpResponseItem responseItem)
         {
-            /*
-                {
-                    "BaseResponse": {
-                        "Ret": 0,
-                        "ErrMsg": ""
-                    },
-                    "MsgID": "5895072760632094896"
-                }
-            */
             var str = responseItem.ResponseString;
             if (!str.IsNullOrEmpty())
             {
                 var json = JObject.Parse(str);
                 if (json["BaseResponse"]["Ret"].ToString() == "0")
                 {
+                    var list = json["ContactList"].ToObject<List<ContactMember>>();
+                    foreach (var item in list)
+                    {
+                        Store.ContactMemberDic[item.UserName] = item;
+                    }
                     NotifyActionEvent(ActionEventType.EvtOK);
                     return;
                 }

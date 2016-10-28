@@ -4,17 +4,24 @@ using System.Linq;
 using System.Threading.Tasks;
 using HttpActionFrame.Core;
 using HttpActionFrame.Event;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Utility.Extensions;
 using WebWeChat.Im.Bean;
 using WebWeChat.Im.Core;
+using WebWeChat.Im.Module.Impl;
+using WebWeChat.Im.Util;
 
 namespace WebWeChat.Im.Action
 {
+    /// <summary>
+    /// 获取好友列表
+    /// </summary>
     public class GetContactAction : WebWeChatAction
     {
-        public GetContactAction(IWeChatContext context, ActionEventListener listener = null) : base(context, listener)
+        public GetContactAction(IWeChatContext context, ActionEventListener listener = null)
+            : base(context, listener)
         {
         }
 
@@ -84,9 +91,11 @@ namespace WebWeChat.Im.Action
                 if (json["BaseResponse"]["Ret"].ToString() == "0")
                 {
                     Store.MemberCount = json["MemberCount"].ToObject<int>();
-                    var list = json["MemberList"].ToObject<List<Member>>();
-                    Store.MemberDic = list.ToDictionary(m => m.UserName);
-
+                    var list = json["MemberList"].ToObject<List<ContactMember>>();
+                    Store.ContactMemberDic = list.ToDictionary(m => m.UserName);
+                    Account.User = Store.ContactMemberDic[Session.User["UserName"].ToString()];
+                    Logger.LogInformation($"应有{Store.MemberCount}个联系人，读取到联系人{Store.ContactMemberDic.Count}个");
+                    Logger.LogInformation($"共有{Store.GroupCount}个群|{Store.FriendCount}个好友|{Store.SpecialUserCount}个特殊账号|{Store.PublicUserCount}公众号或服务号");
                     NotifyActionEvent(ActionEventType.EvtOK);
                     return;
                 }
@@ -98,6 +107,5 @@ namespace WebWeChat.Im.Action
             }
             throw new WeChatException(WeChatErrorCode.ResponseError);
         }
-
     }
 }

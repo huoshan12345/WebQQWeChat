@@ -7,6 +7,9 @@ using WebWeChat.Im.Core;
 
 namespace WebWeChat.Im.Action
 {
+    /// <summary>
+    /// 获取UUID
+    /// </summary>
     public class GetUuidAction : WebWeChatAction
     {
         private readonly Regex _reg = new Regex(@"window.QRLogin.code = (\d+); window.QRLogin.uuid = ""(\S+?)""");

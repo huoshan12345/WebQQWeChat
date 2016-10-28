@@ -16,20 +16,37 @@ namespace WebWeChat.Im.Action
 {
     public abstract class WebWeChatAction : AbstractHttpAction
     {
-        protected ILogger Logger { get; }
-        protected IWeChatContext Context { get; }
-        protected SessionModule Session { get; }
-        protected StoreModule Store { get; }
+        protected IWeChatContext Context { get; set; }
+        protected ILoggerModule Logger { get; set; }
+        protected SessionModule Session { get; set; }
+        protected StoreModule Store { get; set; }
+        protected AccountModule Account { get; set; }
+
         protected long Timestamp => DateTime.Now.ToTimestamp();
         protected string ActionName => GetType().Name;
 
         protected WebWeChatAction(IWeChatContext context, ActionEventListener listener = null) :
             base(context.GetSerivce<IHttpService>(), listener)
         {
+            SetContext(context);
+        }
+
+        /// <summary>
+        /// 把各模块交给ActionFuture初始化
+        /// 即通过调用SetContext方法
+        /// </summary>
+        /// <param name="listener"></param>
+        protected WebWeChatAction(ActionEventListener listener = null) : base(null, listener) { }
+
+        public void SetContext(IWeChatContext context)
+        {
+            if(context == null) throw new ArgumentNullException(nameof(context));
             Context = context;
-            Session = context.GetModule<SessionModule>();
-            Logger = context.GetModule<ILoggerModule>();
-            Store = context.GetModule<StoreModule>();
+            HttpService = HttpService ?? context.GetSerivce<IHttpService>();
+            Logger = Logger ?? context.GetModule<ILoggerModule>();
+            Session = Session ?? context.GetModule<SessionModule>();
+            Store = Store ?? context.GetModule<StoreModule>();
+            Account = Account ?? context.GetModule<AccountModule>();
         }
 
         public override void OnHttpError(Exception ex)

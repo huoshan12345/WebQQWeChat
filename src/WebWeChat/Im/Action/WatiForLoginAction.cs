@@ -9,13 +9,17 @@ using WebWeChat.Im.Core;
 
 namespace WebWeChat.Im.Action
 {
-    public class CheckQRCodeAction : WebWeChatAction
+    /// <summary>
+    /// 等待扫码登录
+    /// </summary>
+    public class WatiForLoginAction : WebWeChatAction
     {
         private readonly Regex _regCode = new Regex(@"window.code=(\d+);");
         private readonly Regex _regUrl = new Regex(@"window.redirect_uri=""(\S+?)"";");
         private readonly int _tip;
 
-        public CheckQRCodeAction(int tip, IWeChatContext context, ActionEventListener listener = null) : base(context, listener)
+        public WatiForLoginAction(int tip, IWeChatContext context, ActionEventListener listener = null) 
+            : base(context, listener)
         {
             _tip = tip;
         }

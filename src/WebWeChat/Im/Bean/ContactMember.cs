@@ -6,20 +6,8 @@ using Newtonsoft.Json;
 
 namespace WebWeChat.Im.Bean
 {
-    public class Member
+    public class ContactMember:GroupMember
     {
-        public int Uin { get; set; }
-
-        /// <summary>
-        ///  用户名称，一个"@"为好友，两个"@"为群组
-        /// </summary>
-        public string UserName { get; set; }
-
-        /// <summary>
-        /// 昵称
-        /// </summary>
-        public string NickName { get; set; }
-
         /// <summary>
         /// 头像图片链接地址
         /// </summary>
@@ -36,9 +24,9 @@ namespace WebWeChat.Im.Bean
         public int MemberCount { get; set; }
 
         /// <summary>
-        /// 成员列表
+        /// 成员列表，只有在群组信息中才有效
         /// </summary>
-        public object[] MemberList { get; set; }
+        public List<GroupMember> MemberList { get; set; }
 
         /// <summary>
         /// 备注名称
@@ -55,31 +43,7 @@ namespace WebWeChat.Im.Bean
 
         public string Signature { get; set; }
         public int VerifyFlag { get; set; }
-        public int OwnerUin { get; set; }
-
-        /// <summary>
-        /// 用户名拼音缩写
-        /// </summary>
-        [JsonProperty(PropertyName = "PYInitial")]
-        public string PyInitial { get; set; }
-
-        /// <summary>
-        /// 用户名拼音全拼
-        /// </summary>
-        [JsonProperty(PropertyName = "PYQuanPin")]
-        public string PyQuanPin { get; set; }
-
-        /// <summary>
-        /// 备注拼音缩写
-        /// </summary>
-        [JsonProperty(PropertyName = "RemarkPYInitial")]
-        public string RemarkPyInitial { get; set; }
-
-        /// <summary>
-        /// 备注拼音全拼
-        /// </summary>
-        [JsonProperty(PropertyName = "RemarkPYQuanPin")]
-        public string RemarkPyQuanPin { get; set; }
+        public long OwnerUin { get; set; }
 
         /// <summary>
         /// 是否为星标朋友 0-否 1-是
@@ -87,7 +51,6 @@ namespace WebWeChat.Im.Bean
         public int StarFriend { get; set; }
         public int AppAccountFlag { get; set; }
         public int Statues { get; set; }
-        public int AttrStatus { get; set; }
 
         /// <summary>
         /// 省
@@ -101,9 +64,8 @@ namespace WebWeChat.Im.Bean
         public string Alias { get; set; }
         public int SnsFlag { get; set; }
         public int UniFriend { get; set; }
-        public string DisplayName { get; set; }
         public int ChatRoomId { get; set; }
-        public string KeyWord { get; set; }
         public string EncryChatRoomId { get; set; }
     }
+
 }
