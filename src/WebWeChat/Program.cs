@@ -68,7 +68,10 @@ namespace WebWeChat
 
             var client = new WebWeChatClient(ServiceProvider, Listener);
             var @event = client.Login().WaitFinalEvent();
-            Console.WriteLine($"登录结束{@event.Type}");
+            if (@event.Type != ActionEventType.EvtOK)
+            {
+                Console.WriteLine("登录失败");
+            }
             Console.Read();
         }
     }
