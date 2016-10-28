@@ -26,5 +26,10 @@ namespace Utility.Extensions
         {
             return obj == null || obj.Value.Equals(default(T));
         }
+
+        public static string SafeToString(this object obj)
+        {
+            return obj?.ToString() ?? string.Empty;
+        }
     }
 }

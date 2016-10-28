@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using HttpActionFrame;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using WebWeChat.Im.Module;
 using WebWeChat.Im.Module.Impl;
 using WebWeChat.Im.Module.Interface;
@@ -26,13 +27,13 @@ namespace WebWeChat
         }
 
         public static void ConfigureServices(IServiceCollection services)
-        {            
+        {
             var config = BuildConfig();
             services.AddSingleton(config);
             HttpActionFrame.Initializer.ConfigureServices(services, config);
 
             services.AddTransient<IHttpModule, HttpModule>();
-            services.AddTransient<ILoggerModule, LoggerModule>();
+            services.AddTransient<ILoggerModule>(provider => new LoggerModule(LogLevel.Debug));
             services.AddTransient<ILoginModule, LoginModule>();
 
             // 以下三个就不以接口形式添加了
@@ -42,7 +43,7 @@ namespace WebWeChat
         }
 
         public static void Configure(IServiceProvider provider)
-        { 
+        {
             HttpActionFrame.Initializer.Configure(provider);
         }
     }

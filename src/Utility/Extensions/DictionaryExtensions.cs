@@ -29,5 +29,11 @@ namespace Utility.Extensions
                 dic[key] = new TList { value };
             }
         }
+
+        public static string ToQueryString(this IDictionary<string, string> dic)
+        {
+            return dic.IsNullOrEmpty() ? string.Empty :
+                string.Join("&", dic.Select(item => $"{item.Key.UrlEncode()}={item.Value.UrlEncode()}"));
+        }
     }
 }

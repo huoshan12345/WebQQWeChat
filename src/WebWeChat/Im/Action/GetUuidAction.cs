@@ -7,7 +7,7 @@ using WebWeChat.Im.Core;
 
 namespace WebWeChat.Im.Action
 {
-    public class GetUuidAction : AbstractWebWeChatAction
+    public class GetUuidAction : WebWeChatAction
     {
         private readonly Regex _reg = new Regex(@"window.QRLogin.code = (\d+); window.QRLogin.uuid = ""(\S+?)""");
 
@@ -29,15 +29,13 @@ namespace WebWeChat.Im.Action
         {
             var str = responseItem.ResponseString;
             var match = _reg.Match(str);
-            if (match.Success)
+            if (match.Success && match.Groups.Count > 2 && match.Groups[1].Value == "200")
             {
                 Session.Uuid = match.Groups[2].Value;
-                NotifyActionEvent(ActionEventType.EvtOK, null);
+                NotifyActionEvent(ActionEventType.EvtOK);
+                return;
             }
-            else
-            {
-               // NotifyActionEvent(ActionEventType.EvtError, );
-            }
+            NotifyErrorEvent(WeChatErrorCode.ResponseError);
         }
     }
 }

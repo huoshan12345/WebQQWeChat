@@ -21,32 +21,42 @@ namespace WebWeChat.Im.Module.Impl
 
         public IActionResult Login(ActionEventListener listener)
         {
-            var future = new ActionFuture(ActorDispatcher, listener);
-            future.PushAction(new GetUuidAction(Context));
-            future.PushAction(new GetQRCodeAction(Context, (sender, @event) =>
-            {
-                if (@event.Type == ActionEventType.EvtOK)
+            var future = new ActionFuture(ActorDispatcher, listener)
+                .PushAction(new GetUuidAction(Context))
+                .PushAction(new GetQRCodeAction(Context, (sender, @event) =>
                 {
-                    var verify = (Image)@event.Target;
-                    Context.FireNotify(new WeChatNotifyEvent(WeChatNotifyEventType.QRCodeReady, verify));
-                }
-            }));
-            future.PushAction(new CheckQRCodeAction(1, Context, (sender, @event) =>
-            {
-                if (@event.Type == ActionEventType.EvtOK)
+                    if (@event.Type == ActionEventType.EvtOK)
+                    {
+                        var verify = (Image)@event.Target;
+                        Context.FireNotify(new WeChatNotifyEvent(WeChatNotifyEventType.QRCodeReady, verify));
+                    }
+                }))
+                .PushAction(new CheckQRCodeAction(1, Context, (sender, @event) =>
                 {
-                    Context.FireNotify(new WeChatNotifyEvent(WeChatNotifyEventType.QRCodeSuccess, null));
-                }
-            }));
-            future.PushAction(new CheckQRCodeAction(0, Context));
-            future.PushLastAction(new WebLoginAction(Context, (sender, @event) =>
-            {
-                if (@event.Type == ActionEventType.EvtOK)
+                    if (@event.Type == ActionEventType.EvtOK)
+                    {
+                        Context.FireNotify(new WeChatNotifyEvent(WeChatNotifyEventType.QRCodeSuccess, null));
+                    }
+                }))
+                .PushAction(new CheckQRCodeAction(0, Context))
+                .PushLastAction(new WebLoginAction(Context, (sender, @event) =>
                 {
-                    Context.FireNotify(new WeChatNotifyEvent(WeChatNotifyEventType.LoginSuccess));
-                }
-            }));
+                    if (@event.Type == ActionEventType.EvtOK)
+                    {
+                        Context.FireNotify(new WeChatNotifyEvent(WeChatNotifyEventType.LoginSuccess));
+                        AfterLogin();
+                    }
+                }));
             return future;
+        }
+
+        private void AfterLogin()
+        {
+            var future = new ActionFuture(ActorDispatcher)
+                .PushAction(new WebwxInitAction(Context))
+                .PushAction(new StatusNotifyAction(Context))
+                .PushAction(new GetContactAction(Context))
+                .ExecuteAsync();
         }
     }
 }

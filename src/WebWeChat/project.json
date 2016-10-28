@@ -34,20 +34,18 @@
     "Microsoft.Extensions.Configuration": "1.0.0",
     "Microsoft.Extensions.Configuration.Json": "1.0.0",
     "Microsoft.Extensions.Configuration.UserSecrets": "1.0.0",
-    "Microsoft.Extensions.DependencyInjection": "1.0.0",
-
+    "Microsoft.Extensions.DependencyInjection": "1.0.0"
   },
 
   "frameworks": {
     "net461": {
       "frameworkAssemblies": {
         "System.Drawing": "4.0.0.0",
-        "System.Runtime": "4.0.20.0",
         "System.Xml.Linq": "4.0.0.0",
         "System.Xml": "4.0.0.0"
       },
       "dependencies": {
-        "System.Net.Http": "4.0.0",
+        "System.Net.Http": "4.0.0"
       },
       "buildOptions": {
         "define": [ "NET" ],

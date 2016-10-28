@@ -28,17 +28,18 @@ namespace HttpActionFrame.Action
             OnActionEvent?.Invoke(this, actionEvent);
         }
 
-        public void NotifyActionEvent(ActionEventType type, object target = null)
+        public virtual void NotifyActionEvent(ActionEventType type, object target = null)
         {
             NotifyActionEvent(new ActionEvent(type, target));
         }
 
-        public async Task ExecuteAsync()
+        public virtual async Task ExecuteAsync()
         {
             try
             {
                 var requestItem = BuildRequest();
-                await _httpService.ExecuteHttpRequestAsync(requestItem, ActionFuture?.Token ?? CancellationToken.None, this);
+                var token = ActionFuture?.Token ?? CancellationToken.None;
+                await _httpService.ExecuteHttpRequestAsync(requestItem, token, this);
             }
             catch (TaskCanceledException)
             {
@@ -60,7 +61,7 @@ namespace HttpActionFrame.Action
 
         public virtual void OnHttpContent(HttpResponseItem responseItem)
         {
-
+            NotifyActionEvent(ActionEventType.EvtOK, responseItem);
         }
 
         public virtual void OnHttpRead(ProgressEventArgs args)

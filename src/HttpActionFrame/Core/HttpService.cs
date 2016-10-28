@@ -33,8 +33,9 @@ namespace HttpActionFrame.Core
             switch (item.Method)
             {
                 case HttpMethodType.Post:
-                request.Content = new StringContent(item.GetQueryString(), item.EncodingType, item.ContentType);
-                break;
+                    request.Content = new StringContent(item.RawData, item.EncodingType, item.ContentType);
+                    break;
+
                 case HttpMethodType.Get:
                 case HttpMethodType.Put:
                 case HttpMethodType.Delete:
@@ -42,9 +43,9 @@ namespace HttpActionFrame.Core
                 case HttpMethodType.Options:
                 case HttpMethodType.Trace:
                 default:
-                break;
+                    break;
             }
-            foreach (var header in item._headerMap.Where(h => !NotAddHeaderNames.Contains(h.Key)))
+            foreach (var header in item.HeaderMap.Where(h => !NotAddHeaderNames.Contains(h.Key)))
             {
                 request.Headers.Add(header.Key, header.Value);
             }
@@ -68,20 +69,20 @@ namespace HttpActionFrame.Core
             switch (responseItem.RequestItem.ResultType)
             {
                 case ResponseResultType.String:
-                {
-                    responseItem.ResponseString = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-                    break;
-                }
+                    {
+                        responseItem.ResponseString = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+                        break;
+                    }
                 case ResponseResultType.Byte:
-                {
-                    responseItem.ResponseBytes = await response.Content.ReadAsByteArrayAsync().ConfigureAwait(false);
-                    break;
-                }
+                    {
+                        responseItem.ResponseBytes = await response.Content.ReadAsByteArrayAsync().ConfigureAwait(false);
+                        break;
+                    }
                 case ResponseResultType.Stream:
-                {
-                    responseItem.ResponseStream = new MemoryStream(await response.Content.ReadAsByteArrayAsync().ConfigureAwait(false));
-                    break;
-                }
+                    {
+                        responseItem.ResponseStream = new MemoryStream(await response.Content.ReadAsByteArrayAsync().ConfigureAwait(false));
+                        break;
+                    }
             }
             foreach (var header in response.Headers)
             {

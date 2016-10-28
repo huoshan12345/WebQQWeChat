@@ -8,55 +8,66 @@ namespace HttpActionFrame.Core
 {
     public class HttpRequestItem
     {
-        public string RawUrl { get; set; }
+        public string RawData
+        {
+            get { return _rawData.ToString(); }
+            set
+            {
+                if (_rawData.Length != 0) _rawData.Clear();
+                _rawData.Append(value);
+            }
+        }
+
+        public string RawUrl { get; }
         public Encoding EncodingType { get; set; }
-        public Dictionary<string, string> _headerMap;
-        public Dictionary<string, string> _queryMap;
         public HttpMethodType Method { get; set; }
         public ResponseResultType ResultType { get; set; }
+        public Dictionary<string, string> HeaderMap { get; }
+        private readonly StringBuilder _rawData;
 
         public string ContentType
         {
-            get { return _headerMap[HttpConstants.ContentType]; }
-            set { _headerMap[HttpConstants.ContentType] = value; }
+            get { return HeaderMap[HttpConstants.ContentType]; }
+            set { HeaderMap[HttpConstants.ContentType] = value; }
         }
 
         public string Referrer
         {
-            get { return _headerMap.GetOrDefault(HttpConstants.Referrer); }
-            set { _headerMap[HttpConstants.Referrer] = value; }
+            get { return HeaderMap.GetOrDefault(HttpConstants.Referrer); }
+            set { HeaderMap[HttpConstants.Referrer] = value; }
         }
 
         public string Origin
         {
-            get { return _headerMap.GetOrDefault(HttpConstants.Origin); }
-            set { _headerMap[HttpConstants.Origin] = value; }
+            get { return HeaderMap.GetOrDefault(HttpConstants.Origin); }
+            set { HeaderMap[HttpConstants.Origin] = value; }
         }
 
         public HttpRequestItem(HttpMethodType method, string rawUrl)
         {
             RawUrl = rawUrl;
             Method = method;
-            _headerMap = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
+            HeaderMap = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
             {
                 [HttpConstants.ContentType] = Method == HttpMethodType.Post
                     ? HttpConstants.DefaultPostContentType
                     : HttpConstants.DefaultGetContentType,
+                [HttpConstants.Host] = new Uri(rawUrl).Host,
             };
-            _queryMap = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+            _rawData = new StringBuilder();
             EncodingType = Encoding.UTF8;
         }
 
-        public string GetQueryString()
+        public HttpRequestItem(HttpMethodType method, string rawUrl, IDictionary<string, string> queryValues)
+            : this(method, rawUrl)
         {
-            return _queryMap.IsNullOrEmpty() ? string.Empty : 
-                string.Join("&", _queryMap.Select(item => $"{item.Key.UrlEncode()}={item.Value.UrlEncode()}"));
+            _rawData.Append(queryValues.ToQueryString());
         }
 
         public string GetUrlWithQuery()
         {
-            return _queryMap.IsNullOrEmpty() ? RawUrl : 
-                $"{RawUrl}?{GetQueryString()}";
+            return _rawData.Length == 0 ? RawUrl :
+                $"{RawUrl}?{RawData}";
         }
 
         public string GetUrl()
@@ -66,24 +77,25 @@ namespace HttpActionFrame.Core
 
         public void AddQueryValue(string key, object value)
         {
-            _queryMap[key] = value?.ToString() ?? string.Empty;
+            if (_rawData.Length != 0) _rawData.Append("&");
+            _rawData.Append($"{key}={value.SafeToString()}");
         }
 
-        [Obsolete]
-        public void AddGetValue(string key, object value)
-        {
-            AddQueryValue(key, value);
-        }
-        
-        [Obsolete]
-        public void AddPostValue(string key, object value)
-        {
-            AddQueryValue(key, value);
-        }
+        //[Obsolete]
+        //public void AddGetValue(string key, object value)
+        //{
+        //    AddQueryValue(key, value);
+        //}
+
+        //[Obsolete]
+        //public void AddPostValue(string key, object value)
+        //{
+        //    AddQueryValue(key, value);
+        //}
 
         public void AddHeader(string key, string value)
         {
-            _headerMap[key] = value;
+            HeaderMap[key] = value;
         }
     }
 }

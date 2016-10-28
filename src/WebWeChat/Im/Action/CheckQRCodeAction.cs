@@ -9,7 +9,7 @@ using WebWeChat.Im.Core;
 
 namespace WebWeChat.Im.Action
 {
-    public class CheckQRCodeAction : AbstractWebWeChatAction
+    public class CheckQRCodeAction : WebWeChatAction
     {
         private readonly Regex _regCode = new Regex(@"window.code=(\d+);");
         private readonly Regex _regUrl = new Regex(@"window.redirect_uri=""(\S+?)"";");

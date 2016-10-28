@@ -11,5 +11,8 @@ namespace WebWeChat.Im.Core
         public const string GetUuid = "https://login.weixin.qq.com/jslogin";
         public const string GetQRCode = "https://login.weixin.qq.com/qrcode/{0}";
         public const string CheckQRCode = "https://login.weixin.qq.com/cgi-bin/mmwebwx-bin/login";
+        public const string WebwxInit = "{0}/webwxinit";
+        public const string StatusNotify = "{0}/webwxstatusnotify";
+        public const string GetContact = "{0}/webwxgetcontact";
     }
 }

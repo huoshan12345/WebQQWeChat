@@ -10,7 +10,7 @@ using System.Xml.Linq;
 
 namespace WebWeChat.Im.Action
 {
-    public class WebLoginAction : AbstractWebWeChatAction
+    public class WebLoginAction : WebWeChatAction
     {
         public WebLoginAction(IWeChatContext context, ActionEventListener listener = null) : base(context, listener)
         {
@@ -23,15 +23,23 @@ namespace WebWeChat.Im.Action
 
         public override void OnHttpContent(HttpResponseItem responseItem)
         {
+            /*
+                <error>
+                    <ret>0</ret>
+                    <message>OK</message>
+                    <skey>xxx</skey>
+                    <wxsid>xxx</wxsid>
+                    <wxuin>xxx</wxuin>
+                    <pass_ticket>xxx</pass_ticket>
+                    <isgrayscale>1</isgrayscale>
+                </error>             
+            */
             var str = responseItem.ResponseString;
-
             var root = XDocument.Parse(str).Root;
-            var skey = root.Element("skey");
-            var wxsid = root.Element("wxsid");
-            var wxuin = root.Element("wxuin");
-            var passTicket = root.Element("pass_ticket");
-
-
+            Session.Skey = root.Element("skey").Value;
+            Session.Sid = root.Element("wxsid").Value;
+            Session.Uin = root.Element("wxuin").Value;
+            Session.PassTicket = root.Element("pass_ticket").Value;
 
             NotifyActionEvent(ActionEventType.EvtOK);
         }

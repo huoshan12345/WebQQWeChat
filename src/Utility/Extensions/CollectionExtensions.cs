@@ -8,7 +8,7 @@ namespace Utility.Extensions
 {
     public static class CollectionExtensions
     {
-        public static bool IsNullOrEmpty(this ICollection col)
+        public static bool IsNullOrEmpty<T>(this ICollection<T> col)
         {
             return col == null || col.Count == 0;
         }

@@ -5,7 +5,7 @@ using WebWeChat.Im.Core;
 
 namespace WebWeChat.Im.Action
 {
-    public class GetQRCodeAction : AbstractWebWeChatAction
+    public class GetQRCodeAction : WebWeChatAction
     {
         public GetQRCodeAction(IWeChatContext context, ActionEventListener listener) : base(context, listener)
         {
