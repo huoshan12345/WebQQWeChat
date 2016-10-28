@@ -5,12 +5,13 @@
 ##主要模块介绍
 ####1. [WebQQCore](https://github.com/huoshan12345/WebQQWeChat/tree/master/src/WebQQCore)
 移植于[iqq webqq-core](https://github.com/im-qq/webqq-core.git)，webqq协议的C#实现。
-基于.net core开发，可运行于win、linux、mac等平台
+基于.net core开发，可跨平台运行
 ![webqqcore-ubuntu](https://raw.githubusercontent.com/huoshan12345/iQQ.Net/master/pic/webqqcore-ubuntu.png)
 
 ####2. [WebWeChat](https://github.com/huoshan12345/WebQQWeChat/tree/master/src/WebWeChat)(未完成)
 仿照WebQQCore的架构，web微信协议的C#实现。
-基于.net core开发，可运行于win、linux、mac等平台
+基于.net core开发，可跨平台运行
+![webwechat-win](https://raw.githubusercontent.com/huoshan12345/iQQ.Net/master/pic/webwechat-win.png)
 
 ####3. [BatchHangQQ](https://github.com/huoshan12345/WebQQWeChat/tree/master/src/BatchHangQQ)
 一个winform的简单批量挂qq程序，依赖于WebQQCore  
