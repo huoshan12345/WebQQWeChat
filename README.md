@@ -1,4 +1,4 @@
-# WebQQWeChat [![star this repo](http://github-svg-buttons.herokuapp.com/star.svg?user=huoshan12345&repo=iQQ.Net&style=flat&background=1081C1)](https://github.com/huoshan12345/iQQ.Net) [![fork this repo](http://github-svg-buttons.herokuapp.com/fork.svg?user=huoshan12345&repo=iQQ.Net&style=flat&background=1081C1)](https://github.com/huoshan12345/iQQ.Net/fork) [![license](https://img.shields.io/github/license/mashape/apistatus.svg?maxAge=2592000)](https://github.com/huoshan12345/iQQ.Net/blob/master/LICENSE.TXT)
+# WebQQWeChat [![star this repo](http://github-svg-buttons.herokuapp.com/star.svg?user=huoshan12345&repo=WebQQWeChat&style=flat&background=1081C1)](https://github.com/huoshan12345/WebQQWeChat) [![fork this repo](http://github-svg-buttons.herokuapp.com/fork.svg?user=huoshan12345&repo=WebQQWeChat&style=flat&background=1081C1)](https://github.com/huoshan12345/WebQQWeChat/fork) [![license](https://img.shields.io/github/license/mashape/apistatus.svg?maxAge=2592000)](https://github.com/huoshan12345/WebQQWeChat/blob/master/LICENSE.TXT)
 
 这个项目是[webQQ](http://web2.qq.com/)和[web微信](https://web.wechat.com/)相关协议的.net实现。基于此的一些功能组件。
 
