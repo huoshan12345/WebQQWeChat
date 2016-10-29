@@ -19,10 +19,10 @@ namespace WebWeChat.Im.Action
             Context = context;
         }
 
-        public override IActionFuture PushAction(IAction action)
+        public override IActionFuture PushAction(IAction action, bool excute = false)
         {
             (action as WebWeChatAction)?.SetContext(Context);
-            return base.PushAction(action);
+            return base.PushAction(action, excute);
         }
     }
 }

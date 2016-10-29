@@ -25,18 +25,18 @@ namespace WebWeChat.Im.Action
         protected long Timestamp => DateTime.Now.ToTimestamp();
         protected string ActionName => GetType().Name;
 
-        protected WebWeChatAction(IWeChatContext context, ActionEventListener listener = null) :
-            base(context.GetSerivce<IHttpService>(), listener)
-        {
-            SetContext(context);
-        }
-
         /// <summary>
         /// 把各模块交给ActionFuture初始化
         /// 即通过调用SetContext方法
         /// </summary>
         /// <param name="listener"></param>
-        protected WebWeChatAction(ActionEventListener listener = null) : base(null, listener) { }
+        protected WebWeChatAction(ActionEventListener listener) : base(null, listener) { }
+
+        protected WebWeChatAction(IWeChatContext context, ActionEventListener listener = null) :
+            base(context.GetSerivce<IHttpService>(), listener)
+        {
+            SetContext(context);
+        }
 
         public void SetContext(IWeChatContext context)
         {
@@ -51,8 +51,8 @@ namespace WebWeChat.Im.Action
 
         public override void OnHttpError(Exception ex)
         {
-            var qqEx = ex as WeChatException ?? new WeChatException(ex);
-            base.OnHttpError(qqEx);
+            var exception = ex as WeChatException ?? new WeChatException(ex);
+            base.OnHttpError(exception);
         }
 
         protected void NotifyErrorEvent(WeChatException ex)
@@ -62,7 +62,7 @@ namespace WebWeChat.Im.Action
 
         protected void NotifyErrorEvent(WeChatErrorCode code)
         {
-            NotifyErrorEvent(new WeChatException(code));
+            NotifyErrorEvent(WeChatException.CreateException(code));
         }
 
         public override async Task ExecuteAsync()

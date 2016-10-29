@@ -105,7 +105,7 @@ namespace HttpActionFrame.Core
             try
             {
                 var httpRequest = GetHttpRequest(requestItem);
-                var response = await _httpClient.SendAsync(httpRequest, HttpCompletionOption.ResponseHeadersRead, token).ConfigureAwait(false);
+                var response = await _httpClient.SendAsync(httpRequest, HttpCompletionOption.ResponseHeadersRead, token);
                 token.ThrowIfCancellationRequested();
                 response.EnsureSuccessStatusCode();
                 responseItem.StatusCode = response.StatusCode;

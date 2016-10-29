@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -12,6 +13,9 @@ namespace WebWeChat.Im
 {
     public class WeChatException : Exception
     {
+        private static readonly ConcurrentDictionary<WeChatErrorCode, WeChatException> _exceptions 
+            = new ConcurrentDictionary<WeChatErrorCode, WeChatException>();
+
         private static WeChatErrorCode GetErrorCode(Exception e)
         {
             if (e is TimeoutException) return WeChatErrorCode.Timeout;
@@ -73,9 +77,9 @@ namespace WebWeChat.Im
 
         public WeChatErrorCode ErrorCode { get; set; }
 
-        public WeChatException(WeChatErrorCode errorCode) : base(errorCode.ToString())
+        public static WeChatException CreateException(WeChatErrorCode errorCode)
         {
-            ErrorCode = errorCode;
+            return _exceptions.GetOrAdd(errorCode, key => new WeChatException(errorCode, ""));
         }
 
         public WeChatException(WeChatErrorCode errorCode, string msg) : base(msg)

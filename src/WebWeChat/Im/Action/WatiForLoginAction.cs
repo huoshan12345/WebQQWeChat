@@ -59,7 +59,7 @@ namespace WebWeChat.Im.Action
                     case "408": NotifyErrorEvent(WeChatErrorCode.Timeout); return;
                 }
             }
-            throw new WeChatException(WeChatErrorCode.ResponseError);
+            throw WeChatException.CreateException(WeChatErrorCode.ResponseError);
         }
     }
 }

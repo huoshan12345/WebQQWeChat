@@ -34,7 +34,8 @@
     "Microsoft.Extensions.Configuration": "1.0.0",
     "Microsoft.Extensions.Configuration.Json": "1.0.0",
     "Microsoft.Extensions.Configuration.UserSecrets": "1.0.0",
-    "Microsoft.Extensions.DependencyInjection": "1.0.0"
+    "Microsoft.Extensions.DependencyInjection": "1.0.0",
+    "System.Runtime.InteropServices.RuntimeInformation":  "4.0.0"
   },
 
   "frameworks": {

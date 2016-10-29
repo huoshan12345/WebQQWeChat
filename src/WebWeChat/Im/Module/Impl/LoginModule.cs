@@ -1,4 +1,5 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Drawing;
 using HttpActionFrame.Action;
 using HttpActionFrame.Actor;
 using HttpActionFrame.Event;
@@ -31,14 +32,14 @@ namespace WebWeChat.Im.Module.Impl
                     }
                 }))
                 .PushAction(new WatiForLoginAction(0, Context))
-                .PushLastAction(new WebLoginAction(Context, (sender, @event) =>
+                .PushAction(new WebLoginAction(Context, (sender, @event) =>
                 {
                     if (@event.Type == ActionEventType.EvtOK)
                     {
                         Context.FireNotify(new WeChatNotifyEvent(WeChatNotifyEventType.LoginSuccess));
                         AfterLogin();
                     }
-                }));
+                }), true);
             return future;
         }
 
@@ -49,6 +50,30 @@ namespace WebWeChat.Im.Module.Impl
                 .PushAction(new StatusNotifyAction(Context))
                 .PushAction(new GetContactAction(Context))
                 .PushAction(new BatchGetContactAction())
+                .PushAction(new SyncCheckAction((sender, @event) =>
+                {
+                    if (@event.Type == ActionEventType.EvtOK)
+                    {
+                        var result = (SyncCheckResult)@event.Target;
+                        switch (result)
+                        {
+                            case SyncCheckResult.Nothing:
+                                break;
+                            case SyncCheckResult.NewMsg:
+                                break;
+                            case SyncCheckResult.UsingPhone:
+                                break;
+                            case SyncCheckResult.RedEnvelope:
+                                break;
+                            case SyncCheckResult.Offline:
+                                break;
+                            case SyncCheckResult.Kicked:
+                                break;
+                            default:
+                                throw new ArgumentOutOfRangeException();
+                        }
+                    }
+                }))
                 .ExecuteAsync();
         }
     }

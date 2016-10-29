@@ -52,7 +52,7 @@ namespace HttpActionFrame.Core
                 [HttpConstants.ContentType] = Method == HttpMethodType.Post
                     ? HttpConstants.DefaultPostContentType
                     : HttpConstants.DefaultGetContentType,
-                [HttpConstants.Host] = new Uri(rawUrl).Host,
+                // [HttpConstants.Host] = new Uri(rawUrl).Host,
             };
             _rawData = new StringBuilder();
             EncodingType = Encoding.UTF8;
@@ -78,7 +78,7 @@ namespace HttpActionFrame.Core
         public void AddQueryValue(string key, object value)
         {
             if (_rawData.Length != 0) _rawData.Append("&");
-            _rawData.Append($"{key}={value.SafeToString()}");
+            _rawData.Append($"{key.UrlEncode()}={value.SafeToString().UrlEncode()}");
         }
 
         //[Obsolete]

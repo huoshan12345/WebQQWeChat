@@ -17,15 +17,21 @@ namespace WebWeChat.Im.Module.Impl
             DeviceId = $"e{ seed.ToString("f15").Split('.')[1] }";
         }
 
+        public SessionState State { get; set; } = SessionState.Offline;
+
         public string Uuid { get; set; }
 
         public string BaseUrl { get; set; }
 
         public string LoginUrl { get; set; }
 
+        public string SyncUrl { get; set; }
+
         public string PassTicket { get; set; }
 
         public JToken SyncKey { get; set; }
+
+        public string SyncKeyStr { get; set; }
 
         public JToken User { get; set; }
 

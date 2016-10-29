@@ -35,5 +35,7 @@ namespace HttpActionFrame.Event
         {
             return $"{Type.GetFullDescription()}, target={Target ?? ""}]";
         }
+
+        public static ActionEvent EmptyOkEvent { get; } = new ActionEvent(ActionEventType.EvtOK, null);
     }
 }

@@ -9,6 +9,7 @@ namespace HttpActionFrame.Action
     public abstract class AbstractHttpAction : IHttpAction
     {
         // private readonly ActionEventListener _listener;
+        protected int _excuteTimes;
         protected int _retryTimes;
         protected virtual int MaxReTryTimes { get; set; } = 3;
         public IActionFuture ActionFuture { get; set; }
@@ -35,6 +36,7 @@ namespace HttpActionFrame.Action
 
         public virtual async Task ExecuteAsync()
         {
+            _excuteTimes++;
             try
             {
                 var requestItem = BuildRequest();
@@ -79,8 +81,7 @@ namespace HttpActionFrame.Action
             if (++_retryTimes < MaxReTryTimes)
             {
                 NotifyActionEvent(new ActionEvent(ActionEventType.EvtRetry, ex));
-                if (ActionFuture != null) ActionFuture.ExcuteAction(this);
-                else await ExecuteAsync();
+                await ExecuteAsync();
             }
             else NotifyActionEvent(new ActionEvent(ActionEventType.EvtError, ex));
         }

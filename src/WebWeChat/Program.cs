@@ -13,11 +13,14 @@ using WebWeChat.Im.Event;
 using WebWeChat.Im.Module.Interface;
 using Microsoft.Extensions.Logging;
 using Utility.Extensions;
+using System.Runtime.InteropServices;
 
 namespace WebWeChat
 {
     public class Program
     {
+        private static Process _process = null;
+
         private static readonly WeChatNotifyEventListener Listener = (client, notifyEvent) =>
         {
             var logger = client.GetModule<ILoggerModule>();
@@ -33,15 +36,20 @@ namespace WebWeChat
                         const string path = "verify.png";
                         verify.Save(path);
                         logger.LogInformation($"请扫描在项目根目录下{path}图片");
-                        Process.Start(path);
+                        if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+                        {
+                            _process = Process.Start(path);
+                        }
                         break;
                     }
 
                 case WeChatNotifyEventType.QRCodeSuccess:
+                    _process?.Kill();
                     logger.LogInformation("请在手机上点击确认以登录");
                     break;
 
                 case WeChatNotifyEventType.QRCodeInvalid:
+                    _process?.Kill();
                     logger.LogWarning("二维码已失效");
                     break;
 

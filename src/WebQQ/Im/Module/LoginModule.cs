@@ -20,14 +20,14 @@ namespace WebQQ.Im.Module
         private IActionResult GetQRCode(ActionEventListener listener)
         {
             var actionLink = new ActionFuture(ActorDispatcher, listener);
-            actionLink.PushLastAction(new GetQRCodeAction(Context, (sender, @event) =>
+            actionLink.PushAction(new GetQRCodeAction(Context, (sender, @event) =>
             {
                 if (@event.Type == ActionEventType.EvtOK)
                 {
                     var verify = (Image) @event.Target;
                     Context.FireNotify(new QQNotifyEvent(QQNotifyEventType.QrcodeReady, verify));
                 }
-            }));// .ExcuteAsync();
+            })).ExecuteAsync();
             return actionLink;
         }
 

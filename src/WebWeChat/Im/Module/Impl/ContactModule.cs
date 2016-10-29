@@ -14,13 +14,13 @@ namespace WebWeChat.Im.Module.Impl
         public IActionResult GetContact(ActionEventListener listener = null)
         {
             return new WebWeChatActionFuture(Context, listener)
-                .PushLastAction(new GetContactAction(Context));
+                .PushAction(new GetContactAction(Context), true);
         }
 
         public IActionResult GetGroupMember(ActionEventListener listener = null)
         {
             return new WebWeChatActionFuture(Context, listener)
-                .PushLastAction(new BatchGetContactAction());
+                .PushAction(new BatchGetContactAction(), true);
         }
     }
 }

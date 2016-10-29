@@ -51,5 +51,9 @@ namespace Utility.Extensions
             return str ?? "";
         }
 
+        public static string JoinWith(this IEnumerable<string> strs, string separator)
+        {
+            return string.Join(separator, strs);
+        }
     }
 }

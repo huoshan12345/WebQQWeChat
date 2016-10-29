@@ -67,7 +67,7 @@ namespace WebWeChat.Im.Action
                 }
 
             }
-            throw new WeChatException(WeChatErrorCode.ResponseError);
+            throw WeChatException.CreateException(WeChatErrorCode.ResponseError);
         }
     }
 }

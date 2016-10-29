@@ -28,7 +28,7 @@ namespace WebWeChat.Im.Module.Impl
         public override string GetMessage(string message, Exception exception)
         {
             var userName = Context.GetModule<AccountModule>().User?.NickName;
-            var prefix = userName.IsNullOrEmpty() ? string.Empty : $"[{userName}]";
+            var prefix = userName.IsNullOrEmpty() ? string.Empty : $"[{userName}] ";
             return $"{DateTime.Now:HH:mm:ss}> {prefix}{message}";
         }
     }

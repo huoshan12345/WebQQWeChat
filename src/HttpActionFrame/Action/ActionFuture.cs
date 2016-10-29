@@ -13,10 +13,10 @@ namespace HttpActionFrame.Action
         private readonly ActionEventListener _outerListener;
         private readonly ManualResetEvent _waitHandle = new ManualResetEvent(false);
         private CancellationTokenSource _cts = new CancellationTokenSource();
-        private readonly Queue<IAction> _queue = new Queue<IAction>();
+        private readonly LinkedList<IAction> _queue = new LinkedList<IAction>();
 
         public IActorDispatcher ActorDispatcher { get; }
-        
+
         public ActionFuture(IActorDispatcher actorDispatcher, ActionEventListener listener = null)
         {
             _outerListener = listener;
@@ -30,67 +30,43 @@ namespace HttpActionFrame.Action
 
         public CancellationToken Token => _cts.Token;
 
-        public virtual IActionFuture PushAction(IAction action)
+        public virtual IActionFuture PushAction(IAction action, bool excute = false)
         {
-            action.ActionFuture = this;
-            action.OnActionEvent += _outerListener;
-            action.OnActionEvent += SendNonLastEventToFuture;
-            _queue.Enqueue(action);
+            if (action.ActionFuture != this)
+            {
+                action.ActionFuture = this;
+                action.OnActionEvent += _outerListener;
+                action.OnActionEvent += SendEventToFuture;
+            }
+            _queue.AddLast(action);
+            if (excute) ExecuteAsync();
             return this;
-        }
-
-        public virtual IActionFuture PushLastAction(IAction action)
-        {
-            action.ActionFuture = this;
-            action.OnActionEvent += _outerListener;
-            action.OnActionEvent += SendLastEventToFuture;
-            _queue.Enqueue(action);
-            ExecuteAsync();
-            return this;
-        }
-
-        public virtual void ExcuteAction(IAction action)
-        {
-            ActorDispatcher.PushActor(action);
         }
 
         private void ExcuteNextAction()
         {
             if (_queue.Count == 0) return;
-            var action = _queue.Dequeue();
+            var action = _queue.First.Value;
+            _queue.RemoveFirst();
             ActorDispatcher.PushActor(action);
         }
 
-        private void SendLastEventToFuture(IAction sender, ActionEvent actionEvent)
-        {
-            SendEventToFuture(sender, actionEvent, true);
-        }
-
-        private void SendNonLastEventToFuture(IAction sender, ActionEvent actionEvent)
-        {
-            SendEventToFuture(sender, actionEvent, false);
-        }
-
-        private void SendEventToFuture(IAction sender, ActionEvent actionEvent, bool terminateWhenOk)
+        private void SendEventToFuture(IAction sender, ActionEvent actionEvent)
         {
             switch (actionEvent.Type)
             {
                 case ActionEventType.EvtCanceled:
                 case ActionEventType.EvtError:
-                {
                     Terminate(sender, actionEvent);
                     break;
-                }
+
                 case ActionEventType.EvtOK:
-                {
-                    if (terminateWhenOk) Terminate(sender, actionEvent);
+                    if (_queue.Count == 0) Terminate(sender, actionEvent); // 如果是最后一个action就终止Future
                     else ExcuteNextAction();
                     break;
-                }
             }
-            // sender.OnActionEvent -= _outerListener;
-            // sender.OnActionEvent -= SendLastEventToFuture;
-            // sender.OnActionEvent -= SendNonLastEventToFuture;
+            sender.OnActionEvent -= _outerListener;
+            sender.OnActionEvent -= SendEventToFuture;
         }
 
         public void Terminate(IAction sender, ActionEvent actionEvent)
@@ -99,7 +75,7 @@ namespace HttpActionFrame.Action
             _finalEvent = actionEvent;
             _waitHandle.Set();
         }
-        
+
         public ActionEvent WaitFinalEvent()
         {
             return WaitFinalEvent(CancellationToken.None);
@@ -144,7 +120,14 @@ namespace HttpActionFrame.Action
 
         public Task ExecuteAsync()
         {
-            ExcuteNextAction();
+            if (_queue.Count != 0)
+            {
+                ExcuteNextAction();
+            }
+            else
+            {
+                Terminate(null, ActionEvent.EmptyOkEvent);
+            }
             return Task.CompletedTask;
         }
     }

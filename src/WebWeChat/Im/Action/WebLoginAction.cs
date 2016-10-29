@@ -47,6 +47,8 @@ namespace WebWeChat.Im.Action
             Session.Uin = root.Element("wxuin").Value;
             Session.PassTicket = root.Element("pass_ticket").Value;
 
+            Session.State = SessionState.Online;
+
             NotifyActionEvent(ActionEventType.EvtOK);
         }
     }
