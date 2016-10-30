@@ -64,9 +64,11 @@ namespace HttpActionFrame.Action
                     if (_queue.Count == 0) Terminate(sender, actionEvent); // 如果是最后一个action就终止Future
                     else ExcuteNextAction();
                     break;
+
+                case ActionEventType.EvtRetry:
+                    _queue.AddFirst(sender);
+                    break;
             }
-            sender.OnActionEvent -= _outerListener;
-            sender.OnActionEvent -= SendEventToFuture;
         }
 
         public void Terminate(IAction sender, ActionEvent actionEvent)

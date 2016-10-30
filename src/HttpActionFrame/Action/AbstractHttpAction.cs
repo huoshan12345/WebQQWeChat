@@ -76,14 +76,11 @@ namespace HttpActionFrame.Action
             NotifyActionEvent(new ActionEvent(ActionEventType.EvtWrite, args));
         }
 
-        public virtual async void OnHttpError(Exception ex)
+        public virtual void OnHttpError(Exception ex)
         {
-            if (++_retryTimes < MaxReTryTimes)
-            {
-                NotifyActionEvent(new ActionEvent(ActionEventType.EvtRetry, ex));
-                await ExecuteAsync();
-            }
-            else NotifyActionEvent(new ActionEvent(ActionEventType.EvtError, ex));
+            NotifyActionEvent(++_retryTimes < MaxReTryTimes
+                ? new ActionEvent(ActionEventType.EvtRetry, ex)
+                : new ActionEvent(ActionEventType.EvtError, ex));
         }
 
         public event ActionEventListener OnActionEvent;

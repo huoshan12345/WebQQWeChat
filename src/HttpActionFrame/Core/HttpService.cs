@@ -11,17 +11,17 @@ namespace HttpActionFrame.Core
 {
     public class HttpService : IHttpService, IDisposable
     {
-        protected readonly CookieContainer _cc;
+        protected readonly CookieContainer _cookieContainer;
         protected readonly HttpClient _httpClient;
         private static readonly string[] NotAddHeaderNames = { HttpConstants.ContentType };
 
         public HttpService()
         {
-            _cc = new CookieContainer();
+            _cookieContainer = new CookieContainer();
             var handler = new HttpClientHandler
             {
                 AllowAutoRedirect = true,
-                CookieContainer = _cc,
+                CookieContainer = _cookieContainer,
             };
             _httpClient = new HttpClient(handler);
             _httpClient.DefaultRequestHeaders.Add(HttpConstants.UserAgent, HttpConstants.DefaultUserAgent);
@@ -33,15 +33,15 @@ namespace HttpActionFrame.Core
             switch (item.Method)
             {
                 case HttpMethodType.Post:
-                    request.Content = new StringContent(item.RawData, item.EncodingType, item.ContentType);
-                    break;
-
-                case HttpMethodType.Get:
                 case HttpMethodType.Put:
                 case HttpMethodType.Delete:
                 case HttpMethodType.Head:
                 case HttpMethodType.Options:
                 case HttpMethodType.Trace:
+                    request.Content = new StringContent(item.RawData, item.EncodingType, item.ContentType);
+                    break;
+
+                case HttpMethodType.Get:
                 default:
                     break;
             }
@@ -126,7 +126,12 @@ namespace HttpActionFrame.Core
 
         public virtual Cookie GetCookie(string name, string url)
         {
-            return _cc.GetCookies(new Uri(url))[name];
+            return _cookieContainer.GetCookies(new Uri(url))[name];
+        }
+
+        public CookieCollection GetCookies(string url)
+        {
+            return _cookieContainer.GetCookies(new Uri(url));
         }
 
         public void Dispose()

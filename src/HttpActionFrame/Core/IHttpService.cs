@@ -29,5 +29,7 @@ namespace HttpActionFrame.Core
         /// <param name="url"></param>
         /// <returns></returns>
         Cookie GetCookie(string name, string url);
+
+        CookieCollection GetCookies(string url);
     }
 }

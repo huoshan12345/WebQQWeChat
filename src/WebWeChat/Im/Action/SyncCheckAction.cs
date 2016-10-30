@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using HttpActionFrame;
 using HttpActionFrame.Core;
 using HttpActionFrame.Event;
 using Microsoft.Extensions.Logging;
@@ -30,16 +31,21 @@ namespace WebWeChat.Im.Action
             {
                 var host = ApiUrls.SyncHosts[_hostIndex];
                 url = $"https://{host}/cgi-bin/mmwebwx-bin/synccheck";
-                Logger.LogInformation($"测试站点{_hostIndex + 1}: {host}");
+                Logger.LogDebug($"测试站点{_hostIndex + 1}: {host}");
+            }
+            else
+            {
+                Logger.LogInformation("Begin SyncCheck...");
             }
             var req = new HttpRequestItem(HttpMethodType.Get, url)
             {
-                RawData = Session.BaseRequest.ToQueryString().ToLowerInvariant(),
-                Referrer = "https://wx.qq.com/"
+                // 此处需要将key都变成小写，否则提交会失败
+                RawData = Session.BaseRequest.ToDictionary(pair => pair.Key.ToLower(), pair => pair.Value).ToQueryString(),
             };
-            req.AddQueryValue("_", Timestamp);
             req.AddQueryValue("r", Timestamp);
             req.AddQueryValue("synckey", Session.SyncKeyStr);
+            req.AddQueryValue("_", Timestamp);
+
             return req;
         }
 
@@ -78,12 +84,12 @@ namespace WebWeChat.Im.Action
                         result = SyncCheckResult.Offline;
                         break;
 
-                    case "1101":
+                    case "1101": // 参数错误
                         Session.State = SessionState.Kicked; // 在其他地方登录了WEB版微信
                         result = SyncCheckResult.Kicked;
                         break;
 
-                    case "1102":
+                    case "1102": // cookie错误
                         break;
 
                     case "0":
@@ -106,15 +112,14 @@ namespace WebWeChat.Im.Action
                             default:
                                 break;
                         }
-                        ActionFuture.PushAction(this);
                         break;
                 }
-                NotifyActionEvent(ActionEventType.EvtOK, result);
+                NotifyActionEvent(ActionEventType.EvtOK, result); // 先通知，后继续执行
             }
             else throw WeChatException.CreateException(WeChatErrorCode.ResponseError);
         }
 
-        public override async void OnHttpError(Exception ex)
+        public override void OnHttpError(Exception ex)
         {
             var exception = ex as WeChatException ?? new WeChatException(ex);
             // SyncUrl为空说明正在测试host 
@@ -123,7 +128,6 @@ namespace WebWeChat.Im.Action
                 if (++_retryTimes < MaxReTryTimes)
                 {
                     NotifyActionEvent(new ActionEvent(ActionEventType.EvtRetry, exception));
-                    await ExecuteAsync();
                 }
                 else
                 {

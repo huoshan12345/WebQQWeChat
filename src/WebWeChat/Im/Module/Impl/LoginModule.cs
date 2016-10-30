@@ -38,6 +38,7 @@ namespace WebWeChat.Im.Module.Impl
                     {
                         Context.FireNotify(new WeChatNotifyEvent(WeChatNotifyEventType.LoginSuccess));
                         AfterLogin();
+                        BeginSyncCheck();
                     }
                 }), true);
             return future;
@@ -50,31 +51,36 @@ namespace WebWeChat.Im.Module.Impl
                 .PushAction(new StatusNotifyAction(Context))
                 .PushAction(new GetContactAction(Context))
                 .PushAction(new BatchGetContactAction())
-                .PushAction(new SyncCheckAction((sender, @event) =>
-                {
-                    if (@event.Type == ActionEventType.EvtOK)
-                    {
-                        var result = (SyncCheckResult)@event.Target;
-                        switch (result)
-                        {
-                            case SyncCheckResult.Nothing:
-                                break;
-                            case SyncCheckResult.NewMsg:
-                                break;
-                            case SyncCheckResult.UsingPhone:
-                                break;
-                            case SyncCheckResult.RedEnvelope:
-                                break;
-                            case SyncCheckResult.Offline:
-                                break;
-                            case SyncCheckResult.Kicked:
-                                break;
-                            default:
-                                throw new ArgumentOutOfRangeException();
-                        }
-                    }
-                }))
                 .ExecuteAsync();
+        }
+
+        private void BeginSyncCheck()
+        {
+            var future = new WebWeChatActionFuture(Context);
+            future.PushAction(new SyncCheckAction((sender, @event) =>
+            {
+                if (@event.Type != ActionEventType.EvtOK) return;
+                var result = (SyncCheckResult) @event.Target;
+                switch (result)
+                {
+                    case SyncCheckResult.Nothing:
+                        break;
+                    case SyncCheckResult.NewMsg:
+                        break;
+                    case SyncCheckResult.UsingPhone:
+                        break;
+                    case SyncCheckResult.RedEnvelope:
+                        break;
+                    case SyncCheckResult.Offline:
+                        break;
+                    case SyncCheckResult.Kicked:
+                        break;
+                }
+                if (Context.GetModule<SessionModule>().State == SessionState.Online && !future.Token.IsCancellationRequested)
+                {
+                    future.ActorDispatcher.PushActor(sender);
+                }
+            })).ExecuteAsync();
         }
     }
 }

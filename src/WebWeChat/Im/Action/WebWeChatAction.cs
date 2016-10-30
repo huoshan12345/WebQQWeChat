@@ -42,11 +42,11 @@ namespace WebWeChat.Im.Action
         {
             if(context == null) throw new ArgumentNullException(nameof(context));
             Context = context;
-            HttpService = HttpService ?? context.GetSerivce<IHttpService>();
-            Logger = Logger ?? context.GetModule<ILoggerModule>();
-            Session = Session ?? context.GetModule<SessionModule>();
-            Store = Store ?? context.GetModule<StoreModule>();
-            Account = Account ?? context.GetModule<AccountModule>();
+            HttpService = context.GetSerivce<IHttpService>();
+            Logger = context.GetModule<ILoggerModule>();
+            Session = context.GetModule<SessionModule>();
+            Store = context.GetModule<StoreModule>();
+            Account = context.GetModule<AccountModule>();
         }
 
         public override void OnHttpError(Exception ex)

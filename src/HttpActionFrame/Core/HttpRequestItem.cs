@@ -27,7 +27,7 @@ namespace HttpActionFrame.Core
 
         public string ContentType
         {
-            get { return HeaderMap[HttpConstants.ContentType]; }
+            get { return HeaderMap.GetOrDefault(HttpConstants.ContentType); }
             set { HeaderMap[HttpConstants.ContentType] = value; }
         }
 
@@ -49,11 +49,14 @@ namespace HttpActionFrame.Core
             Method = method;
             HeaderMap = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
             {
-                [HttpConstants.ContentType] = Method == HttpMethodType.Post
-                    ? HttpConstants.DefaultPostContentType
-                    : HttpConstants.DefaultGetContentType,
+                //[HttpConstants.ContentType] = Method == HttpMethodType.Post
+                //    ? HttpConstants.DefaultPostContentType : HttpConstants.DefaultGetContentType,
                 // [HttpConstants.Host] = new Uri(rawUrl).Host,
             };
+            if (Method != HttpMethodType.Get)
+            {
+                HeaderMap[HttpConstants.ContentType] = HttpConstants.DefaultPostContentType;
+            }
             _rawData = new StringBuilder();
             EncodingType = Encoding.UTF8;
         }
@@ -79,6 +82,12 @@ namespace HttpActionFrame.Core
         {
             if (_rawData.Length != 0) _rawData.Append("&");
             _rawData.Append($"{key.UrlEncode()}={value.SafeToString().UrlEncode()}");
+        }
+
+        public void AddQueryString(string str)
+        {
+            if (_rawData.Length != 0) _rawData.Append("&");
+            _rawData.Append(str);
         }
 
         //[Obsolete]

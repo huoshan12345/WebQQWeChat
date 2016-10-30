@@ -56,7 +56,10 @@ namespace WebWeChat.Im.Module.Impl
         public string DeviceId
         {
             get { return BaseRequest.GetOrDefault(nameof(DeviceId)); }
-            set { BaseRequest[nameof(DeviceId)] = value; }
+            set
+            {
+                BaseRequest[nameof(DeviceId)] = value;
+            }
         }
 
         /// <summary>
