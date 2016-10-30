@@ -9,4 +9,9 @@ namespace HttpActionFrame.Action
 
         IActionFuture ActionFuture { get; set; }
     }
+
+    public interface IAction<T> : IActor<T>, IActionEventHandler
+    {
+        void NotifyActionEvent(ActionEvent actionEvent);
+    }
 }

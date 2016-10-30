@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-using HttpActionFrame.Core;
-using HttpActionFrame.Event;
+using Utility.HttpAction.Core;
+using Utility.HttpAction.Event;
 using WebWeChat.Im.Core;
 
 namespace WebWeChat.Im.Action

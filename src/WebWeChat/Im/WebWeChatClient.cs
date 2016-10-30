@@ -2,11 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using HttpActionFrame.Action;
-using HttpActionFrame.Actor;
-using HttpActionFrame.Event;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Utility.HttpAction.Event;
 using WebWeChat.Im.Core;
 using WebWeChat.Im.Event;
 using WebWeChat.Im.Module;
@@ -42,7 +40,7 @@ namespace WebWeChat.Im
             Init();
         }
 
-        public IActionResult Login(ActionEventListener listener = null)
+        public Task<ActionEventType> Login(ActionEventListener listener = null)
         {
             var login = GetModule<ILoginModule>();
             return login.Login(listener);

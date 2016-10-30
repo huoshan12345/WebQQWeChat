@@ -1,5 +1,5 @@
-﻿using HttpActionFrame.Action;
-using HttpActionFrame.Event;
+﻿using System.Threading.Tasks;
+using Utility.HttpAction.Event;
 
 namespace WebWeChat.Im.Module.Interface
 {
@@ -10,6 +10,6 @@ namespace WebWeChat.Im.Module.Interface
         /// </summary>
         /// <param name="listener"></param>
         /// <returns></returns>
-        IActionResult Login(ActionEventListener listener = null);
+        Task<ActionEventType> Login(ActionEventListener listener = null);
     }
 }

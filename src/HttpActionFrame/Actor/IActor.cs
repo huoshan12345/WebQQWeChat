@@ -6,4 +6,9 @@ namespace HttpActionFrame.Actor
     {
         Task ExecuteAsync();
     }
+
+    public interface IActor<T>
+    {
+        Task<T> ExecuteAsync();
+    }
 }

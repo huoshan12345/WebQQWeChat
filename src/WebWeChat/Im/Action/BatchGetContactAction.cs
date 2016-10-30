@@ -1,15 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
-using HttpActionFrame.Core;
-using HttpActionFrame.Event;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using WebWeChat.Im.Bean;
 using WebWeChat.Im.Core;
-using Microsoft.Extensions.Logging;
 using Utility.Extensions;
+using Utility.HttpAction.Core;
+using Utility.HttpAction.Event;
 
 namespace WebWeChat.Im.Action
 {

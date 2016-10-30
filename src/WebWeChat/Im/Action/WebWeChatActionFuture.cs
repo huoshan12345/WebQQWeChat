@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using HttpActionFrame.Action;
-using HttpActionFrame.Actor;
-using HttpActionFrame.Event;
+﻿using Utility.HttpAction.Action;
+using Utility.HttpAction.Event;
 using WebWeChat.Im.Core;
 
 namespace WebWeChat.Im.Action
@@ -14,15 +9,15 @@ namespace WebWeChat.Im.Action
         protected IWeChatContext Context { get; }
 
         public WebWeChatActionFuture(IWeChatContext context, ActionEventListener listener = null)
-            : base(context.GetSerivce<IActorDispatcher>(), listener)
+            : base(listener)
         {
             Context = context;
         }
 
-        public override IActionFuture PushAction(IAction action, bool excute = false)
+        public override IActionFuture PushAction(IAction action)
         {
             (action as WebWeChatAction)?.SetContext(Context);
-            return base.PushAction(action, excute);
+            return base.PushAction(action);
         }
     }
 }

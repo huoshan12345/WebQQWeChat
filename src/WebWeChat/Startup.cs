@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using HttpActionFrame;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -30,7 +29,7 @@ namespace WebWeChat
         {
             var config = BuildConfig();
             services.AddSingleton(config);
-            HttpActionFrame.Initializer.ConfigureServices(services, config);
+            Utility.HttpAction.Initializer.ConfigureServices(services, config);
 
             services.AddTransient<IHttpModule, HttpModule>();
             services.AddTransient<ILoggerModule>(provider => new LoggerModule(LogLevel.Information));
@@ -44,7 +43,7 @@ namespace WebWeChat
 
         public static void Configure(IServiceProvider provider)
         {
-            HttpActionFrame.Initializer.Configure(provider);
+            Utility.HttpAction.Initializer.Configure(provider);
         }
     }
 }

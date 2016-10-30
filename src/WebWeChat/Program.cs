@@ -2,11 +2,6 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
-using System.Linq;
-using System.Threading.Tasks;
-using HttpActionFrame;
-using HttpActionFrame.Event;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using WebWeChat.Im;
 using WebWeChat.Im.Event;
@@ -14,6 +9,7 @@ using WebWeChat.Im.Module.Interface;
 using Microsoft.Extensions.Logging;
 using Utility.Extensions;
 using System.Runtime.InteropServices;
+using Utility.HttpAction.Event;
 
 namespace WebWeChat
 {
@@ -75,8 +71,8 @@ namespace WebWeChat
             Init();
 
             var client = new WebWeChatClient(ServiceProvider, Listener);
-            var @event = client.Login().WaitFinalEvent();
-            if (@event.Type != ActionEventType.EvtOK)
+            var @event = client.Login().Result;
+            if (@event != ActionEventType.EvtOK)
             {
                 Console.WriteLine("登录失败");
             }

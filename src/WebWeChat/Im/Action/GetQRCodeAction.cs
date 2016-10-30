@@ -1,6 +1,6 @@
 ﻿using System.Drawing;
-using HttpActionFrame.Core;
-using HttpActionFrame.Event;
+using Utility.HttpAction.Core;
+using Utility.HttpAction.Event;
 using WebWeChat.Im.Core;
 
 namespace WebWeChat.Im.Action
@@ -21,7 +21,7 @@ namespace WebWeChat.Im.Action
             var req =  new HttpRequestItem(HttpMethodType.Post, string.Format(ApiUrls.GetQRCode, Session.Uuid));
             req.AddQueryValue("t", "webwx");
             req.AddQueryValue("_", Timestamp);
-            req.ResultType = ResponseResultType.Stream;
+            req.ResultType = HttpResultType.Stream;
             return req;
         }
 

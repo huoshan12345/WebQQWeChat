@@ -1,4 +1,4 @@
-﻿using HttpActionFrame.Core;
+﻿using Utility.HttpAction.Service;
 
 namespace WebWeChat.Im.Module.Interface
 {

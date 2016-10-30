@@ -67,6 +67,7 @@ namespace HttpActionFrame.Action
 
                 case ActionEventType.EvtRetry:
                     _queue.AddFirst(sender);
+                    ExcuteNextAction();
                     break;
             }
         }

@@ -1,12 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
-using HttpActionFrame.Action;
-using HttpActionFrame.Core;
-using HttpActionFrame.Event;
 using Microsoft.Extensions.Logging;
 using Utility.Extensions;
+using Utility.HttpAction.Action;
+using Utility.HttpAction.Event;
+using Utility.HttpAction.Service;
 using WebWeChat.Im.Core;
 using WebWeChat.Im.Event;
 using WebWeChat.Im.Module.Impl;
@@ -14,7 +13,7 @@ using WebWeChat.Im.Module.Interface;
 
 namespace WebWeChat.Im.Action
 {
-    public abstract class WebWeChatAction : AbstractHttpAction
+    public abstract class WebWeChatAction : HttpAction
     {
         protected IWeChatContext Context { get; set; }
         protected ILoggerModule Logger { get; set; }
@@ -30,17 +29,21 @@ namespace WebWeChat.Im.Action
         /// 即通过调用SetContext方法
         /// </summary>
         /// <param name="listener"></param>
-        protected WebWeChatAction(ActionEventListener listener) : base(null, listener) { }
+        protected WebWeChatAction(ActionEventListener listener) : base(null)
+        {
+            OnActionEvent += listener;
+        }
 
         protected WebWeChatAction(IWeChatContext context, ActionEventListener listener = null) :
-            base(context.GetSerivce<IHttpService>(), listener)
+            base(context.GetSerivce<IHttpService>())
         {
+            OnActionEvent += listener;
             SetContext(context);
         }
 
         public void SetContext(IWeChatContext context)
         {
-            if(context == null) throw new ArgumentNullException(nameof(context));
+            if (context == null) throw new ArgumentNullException(nameof(context));
             Context = context;
             HttpService = context.GetSerivce<IHttpService>();
             Logger = context.GetModule<ILoggerModule>();
@@ -65,14 +68,15 @@ namespace WebWeChat.Im.Action
             NotifyErrorEvent(WeChatException.CreateException(code));
         }
 
-        public override async Task ExecuteAsync()
+        public override async Task<ActionEventType> ExecuteAsync(CancellationToken token)
         {
             Logger.LogTrace($"[Action={ActionName} Begin]");
-            await base.ExecuteAsync();
+            var result = await base.ExecuteAsync(token);
             Logger.LogTrace($"[Action={ActionName} End]");
+            return result;
         }
 
-        public override void NotifyActionEvent(ActionEvent actionEvent)
+        protected override void NotifyActionEvent(ActionEvent actionEvent)
         {
             var type = actionEvent.Type;
             var target = actionEvent.Target;
@@ -89,7 +93,7 @@ namespace WebWeChat.Im.Action
                 case ActionEventType.EvtRetry:
                     {
                         var ex = (WeChatException)target;
-                        Logger.LogWarning($"[Action={ActionName}, Type={type}, RetryTimes={_retryTimes}][{ex.ToSimpleString()}]");
+                        Logger.LogWarning($"[Action={ActionName}, Type={type}, RetryTimes={RetryTimes}][{ex.ToSimpleString()}]");
                         break;
                     }
                 case ActionEventType.EvtCanceled:

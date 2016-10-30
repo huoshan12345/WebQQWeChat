@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Drawing;
-using HttpActionFrame.Action;
-using HttpActionFrame.Actor;
-using HttpActionFrame.Event;
+using System.Threading;
+using System.Threading.Tasks;
+using Utility.HttpAction.Event;
 using WebWeChat.Im.Action;
 using WebWeChat.Im.Core;
 using WebWeChat.Im.Event;
@@ -12,7 +12,7 @@ namespace WebWeChat.Im.Module.Impl
 {
     public class LoginModule : WeChatModule, ILoginModule
     {
-        public IActionResult Login(ActionEventListener listener = null)
+        public Task<ActionEventType> Login(ActionEventListener listener = null)
         {
             var future = new WebWeChatActionFuture(Context, listener)
                 .PushAction(new GetUuidAction(Context))
@@ -40,8 +40,8 @@ namespace WebWeChat.Im.Module.Impl
                         AfterLogin();
                         BeginSyncCheck();
                     }
-                }), true);
-            return future;
+                }));
+            return future.ExecuteAsync(CancellationToken.None);
         }
 
         private void AfterLogin()
@@ -51,7 +51,7 @@ namespace WebWeChat.Im.Module.Impl
                 .PushAction(new StatusNotifyAction(Context))
                 .PushAction(new GetContactAction(Context))
                 .PushAction(new BatchGetContactAction())
-                .ExecuteAsync();
+                .ExecuteAsync(CancellationToken.None);
         }
 
         private void BeginSyncCheck()
@@ -76,11 +76,11 @@ namespace WebWeChat.Im.Module.Impl
                     case SyncCheckResult.Kicked:
                         break;
                 }
-                if (Context.GetModule<SessionModule>().State == SessionState.Online && !future.Token.IsCancellationRequested)
+                if (Context.GetModule<SessionModule>().State == SessionState.Online)
                 {
-                    future.ActorDispatcher.PushActor(sender);
+                    future.PushAction(sender);
                 }
-            })).ExecuteAsync();
+            })).ExecuteAsync(CancellationToken.None);
         }
     }
 }

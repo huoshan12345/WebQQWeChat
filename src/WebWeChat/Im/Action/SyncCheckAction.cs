@@ -1,16 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-using HttpActionFrame;
-using HttpActionFrame.Core;
-using HttpActionFrame.Event;
+using System.Threading;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using Utility.Extensions;
-using WebWeChat.Im.Bean;
+using Utility.HttpAction.Core;
+using Utility.HttpAction.Event;
 using WebWeChat.Im.Core;
 
 namespace WebWeChat.Im.Action
@@ -53,7 +48,7 @@ namespace WebWeChat.Im.Action
         {
             if (++_hostIndex < ApiUrls.SyncHosts.Length)
             {
-                await ExecuteAsync();
+                await ExecuteAsync(CancellationToken.None);
             }
             else
             {
@@ -125,13 +120,13 @@ namespace WebWeChat.Im.Action
             // SyncUrl为空说明正在测试host 
             if (Session.SyncUrl == null)
             {
-                if (++_retryTimes < MaxReTryTimes)
+                if (++RetryTimes < MaxReTryTimes)
                 {
                     NotifyActionEvent(new ActionEvent(ActionEventType.EvtRetry, exception));
                 }
                 else
                 {
-                    _retryTimes = 0;
+                    RetryTimes = 0;
                     TestNextHost();
                 }
             }
