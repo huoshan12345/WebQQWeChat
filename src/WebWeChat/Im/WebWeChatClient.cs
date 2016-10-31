@@ -7,11 +7,14 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Logging;
 using Utility.HttpAction.Event;
+using WebWeChat.Im.Action;
 using WebWeChat.Im.Core;
 using WebWeChat.Im.Event;
 using WebWeChat.Im.Module;
 using WebWeChat.Im.Module.Impl;
 using WebWeChat.Im.Module.Interface;
+using WebWeChat.Im.Service.Impl;
+using WebWeChat.Im.Service.Interface;
 
 namespace WebWeChat.Im
 {
@@ -20,7 +23,7 @@ namespace WebWeChat.Im
         private readonly WeChatNotifyEventListener _notifyListener;
         private readonly ServiceCollection _services;
         private readonly IServiceProvider _serviceProvider;
-        private readonly ILoggerModule _logger;
+        private readonly IWeChatLogger _logger;
 
         public WebWeChatClient(WeChatNotifyEventListener notifyListener = null)
         {
@@ -28,20 +31,23 @@ namespace WebWeChat.Im
             Startup.ConfigureServices(_services);
 
             _services.AddSingleton<IWeChatContext>(this);
-            _services.AddSingleton<IHttpModule, HttpModule>();
-            _services.AddSingleton<ILoggerModule>(provider => new LoggerModule(this, LogLevel.Debug));
-            _services.AddSingleton<ILoginModule, LoginModule>();
 
-            // 以下三个就不以接口形式添加了
+            // 模块
+            _services.AddSingleton<ILoginModule, LoginModule>();
             _services.AddSingleton<StoreModule>();
             _services.AddSingleton<SessionModule>();
             _services.AddSingleton<AccountModule>();
 
+            // 服务
+            _services.AddSingleton<IWeChatHttp, WeChatHttp>();
+            _services.AddSingleton<IWeChatLogger>(provider => new WeChatLogger(this, LogLevel.Debug));
+            _services.AddSingleton<IWeChatActionFactory, WeChatActionFactory>();
+            
             _serviceProvider = _services.BuildServiceProvider();
             Startup.Configure(_serviceProvider);
 
             _notifyListener = notifyListener;
-            _logger = GetModule<ILoggerModule>();
+            _logger = GetSerivce<IWeChatLogger>();
         }
 
         public Task<ActionEvent> Login(ActionEventListener listener = null)
@@ -64,34 +70,16 @@ namespace WebWeChat.Im
         }
 
         /// <inheritdoc />
-        public T GetSerivce<T>()
+        public T GetSerivce<T>() where T : IWeChatService
         {
             return _serviceProvider.GetService<T>();
         }
+
         /// <inheritdoc />
         public T GetModule<T>() where T : IWeChatModule
         {
             return _serviceProvider.GetService<T>();
         }
-
-        ///// <summary>
-        ///// 初始化所有模块和服务
-        ///// </summary>
-        //private void Init()
-        //{
-        //    try
-        //    {
-        //        foreach (var type in _modules.Keys)
-        //        {
-        //            var module = _modules[type];
-        //            module.Init(this);
-        //        }
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        _logger?.LogError(0, e, $"初始化模块和服务失败{e}");
-        //    }
-        //}
 
         /// <summary>
         /// 销毁所有模块和服务
@@ -100,10 +88,16 @@ namespace WebWeChat.Im
         {
             try
             {
-                foreach (var service in _services.Where(s=>s.ServiceType.GetTypeInfo().IsAssignableFrom(typeof(IWeChatModule))))
+                foreach (var service in _services)
                 {
-                    var obj = (IWeChatModule) service.ImplementationInstance;
-                    obj.Dispose();
+                    var serviceType = service.ServiceType;
+                    if (typeof(IDisposable).IsAssignableFrom(serviceType) &&
+                        (typeof(IWeChatModule).IsAssignableFrom(serviceType)
+                        || typeof(IWeChatService).IsAssignableFrom(serviceType)))
+                    {
+                        var obj = (IDisposable)service.ImplementationInstance;
+                        obj.Dispose();
+                    }
                 }
             }
             catch (Exception e)

@@ -1,15 +1,15 @@
 ﻿using System;
 using Utility.HttpAction.Service;
 using WebWeChat.Im.Core;
-using WebWeChat.Im.Module.Interface;
+using WebWeChat.Im.Service.Interface;
 
-namespace WebWeChat.Im.Module.Impl
+namespace WebWeChat.Im.Service.Impl
 {
-    public class HttpModule : HttpService, IHttpModule
+    public class WeChatHttp : HttpService, IWeChatHttp
     {
         public IWeChatContext Context { get; }
 
-        public HttpModule(IWeChatContext context)
+        public WeChatHttp(IWeChatContext context)
         {
             if (context == null) throw new ArgumentNullException(nameof(context));
             Context = context;

@@ -12,7 +12,7 @@ namespace WebWeChat.Im.Action
     /// 微信初始化
     /// 获取初始化信息（账号头像信息、聊天好友、阅读等）
     /// </summary>
-    public class WebwxInitAction : WebWeChatAction
+    public class WebwxInitAction : WeChatAction
     {
         public WebwxInitAction(IWeChatContext context, ActionEventListener listener = null) : base(context, listener)
         {

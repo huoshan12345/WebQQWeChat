@@ -11,6 +11,7 @@ using Utility.Extensions;
 using System.Runtime.InteropServices;
 using Utility.HttpAction.Event;
 using System.Text;
+using WebWeChat.Im.Service.Interface;
 
 namespace WebWeChat
 {
@@ -19,7 +20,7 @@ namespace WebWeChat
         private static Process _process = null;
         private static readonly WeChatNotifyEventListener Listener = (client, notifyEvent) =>
         {
-            var logger = client.GetModule<ILoggerModule>();
+            var logger = client.GetSerivce<IWeChatLogger>();
             switch (notifyEvent.Type)
             {
                 case WeChatNotifyEventType.LoginSuccess:

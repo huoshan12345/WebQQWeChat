@@ -2,6 +2,7 @@
 using WebWeChat.Im.Event;
 using WebWeChat.Im.Module;
 using WebWeChat.Im.Module.Interface;
+using WebWeChat.Im.Service.Interface;
 
 namespace WebWeChat.Im.Core
 {
@@ -9,7 +10,7 @@ namespace WebWeChat.Im.Core
     {
         void FireNotify(WeChatNotifyEvent notifyEvent);
 
-        T GetSerivce<T>();
+        T GetSerivce<T>() where T : IWeChatService;
 
         T GetModule<T>() where T : IWeChatModule;
     }

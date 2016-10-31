@@ -16,7 +16,7 @@ namespace WebWeChat.Im.Module.Impl
 
         public Task<ActionEvent> GetGroupMember(ActionEventListener listener = null)
         {
-            return new BatchGetContactAction(listener).ExecuteAsync(CancellationToken.None);
+            return new BatchGetContactAction(Context, listener).ExecuteAsync(CancellationToken.None);
         }
 
         public ContactModule(IWeChatContext context) : base(context)

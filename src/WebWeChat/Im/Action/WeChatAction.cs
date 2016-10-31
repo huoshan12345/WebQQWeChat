@@ -10,13 +10,14 @@ using WebWeChat.Im.Core;
 using WebWeChat.Im.Event;
 using WebWeChat.Im.Module.Impl;
 using WebWeChat.Im.Module.Interface;
+using WebWeChat.Im.Service.Interface;
 
 namespace WebWeChat.Im.Action
 {
-    public abstract class WebWeChatAction : HttpAction
+    public abstract class WeChatAction : HttpAction
     {
         protected IWeChatContext Context { get; set; }
-        protected ILoggerModule Logger { get; set; }
+        protected IWeChatLogger Logger { get; set; }
         protected SessionModule Session { get; set; }
         protected StoreModule Store { get; set; }
         protected AccountModule Account { get; set; }
@@ -24,29 +25,19 @@ namespace WebWeChat.Im.Action
         protected long Timestamp => DateTime.Now.ToTimestamp();
         protected string ActionName => GetType().Name;
 
-        /// <summary>
-        /// 把各模块交给ActionFuture初始化
-        /// 即通过调用SetContext方法
-        /// </summary>
-        /// <param name="listener"></param>
-        protected WebWeChatAction(ActionEventListener listener) : base(null)
+        protected WeChatAction(IWeChatContext context, ActionEventListener listener = null) :
+            base(context.GetSerivce<IWeChatHttp>())
         {
-            OnActionEvent += listener;
-        }
-
-        protected WebWeChatAction(IWeChatContext context, ActionEventListener listener = null) :
-            base(context.GetModule<IHttpModule>())
-        {
-            OnActionEvent += listener;
             SetContext(context);
+            OnActionEvent += listener;
         }
 
         public void SetContext(IWeChatContext context)
         {
-            if (context == null) throw new ArgumentNullException(nameof(context));
+            if (context == Context) return;
             Context = context;
-            HttpService = context.GetModule<IHttpModule>();
-            Logger = context.GetModule<ILoggerModule>();
+            HttpService = context.GetSerivce<IWeChatHttp>();
+            Logger = context.GetSerivce<IWeChatLogger>();
             Session = context.GetModule<SessionModule>();
             Store = context.GetModule<StoreModule>();
             Account = context.GetModule<AccountModule>();

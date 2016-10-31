@@ -5,14 +5,14 @@ using WebWeChat.Im.Core;
 
 namespace WebWeChat.Im.Action
 {
-    public class GetQRCodeAction : WebWeChatAction
+    public class GetQRCodeAction : WeChatAction
     {
         /// <summary>
         /// 显示二维码
         /// </summary>
         /// <param name="context"></param>
         /// <param name="listener"></param>
-        public GetQRCodeAction(IWeChatContext context, ActionEventListener listener) : base(context, listener)
+        public GetQRCodeAction(IWeChatContext context, ActionEventListener listener = null) : base(context, listener)
         {
         }
 

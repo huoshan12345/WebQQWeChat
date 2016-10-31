@@ -10,12 +10,13 @@ using WebWeChat.Im.Core;
 
 namespace WebWeChat.Im.Action
 {
-    public class SyncCheckAction : WebWeChatAction
+    public class SyncCheckAction : WeChatAction
     {
         private readonly Regex _reg = new Regex(@"window.synccheck={retcode:""(\d+)"",selector:""(\d+)""}");
         private int _hostIndex = 0;
 
-        public SyncCheckAction(ActionEventListener listener = null) : base(listener)
+        public SyncCheckAction(IWeChatContext context, ActionEventListener listener = null)
+            : base(context, listener)
         {
         }
 

@@ -3,15 +3,16 @@ using Microsoft.Extensions.Logging;
 using Utility.Extensions;
 using Utility.Logger;
 using WebWeChat.Im.Core;
-using WebWeChat.Im.Module.Interface;
+using WebWeChat.Im.Module.Impl;
+using WebWeChat.Im.Service.Interface;
 
-namespace WebWeChat.Im.Module.Impl
+namespace WebWeChat.Im.Service.Impl
 {
-    public class LoggerModule : SimpleConsoleLogger, ILoggerModule
+    public class WeChatLogger : SimpleConsoleLogger, IWeChatLogger
     {
         public IWeChatContext Context { get; set; }
 
-        public LoggerModule(IWeChatContext context, LogLevel minLevel = LogLevel.Information) : base("WeChat", minLevel)
+        public WeChatLogger(IWeChatContext context, LogLevel minLevel = LogLevel.Information) : base("WeChat", minLevel)
         {
             if (context == null) throw new ArgumentNullException(nameof(context));
             Context = context;

@@ -9,7 +9,7 @@ namespace WebWeChat.Im.Action
     /// <summary>
     /// 等待扫码登录
     /// </summary>
-    public class WatiForLoginAction : WebWeChatAction
+    public class WatiForLoginAction : WeChatAction
     {
         private readonly Regex _regCode = new Regex(@"window.code=(\d+);");
         private readonly Regex _regUrl = new Regex(@"window.redirect_uri=""(\S+?)"";");

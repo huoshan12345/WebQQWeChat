@@ -5,7 +5,7 @@ using Utility.HttpAction.Event;
 
 namespace WebWeChat.Im.Action
 {
-    public class WebLoginAction : WebWeChatAction
+    public class WebLoginAction : WeChatAction
     {
         /// <summary>
         /// 获取登录参数

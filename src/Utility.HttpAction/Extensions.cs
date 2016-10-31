@@ -3,6 +3,7 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using Utility.Extensions;
+using Utility.HttpAction.Action;
 using Utility.HttpAction.Core;
 
 namespace Utility.HttpAction
@@ -22,6 +23,11 @@ namespace Utility.HttpAction
         public static string GetRequestHeader(this HttpRequestItem request, CookieContainer cookieContainer)
         {
             return GetRequestHeader(request, cookieContainer.GetCookies(new Uri(request.RawUrl)));
+        }
+
+        public static IAction CreateAction<T>(this IActionFactory factory, params object[] args) where T : IAction
+        {
+            return factory.CreateAction(typeof(T), args);
         }
     }
 }

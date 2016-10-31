@@ -7,6 +7,7 @@ using WebWeChat.Im.Action;
 using WebWeChat.Im.Core;
 using WebWeChat.Im.Event;
 using WebWeChat.Im.Module.Interface;
+using WebWeChat.Im.Service.Impl;
 
 namespace WebWeChat.Im.Module.Impl
 {
@@ -14,8 +15,8 @@ namespace WebWeChat.Im.Module.Impl
     {
         public Task<ActionEvent> Login(ActionEventListener listener = null)
         {
-            var future = new WebWeChatActionFuture(Context, listener)
-                .PushAction(new GetUuidAction(Context))
+            var future = new WeChatActionFuture(Context, listener)
+                .PushAction<GetUuidAction>()
                 .PushAction(new GetQRCodeAction(Context, (sender, @event) =>
                 {
                     if (@event.Type == ActionEventType.EvtOK)
@@ -49,18 +50,18 @@ namespace WebWeChat.Im.Module.Impl
 
         private void AfterLogin()
         {
-            var future = new WebWeChatActionFuture(Context)
+            var future = new WeChatActionFuture(Context)
                 .PushAction(new WebwxInitAction(Context))
                 .PushAction(new StatusNotifyAction(Context))
                 .PushAction(new GetContactAction(Context))
-                .PushAction(new BatchGetContactAction())
+                .PushAction(new BatchGetContactAction(Context))
                 .ExecuteAsync(CancellationToken.None);
         }
 
         private void BeginSyncCheck()
         {
-            var future = new WebWeChatActionFuture(Context);
-            future.PushAction(new SyncCheckAction((sender, @event) =>
+            var future = new WeChatActionFuture(Context);
+            future.PushAction(new SyncCheckAction(Context, (sender, @event) =>
             {
                 if (@event.Type != ActionEventType.EvtOK) return;
                 var result = (SyncCheckResult) @event.Target;

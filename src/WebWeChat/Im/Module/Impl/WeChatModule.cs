@@ -12,17 +12,6 @@ namespace WebWeChat.Im.Module.Impl
             Context = context;
         }
 
-        public virtual void Destroy()
-        {
-        }
-
         public IWeChatContext Context { get; }
-
-        /// <summary>
-        /// 可销毁
-        /// </summary>
-        public virtual void Dispose()
-        {
-        }
     }
 }

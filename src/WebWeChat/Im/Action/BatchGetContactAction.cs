@@ -14,10 +14,10 @@ namespace WebWeChat.Im.Action
     /// <summary>
     /// 用于获取群成员
     /// </summary>
-    public class BatchGetContactAction : WebWeChatAction
+    public class BatchGetContactAction : WeChatAction
     {
-        public BatchGetContactAction(ActionEventListener listener = null)
-            : base(listener)
+        public BatchGetContactAction(IWeChatContext context, ActionEventListener listener = null)
+            : base(context, listener)
         {
         }
 
