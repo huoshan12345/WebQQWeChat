@@ -7,17 +7,12 @@ namespace WebWeChat.Im.Module.Impl
 {
     public class HttpModule : HttpService, IHttpModule
     {
-        public void Init(IWeChatContext context)
+        public IWeChatContext Context { get; }
+
+        public HttpModule(IWeChatContext context)
         {
             if (context == null) throw new ArgumentNullException(nameof(context));
             Context = context;
         }
-
-        public void Destroy()
-        {
-            Dispose();
-        }
-
-        public IWeChatContext Context { get; private set; }
     }
 }

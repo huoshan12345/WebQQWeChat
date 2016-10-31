@@ -44,19 +44,19 @@ namespace WebWeChat.Im.Action
             return req;
         }
 
-        private async void TestNextHost()
+        private ActionEvent TestNextHost()
         {
             if (++_hostIndex < ApiUrls.SyncHosts.Length)
             {
-                await ExecuteAsync(CancellationToken.None);
+                return ActionEvent.EmptyRepeatEvent;
             }
             else
             {
-                NotifyErrorEvent(WeChatErrorCode.IoError);
+                return NotifyErrorEvent(WeChatErrorCode.IoError);
             }
         }
 
-        public override void OnHttpContent(HttpResponseItem responseItem)
+        public override ActionEvent HandleResponse(HttpResponseItem responseItem)
         {
             var str = responseItem.ResponseString;
             var match = _reg.Match(str);
@@ -68,8 +68,7 @@ namespace WebWeChat.Im.Action
 
                 if (Session.SyncUrl == null && retcode != "0")
                 {
-                    TestNextHost();
-                    return;
+                    return TestNextHost();
                 }
 
                 switch (retcode)
@@ -109,28 +108,27 @@ namespace WebWeChat.Im.Action
                         }
                         break;
                 }
-                NotifyActionEvent(ActionEventType.EvtOK, result); // 先通知，后继续执行
+                return NotifyActionEvent(ActionEventType.EvtOK, result);
             }
             else throw WeChatException.CreateException(WeChatErrorCode.ResponseError);
         }
 
-        public override void OnHttpError(Exception ex)
+        public override ActionEvent HandleException(Exception ex)
         {
-            var exception = ex as WeChatException ?? new WeChatException(ex);
-            // SyncUrl为空说明正在测试host 
+            // SyncUrl为空说明正在测试host
             if (Session.SyncUrl == null)
             {
                 if (++RetryTimes < MaxReTryTimes)
                 {
-                    NotifyActionEvent(new ActionEvent(ActionEventType.EvtRetry, exception));
+                    return NotifyActionEvent(ActionEvent.CreateEvent(ActionEventType.EvtRetry, ex));
                 }
                 else
                 {
                     RetryTimes = 0;
-                    TestNextHost();
+                    return TestNextHost();
                 }
             }
-            else base.OnHttpError(exception);
+            else return base.HandleException(ex);
         }
     }
 }

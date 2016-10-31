@@ -3,15 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Utility.HttpAction.Core;
+using Utility.HttpAction.Event;
 
 namespace Utility.HttpAction.Action
 {
-    public interface IHttpActionListener
-    {
-        void OnHttpHeader(HttpResponseItem responseItem);
+    //public interface IHttpActionListener
+    //{
+    //    void OnHttpHeader(HttpResponseItem responseItem);
 
-        void OnHttpContent(HttpResponseItem responseItem);
+    //    void OnHttpContent(HttpResponseItem responseItem);
 
-        void OnHttpError(Exception ex);
-    }
+    //    void OnHttpError(Exception ex);
+    //}
 }

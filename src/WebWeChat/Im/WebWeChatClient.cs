@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Logging;
 using Utility.HttpAction.Event;
 using WebWeChat.Im.Core;
@@ -15,32 +17,34 @@ namespace WebWeChat.Im
 {
     public class WebWeChatClient : IWebWeChatClient
     {
-        private readonly Dictionary<Type, IWeChatModule> _modules;
         private readonly WeChatNotifyEventListener _notifyListener;
-        private readonly IServiceProvider _services;
+        private readonly ServiceCollection _services;
+        private readonly IServiceProvider _serviceProvider;
         private readonly ILoggerModule _logger;
 
-        public WebWeChatClient(IServiceProvider services, WeChatNotifyEventListener notifyListener = null)
+        public WebWeChatClient(WeChatNotifyEventListener notifyListener = null)
         {
-            if(services == null) throw new ArgumentNullException(nameof(services));
-            _services = services;
+            _services = new ServiceCollection();
+            Startup.ConfigureServices(_services);
+
+            _services.AddSingleton<IWeChatContext>(this);
+            _services.AddSingleton<IHttpModule, HttpModule>();
+            _services.AddSingleton<ILoggerModule>(provider => new LoggerModule(this, LogLevel.Debug));
+            _services.AddSingleton<ILoginModule, LoginModule>();
+
+            // 以下三个就不以接口形式添加了
+            _services.AddSingleton<StoreModule>();
+            _services.AddSingleton<SessionModule>();
+            _services.AddSingleton<AccountModule>();
+
+            _serviceProvider = _services.BuildServiceProvider();
+            Startup.Configure(_serviceProvider);
+
             _notifyListener = notifyListener;
-            _modules = new Dictionary<Type, IWeChatModule>
-            {
-                [typeof(ILoginModule)] = GetSerivce<ILoginModule>(),
-                [typeof(ILoggerModule)] = GetSerivce<ILoggerModule>(),
-                [typeof(IHttpModule)] = GetSerivce<IHttpModule>(),
-
-                [typeof(StoreModule)] = GetSerivce<StoreModule>(),
-                [typeof(SessionModule)] = GetSerivce<SessionModule>(),
-                [typeof(AccountModule)] = GetSerivce<AccountModule>(),
-            };
             _logger = GetModule<ILoggerModule>();
-
-            Init();
         }
 
-        public Task<ActionEventType> Login(ActionEventListener listener = null)
+        public Task<ActionEvent> Login(ActionEventListener listener = null)
         {
             var login = GetModule<ILoginModule>();
             return login.Login(listener);
@@ -62,54 +66,50 @@ namespace WebWeChat.Im
         /// <inheritdoc />
         public T GetSerivce<T>()
         {
-            return _services.GetService<T>();
+            return _serviceProvider.GetService<T>();
         }
         /// <inheritdoc />
         public T GetModule<T>() where T : IWeChatModule
         {
-            return (T)_modules[typeof(T)];
+            return _serviceProvider.GetService<T>();
         }
 
-        /// <summary>
-        /// 初始化所有模块和服务
-        /// </summary>
-        private void Init()
-        {
-            try
-            {
-                foreach (var type in _modules.Keys)
-                {
-                    var module = _modules[type];
-                    module.Init(this);
-                }
-            }
-            catch (Exception e)
-            {
-                _logger?.LogError(0, e, $"初始化模块和服务失败{e}");
-            }
-        }
+        ///// <summary>
+        ///// 初始化所有模块和服务
+        ///// </summary>
+        //private void Init()
+        //{
+        //    try
+        //    {
+        //        foreach (var type in _modules.Keys)
+        //        {
+        //            var module = _modules[type];
+        //            module.Init(this);
+        //        }
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        _logger?.LogError(0, e, $"初始化模块和服务失败{e}");
+        //    }
+        //}
 
         /// <summary>
         /// 销毁所有模块和服务
         /// </summary>
-        private void Destroy()
+        public void Dispose()
         {
             try
             {
-                foreach (var module in _modules.Values)
+                foreach (var service in _services.Where(s=>s.ServiceType.GetTypeInfo().IsAssignableFrom(typeof(IWeChatModule))))
                 {
-                    module.Destroy();
+                    var obj = (IWeChatModule) service.ImplementationInstance;
+                    obj.Dispose();
                 }
             }
             catch (Exception e)
             {
                 _logger.LogError($"销毁所有模块和服务失败: {e}");
             }
-        }
-
-        public void Dispose()
-        {
-            Destroy();
         }
     }
 }

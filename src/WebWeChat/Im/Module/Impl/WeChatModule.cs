@@ -6,7 +6,7 @@ namespace WebWeChat.Im.Module.Impl
 {
     public abstract class WeChatModule : IWeChatModule
     {
-        public virtual void Init(IWeChatContext context)
+        protected WeChatModule(IWeChatContext context)
         {
             if (context == null) throw new ArgumentNullException(nameof(context));
             Context = context;
@@ -16,6 +16,13 @@ namespace WebWeChat.Im.Module.Impl
         {
         }
 
-        public IWeChatContext Context { get; private set; }
+        public IWeChatContext Context { get; }
+
+        /// <summary>
+        /// 可销毁
+        /// </summary>
+        public virtual void Dispose()
+        {
+        }
     }
 }

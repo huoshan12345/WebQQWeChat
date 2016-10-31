@@ -30,6 +30,10 @@ namespace WebWeChat.Im.Event
         [Description("二维码验证成功")]
         QRCodeSuccess,
 
+        /// <summary>
+        /// 错误
+        /// </summary>
+        [Description("错误")]
         Error,
 
         /// <summary>

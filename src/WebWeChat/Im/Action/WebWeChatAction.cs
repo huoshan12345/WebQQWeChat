@@ -35,7 +35,7 @@ namespace WebWeChat.Im.Action
         }
 
         protected WebWeChatAction(IWeChatContext context, ActionEventListener listener = null) :
-            base(context.GetSerivce<IHttpService>())
+            base(context.GetModule<IHttpModule>())
         {
             OnActionEvent += listener;
             SetContext(context);
@@ -45,30 +45,30 @@ namespace WebWeChat.Im.Action
         {
             if (context == null) throw new ArgumentNullException(nameof(context));
             Context = context;
-            HttpService = context.GetSerivce<IHttpService>();
+            HttpService = context.GetModule<IHttpModule>();
             Logger = context.GetModule<ILoggerModule>();
             Session = context.GetModule<SessionModule>();
             Store = context.GetModule<StoreModule>();
             Account = context.GetModule<AccountModule>();
         }
 
-        public override void OnHttpError(Exception ex)
+        public override ActionEvent HandleException(Exception ex)
         {
             var exception = ex as WeChatException ?? new WeChatException(ex);
-            base.OnHttpError(exception);
+            return base.HandleException(exception);
         }
 
-        protected void NotifyErrorEvent(WeChatException ex)
+        protected ActionEvent NotifyErrorEvent(WeChatException ex)
         {
-            NotifyActionEvent(new ActionEvent(ActionEventType.EvtError, ex));
+            return NotifyActionEvent(ActionEvent.CreateEvent(ActionEventType.EvtError, ex));
         }
 
-        protected void NotifyErrorEvent(WeChatErrorCode code)
+        protected ActionEvent NotifyErrorEvent(WeChatErrorCode code)
         {
-            NotifyErrorEvent(WeChatException.CreateException(code));
+            return NotifyErrorEvent(WeChatException.CreateException(code));
         }
 
-        public override async Task<ActionEventType> ExecuteAsync(CancellationToken token)
+        public override async Task<ActionEvent> ExecuteAsync(CancellationToken token)
         {
             Logger.LogTrace($"[Action={ActionName} Begin]");
             var result = await base.ExecuteAsync(token);
@@ -76,7 +76,7 @@ namespace WebWeChat.Im.Action
             return result;
         }
 
-        protected override void NotifyActionEvent(ActionEvent actionEvent)
+        protected override ActionEvent NotifyActionEvent(ActionEvent actionEvent)
         {
             var type = actionEvent.Type;
             var target = actionEvent.Target;
@@ -104,7 +104,7 @@ namespace WebWeChat.Im.Action
                     Logger.LogDebug($"[Action={ActionName}, Type={type}]");
                     break;
             }
-            base.NotifyActionEvent(actionEvent);
+            return base.NotifyActionEvent(actionEvent);
         }
     }
 }

@@ -9,6 +9,6 @@ namespace Utility.HttpAction.Action
 {
     public interface IActor
     {
-        Task<ActionEventType> ExecuteAsync(CancellationToken token);
+        Task<ActionEvent> ExecuteAsync(CancellationToken token);
     }
 }

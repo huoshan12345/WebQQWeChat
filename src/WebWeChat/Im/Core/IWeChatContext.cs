@@ -5,7 +5,7 @@ using WebWeChat.Im.Module.Interface;
 
 namespace WebWeChat.Im.Core
 {
-    public interface IWeChatContext : IDisposable
+    public interface IWeChatContext
     {
         void FireNotify(WeChatNotifyEvent notifyEvent);
 

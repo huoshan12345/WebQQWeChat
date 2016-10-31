@@ -22,7 +22,7 @@ namespace WebWeChat.Im.Action
             return new HttpRequestItem(HttpMethodType.Get, Session.LoginUrl);
         }
 
-        public override void OnHttpContent(HttpResponseItem responseItem)
+        public override ActionEvent HandleResponse(HttpResponseItem responseItem)
         {
             /*
                 <error>
@@ -44,7 +44,7 @@ namespace WebWeChat.Im.Action
 
             Session.State = SessionState.Online;
 
-            NotifyActionEvent(ActionEventType.EvtOK);
+            return NotifyActionEvent(ActionEventType.EvtOK);
         }
     }
 }

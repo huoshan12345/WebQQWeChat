@@ -2,22 +2,25 @@
 using System.Threading.Tasks;
 using Utility.HttpAction.Event;
 using WebWeChat.Im.Action;
+using WebWeChat.Im.Core;
 using WebWeChat.Im.Module.Interface;
 
 namespace WebWeChat.Im.Module.Impl
 {
     public class ContactModule : WeChatModule, IContactModule
     {
-        public Task<ActionEventType> GetContact(ActionEventListener listener = null)
+        public Task<ActionEvent> GetContact(ActionEventListener listener = null)
         {
-            return new WebWeChatActionFuture(Context, listener)
-                .PushAction(new GetContactAction(Context)).ExecuteAsync(CancellationToken.None);
+            return new GetContactAction(Context, listener).ExecuteAsync(CancellationToken.None);
         }
 
-        public Task<ActionEventType> GetGroupMember(ActionEventListener listener = null)
+        public Task<ActionEvent> GetGroupMember(ActionEventListener listener = null)
         {
-            return new WebWeChatActionFuture(Context, listener)
-                .PushAction(new BatchGetContactAction()).ExecuteAsync(CancellationToken.None);
+            return new BatchGetContactAction(listener).ExecuteAsync(CancellationToken.None);
+        }
+
+        public ContactModule(IWeChatContext context) : base(context)
+        {
         }
     }
 }

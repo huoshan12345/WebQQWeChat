@@ -3318,7 +3318,7 @@
       ]
     },
     "Microsoft.NETCore.App/1.0.1": {
-      "sha512": "Magix7ezmhzMc1pNIH7an8vkZYd7a5JjAhXJoYUw3ukRzRfYN2SLetRtQXe/3X9/otnMH1K1J5oOP/q5Mpv7Lg==",
+      "sha512": "M3iH7u95LntTkJtI/DqN/96MRlb8Wa0SjnXldxHA4FjlvEqghOhwK087bDZAZaTN9C4YHckvaYH3ka9eYWZZZw==",
       "type": "package",
       "path": "Microsoft.NETCore.App/1.0.1",
       "files": [
@@ -3366,7 +3366,7 @@
       ]
     },
     "Microsoft.NETCore.Jit/1.0.4": {
-      "sha512": "E3N/4tY7denm+CdHVnxLrdARQsUSjSZzd1pjUwSlGvGf9yDM6S8XcFWz9K7dFnB/g39ovTRjKEoXZWE3fX55gQ==",
+      "sha512": "IcHTGj+vTFcOu7/flwNg+CWIfTsxqHWgj08MKOtYwS5k0EuLvx6PrYsn7vHCV0SUTk1zbQ1l0EJj1UdxTMyx4w==",
       "type": "package",
       "path": "Microsoft.NETCore.Jit/1.0.4",
       "files": [
@@ -3391,7 +3391,7 @@
       ]
     },
     "Microsoft.NETCore.Runtime.CoreCLR/1.0.4": {
-      "sha512": "Bgou+2REFu7mW/gh7f3LUIpvnCHqdOxCgIYMnSM6MtmqthleuFXSuDjub5zlT0G78sHPhnPqUYA+j1J6hZK/8Q==",
+      "sha512": "r4/aP7VYcJ+W/rJVFU+jAdjF4KrsHRDYQJ+p8weUP5n65yLzWXlQTVY6OsR560aV5EF7jc65dqsNXIryUCrEkQ==",
       "type": "package",
       "path": "Microsoft.NETCore.Runtime.CoreCLR/1.0.4",
       "files": [
@@ -8121,8 +8121,8 @@
     },
     "Utility.HttpAction/1.0.0": {
       "type": "project",
-      "path": "d:\\Users\\lijing\\Documents\\projects\\WebQQWeChat\\src\\Utility.HttpAction\\project.json",
-      "msbuildProject": "d:\\Users\\lijing\\Documents\\projects\\WebQQWeChat\\src\\Utility.HttpAction\\Utility.HttpAction.xproj"
+      "path": "../Utility.HttpAction/project.json",
+      "msbuildProject": "../Utility.HttpAction/Utility.HttpAction.xproj"
     }
   },
   "projectFileDependencyGroups": {

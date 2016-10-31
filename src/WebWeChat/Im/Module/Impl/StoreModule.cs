@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using WebWeChat.Im.Bean;
+using WebWeChat.Im.Core;
 using WebWeChat.Im.Util;
 
 namespace WebWeChat.Im.Module.Impl
@@ -44,5 +45,9 @@ namespace WebWeChat.Im.Module.Impl
         public IEnumerable<ContactMember> PublicUsers => ContactMemberDic.Values.Where(m => m.IsPublicUsers());
 
         public int PublicUserCount => PublicUsers.Count();
+
+        public StoreModule(IWeChatContext context) : base(context)
+        {
+        }
     }
 }

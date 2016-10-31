@@ -36,7 +36,7 @@ namespace WebWeChat.Im.Action
             return req;
         }
 
-        public override void OnHttpContent(HttpResponseItem responseItem)
+        public override ActionEvent HandleResponse(HttpResponseItem responseItem)
         {
             /*
                 {
@@ -53,8 +53,7 @@ namespace WebWeChat.Im.Action
                 var json = JObject.Parse(str);
                 if (json["BaseResponse"]["Ret"].ToString() == "0")
                 {
-                    NotifyActionEvent(ActionEventType.EvtOK);
-                    return;
+                    return NotifyActionEvent(ActionEventType.EvtOK);
                 }
                 else
                 {

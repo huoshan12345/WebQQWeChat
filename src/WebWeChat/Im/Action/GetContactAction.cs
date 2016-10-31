@@ -35,7 +35,7 @@ namespace WebWeChat.Im.Action
             return req;
         }
 
-        public override void OnHttpContent(HttpResponseItem responseItem)
+        public override ActionEvent HandleResponse(HttpResponseItem responseItem)
         {
             /*
                 {
@@ -94,8 +94,7 @@ namespace WebWeChat.Im.Action
                     Account.User = Store.ContactMemberDic[Session.User["UserName"].ToString()];
                     Logger.LogInformation($"应有{Store.MemberCount}个联系人，读取到联系人{Store.ContactMemberDic.Count}个");
                     Logger.LogInformation($"共有{Store.GroupCount}个群|{Store.FriendCount}个好友|{Store.SpecialUserCount}个特殊账号|{Store.PublicUserCount}公众号或服务号");
-                    NotifyActionEvent(ActionEventType.EvtOK);
-                    return;
+                    return NotifyActionEvent(ActionEventType.EvtOK);
                 }
                 else
                 {

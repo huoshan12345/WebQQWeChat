@@ -22,68 +22,60 @@ namespace Utility.HttpAction.Action
             HttpService = httpHttpService;
         }
 
-        protected virtual void NotifyActionEvent(ActionEvent actionEvent)
+        protected virtual ActionEvent NotifyActionEvent(ActionEvent actionEvent)
         {
             OnActionEvent?.Invoke(this, actionEvent);
+            return actionEvent;
         }
 
-        protected virtual void NotifyActionEvent(ActionEventType type, object target = null)
+        protected virtual ActionEvent NotifyActionEvent(ActionEventType type, object target = null)
         {
-            NotifyActionEvent(new ActionEvent(type, target));
-        }
-
-        public virtual void OnHttpHeader(HttpResponseItem responseItem)
-        {
-        }
-
-        public virtual void OnHttpContent(HttpResponseItem responseItem)
-        {
-        }
-
-        public virtual void OnHttpError(Exception ex)
-        {
-            NotifyActionEvent(new ActionEvent(ActionEventType.EvtError, ex));
+            return NotifyActionEvent(target == null ? ActionEvent.EmptyEvents[type] : ActionEvent.CreateEvent(type, target));
         }
 
         public abstract HttpRequestItem BuildRequest();
 
+        public abstract ActionEvent HandleResponse(HttpResponseItem response);
+
         public event ActionEventListener OnActionEvent;
 
-        public virtual async Task<ActionEventType> ExecuteAsync(CancellationToken token)
+        public virtual ActionEvent HandleException(Exception ex)
+        {
+            if (RetryTimes < MaxReTryTimes)
+            {
+                return NotifyActionEvent(ActionEvent.CreateEvent(ActionEventType.EvtRetry, ex));
+            }
+            else
+            {
+                return NotifyActionEvent(ActionEvent.CreateEvent(ActionEventType.EvtError, ex));
+            }
+        }
+
+        public virtual async Task<ActionEvent> ExecuteAsync(CancellationToken token)
         {
             ++ExcuteTimes;
-            for (var i = 0; i < MaxReTryTimes; i++)
+            if (token.IsCancellationRequested)
             {
-                try
-                {
-                    var requestItem = BuildRequest();
-                    await HttpService.ExecuteHttpRequestAsync(requestItem, token, this);
-                    return ActionEventType.EvtOK;
-                }
-                catch (TaskCanceledException)
-                {
-                    NotifyActionEvent(new ActionEvent(ActionEventType.EvtCanceled, this));
-                    return ActionEventType.EvtCanceled;
-                }
-                catch (OperationCanceledException)
-                {
-                    NotifyActionEvent(new ActionEvent(ActionEventType.EvtCanceled, this));
-                    return ActionEventType.EvtCanceled;
-                }
-                catch (Exception ex)
-                {
-                    if (i + 1 < MaxReTryTimes)
-                    {
-                        NotifyActionEvent(new ActionEvent(ActionEventType.EvtRetry, ex));
-                        return ActionEventType.EvtRetry;
-                    }
-                    else
-                    {
-                        OnHttpError(ex);
-                    }
-                }
+                return NotifyActionEvent(ActionEvent.CreateEvent(ActionEventType.EvtCanceled, this));
             }
-            return ActionEventType.EvtError;
+            try
+            {
+                var requestItem = BuildRequest();
+                var response = await HttpService.ExecuteHttpRequestAsync(requestItem, token);
+                return HandleResponse(response);
+            }
+            catch (TaskCanceledException)
+            {
+                return NotifyActionEvent(ActionEvent.CreateEvent(ActionEventType.EvtCanceled, this));
+            }
+            catch (OperationCanceledException)
+            {
+                return NotifyActionEvent(ActionEvent.CreateEvent(ActionEventType.EvtCanceled, this));
+            }
+            catch (Exception ex)
+            {
+                return HandleException(ex);
+            }
         }
     }
 }

@@ -10,6 +10,6 @@ namespace WebWeChat.Im.Module.Interface
         /// </summary>
         /// <param name="listener"></param>
         /// <returns></returns>
-        Task<ActionEventType> Login(ActionEventListener listener = null);
+        Task<ActionEvent> Login(ActionEventListener listener = null);
     }
 }

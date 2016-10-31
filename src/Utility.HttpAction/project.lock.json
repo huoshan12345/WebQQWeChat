@@ -4714,8 +4714,8 @@
     },
     "Utility/1.0.0": {
       "type": "project",
-      "path": "D:\\Users\\lijing\\Documents\\projects\\WebQQWeChat\\src\\Utility\\project.json",
-      "msbuildProject": "D:\\Users\\lijing\\Documents\\projects\\WebQQWeChat\\src\\Utility\\Utility.xproj"
+      "path": "../Utility/project.json",
+      "msbuildProject": "../Utility/Utility.xproj"
     }
   },
   "projectFileDependencyGroups": {

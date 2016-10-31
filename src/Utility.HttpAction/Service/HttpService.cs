@@ -97,28 +97,20 @@ namespace Utility.HttpAction.Service
             // TODO
         }
 
-        public virtual async Task<HttpResponseItem> ExecuteHttpRequestAsync(HttpRequestItem requestItem, CancellationToken token, IHttpActionListener actionListener = null)
+        public virtual async Task<HttpResponseItem> ExecuteHttpRequestAsync(HttpRequestItem requestItem, CancellationToken token)
         {
-            var responseItem = new HttpResponseItem() { RequestItem = requestItem };
-            try
-            {
-                var httpRequest = GetHttpRequest(requestItem);
-                var response = await _httpClient.SendAsync(httpRequest, HttpCompletionOption.ResponseHeadersRead, token);
-                token.ThrowIfCancellationRequested();
-                response.EnsureSuccessStatusCode();
-                responseItem.StatusCode = response.StatusCode;
-                ReadHeader(response, responseItem);
-                token.ThrowIfCancellationRequested();
-                actionListener?.OnHttpHeader(responseItem);
-                await ReadContentAsync(response, responseItem).ConfigureAwait(false);
-                token.ThrowIfCancellationRequested();
-                actionListener?.OnHttpContent(responseItem);
-            }
-            catch (Exception ex)
-            {
-                responseItem.Exception = ex;
-                actionListener?.OnHttpError(ex);
-            }
+            token.ThrowIfCancellationRequested();
+
+            var responseItem = new HttpResponseItem { RequestItem = requestItem };
+            var httpRequest = GetHttpRequest(requestItem);
+            var response = await _httpClient.SendAsync(httpRequest, token);
+            response.EnsureSuccessStatusCode();
+            responseItem.StatusCode = response.StatusCode;
+
+            token.ThrowIfCancellationRequested();
+
+            ReadHeader(response, responseItem);
+            await ReadContentAsync(response, responseItem).ConfigureAwait(false);
             return responseItem;
         }
 

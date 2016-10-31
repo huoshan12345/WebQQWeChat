@@ -13,12 +13,11 @@ namespace WebWeChat.Im.Action
     {
         private readonly Regex _regCode = new Regex(@"window.code=(\d+);");
         private readonly Regex _regUrl = new Regex(@"window.redirect_uri=""(\S+?)"";");
-        private readonly int _tip;
+        private int _tip = 1;
 
-        public WatiForLoginAction(int tip, IWeChatContext context, ActionEventListener listener = null) 
+        public WatiForLoginAction(IWeChatContext context, ActionEventListener listener = null) 
             : base(context, listener)
         {
-            _tip = tip;
         }
 
         public override HttpRequestItem BuildRequest()
@@ -30,7 +29,7 @@ namespace WebWeChat.Im.Action
             return req;
         }
 
-        public override void OnHttpContent(HttpResponseItem responseItem)
+        public override ActionEvent HandleResponse(HttpResponseItem responseItem)
         {
             var str = responseItem.ResponseString;
             var match = _regCode.Match(str);
@@ -46,14 +45,16 @@ namespace WebWeChat.Im.Action
                             {
                                 Session.LoginUrl = $"{m.Groups[1].Value}&fun=new";
                                 Session.BaseUrl = Session.LoginUrl.Substring(0, Session.LoginUrl.LastIndexOf("/", StringComparison.OrdinalIgnoreCase));
-                                NotifyActionEvent(ActionEventType.EvtOK);
-                                return;
+                                return NotifyActionEvent(ActionEventType.EvtOK);
                             }
                             break;
                         }
 
-                    case "201": NotifyActionEvent(ActionEventType.EvtOK); return;
-                    case "408": NotifyErrorEvent(WeChatErrorCode.Timeout); return;
+                    case "201":
+                        _tip = 0;
+                        return NotifyActionEvent(ActionEventType.EvtRepeat);
+
+                    case "408": return NotifyErrorEvent(WeChatErrorCode.Timeout);
                 }
             }
             throw WeChatException.CreateException(WeChatErrorCode.ResponseError);

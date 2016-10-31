@@ -13,7 +13,14 @@ namespace WebWeChat
 {
     public class Startup
     {
-        private static IConfigurationRoot BuildConfig()
+        public static IConfigurationRoot Configuration { get; private set; }
+
+        static Startup()
+        {
+            BuildConfig();
+        }
+
+        private static void BuildConfig()
         {
             var builder = new ConfigurationBuilder()
                 .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
@@ -22,28 +29,16 @@ namespace WebWeChat
             {
                 builder.AddUserSecrets();
             }
-            return builder.Build();
+            Configuration = builder.Build();
         }
 
         public static void ConfigureServices(IServiceCollection services)
         {
-            var config = BuildConfig();
-            services.AddSingleton(config);
-            Utility.HttpAction.Initializer.ConfigureServices(services, config);
-
-            services.AddTransient<IHttpModule, HttpModule>();
-            services.AddTransient<ILoggerModule>(provider => new LoggerModule(LogLevel.Information));
-            services.AddTransient<ILoginModule, LoginModule>();
-
-            // 以下三个就不以接口形式添加了
-            services.AddTransient<StoreModule>();
-            services.AddTransient<SessionModule>();
-            services.AddTransient<AccountModule>();
+            services.AddSingleton(Configuration);
         }
 
         public static void Configure(IServiceProvider provider)
         {
-            Utility.HttpAction.Initializer.Configure(provider);
         }
     }
 }

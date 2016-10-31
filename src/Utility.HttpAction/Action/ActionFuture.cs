@@ -17,24 +17,26 @@ namespace Utility.HttpAction.Action
             _outerListener = listener;
         }
 
-        public virtual async Task<ActionEventType> ExecuteAsync(CancellationToken token)
+        public virtual async Task<ActionEvent> ExecuteAsync(CancellationToken token)
         {
+            ActionEvent lastEvent = null;
             while (_queue.Count != 0)
             {
-                if (token.IsCancellationRequested) return ActionEventType.EvtCanceled;
+                if (token.IsCancellationRequested) return ActionEvent.CreateEvent(ActionEventType.EvtCanceled, this);
                 var action = _queue.First.Value;
                 _queue.RemoveFirst();
                 var result = await action.ExecuteAsync(token);
-                if(result == ActionEventType.EvtRetry)
+                if (result.Type == ActionEventType.EvtRetry || result.Type == ActionEventType.EvtRepeat)
                 {
                     _queue.AddFirst(action);
                 }
-                else if(result != ActionEventType.EvtOK)
+                else if(result.Type != ActionEventType.EvtOK)
                 {
                     return result;
                 }
+                lastEvent = result;
             }
-            return ActionEventType.EvtOK;
+            return lastEvent ?? ActionEvent.EmptyOkEvent;
         }
 
         public virtual IActionFuture PushAction(IAction action)

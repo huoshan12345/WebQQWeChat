@@ -24,7 +24,7 @@ namespace Utility.HttpAction.Service
         /// <summary>
         /// 执行一个HTTP请求
         /// </summary>
-        Task<HttpResponseItem> ExecuteHttpRequestAsync(HttpRequestItem request, CancellationToken token, IHttpActionListener actionListener = null);
+        Task<HttpResponseItem> ExecuteHttpRequestAsync(HttpRequestItem request, CancellationToken token);
 
         /// <summary>
         /// 获取一个cookie

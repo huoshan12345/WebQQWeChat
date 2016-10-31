@@ -5,8 +5,8 @@ namespace WebWeChat.Im.Module.Interface
 {
     public interface IContactModule
     {
-        Task<ActionEventType> GetContact(ActionEventListener listener = null);
+        Task<ActionEvent> GetContact(ActionEventListener listener = null);
 
-        Task<ActionEventType> GetGroupMember(ActionEventListener listener = null);
+        Task<ActionEvent> GetGroupMember(ActionEventListener listener = null);
     }
 }

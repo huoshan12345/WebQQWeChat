@@ -25,9 +25,9 @@ namespace WebWeChat.Im.Action
             return req;
         }
 
-        public override void OnHttpContent(HttpResponseItem responseItem)
+        public override ActionEvent HandleResponse(HttpResponseItem responseItem)
         {
-            NotifyActionEvent(ActionEventType.EvtOK, Image.FromStream(responseItem.ResponseStream));
+            return NotifyActionEvent(ActionEventType.EvtOK, Image.FromStream(responseItem.ResponseStream));
         }
     }
 }

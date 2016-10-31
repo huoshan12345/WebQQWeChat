@@ -38,7 +38,7 @@ namespace WebWeChat.Im.Action
             return req;
         }
 
-        public override void OnHttpContent(HttpResponseItem responseItem)
+        public override ActionEvent HandleResponse(HttpResponseItem responseItem)
         {
             /*
                 {
@@ -105,8 +105,7 @@ namespace WebWeChat.Im.Action
                     Session.SyncKey = json["SyncKey"];
                     Session.SyncKeyStr = Session.SyncKey["List"].ToArray().Select(m => $"{m["Key"]}_{m["Val"]}").JoinWith("|");
                     Session.User = json["User"];
-                    NotifyActionEvent(ActionEventType.EvtOK);
-                    return;
+                    return NotifyActionEvent(ActionEventType.EvtOK);
                 }
                 else
                 {

@@ -10,13 +10,13 @@ using Microsoft.Extensions.Logging;
 using Utility.Extensions;
 using System.Runtime.InteropServices;
 using Utility.HttpAction.Event;
+using System.Text;
 
 namespace WebWeChat
 {
     public class Program
     {
         private static Process _process = null;
-
         private static readonly WeChatNotifyEventListener Listener = (client, notifyEvent) =>
         {
             var logger = client.GetModule<ILoggerModule>();
@@ -32,10 +32,9 @@ namespace WebWeChat
                         const string path = "verify.png";
                         verify.Save(path);
                         logger.LogInformation($"请扫描在项目根目录下{path}图片");
-                        if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-                        {
-                            _process = Process.Start(path);
-                        }
+#if NET
+                        _process = Process.Start(path);
+#endif
                         break;
                     }
 
@@ -56,23 +55,14 @@ namespace WebWeChat
             }
         };
 
-        public static IServiceProvider ServiceProvider { get; private set; }
-
-        private static void Init()
-        {
-            var services = new ServiceCollection();
-            Startup.ConfigureServices(services);
-            ServiceProvider = services.BuildServiceProvider();
-            Startup.Configure(ServiceProvider);
-        }
-
         public static void Main(string[] args)
         {
-            Init();
-
-            var client = new WebWeChatClient(ServiceProvider, Listener);
+#if NETCORE
+            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+#endif
+            var client = new WebWeChatClient(Listener);
             var @event = client.Login().Result;
-            if (@event != ActionEventType.EvtOK)
+            if (@event.Type != ActionEventType.EvtOK)
             {
                 Console.WriteLine("登录失败");
             }

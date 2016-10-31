@@ -17,5 +17,7 @@ namespace Utility.HttpAction.Event
         EvtCanceled,
         [Description("重试")]
         EvtRetry,
+        [Description("再次执行")]
+        EvtRepeat
     }
 }

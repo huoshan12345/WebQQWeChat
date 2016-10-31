@@ -38,7 +38,7 @@ namespace WebWeChat.Im.Action
             return req;
         }
 
-        public override void OnHttpContent(HttpResponseItem responseItem)
+        public override ActionEvent HandleResponse(HttpResponseItem responseItem)
         {
             var str = responseItem.ResponseString;
             if (!str.IsNullOrEmpty())
@@ -51,8 +51,7 @@ namespace WebWeChat.Im.Action
                     {
                         Store.ContactMemberDic[item.UserName] = item;
                     }
-                    NotifyActionEvent(ActionEventType.EvtOK);
-                    return;
+                    return NotifyActionEvent(ActionEventType.EvtOK);
                 }
                 else
                 {
