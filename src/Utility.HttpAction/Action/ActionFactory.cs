@@ -16,24 +16,18 @@ namespace Utility.HttpAction.Action
             if (actionType.IsAssignableFrom(typeof(IAction))) throw new ArgumentException(nameof(actionType));
 
             var argsType = args.Select(a => a.GetType()).ToArray();
-            var ctor = actionType.GetConstructor(argsType);
-            if (ctor == null)
+            var ctor = actionType.GetConstructors().FirstOrDefault(m => m.ArgumentListMatches(argsType));
+            if (ctor != null)
             {
-                ctor = actionType.GetConstructors().FirstOrDefault(m => m.GetParameters().Where(p => !p.IsOptional).Select(p => p.ParameterType).SequenceAssignableFrom(argsType));
-                if (ctor != null)
+                var paras = ctor.GetParameters(); // paras.Length must be larger than args.Length
+                if (paras.Length != args.Length)
                 {
-                    var paras = ctor.GetParameters();
                     var argsNew = new object[paras.Length];
-                    for (int i = 0, j = 0; i < paras.Length; i++)
+                    args.CopyTo(argsNew, 0);
+                    
+                    for (var i = args.Length; i < paras.Length; i++)
                     {
-                        if (paras[i].IsOptional)
-                        {
-                            argsNew[i] = paras[i].RawDefaultValue;
-                        }
-                        else
-                        {
-                            argsNew[i] = args[j++];
-                        }
+                        argsNew[i] = paras[i].RawDefaultValue;
                     }
                     args = argsNew;
                 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Reflection;
 using System.Threading.Tasks;
 
@@ -31,6 +32,34 @@ namespace Utility.Extensions
                 }
             }
             return true;
+        }
+
+        public static object GetDefaultValue(this Type t)
+        {
+            if (t.GetTypeInfo().IsValueType && Nullable.GetUnderlyingType(t) == null)
+                return Activator.CreateInstance(t);
+            else
+                return null;
+        }
+
+
+        public static object GetDefaultValueV2(this Type type)
+        {
+            // Validate parameters.
+            if (type == null) throw new ArgumentNullException(nameof(type));
+
+            // We want an Func<object> which returns the default.
+            // Create that expression here.
+            var e = Expression.Lambda<Func<object>>(
+                // Have to convert to object.
+                Expression.Convert(
+                    // The default value, always get what the *code* tells us.
+                    Expression.Default(type), typeof(object)
+                )
+            );
+
+            // Compile and return the value.
+            return e.Compile()();
         }
     }
 }

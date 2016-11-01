@@ -19,7 +19,7 @@ namespace WebWeChat.Im.Action
 
         public override HttpRequestItem BuildRequest()
         {
-            var url = string.Format(ApiUrls.StatusNotify, Session.BaseUrl, Session.PassTicket);
+            var url = string.Format(ApiUrls.StatusNotify, Session.BaseUrl);
             var obj = new
             {
                 Session.BaseRequest,

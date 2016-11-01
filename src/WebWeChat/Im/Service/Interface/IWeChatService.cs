@@ -8,9 +8,5 @@ namespace WebWeChat.Im.Service.Interface
 {
     public interface IWeChatService
     {
-        /// <summary>
-        /// 对象上下文
-        /// </summary>
-        IWeChatContext Context { get; }
     }
 }

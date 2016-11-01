@@ -2,9 +2,12 @@
 using System.Linq;
 using System.Net;
 using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 using Utility.Extensions;
 using Utility.HttpAction.Action;
 using Utility.HttpAction.Core;
+using Utility.HttpAction.Event;
 
 namespace Utility.HttpAction
 {
@@ -28,6 +31,18 @@ namespace Utility.HttpAction
         public static IAction CreateAction<T>(this IActionFactory factory, params object[] args) where T : IAction
         {
             return factory.CreateAction(typeof(T), args);
+        }
+
+        public static Task<ActionEvent> ExecuteAsync(this IActor actor)
+        {
+            return actor.ExecuteAsync(CancellationToken.None);
+        }
+
+        public static Task<ActionEvent> ExecuteAsync(this IActor actor, int seconds)
+        {
+            var cts = new CancellationTokenSource();
+            cts.CancelAfter(seconds * 1000);
+            return actor.ExecuteAsync(cts.Token);
         }
     }
 }

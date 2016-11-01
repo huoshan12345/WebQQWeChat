@@ -2,6 +2,8 @@
 using System.Drawing;
 using System.Threading;
 using System.Threading.Tasks;
+using Utility.HttpAction;
+using Utility.HttpAction.Action;
 using Utility.HttpAction.Event;
 using WebWeChat.Im.Action;
 using WebWeChat.Im.Core;
@@ -13,19 +15,23 @@ namespace WebWeChat.Im.Module.Impl
 {
     public class LoginModule : WeChatModule, ILoginModule
     {
+        public LoginModule(IWeChatContext context) : base(context)
+        {
+        }
+
         public Task<ActionEvent> Login(ActionEventListener listener = null)
         {
             var future = new WeChatActionFuture(Context, listener)
                 .PushAction<GetUuidAction>()
-                .PushAction(new GetQRCodeAction(Context, (sender, @event) =>
+                .PushAction<GetQRCodeAction>((sender, @event) =>
                 {
                     if (@event.Type == ActionEventType.EvtOK)
                     {
                         var verify = (Image)@event.Target;
                         Context.FireNotify(new WeChatNotifyEvent(WeChatNotifyEventType.QRCodeReady, verify));
                     }
-                }))
-                .PushAction(new WatiForLoginAction(Context, (sender, @event) =>
+                })
+                .PushAction<WatiForLoginAction>((sender, @event) =>
                 {
                     if (@event.Type == ActionEventType.EvtRepeat)
                     {
@@ -35,8 +41,8 @@ namespace WebWeChat.Im.Module.Impl
                     {
                         Context.FireNotify(new WeChatNotifyEvent(WeChatNotifyEventType.QRCodeInvalid));
                     }
-                }))
-                .PushAction(new WebLoginAction(Context, (sender, @event) =>
+                })
+                .PushAction<WebLoginAction>((sender, @event) =>
                 {
                     if (@event.Type == ActionEventType.EvtOK)
                     {
@@ -44,27 +50,27 @@ namespace WebWeChat.Im.Module.Impl
                         AfterLogin();
                         BeginSyncCheck();
                     }
-                }));
-            return future.ExecuteAsync(CancellationToken.None);
+                });
+            return future.ExecuteAsync();
         }
 
         private void AfterLogin()
         {
             var future = new WeChatActionFuture(Context)
-                .PushAction(new WebwxInitAction(Context))
-                .PushAction(new StatusNotifyAction(Context))
-                .PushAction(new GetContactAction(Context))
-                .PushAction(new BatchGetContactAction(Context))
-                .ExecuteAsync(CancellationToken.None);
+                .PushAction<WebwxInitAction>()
+                .PushAction<StatusNotifyAction>()
+                .PushAction<GetContactAction>()
+                .PushAction<BatchGetContactAction>()
+                .ExecuteAsync();
         }
 
         private void BeginSyncCheck()
         {
             var future = new WeChatActionFuture(Context);
-            future.PushAction(new SyncCheckAction(Context, (sender, @event) =>
+            future.PushAction<SyncCheckAction>((sender, @event) =>
             {
                 if (@event.Type != ActionEventType.EvtOK) return;
-                var result = (SyncCheckResult) @event.Target;
+                var result = (SyncCheckResult)@event.Target;
                 switch (result)
                 {
                     case SyncCheckResult.Nothing:
@@ -84,11 +90,7 @@ namespace WebWeChat.Im.Module.Impl
                 {
                     future.PushAction(sender);
                 }
-            })).ExecuteAsync(CancellationToken.None);
-        }
-
-        public LoginModule(IWeChatContext context) : base(context)
-        {
+            }).ExecuteAsync();
         }
     }
 }

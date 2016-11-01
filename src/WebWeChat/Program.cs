@@ -55,7 +55,6 @@ namespace WebWeChat
 
             }
         };
-
         public static void Main(string[] args)
         {
 #if NETCORE
@@ -69,5 +68,13 @@ namespace WebWeChat
             }
             Console.Read();
         }
+
+
+
+        public static void Test()
+        {
+
+        }
+
     }
 }
