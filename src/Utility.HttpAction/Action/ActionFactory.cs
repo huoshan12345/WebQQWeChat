@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
+using Utility.Extensions;
 
 namespace Utility.HttpAction.Action
 {
@@ -13,17 +14,17 @@ namespace Utility.HttpAction.Action
         {
             if (actionType == null) throw new ArgumentNullException(nameof(actionType));
             if (actionType.IsAssignableFrom(typeof(IAction))) throw new ArgumentException(nameof(actionType));
-            
+
             var argsType = args.Select(a => a.GetType()).ToArray();
             var ctor = actionType.GetConstructor(argsType);
             if (ctor == null)
             {
-                ctor = actionType.GetConstructors().FirstOrDefault(m => m.GetParameters().Where(p => !p.IsOptional).Select(p => p.ParameterType).SequenceEqual(argsType));
+                ctor = actionType.GetConstructors().FirstOrDefault(m => m.GetParameters().Where(p => !p.IsOptional).Select(p => p.ParameterType).SequenceAssignableFrom(argsType));
                 if (ctor != null)
                 {
                     var paras = ctor.GetParameters();
                     var argsNew = new object[paras.Length];
-                    for(int i = 0, j = 0; i < paras.Length; i++)
+                    for (int i = 0, j = 0; i < paras.Length; i++)
                     {
                         if (paras[i].IsOptional)
                         {
@@ -34,9 +35,10 @@ namespace Utility.HttpAction.Action
                             argsNew[i] = args[j++];
                         }
                     }
+                    args = argsNew;
                 }
             }
-            if(ctor == null) throw new Exception();
+            if (ctor == null) throw new MissingMethodException();
             return (IAction)ctor.Invoke(args);
         }
     }
