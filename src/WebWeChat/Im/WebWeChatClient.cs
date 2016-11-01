@@ -72,13 +72,13 @@ namespace WebWeChat.Im
         /// <inheritdoc />
         public T GetSerivce<T>() where T : IWeChatService
         {
-            return _serviceProvider.GetService<T>();
+            return _serviceProvider.GetRequiredService<T>();
         }
 
         /// <inheritdoc />
         public T GetModule<T>() where T : IWeChatModule
         {
-            return _serviceProvider.GetService<T>();
+            return _serviceProvider.GetRequiredService<T>();
         }
 
         /// <summary>

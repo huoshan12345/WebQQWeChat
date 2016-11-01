@@ -16,7 +16,9 @@ namespace WebWeChat.Im.Action
 {
     public abstract class WeChatAction : HttpAction
     {
-        protected IWeChatContext Context { get; set; }
+        // 为了防止通知层级混乱，其他action不应该直接操作Context，本action也只是在报告错误时用到了。
+        // 其他通知应该先通知到调用action的模块，由模块决定是否需要进一步通知
+        private IWeChatContext Context { get; set; }
         protected IWeChatLogger Logger { get; set; }
         protected SessionModule Session { get; set; }
         protected StoreModule Store { get; set; }
@@ -33,7 +35,7 @@ namespace WebWeChat.Im.Action
         }
 
         public void SetContext(IWeChatContext context)
-        {
+        {            
             if (context == Context) return;
             Context = context;
             HttpService = context.GetSerivce<IWeChatHttp>();

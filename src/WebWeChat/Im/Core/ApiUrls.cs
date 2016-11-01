@@ -16,6 +16,7 @@ namespace WebWeChat.Im.Core
         public const string GetContact = "{0}/webwxgetcontact";
         public const string BatchGetContact = "{0}/webwxbatchgetcontact";
         public const string SyncCheck = "{0}/synccheck";
+        public const string WebwxSync = "{0}/webwxsync";
 
         public static readonly string[] SyncHosts =
         {

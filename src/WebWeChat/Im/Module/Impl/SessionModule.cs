@@ -6,9 +6,16 @@ using System.Globalization;
 using Newtonsoft.Json.Linq;
 using Utility.Extensions;
 using WebWeChat.Im.Core;
+using System.Linq;
 
 namespace WebWeChat.Im.Module.Impl
 {
+    public enum SessionState
+    {
+        Offline,
+        Online,
+    }
+
     public class SessionModule : WeChatModule
     {
 
@@ -26,7 +33,7 @@ namespace WebWeChat.Im.Module.Impl
 
         public JToken SyncKey { get; set; }
 
-        public string SyncKeyStr { get; set; }
+        public string SyncKeyStr => SyncKey?["List"].ToArray().Select(m => $"{m["Key"]}_{m["Val"]}").JoinWith("|");
 
         public JToken User { get; set; }
 

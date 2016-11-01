@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 using WebWeChat.Im.Bean;
 
 namespace WebWeChat.Im.Util
@@ -29,6 +30,11 @@ namespace WebWeChat.Im.Util
         public static bool IsGroup(this ContactMember member)
         {
             return member.UserName.StartsWith("@@");
+        }
+
+        public static string ToJson(this object obj, Formatting formatting = Formatting.None)
+        {
+            return JsonConvert.SerializeObject(obj, formatting);
         }
     }
 }

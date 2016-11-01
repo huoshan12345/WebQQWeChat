@@ -6,7 +6,9 @@ using Microsoft.Extensions.Logging;
 using Utility.Extensions;
 using Utility.HttpAction.Core;
 using Utility.HttpAction.Event;
+using WebWeChat.Im.Action.ActionResult;
 using WebWeChat.Im.Core;
+using WebWeChat.Im.Module.Impl;
 
 namespace WebWeChat.Im.Action
 {
@@ -64,48 +66,32 @@ namespace WebWeChat.Im.Action
             if (match.Success)
             {
                 var retcode = match.Groups[1].Value;
-                var selector = match.Groups[2].Value;
                 var result = SyncCheckResult.Nothing;
 
                 if (Session.SyncUrl == null && retcode != "0")
                 {
+                    // retcode
+                    // 1100-
+                    // 1101-参数错误
+                    // 1102-cookie错误
                     return TestNextHost();
                 }
 
                 switch (retcode)
                 {
                     case "1100":
+                    case "1101":
                         Session.State = SessionState.Offline; // 在手机上登出了微信
-                        result = SyncCheckResult.Offline;
-                        break;
-
-                    case "1101": // 参数错误
-                        Session.State = SessionState.Kicked; // 在其他地方登录了WEB版微信
-                        result = SyncCheckResult.Kicked;
-                        break;
-
-                    case "1102": // cookie错误
+                        result = (SyncCheckResult)int.Parse(retcode);
                         break;
 
                     case "0":
                         Session.SyncUrl = responseItem.RequestItem.RawUrl;
-                        switch (selector)
+                        var selector = match.Groups[2].Value;
+                        result = (SyncCheckResult) int.Parse(selector);
+                        if (result == SyncCheckResult.Nothing)
                         {
-                            case "2": // 新消息
-                                result = SyncCheckResult.NewMsg;
-                                break;
-
-                            case "6": // 红包
-                                result = SyncCheckResult.RedEnvelope;
-                                break;
-
-                            case "7": // 在手机上玩微信
-                                result = SyncCheckResult.UsingPhone;
-                                break;
-
-                            case "0": // 什么都没有
-                            default:
-                                break;
+                            Thread.Sleep(10000);
                         }
                         break;
                 }

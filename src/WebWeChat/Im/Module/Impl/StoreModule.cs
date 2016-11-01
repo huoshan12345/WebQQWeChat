@@ -14,7 +14,9 @@ namespace WebWeChat.Im.Module.Impl
         public int MemberCount { get; set; }
 
         /// <summary>
+        /// 存放联系人
         /// 主键是member的username
+        /// 目前理论上不会同时有多个线程同时操作，所以就用dic了
         /// </summary>
         public Dictionary<string, ContactMember> ContactMemberDic { get; set; } = new Dictionary<string, ContactMember>();
 

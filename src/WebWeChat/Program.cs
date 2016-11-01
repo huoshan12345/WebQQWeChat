@@ -11,7 +11,9 @@ using Utility.Extensions;
 using System.Runtime.InteropServices;
 using Utility.HttpAction.Event;
 using System.Text;
+using WebWeChat.Im.Bean;
 using WebWeChat.Im.Service.Interface;
+using Utility.Extensions;
 
 namespace WebWeChat
 {
@@ -48,6 +50,13 @@ namespace WebWeChat
                     _process?.Kill();
                     logger.LogWarning("二维码已失效");
                     break;
+
+                case WeChatNotifyEventType.Message:
+                    {
+                        var msg = (Message)notifyEvent.Target;
+                        logger.LogInformation($"[{msg.MsgType.GetDescription()}][{msg.Content}]");
+                        break;
+                    }
 
                 default:
                     logger.LogInformation(notifyEvent.Type.GetFullDescription());

@@ -1,4 +1,4 @@
-﻿namespace WebWeChat.Im
+﻿namespace WebWeChat.Im.Core
 {
     public enum WeChatErrorCode
     {

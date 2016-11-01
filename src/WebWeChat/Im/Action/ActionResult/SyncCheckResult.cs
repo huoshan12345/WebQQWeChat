@@ -1,40 +1,35 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace WebWeChat.Im.Core
+﻿namespace WebWeChat.Im.Action.ActionResult
 {
     public enum SyncCheckResult
     {
         /// <summary>
-        /// 
+        /// 什么都没有
         /// </summary>
-        Nothing,
+        Nothing = 0,
 
         /// <summary>
         /// 新消息
         /// </summary>
-        NewMsg,
+        NewMsg = 2,
 
         /// <summary>
         /// 正在使用手机微信
         /// </summary>
-        UsingPhone,
+        UsingPhone = 7,
 
         /// <summary>
         /// 红包
         /// </summary>
-        RedEnvelope,
+        RedEnvelope = 6,
 
         /// <summary>
         /// 已离线
         /// </summary>
-        Offline,
+        Offline = 1100,
 
         /// <summary>
         /// 被踢
         /// </summary>
-        Kicked,
+        Kicked = 1101,
     }
 }

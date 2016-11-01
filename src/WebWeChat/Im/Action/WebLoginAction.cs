@@ -2,6 +2,7 @@
 using System.Xml.Linq;
 using Utility.HttpAction.Core;
 using Utility.HttpAction.Event;
+using WebWeChat.Im.Module.Impl;
 
 namespace WebWeChat.Im.Action
 {

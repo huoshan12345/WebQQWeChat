@@ -103,7 +103,7 @@ namespace WebWeChat.Im.Action
                 if (json["BaseResponse"]["Ret"].ToString() == "0")
                 {
                     Session.SyncKey = json["SyncKey"];
-                    Session.SyncKeyStr = Session.SyncKey["List"].ToArray().Select(m => $"{m["Key"]}_{m["Val"]}").JoinWith("|");
+                    // Session.SyncKeyStr = Session.SyncKey["List"].ToArray().Select(m => $"{m["Key"]}_{m["Val"]}").JoinWith("|");
                     Session.User = json["User"];
                     return NotifyActionEvent(ActionEventType.EvtOK);
                 }

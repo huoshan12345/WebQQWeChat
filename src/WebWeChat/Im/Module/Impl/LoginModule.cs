@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Threading;
 using System.Threading.Tasks;
@@ -6,6 +7,8 @@ using Utility.HttpAction;
 using Utility.HttpAction.Action;
 using Utility.HttpAction.Event;
 using WebWeChat.Im.Action;
+using WebWeChat.Im.Action.ActionResult;
+using WebWeChat.Im.Bean;
 using WebWeChat.Im.Core;
 using WebWeChat.Im.Event;
 using WebWeChat.Im.Module.Interface;
@@ -76,6 +79,16 @@ namespace WebWeChat.Im.Module.Impl
                     case SyncCheckResult.Nothing:
                         break;
                     case SyncCheckResult.NewMsg:
+                        future.PushAction<WebwxSyncAction>((s, e) =>
+                        {
+                            if (e.Type != ActionEventType.EvtOK) return;
+                            var msgs = (List<Message>) e.Target;
+                            foreach (var msg in msgs)
+                            {
+                                var notify = new WeChatNotifyEvent(WeChatNotifyEventType.Message, msg);
+                                Context.FireNotify(notify);
+                            }
+                        });
                         break;
                     case SyncCheckResult.UsingPhone:
                         break;

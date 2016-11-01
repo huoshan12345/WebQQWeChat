@@ -47,5 +47,11 @@ namespace WebWeChat.Im.Event
         /// </summary>
         [Description("重新登录成功")]
         ReloginSuccess,
+
+        /// <summary>
+        /// 消息
+        /// </summary>
+        [Description("消息")]
+        Message,
     }
 }

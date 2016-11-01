@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Utility.HttpAction.Event;
-using WebWeChat.Im.Core;
-using WebWeChat.Im.Module.Interface;
 
-namespace WebWeChat.Im
+namespace WebWeChat.Im.Core
 {
     public interface IWebWeChatClient : IWeChatContext, IDisposable
     {
