@@ -962,7 +962,7 @@
           "System.Runtime": "4.1.0"
         },
         "compile": {
-          "ref/netstandard1.5/_._": {}
+          "ref/netstandard1.5/System.Reflection.TypeExtensions.dll": {}
         },
         "runtime": {
           "lib/netstandard1.5/System.Reflection.TypeExtensions.dll": {}
@@ -4615,7 +4615,8 @@
     ".NETStandard,Version=v1.6": [
       "NETStandard.Library >= 1.6.0",
       "System.ComponentModel.Primitives >= 4.1.0",
-      "System.Linq.Queryable >= 4.0.1"
+      "System.Linq.Queryable >= 4.0.1",
+      "System.Reflection.TypeExtensions >= 4.1.0"
     ]
   },
   "tools": {},

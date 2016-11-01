@@ -2526,7 +2526,8 @@
           "NETStandard.Library": "1.6.0",
           "System.ComponentModel.Annotations": "4.1.0",
           "System.ComponentModel.Primitives": "4.1.0",
-          "System.Linq.Queryable": "4.0.1"
+          "System.Linq.Queryable": "4.0.1",
+          "System.Reflection.TypeExtensions": "4.1.0"
         },
         "compile": {
           "netstandard1.6/Utility.dll": {}
