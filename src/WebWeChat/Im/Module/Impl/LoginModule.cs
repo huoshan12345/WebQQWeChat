@@ -73,41 +73,46 @@ namespace WebWeChat.Im.Module.Impl
 
         private void BeginSyncCheck()
         {
-            var future = new WeChatActionFuture(Context);
-            future.PushAction<SyncCheckAction>((sender, @event) =>
+            Dispatcher.PushActor(new SyncCheckAction(Context, async (sender, @event) =>
             {
                 if (@event.Type != ActionEventType.EvtOK) return;
                 var result = (SyncCheckResult)@event.Target;
                 switch (result)
                 {
-                    case SyncCheckResult.Nothing:
+                    case SyncCheckResult.Offline:
+                    case SyncCheckResult.Kicked:
                         break;
+
+                    case SyncCheckResult.UsingPhone:
                     case SyncCheckResult.NewMsg:
-                        future.PushAction<WebwxSyncAction>((s, e) =>
+                        Dispatcher.PushActor(new WebwxSyncAction(Context, (s, e) =>
                         {
+                            if (e.Type != ActionEventType.EvtRetry)
+                            {
+                                if (Context.GetModule<SessionModule>().State == SessionState.Online)
+                                {
+                                    Dispatcher.PushActor(sender);
+                                }
+                            }
+
                             if (e.Type != ActionEventType.EvtOK) return;
                             var msgs = (List<Message>)e.Target;
                             foreach (var msg in msgs.Where(m => m.MsgType != MessageType.GetContact))
                             {
                                 var notify = new WeChatNotifyEvent(WeChatNotifyEventType.Message, msg);
-                                Context.FireNotify(notify);
+                                Context.FireNotifyAsync(notify);
                             }
-                        });
+                        }));
                         break;
-                    case SyncCheckResult.UsingPhone:
-                        break;
+
                     case SyncCheckResult.RedEnvelope:
-                        break;
-                    case SyncCheckResult.Offline:
-                        break;
-                    case SyncCheckResult.Kicked:
+                    case SyncCheckResult.Nothing:
+                        await Task.Delay(5 * 1000);
+                        Dispatcher.PushActor(sender);
                         break;
                 }
-                if (Context.GetModule<SessionModule>().State == SessionState.Online)
-                {
-                    future.PushAction(sender);
-                }
-            }).ExecuteAsync();
+
+            }));
         }
     }
 }

@@ -21,7 +21,7 @@ namespace WebWeChat
         private static Process _process = null;
         private static readonly WeChatNotifyEventListener Listener = (client, notifyEvent) =>
         {
-            var logger = client.GetSerivce<IWeChatLogger>();
+            var logger = client.GetSerivce<ILogger>();
             switch (notifyEvent.Type)
             {
                 case WeChatNotifyEventType.LoginSuccess:
@@ -74,7 +74,10 @@ namespace WebWeChat
             {
                 Console.WriteLine("登录失败");
             }
+
+            Console.WriteLine("按任意键退出");
             Console.Read();
+            Startup.Dispose(); // 释放全局资源
         }
 
 

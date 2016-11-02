@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using System.Threading.Tasks;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using WebWeChat.Im.Core;
 using Utility.Extensions;
@@ -19,7 +20,7 @@ namespace WebWeChat.Im.Action
 
         public override HttpRequestItem BuildRequest()
         {
-            var url = string.Format(ApiUrls.StatusNotify, Session.BaseUrl);
+            var url = string.Format(ApiUrls.StatusNotify, Session.BaseUrl, Session.PassTicket);
             var obj = new
             {
                 Session.BaseRequest,
@@ -36,7 +37,7 @@ namespace WebWeChat.Im.Action
             return req;
         }
 
-        public override ActionEvent HandleResponse(HttpResponseItem responseItem)
+        public override Task<ActionEvent> HandleResponse(HttpResponseItem responseItem)
         {
             /*
                 {
@@ -53,7 +54,7 @@ namespace WebWeChat.Im.Action
                 var json = JObject.Parse(str);
                 if (json["BaseResponse"]["Ret"].ToString() == "0")
                 {
-                    return NotifyActionEvent(ActionEventType.EvtOK);
+                    return NotifyActionEventAsync(ActionEventType.EvtOK);
                 }
                 else
                 {

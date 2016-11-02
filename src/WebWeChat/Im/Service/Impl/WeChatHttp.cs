@@ -5,7 +5,7 @@ using WebWeChat.Im.Service.Interface;
 
 namespace WebWeChat.Im.Service.Impl
 {
-    public class WeChatHttp : HttpService, IWeChatHttp
+    public class WeChatHttp : HttpService, IWeChatService
     {
     }
 }

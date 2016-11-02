@@ -11,6 +11,6 @@ namespace Utility.HttpAction.Action
     {
         HttpRequestItem BuildRequest();
 
-        ActionEvent HandleResponse(HttpResponseItem response);
+        Task<ActionEvent> HandleResponse(HttpResponseItem response);
     }
 }

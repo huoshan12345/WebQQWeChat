@@ -8,7 +8,7 @@ using WebWeChat.Im.Service.Interface;
 
 namespace WebWeChat.Im.Service.Impl
 {
-    public class WeChatLogger : SimpleConsoleLogger, IWeChatLogger
+    public class WeChatLogger : SimpleConsoleLogger, IWeChatService
     {
         public IWeChatContext Context { get; set; }
 
@@ -18,15 +18,17 @@ namespace WebWeChat.Im.Service.Impl
             Context = context;
         }
 
+        /// <summary>
+        /// :warning:
+        /// </summary>
+        /// <param name="message"></param>
+        /// <param name="exception"></param>
+        /// <returns></returns>
         public override string GetMessage(string message, Exception exception)
         {
             var userName = Context.GetModule<AccountModule>().User?.NickName;
             var prefix = userName.IsNullOrEmpty() ? string.Empty : $"[{userName}]";
             return $"{DateTime.Now:HH:mm:ss}> {prefix}{message}";
-        }
-
-        public void Dispose()
-        {
         }
     }
 }

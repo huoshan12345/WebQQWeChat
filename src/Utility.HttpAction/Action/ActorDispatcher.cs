@@ -1,17 +1,17 @@
 ﻿using System;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
+using Utility.HttpAction.Event;
 
-namespace HttpActionFrame.Actor
+namespace Utility.HttpAction.Action
 {
-    /// <summary>
-    /// 单线程的QQ内部分发器，可以同时使用多个QQ实例里
-    /// </summary>
-    public class SimpleActorDispatcher : IActorDispatcher
+    public class ActorDispatcher : IActorDispatcher
     {
         private readonly BlockingCollection<IActor> _actorQueue;
 
-        public SimpleActorDispatcher()
+        public ActorDispatcher()
         {
             _actorQueue = new BlockingCollection<IActor>();
         }
@@ -29,7 +29,15 @@ namespace HttpActionFrame.Actor
         private static bool DispatchAction(IActor actor)
         {
             if (actor == null) return true;
-            actor.ExecuteAsync();
+            actor.ExecuteAsync().ContinueWith(result =>
+            {
+                if(result.Status != TaskStatus.RanToCompletion) return;
+                var type = result.Result.Type;
+                if (type == ActionEventType.EvtRepeat || type == ActionEventType.EvtRetry)
+                {
+                    DispatchAction(actor);
+                }
+            } );
             return !(actor is ExitActor);
         }
 

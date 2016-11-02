@@ -31,7 +31,7 @@ namespace Utility.HttpAction.Service
 
         private static HttpRequestMessage GetHttpRequest(HttpRequestItem item)
         {
-            var request = new HttpRequestMessage(new HttpMethod(item.Method.ToString()), item.GetUrl());
+            var request = new HttpRequestMessage(new HttpMethod(item.Method.ToString()), new Uri(item.GetUrl()));
             switch (item.Method)
             {
                 case HttpMethodType.Post:
@@ -103,7 +103,7 @@ namespace Utility.HttpAction.Service
 
             var responseItem = new HttpResponseItem { RequestItem = requestItem };
             var httpRequest = GetHttpRequest(requestItem);
-            var response = await _httpClient.SendAsync(httpRequest, token);
+            var response = await _httpClient.SendAsync(httpRequest, HttpCompletionOption.ResponseHeadersRead, token).ConfigureAwait(false);
             response.EnsureSuccessStatusCode();
             responseItem.StatusCode = response.StatusCode;
 

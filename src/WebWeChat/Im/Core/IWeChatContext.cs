@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using WebWeChat.Im.Event;
 using WebWeChat.Im.Module;
 using WebWeChat.Im.Module.Interface;
@@ -10,7 +11,9 @@ namespace WebWeChat.Im.Core
     {
         void FireNotify(WeChatNotifyEvent notifyEvent);
 
-        T GetSerivce<T>() where T : IWeChatService;
+        Task FireNotifyAsync(WeChatNotifyEvent notifyEvent);
+
+        T GetSerivce<T>();
 
         T GetModule<T>() where T : IWeChatModule;
     }

@@ -19,7 +19,7 @@ namespace WebWeChat.Im.Action
         // 为了防止通知层级混乱，其他action不应该直接操作Context，本action也只是在报告错误时用到了。
         // 其他通知应该先通知到调用action的模块，由模块决定是否需要进一步通知
         private IWeChatContext Context { get; set; }
-        protected IWeChatLogger Logger { get; set; }
+        protected ILogger Logger { get; set; }
         protected SessionModule Session { get; set; }
         protected StoreModule Store { get; set; }
         protected AccountModule Account { get; set; }
@@ -28,7 +28,7 @@ namespace WebWeChat.Im.Action
         protected string ActionName => GetType().Name;
 
         protected WeChatAction(IWeChatContext context, ActionEventListener listener = null) :
-            base(context.GetSerivce<IWeChatHttp>())
+            base(context.GetSerivce<IHttpService>())
         {
             SetContext(context);
             OnActionEvent += listener;
@@ -38,38 +38,38 @@ namespace WebWeChat.Im.Action
         {            
             if (context == Context) return;
             Context = context;
-            HttpService = context.GetSerivce<IWeChatHttp>();
-            Logger = context.GetSerivce<IWeChatLogger>();
+            HttpService = context.GetSerivce<IHttpService>();
+            Logger = context.GetSerivce<ILogger>();
             Session = context.GetModule<SessionModule>();
             Store = context.GetModule<StoreModule>();
             Account = context.GetModule<AccountModule>();
         }
 
-        public override ActionEvent HandleException(Exception ex)
+        public override Task<ActionEvent> HandleExceptionAsync(Exception ex)
         {
             var exception = ex as WeChatException ?? new WeChatException(ex);
-            return base.HandleException(exception);
+            return base.HandleExceptionAsync(exception);
         }
 
-        protected ActionEvent NotifyErrorEvent(WeChatException ex)
+        protected Task<ActionEvent> NotifyErrorEventAsync(WeChatException ex)
         {
-            return NotifyActionEvent(ActionEvent.CreateEvent(ActionEventType.EvtError, ex));
+            return NotifyActionEventAsync(ActionEvent.CreateEvent(ActionEventType.EvtError, ex));
         }
 
-        protected ActionEvent NotifyErrorEvent(WeChatErrorCode code)
+        protected Task<ActionEvent> NotifyErrorEventAsync(WeChatErrorCode code)
         {
-            return NotifyErrorEvent(WeChatException.CreateException(code));
+            return NotifyErrorEventAsync(WeChatException.CreateException(code));
         }
 
         public override async Task<ActionEvent> ExecuteAsync(CancellationToken token)
         {
             Logger.LogTrace($"[Action={ActionName} Begin]");
-            var result = await base.ExecuteAsync(token);
+            var result = await base.ExecuteAsync(token).ConfigureAwait(false);
             Logger.LogTrace($"[Action={ActionName} End]");
             return result;
         }
 
-        protected override ActionEvent NotifyActionEvent(ActionEvent actionEvent)
+        protected override Task<ActionEvent> NotifyActionEventAsync(ActionEvent actionEvent)
         {
             var type = actionEvent.Type;
             var target = actionEvent.Target;
@@ -97,7 +97,7 @@ namespace WebWeChat.Im.Action
                     Logger.LogDebug($"[Action={ActionName}, Type={type}]");
                     break;
             }
-            return base.NotifyActionEvent(actionEvent);
+            return base.NotifyActionEventAsync(actionEvent);
         }
     }
 }
