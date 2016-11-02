@@ -7,7 +7,7 @@ using WebWeChat.Im.Service.Interface;
 
 namespace WebWeChat.Im.Service.Impl
 {
-    public class WeChatActionFactory : ActionFactory, IWeChatActionFactory
+    public class WeChatActionFactory : ActionFactory, IWeChatActionFactory, IWeChatService
     {
         public IWeChatContext Context { get; }
 

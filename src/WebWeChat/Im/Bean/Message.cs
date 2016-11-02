@@ -66,6 +66,9 @@ namespace WebWeChat.Im.Bean
         MsgWithdraw = 10002
     }
 
+    /// <summary>
+    /// 接收到的消息
+    /// </summary>
     public class Message
     {
         public string MsgId { get; set; }

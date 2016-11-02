@@ -5,7 +5,6 @@ using System.Drawing;
 using Microsoft.Extensions.DependencyInjection;
 using WebWeChat.Im;
 using WebWeChat.Im.Event;
-using WebWeChat.Im.Module.Interface;
 using Microsoft.Extensions.Logging;
 using Utility.Extensions;
 using System.Runtime.InteropServices;

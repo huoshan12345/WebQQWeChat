@@ -44,5 +44,11 @@ namespace WebWeChat.Im.Action
             var action = ActionFactory.CreateAction<T>(listener);
             return (WeChatActionFuture)base.PushAction(action);
         }
+
+        public WeChatActionFuture PushAction<T>(object obj, ActionEventListener listener) where T : WeChatAction
+        {
+            var action = ActionFactory.CreateAction<T>(obj, listener);
+            return (WeChatActionFuture)base.PushAction(action);
+        }
     }
 }

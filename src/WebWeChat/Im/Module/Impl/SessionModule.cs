@@ -1,12 +1,9 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Globalization;
+using System.Linq;
 using Newtonsoft.Json.Linq;
 using Utility.Extensions;
 using WebWeChat.Im.Core;
-using System.Linq;
 
 namespace WebWeChat.Im.Module.Impl
 {

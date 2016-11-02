@@ -9,7 +9,6 @@ using Utility.HttpAction.Core;
 using Utility.HttpAction.Event;
 using WebWeChat.Im.Bean;
 using WebWeChat.Im.Core;
-using WebWeChat.Im.Module.Impl;
 using WebWeChat.Im.Util;
 
 namespace WebWeChat.Im.Action

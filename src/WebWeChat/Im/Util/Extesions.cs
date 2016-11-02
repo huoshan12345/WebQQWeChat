@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using WebWeChat.Im.Bean;
 
 namespace WebWeChat.Im.Util
@@ -35,6 +36,11 @@ namespace WebWeChat.Im.Util
         public static string ToJson(this object obj, Formatting formatting = Formatting.None)
         {
             return JsonConvert.SerializeObject(obj, formatting);
+        }
+
+        public static JObject ToJsonObj(this string str)
+        {
+            return JObject.Parse(str);
         }
     }
 }

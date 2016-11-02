@@ -8,8 +8,8 @@ using Utility.HttpAction.Event;
 using Utility.HttpAction.Service;
 using WebWeChat.Im.Core;
 using WebWeChat.Im.Event;
+using WebWeChat.Im.Module;
 using WebWeChat.Im.Module.Impl;
-using WebWeChat.Im.Module.Interface;
 using WebWeChat.Im.Service.Interface;
 
 namespace WebWeChat.Im.Action

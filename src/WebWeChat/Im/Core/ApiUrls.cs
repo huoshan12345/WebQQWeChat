@@ -18,6 +18,7 @@ namespace WebWeChat.Im.Core
         // public const string SyncCheck = "{0}/synccheck";
         // public const string WebwxSync = "{0}/webwxsync?sid={1}&skey={2}&pass_ticket={3}";
         public const string WebwxSync = "{0}/webwxsync";
+        public const string SendMsg = "{0}/webwxsendmsg";
 
         public static readonly string[] SyncHosts =
         {

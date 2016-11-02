@@ -19,5 +19,10 @@ namespace Utility.Extensions
         {
             return (long)(DateTime.UtcNow - Jan1St1970).TotalSeconds;
         }
+
+        public static long ToTimestampMilli(this DateTime d)
+        {
+            return (long)(DateTime.UtcNow - Jan1St1970).TotalMilliseconds;
+        }
     }
 }

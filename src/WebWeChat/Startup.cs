@@ -7,8 +7,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Utility.HttpAction.Action;
 using WebWeChat.Im.Module;
-using WebWeChat.Im.Module.Impl;
-using WebWeChat.Im.Module.Interface;
 
 namespace WebWeChat
 {
