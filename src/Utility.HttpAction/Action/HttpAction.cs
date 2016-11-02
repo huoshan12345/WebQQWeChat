@@ -24,7 +24,9 @@ namespace Utility.HttpAction.Action
 
         protected virtual ActionEvent NotifyActionEvent(ActionEvent actionEvent)
         {
-            OnActionEvent?.Invoke(this, actionEvent);
+            OnActionEvent?.BeginInvoke(this, actionEvent, null, null);
+            if (actionEvent.Type == ActionEventType.EvtRetry) ++RetryTimes;
+            else RetryTimes = 0;
             return actionEvent;
         }
 
@@ -41,14 +43,23 @@ namespace Utility.HttpAction.Action
 
         public virtual ActionEvent HandleException(Exception ex)
         {
-            if (RetryTimes < MaxReTryTimes)
+            try
             {
-                return NotifyActionEvent(ActionEvent.CreateEvent(ActionEventType.EvtRetry, ex));
+                if (RetryTimes < MaxReTryTimes)
+                {
+                    var result = NotifyActionEvent(ActionEvent.CreateEvent(ActionEventType.EvtRetry, ex));
+                    return result;
+                }
+                else
+                {
+                    return NotifyActionEvent(ActionEvent.CreateEvent(ActionEventType.EvtError, ex));
+                }
             }
-            else
+            catch (Exception e)
             {
-                return NotifyActionEvent(ActionEvent.CreateEvent(ActionEventType.EvtError, ex));
+                throw new Exception($"throw an unhandled exception when excute [{nameof(HandleException)}] method.", e);
             }
+
         }
 
         public virtual async Task<ActionEvent> ExecuteAsync(CancellationToken token)

@@ -66,7 +66,6 @@ namespace WebWeChat.Im.Action
             if (match.Success)
             {
                 var retcode = match.Groups[1].Value;
-                var result = SyncCheckResult.Nothing;
 
                 if (Session.SyncUrl == null && retcode != "0")
                 {
@@ -77,6 +76,7 @@ namespace WebWeChat.Im.Action
                     return TestNextHost();
                 }
 
+                var result = SyncCheckResult.Nothing;
                 switch (retcode)
                 {
                     case "1100":

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Utility.HttpAction;
@@ -51,7 +52,6 @@ namespace WebWeChat.Im.Module.Impl
                     {
                         Context.FireNotify(new WeChatNotifyEvent(WeChatNotifyEventType.LoginSuccess));
                         AfterLogin();
-                        BeginSyncCheck();
                     }
                 });
             return future.ExecuteAsync();
@@ -62,7 +62,11 @@ namespace WebWeChat.Im.Module.Impl
             var future = new WeChatActionFuture(Context)
                 .PushAction<WebwxInitAction>()
                 .PushAction<StatusNotifyAction>()
-                .PushAction<GetContactAction>()
+                .PushAction<GetContactAction>((sender, @event) =>
+                {
+                    if (@event.Type != ActionEventType.EvtOK) return;
+                    BeginSyncCheck();
+                })
                 .PushAction<BatchGetContactAction>()
                 .ExecuteAsync();
         }
@@ -82,8 +86,8 @@ namespace WebWeChat.Im.Module.Impl
                         future.PushAction<WebwxSyncAction>((s, e) =>
                         {
                             if (e.Type != ActionEventType.EvtOK) return;
-                            var msgs = (List<Message>) e.Target;
-                            foreach (var msg in msgs)
+                            var msgs = (List<Message>)e.Target;
+                            foreach (var msg in msgs.Where(m => m.MsgType != MessageType.GetContact))
                             {
                                 var notify = new WeChatNotifyEvent(WeChatNotifyEventType.Message, msg);
                                 Context.FireNotify(notify);

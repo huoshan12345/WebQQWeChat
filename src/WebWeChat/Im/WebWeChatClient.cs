@@ -40,7 +40,7 @@ namespace WebWeChat.Im
 
             // 服务
             _services.AddSingleton<IWeChatHttp, WeChatHttp>();
-            _services.AddSingleton<IWeChatLogger>(provider => new WeChatLogger(this, LogLevel.Debug));
+            _services.AddSingleton<IWeChatLogger>(provider => new WeChatLogger(this, LogLevel.Trace));
             _services.AddSingleton<IWeChatActionFactory, WeChatActionFactory>();
             
             _serviceProvider = _services.BuildServiceProvider();

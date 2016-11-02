@@ -10,11 +10,13 @@ namespace WebWeChat.Im.Core
 {
     public class WeChatException : Exception
     {
-        private static readonly ConcurrentDictionary<WeChatErrorCode, WeChatException> _exceptions 
+        private static readonly ConcurrentDictionary<WeChatErrorCode, WeChatException> Exceptions 
             = new ConcurrentDictionary<WeChatErrorCode, WeChatException>();
 
         private static WeChatErrorCode GetErrorCode(Exception e)
         {
+            e = e.InnerException ?? e;
+
             if (e is TimeoutException) return WeChatErrorCode.Timeout;
             if (e is IOException) return WeChatErrorCode.IoError;
             if (e is ArgumentException) return WeChatErrorCode.ParameterError;
@@ -25,9 +27,11 @@ namespace WebWeChat.Im.Core
             {
                 switch (webEx.Status)
                 {
-                    case WebExceptionStatus.Success: break;
+                    case WebExceptionStatus.Success:
+                        break;
 
-                    case WebExceptionStatus.NameResolutionFailure: return WeChatErrorCode.ParameterError;
+                    case WebExceptionStatus.NameResolutionFailure:
+                        return WeChatErrorCode.ParameterError;
 
                     case WebExceptionStatus.ConnectFailure:
                     case WebExceptionStatus.ReceiveFailure:
@@ -35,37 +39,26 @@ namespace WebWeChat.Im.Core
                     case WebExceptionStatus.PipelineFailure:
                         return WeChatErrorCode.IoError;
 
-                    case WebExceptionStatus.RequestCanceled:
-                        break;
-                    case WebExceptionStatus.ProtocolError:
-                        break;
-                    case WebExceptionStatus.ConnectionClosed:
-                        break;
-                    case WebExceptionStatus.TrustFailure:
-                        break;
-                    case WebExceptionStatus.SecureChannelFailure:
-                        break;
-                    case WebExceptionStatus.ServerProtocolViolation:
-                        break;
-                    case WebExceptionStatus.KeepAliveFailure:
-                        break;
-                    case WebExceptionStatus.Pending:
-                        break;
-                    case WebExceptionStatus.Timeout: return WeChatErrorCode.Timeout;
+                    case WebExceptionStatus.Timeout:
+                        return WeChatErrorCode.Timeout;
+                    case WebExceptionStatus.UnknownError:
+                        return WeChatErrorCode.UnknownError;
 
+                    case WebExceptionStatus.RequestCanceled:
+                    case WebExceptionStatus.ProtocolError:
+                    case WebExceptionStatus.ConnectionClosed:
+                    case WebExceptionStatus.TrustFailure:
+                    case WebExceptionStatus.SecureChannelFailure:
+                    case WebExceptionStatus.ServerProtocolViolation:
+                    case WebExceptionStatus.KeepAliveFailure:
+                    case WebExceptionStatus.Pending:
                     case WebExceptionStatus.ProxyNameResolutionFailure:
-                        break;
-                    case WebExceptionStatus.UnknownError: return WeChatErrorCode.UnknownError;
                     case WebExceptionStatus.MessageLengthLimitExceeded:
-                        break;
                     case WebExceptionStatus.CacheEntryNotFound:
-                        break;
                     case WebExceptionStatus.RequestProhibitedByCachePolicy:
-                        break;
                     case WebExceptionStatus.RequestProhibitedByProxy:
-                        break;
                     default:
-                        break;
+                        return WeChatErrorCode.IoError;
                 }
             }
 
@@ -76,7 +69,7 @@ namespace WebWeChat.Im.Core
 
         public static WeChatException CreateException(WeChatErrorCode errorCode)
         {
-            return _exceptions.GetOrAdd(errorCode, key => new WeChatException(errorCode, ""));
+            return Exceptions.GetOrAdd(errorCode, key => new WeChatException(errorCode, ""));
         }
 
         public WeChatException(WeChatErrorCode errorCode, string msg) : base(msg)
@@ -100,7 +93,7 @@ namespace WebWeChat.Im.Core
 
         public override string ToString()
         {
-            var msg = new StringBuilder($"ErrorCode={ErrorCode}, ErrorMsg={Message}, StackTrace=");
+            var msg = new StringBuilder($"ErrorCode={ErrorCode}, ErrorMsg={this.GetAllMessages()}, StackTrace=");
             msg.AppendLineIf($"{Environment.NewLine}{StackTrace}", StackTrace != null);
             return msg.ToString();
         }
