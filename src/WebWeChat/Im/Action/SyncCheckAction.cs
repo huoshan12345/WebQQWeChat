@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading;
+using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Utility.Extensions;
 using Utility.HttpAction.Core;
@@ -9,6 +10,7 @@ using Utility.HttpAction.Event;
 using WebWeChat.Im.Action.ActionResult;
 using WebWeChat.Im.Core;
 using WebWeChat.Im.Module.Impl;
+using Utility.HttpAction;
 
 namespace WebWeChat.Im.Action
 {
@@ -47,67 +49,71 @@ namespace WebWeChat.Im.Action
             return req;
         }
 
-        private ActionEvent TestNextHost()
+        private Task<ActionEvent> TestNextHost()
         {
             if (++_hostIndex < ApiUrls.SyncHosts.Length)
             {
-                return ActionEvent.EmptyRepeatEvent;
+                return Task.FromResult(ActionEvent.EmptyRepeatEvent);
             }
             else
             {
-                return NotifyErrorEvent(WeChatErrorCode.IoError);
+                return NotifyErrorEventAsync(WeChatErrorCode.IoError);
             }
         }
 
-        public override ActionEvent HandleResponse(HttpResponseItem responseItem)
+        public override Task<ActionEvent> HandleResponse(HttpResponseItem responseItem)
         {
             var str = responseItem.ResponseString;
             var match = _reg.Match(str);
             if (match.Success)
             {
                 var retcode = match.Groups[1].Value;
-                var result = SyncCheckResult.Nothing;
 
-                if (Session.SyncUrl == null && retcode != "0")
+                if (Session.SyncUrl == null)
                 {
                     // retcode
                     // 1100-
                     // 1101-参数错误
                     // 1102-cookie错误
-                    return TestNextHost();
+                    if (retcode != "0") return TestNextHost();
+                    else
+                    {
+                        Session.SyncUrl = responseItem.RequestItem.RawUrl;
+                        return this.ExecuteAsync();
+                    }
+
                 }
 
+                SyncCheckResult result;
                 switch (retcode)
                 {
                     case "1100":
-                    case "1101":
-                        Session.State = SessionState.Offline; // 在手机上登出了微信
+                    case "1101": // 在手机上登出了微信
+                        Session.State = SessionState.Offline;
                         result = (SyncCheckResult)int.Parse(retcode);
                         break;
 
                     case "0":
-                        Session.SyncUrl = responseItem.RequestItem.RawUrl;
                         var selector = match.Groups[2].Value;
-                        result = (SyncCheckResult) int.Parse(selector);
-                        if (result == SyncCheckResult.Nothing)
-                        {
-                            Thread.Sleep(10000);
-                        }
+                        result = (SyncCheckResult)int.Parse(selector);
                         break;
+
+                    default:
+                        throw WeChatException.CreateException(WeChatErrorCode.ResponseError);
                 }
-                return NotifyActionEvent(ActionEventType.EvtOK, result);
+                return NotifyActionEventAsync(ActionEventType.EvtOK, result);
             }
             else throw WeChatException.CreateException(WeChatErrorCode.ResponseError);
         }
 
-        public override ActionEvent HandleException(Exception ex)
+        public override Task<ActionEvent> HandleExceptionAsync(Exception ex)
         {
             // SyncUrl为空说明正在测试host
             if (Session.SyncUrl == null)
             {
                 if (++RetryTimes < MaxReTryTimes)
                 {
-                    return NotifyActionEvent(ActionEvent.CreateEvent(ActionEventType.EvtRetry, ex));
+                    return NotifyActionEventAsync(ActionEvent.CreateEvent(ActionEventType.EvtRetry, ex));
                 }
                 else
                 {
@@ -115,7 +121,7 @@ namespace WebWeChat.Im.Action
                     return TestNextHost();
                 }
             }
-            else return base.HandleException(ex);
+            else return base.HandleExceptionAsync(ex);
         }
     }
 }

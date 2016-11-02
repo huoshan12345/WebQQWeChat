@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using Utility.HttpAction.Core;
 using Utility.HttpAction.Event;
 using WebWeChat.Im.Core;
@@ -29,7 +30,7 @@ namespace WebWeChat.Im.Action
             return req;
         }
 
-        public override ActionEvent HandleResponse(HttpResponseItem responseItem)
+        public override Task<ActionEvent> HandleResponse(HttpResponseItem responseItem)
         {
             var str = responseItem.ResponseString;
             var match = _regCode.Match(str);
@@ -45,16 +46,16 @@ namespace WebWeChat.Im.Action
                             {
                                 Session.LoginUrl = $"{m.Groups[1].Value}&fun=new";
                                 Session.BaseUrl = Session.LoginUrl.Substring(0, Session.LoginUrl.LastIndexOf("/", StringComparison.OrdinalIgnoreCase));
-                                return NotifyActionEvent(ActionEventType.EvtOK);
+                                return NotifyActionEventAsync(ActionEventType.EvtOK);
                             }
                             break;
                         }
 
                     case "201":
                         _tip = 0;
-                        return NotifyActionEvent(ActionEventType.EvtRepeat);
+                        return NotifyActionEventAsync(ActionEventType.EvtRepeat);
 
-                    case "408": return NotifyErrorEvent(WeChatErrorCode.Timeout);
+                    case "408": return NotifyErrorEventAsync(WeChatErrorCode.Timeout);
                 }
             }
             throw WeChatException.CreateException(WeChatErrorCode.ResponseError);

@@ -11,11 +11,12 @@ namespace WebWeChat.Im.Core
         public const string GetUuid = "https://login.weixin.qq.com/jslogin";
         public const string GetQRCode = "https://login.weixin.qq.com/qrcode/{0}";
         public const string CheckQRCode = "https://login.weixin.qq.com/cgi-bin/mmwebwx-bin/login";
-        public const string WebwxInit = "{0}/webwxinit";
-        public const string StatusNotify = "{0}/webwxstatusnotify";
-        public const string GetContact = "{0}/webwxgetcontact";
-        public const string BatchGetContact = "{0}/webwxbatchgetcontact";
-        public const string SyncCheck = "{0}/synccheck";
+        public const string WebwxInit = "{0}/webwxinit?pass_ticket={1}&skey={2}&r={3}";
+        public const string StatusNotify = "{0}/webwxstatusnotify?lang=zh_CN&pass_ticket={1}";
+        public const string GetContact = "{0}/webwxgetcontact?pass_ticket={1}&skey={2}&r={3}";
+        public const string BatchGetContact = "{0}/webwxbatchgetcontact?type=ex&pass_ticket={1}&r={2}";
+        // public const string SyncCheck = "{0}/synccheck";
+        // public const string WebwxSync = "{0}/webwxsync?sid={1}&skey={2}&pass_ticket={3}";
         public const string WebwxSync = "{0}/webwxsync";
 
         public static readonly string[] SyncHosts =

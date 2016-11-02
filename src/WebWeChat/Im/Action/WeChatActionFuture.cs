@@ -18,11 +18,10 @@ namespace WebWeChat.Im.Action
         }
 
         /// <summary>
-        /// 动态创建action
-        /// 要求Action的构造函数第一个参数必须为Context
-        /// args指的是Action的构造函数的除了Context以外的参数按顺序排列
-        /// 和PushAction(IAction action)的区别就是不需要new一个action并且给它传一个Context参数(这个参数每个WeChatAction都需要传)
-        /// 对，就是这么简单的原因，然后我就费了老大劲写了一个ActionFactory
+        /// 动态创建action，要求Action的构造函数第一个参数必须为Context
+        /// <para />args指的是Action的构造函数的除了Context以外的参数按顺序排列
+        /// <para />和PushAction(IAction action)的区别就是不需要new一个action并且给它传一个Context参数(这个参数每个WeChatAction都需要传)
+        /// <para />对，就是这么简单的原因，然后我就费了老大劲写了一个ActionFactory
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="args"></param>

@@ -26,7 +26,7 @@ namespace Utility.HttpAction.Service
                 CookieContainer = _cookieContainer,
             };
             _httpClient = new HttpClient(handler);
-            _httpClient.DefaultRequestHeaders.Add(HttpConstants.UserAgent, HttpConstants.DefaultUserAgent);
+            // _httpClient.DefaultRequestHeaders.Add(HttpConstants.UserAgent, HttpConstants.DefaultUserAgent);
         }
 
         private static HttpRequestMessage GetHttpRequest(HttpRequestItem item)
@@ -103,15 +103,14 @@ namespace Utility.HttpAction.Service
 
             var responseItem = new HttpResponseItem { RequestItem = requestItem };
             var httpRequest = GetHttpRequest(requestItem);
-            var response = await _httpClient.SendAsync(httpRequest, token);
-            response.EnsureSuccessStatusCode();
-            responseItem.StatusCode = response.StatusCode;
-
-            token.ThrowIfCancellationRequested();
-
-            ReadHeader(response, responseItem);
-            await ReadContentAsync(response, responseItem).ConfigureAwait(false);
-            return responseItem;
+            using (var response = await _httpClient.SendAsync(httpRequest, HttpCompletionOption.ResponseHeadersRead, token).ConfigureAwait(false))
+            {
+                response.EnsureSuccessStatusCode();
+                responseItem.StatusCode = response.StatusCode;
+                // ReadHeader(response, responseItem);
+                await ReadContentAsync(response, responseItem).ConfigureAwait(false);
+                return responseItem;
+            }
         }
 
         public virtual Cookie GetCookie(string name, string url)

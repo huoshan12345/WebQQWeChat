@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -25,7 +26,7 @@ namespace WebWeChat.Im.Action
 
         public override HttpRequestItem BuildRequest()
         {
-            var url = string.Format(ApiUrls.GetContact, Session.BaseUrl);
+            var url = string.Format(ApiUrls.GetContact, Session.BaseUrl, Session.PassTicket, Session.Skey, Timestamp);
             var obj = new { Session.BaseRequest };
             var req = new HttpRequestItem(HttpMethodType.Post, url)
             {
@@ -35,7 +36,7 @@ namespace WebWeChat.Im.Action
             return req;
         }
 
-        public override ActionEvent HandleResponse(HttpResponseItem responseItem)
+        public override Task<ActionEvent> HandleResponse(HttpResponseItem responseItem)
         {
             /*
                 {
@@ -94,7 +95,7 @@ namespace WebWeChat.Im.Action
                     Account.User = Store.ContactMemberDic[Session.User["UserName"].ToString()];
                     Logger.LogInformation($"应有{Store.MemberCount}个联系人，读取到联系人{Store.ContactMemberDic.Count}个");
                     Logger.LogInformation($"共有{Store.GroupCount}个群|{Store.FriendCount}个好友|{Store.SpecialUserCount}个特殊账号|{Store.PublicUserCount}公众号或服务号");
-                    return NotifyActionEvent(ActionEventType.EvtOK);
+                    return NotifyActionEventAsync(ActionEventType.EvtOK);
                 }
                 else
                 {

@@ -6,7 +6,9 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Logging;
+using Utility.HttpAction.Action;
 using Utility.HttpAction.Event;
+using Utility.HttpAction.Service;
 using WebWeChat.Im.Action;
 using WebWeChat.Im.Core;
 using WebWeChat.Im.Event;
@@ -23,7 +25,7 @@ namespace WebWeChat.Im
         private readonly WeChatNotifyEventListener _notifyListener;
         private readonly ServiceCollection _services;
         private readonly IServiceProvider _serviceProvider;
-        private readonly IWeChatLogger _logger;
+        private readonly ILogger _logger;
 
         public WebWeChatClient(WeChatNotifyEventListener notifyListener = null)
         {
@@ -39,15 +41,15 @@ namespace WebWeChat.Im
             _services.AddSingleton<AccountModule>();
 
             // 服务
-            _services.AddSingleton<IWeChatHttp, WeChatHttp>();
-            _services.AddSingleton<IWeChatLogger>(provider => new WeChatLogger(this, LogLevel.Debug));
+            _services.AddSingleton<IHttpService, WeChatHttp>();
+            _services.AddSingleton<ILogger>(provider => new WeChatLogger(this, LogLevel.Information));
             _services.AddSingleton<IWeChatActionFactory, WeChatActionFactory>();
             
             _serviceProvider = _services.BuildServiceProvider();
             Startup.Configure(_serviceProvider);
 
             _notifyListener = notifyListener;
-            _logger = GetSerivce<IWeChatLogger>();
+            _logger = GetSerivce<ILogger>();
         }
 
         public Task<ActionEvent> Login(ActionEventListener listener = null)
@@ -69,8 +71,13 @@ namespace WebWeChat.Im
             }
         }
 
+        public Task FireNotifyAsync(WeChatNotifyEvent notifyEvent)
+        {
+            return Task.Run(()=> FireNotify(notifyEvent));
+        }
+
         /// <inheritdoc />
-        public T GetSerivce<T>() where T : IWeChatService
+        public T GetSerivce<T>()
         {
             return _serviceProvider.GetRequiredService<T>();
         }

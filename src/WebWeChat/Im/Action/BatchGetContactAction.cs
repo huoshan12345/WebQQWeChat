@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using WebWeChat.Im.Bean;
@@ -23,7 +24,7 @@ namespace WebWeChat.Im.Action
 
         public override HttpRequestItem BuildRequest()
         {
-            var url = string.Format(ApiUrls.BatchGetContact, Session.BaseUrl);
+            var url = string.Format(ApiUrls.BatchGetContact, Session.BaseUrl, Session.PassTicket, Timestamp);
             var obj = new
             {
                 Session.BaseRequest,
@@ -38,7 +39,7 @@ namespace WebWeChat.Im.Action
             return req;
         }
 
-        public override ActionEvent HandleResponse(HttpResponseItem responseItem)
+        public override Task<ActionEvent> HandleResponse(HttpResponseItem responseItem)
         {
             var str = responseItem.ResponseString;
             if (!str.IsNullOrEmpty())
@@ -51,7 +52,7 @@ namespace WebWeChat.Im.Action
                     {
                         Store.ContactMemberDic[item.UserName] = item;
                     }
-                    return NotifyActionEvent(ActionEventType.EvtOK);
+                    return NotifyActionEventAsync(ActionEventType.EvtOK);
                 }
                 else
                 {

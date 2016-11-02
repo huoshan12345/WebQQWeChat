@@ -4,7 +4,9 @@ using System.Linq;
 using System.Threading.Tasks;
 
 namespace Utility.HttpAction.Action
-{
+{    /// <summary>
+     /// 用于按顺序执行一些action，前一个action成功则继续执行，否则则退出
+     /// </summary>
     public interface IActionFuture : IActor
     {
         /// <summary>

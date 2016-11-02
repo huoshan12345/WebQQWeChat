@@ -9,6 +9,6 @@ namespace Utility.HttpAction.Action
 {
     public interface IAction : IActor, IActionEventHandler
     {
-        ActionEvent HandleException(Exception ex);
+        Task<ActionEvent> HandleExceptionAsync(Exception ex);
     }
 }

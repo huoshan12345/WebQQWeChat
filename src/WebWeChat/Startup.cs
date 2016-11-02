@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Utility.HttpAction.Action;
 using WebWeChat.Im.Module;
 using WebWeChat.Im.Module.Impl;
 using WebWeChat.Im.Module.Interface;
@@ -15,9 +16,15 @@ namespace WebWeChat
     {
         public static IConfigurationRoot Configuration { get; private set; }
 
+        /// <summary>
+        /// 全局的执行器
+        /// </summary>
+        public static IActorDispatcher Dispatcher { get; } = new ActorDispatcher();
+
         static Startup()
         {
             BuildConfig();
+            Dispatcher.BeginExcute();
         }
 
         private static void BuildConfig()
@@ -34,11 +41,17 @@ namespace WebWeChat
 
         public static void ConfigureServices(IServiceCollection services)
         {
+            services.AddSingleton(Dispatcher);
             services.AddSingleton(Configuration);
         }
 
         public static void Configure(IServiceProvider provider)
         {
+        }
+
+        public static void Dispose()
+        {
+            Dispatcher.Dispose();
         }
     }
 }

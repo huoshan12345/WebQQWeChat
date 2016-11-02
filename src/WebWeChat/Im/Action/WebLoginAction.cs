@@ -1,4 +1,5 @@
-﻿using WebWeChat.Im.Core;
+﻿using System.Threading.Tasks;
+using WebWeChat.Im.Core;
 using System.Xml.Linq;
 using Utility.HttpAction.Core;
 using Utility.HttpAction.Event;
@@ -23,7 +24,7 @@ namespace WebWeChat.Im.Action
             return new HttpRequestItem(HttpMethodType.Get, Session.LoginUrl);
         }
 
-        public override ActionEvent HandleResponse(HttpResponseItem responseItem)
+        public override Task<ActionEvent> HandleResponse(HttpResponseItem responseItem)
         {
             /*
                 <error>
@@ -45,7 +46,7 @@ namespace WebWeChat.Im.Action
 
             Session.State = SessionState.Online;
 
-            return NotifyActionEvent(ActionEventType.EvtOK);
+            return NotifyActionEventAsync(ActionEventType.EvtOK);
         }
     }
 }

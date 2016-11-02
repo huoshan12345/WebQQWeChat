@@ -11,6 +11,7 @@ namespace WebWeChat.Im.Service.Impl
     {
         public IWeChatContext Context { get; }
 
+        
         public WeChatActionFactory(IWeChatContext context)
         {
             Context = context;

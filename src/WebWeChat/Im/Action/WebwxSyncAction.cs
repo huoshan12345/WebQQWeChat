@@ -20,6 +20,7 @@ namespace WebWeChat.Im.Action
 
         public override HttpRequestItem BuildRequest()
         {
+            // var url = string.Format(ApiUrls.WebwxSync, Session.BaseUrl, Session.Sid, Session.Skey, Session.PassTicket);
             var url = string.Format(ApiUrls.WebwxSync, Session.BaseUrl);
             var obj = new
             {
@@ -29,14 +30,13 @@ namespace WebWeChat.Im.Action
             };
             var req = new HttpRequestItem(HttpMethodType.Post, url)
             {
-                // 此处需要将key都变成小写，否则提交会失败
                 RawData = obj.ToJson(),
                 ContentType = HttpConstants.JsonContentType,
             };
             return req;
         }
 
-        public override ActionEvent HandleResponse(HttpResponseItem response)
+        public override Task<ActionEvent> HandleResponse(HttpResponseItem response)
         {
             var str = response.ResponseString;
             var json = JObject.Parse(str);
@@ -44,7 +44,7 @@ namespace WebWeChat.Im.Action
             {
                 Session.SyncKey = json["SyncKey"];
                 var list = json["AddMsgList"].ToObject<List<Message>>();
-                return NotifyActionEvent(ActionEventType.EvtOK, list);
+                return NotifyActionEventAsync(ActionEventType.EvtOK, list);
             }
             throw WeChatException.CreateException(WeChatErrorCode.ResponseError);
 
