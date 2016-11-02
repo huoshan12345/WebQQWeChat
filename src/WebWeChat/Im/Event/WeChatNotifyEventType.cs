@@ -37,6 +37,12 @@ namespace WebWeChat.Im.Event
         Error,
 
         /// <summary>
+        /// 离线
+        /// </summary>
+        [Description("离线")]
+        Offline,
+
+        /// <summary>
         /// 登录成功
         /// </summary>
         [Description("登录成功")]

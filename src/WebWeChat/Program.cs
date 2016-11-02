@@ -11,6 +11,7 @@ using Utility.Extensions;
 using System.Runtime.InteropServices;
 using Utility.HttpAction.Event;
 using System.Text;
+using System.Threading;
 using WebWeChat.Im.Bean;
 using WebWeChat.Im.Service.Interface;
 
@@ -18,6 +19,8 @@ namespace WebWeChat
 {
     public class Program
     {
+        private static readonly ManualResetEvent QuitEvent = new ManualResetEvent(false); // 用这个来保持控制台不退出
+
         private static Process _process = null;
         private static readonly WeChatNotifyEventListener Listener = (client, notifyEvent) =>
         {
@@ -53,9 +56,14 @@ namespace WebWeChat
                 case WeChatNotifyEventType.Message:
                     {
                         var msg = (Message)notifyEvent.Target;
-                        logger.LogInformation($"[{msg.MsgType.GetDescription()}][{msg.Content}]");
+                        logger.LogInformation($"[{msg.MsgType.GetDescription()}]: {msg.Content}");
                         break;
                     }
+
+                case WeChatNotifyEventType.Offline:
+                    logger.LogCritical("微信已经掉线");
+                    QuitEvent.Set();
+                    break;
 
                 default:
                     logger.LogInformation(notifyEvent.Type.GetFullDescription());
@@ -75,8 +83,9 @@ namespace WebWeChat
                 Console.WriteLine("登录失败");
             }
 
-            Console.WriteLine("按任意键退出");
-            Console.Read();
+            QuitEvent.WaitOne();
+            // Console.Read(); // 不要用这句来保持不退出，会导致死锁
+            client.Dispose();
             Startup.Dispose(); // 释放全局资源
         }
 

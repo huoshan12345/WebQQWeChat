@@ -71,9 +71,28 @@ namespace WebWeChat.Im.Module.Impl
                 .ExecuteAsync();
         }
 
-        private void BeginSyncCheck()
+        public void BeginSyncCheck()
         {
-            Dispatcher.PushActor(new SyncCheckAction(Context, async (sender, @event) =>
+            var sync = new SyncCheckAction(Context);
+            var wxSync = new WebwxSyncAction(Context, async (s, e) =>
+            {
+                if (e.Type == ActionEventType.EvtRetry) return;
+
+                if (e.Type == ActionEventType.EvtOK)
+                {
+                    var msgs = (List<Message>)e.Target;
+                    if (msgs.Count == 0) await Task.Delay(3 * 1000);
+
+                    foreach (var msg in msgs.Where(m => m.MsgType != MessageType.GetContact))
+                    {
+                        var notify = new WeChatNotifyEvent(WeChatNotifyEventType.Message, msg);
+                        await Context.FireNotifyAsync(notify);
+                    }
+                }
+                Dispatcher.PushActor(sync);
+            });
+
+            sync.OnActionEvent += async (sender, @event) =>
             {
                 if (@event.Type != ActionEventType.EvtOK) return;
                 var result = (SyncCheckResult)@event.Target;
@@ -81,38 +100,26 @@ namespace WebWeChat.Im.Module.Impl
                 {
                     case SyncCheckResult.Offline:
                     case SyncCheckResult.Kicked:
+                        Context.FireNotify(new WeChatNotifyEvent(WeChatNotifyEventType.Offline));
                         break;
 
                     case SyncCheckResult.UsingPhone:
                     case SyncCheckResult.NewMsg:
-                        Dispatcher.PushActor(new WebwxSyncAction(Context, (s, e) =>
-                        {
-                            if (e.Type != ActionEventType.EvtRetry)
-                            {
-                                if (Context.GetModule<SessionModule>().State == SessionState.Online)
-                                {
-                                    Dispatcher.PushActor(sender);
-                                }
-                            }
-
-                            if (e.Type != ActionEventType.EvtOK) return;
-                            var msgs = (List<Message>)e.Target;
-                            foreach (var msg in msgs.Where(m => m.MsgType != MessageType.GetContact))
-                            {
-                                var notify = new WeChatNotifyEvent(WeChatNotifyEventType.Message, msg);
-                                Context.FireNotifyAsync(notify);
-                            }
-                        }));
+                        Dispatcher.PushActor(wxSync);
                         break;
 
                     case SyncCheckResult.RedEnvelope:
                     case SyncCheckResult.Nothing:
-                        await Task.Delay(5 * 1000);
+                        await Task.Delay(3 * 1000);
                         Dispatcher.PushActor(sender);
                         break;
-                }
 
-            }));
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
+            };
+
+            Dispatcher.PushActor(sync);
         }
     }
 }

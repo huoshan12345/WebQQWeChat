@@ -74,7 +74,8 @@ namespace Utility.Logger
             {
                 var color = Console.ForegroundColor;
                 Console.ForegroundColor = logLevelColor;
-                Console.WriteLine(GetMessage(message, exception));
+                var msg = GetMessage(message, exception);
+                Console.WriteLine(msg);
                 Console.ForegroundColor = color;
             }
         }
