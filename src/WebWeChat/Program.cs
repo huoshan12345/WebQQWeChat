@@ -13,7 +13,6 @@ using Utility.HttpAction.Event;
 using System.Text;
 using WebWeChat.Im.Bean;
 using WebWeChat.Im.Service.Interface;
-using Utility.Extensions;
 
 namespace WebWeChat
 {
