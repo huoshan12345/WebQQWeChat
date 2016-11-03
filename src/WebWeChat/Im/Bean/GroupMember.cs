@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
+using Utility.Extensions;
 
 namespace WebWeChat.Im.Bean
 {
@@ -51,5 +52,7 @@ namespace WebWeChat.Im.Bean
         public string DisplayName { get; set; }
 
         public string KeyWord { get; set; }
+
+        public virtual string ShowName => DisplayName.IsNullOrEmpty() ? (NickName.IsNullOrEmpty() ? UserName : DisplayName) : NickName;
     }
 }

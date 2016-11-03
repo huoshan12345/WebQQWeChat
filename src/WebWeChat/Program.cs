@@ -55,7 +55,7 @@ namespace WebWeChat
                 case WeChatNotifyEventType.Message:
                     {
                         var msg = (Message)notifyEvent.Target;
-                        logger.LogInformation($"[{msg.MsgType.GetDescription()}来自{msg.FromUser?.NickName}]: {msg.Content}");
+                        logger.LogInformation($"[{msg.MsgType.GetDescription()} 来自 {msg.FromUser?.ShowName}]: {msg.Content}");
                         break;
                     }
 

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
+using Utility.Extensions;
 
 namespace WebWeChat.Im.Bean
 {
@@ -66,6 +67,8 @@ namespace WebWeChat.Im.Bean
         public int UniFriend { get; set; }
         public int ChatRoomId { get; set; }
         public string EncryChatRoomId { get; set; }
+
+        public override string ShowName => RemarkName.IsNullOrEmpty() ? (NickName.IsNullOrEmpty() ? UserName : NickName) : RemarkName;
     }
 
 }

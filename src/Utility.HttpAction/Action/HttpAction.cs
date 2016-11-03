@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using Utility.HttpAction.Core;
@@ -85,6 +86,7 @@ namespace Utility.HttpAction.Action
                 catch (OperationCanceledException) { }
                 catch (Exception ex)
                 {
+                    ex = ex.InnerException ?? ex;
 #if DEBUG
                     // 此处用于生成请求信息，然后用fiddler等工具测试
                     if (req?.RawUrl.Contains("webwxsync") == true || req?.RawUrl.Contains("synccheck") == true)
