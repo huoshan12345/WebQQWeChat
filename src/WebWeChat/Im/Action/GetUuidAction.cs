@@ -17,6 +17,7 @@ namespace WebWeChat.Im.Action
 
         public GetUuidAction(IWeChatContext context, ActionEventListener listener = null) : base(context, listener)
         {
+            Session.Seq = Timestamp;
         }
 
         public override HttpRequestItem BuildRequest()
@@ -25,7 +26,7 @@ namespace WebWeChat.Im.Action
             req.AddQueryValue("appid", ApiUrls.Appid);
             req.AddQueryValue("fun", "new");
             req.AddQueryValue("lang", "zh_CN");
-            req.AddQueryValue("_", Timestamp);
+            req.AddQueryValue("_", Session.Seq++);
             return req;
         }
 

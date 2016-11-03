@@ -65,9 +65,9 @@ namespace WebWeChat.Im.Module.Impl
             {
                 if (e.Type == ActionEventType.EvtRetry) return;
 
+                Dispatcher.PushActor(sync);
                 if (e.Type == ActionEventType.EvtOK)
                 {
-                    Dispatcher.PushActor(sync);
                     var msgs = (IList<Message>)e.Target;
                     // if (msgs.Count == 0) await Task.Delay(5 * 1000);
                     foreach (var msg in msgs)
@@ -94,11 +94,10 @@ namespace WebWeChat.Im.Module.Impl
                     case SyncCheckResult.Offline:
                     case SyncCheckResult.Kicked:
                         Context.FireNotify(new WeChatNotifyEvent(WeChatNotifyEventType.Offline));
-                        break;
+                        return;
 
                     case SyncCheckResult.UsingPhone:
                     case SyncCheckResult.NewMsg:
-                        Dispatcher.PushActor(wxSync);
                         break;
 
                     case SyncCheckResult.RedEnvelope:
@@ -108,7 +107,7 @@ namespace WebWeChat.Im.Module.Impl
                     default:
                         throw new ArgumentOutOfRangeException();
                 }
-                Dispatcher.PushActor(sender);
+                Dispatcher.PushActor(result == SyncCheckResult.Nothing ? sender : wxSync);
             };
 
             Dispatcher.PushActor(sync);

@@ -21,7 +21,7 @@ namespace WebWeChat.Im.Action
         {
             var req =  new HttpRequestItem(HttpMethodType.Post, string.Format(ApiUrls.GetQRCode, Session.Uuid));
             req.AddQueryValue("t", "webwx");
-            req.AddQueryValue("_", Timestamp);
+            req.AddQueryValue("_", Session.Seq++);
             req.ResultType = HttpResultType.Stream;
             return req;
         }

@@ -24,7 +24,7 @@ namespace WebWeChat.Im.Action
         protected StoreModule Store { get; set; }
         protected AccountModule Account { get; set; }
 
-        protected long Timestamp => DateTime.Now.ToTimestamp();
+        protected long Timestamp => DateTime.Now.ToTimestampMilli();
         protected string ActionName => GetType().GetDescription();
 
         protected WeChatAction(IWeChatContext context, ActionEventListener listener = null) :

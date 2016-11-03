@@ -30,7 +30,7 @@ namespace WebWeChat.Im.Action
             var req = new HttpRequestItem(HttpMethodType.Post, ApiUrls.CheckQRCode);
             req.AddQueryValue("tip", _tip);
             req.AddQueryValue("uuid", Session.Uuid);
-            req.AddQueryValue("_", Timestamp);
+            req.AddQueryValue("_", Session.Seq++);
             return req;
         }
 

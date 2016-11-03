@@ -55,7 +55,7 @@ namespace WebWeChat
                 case WeChatNotifyEventType.Message:
                     {
                         var msg = (Message)notifyEvent.Target;
-                        logger.LogInformation($"[{msg.MsgType.GetDescription()}]: [来自{msg.FromUser?.NickName}]{msg.Content}");
+                        logger.LogInformation($"[{msg.MsgType.GetDescription()}来自{msg.FromUser?.NickName}]: {msg.Content}");
                         break;
                     }
 
@@ -101,13 +101,6 @@ namespace WebWeChat
 
             Startup.Dispose(); // 释放全局资源
             Console.Read();
-        }
-
-
-
-        public static void Test()
-        {
-
         }
 
     }

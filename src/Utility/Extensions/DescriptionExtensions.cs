@@ -24,7 +24,7 @@ namespace Utility.Extensions
                 var type = key.GetType();
                 var field = type.GetTypeInfo().GetField(key.ToString());
                 //如果field为null则应该是组合位域值，
-                return field == null ? key.ToString() : field.Name;
+                return field == null ? key.ToString() : GetDescription(field);
             });
         }
 

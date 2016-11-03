@@ -50,7 +50,7 @@ namespace WebWeChat.Im.Action
             };
             req.AddQueryValue("r", Timestamp);
             req.AddQueryValue("synckey", Session.SyncKeyStr);
-            req.AddQueryValue("_", Timestamp);
+            req.AddQueryValue("_", Session.Seq++);
 
             return req;
         }

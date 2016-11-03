@@ -20,6 +20,8 @@ namespace WebWeChat.Im.Module.Impl
 
         public SessionState State { get; set; } = SessionState.Offline;
 
+        public long Seq { get; set; }
+
         public string Uuid { get; set; }
 
         public string BaseUrl { get; set; }
