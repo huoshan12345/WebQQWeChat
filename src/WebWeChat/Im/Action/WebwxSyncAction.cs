@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
@@ -12,7 +13,11 @@ using WebWeChat.Im.Util;
 
 namespace WebWeChat.Im.Action
 {
-    public class WebwxSyncAction:WeChatAction
+    /// <summary>
+    /// 消息同步
+    /// </summary>
+    [Description("消息同步")]
+    public class WebwxSyncAction : WeChatAction
     {
         public WebwxSyncAction(IWeChatContext context, ActionEventListener listener = null) : base(context, listener)
         {
@@ -20,8 +25,8 @@ namespace WebWeChat.Im.Action
 
         public override HttpRequestItem BuildRequest()
         {
-            // var url = string.Format(ApiUrls.WebwxSync, Session.BaseUrl, Session.Sid, Session.Skey, Session.PassTicket);
-            var url = string.Format(ApiUrls.WebwxSync, Session.BaseUrl);
+            var url = string.Format(ApiUrls.WebwxSync, Session.BaseUrl, Session.Sid, Session.Skey, Session.PassTicket);
+            // var url = string.Format(ApiUrls.WebwxSync, Session.BaseUrl);
             var obj = new
             {
                 Session.BaseRequest,
@@ -32,6 +37,7 @@ namespace WebWeChat.Im.Action
             {
                 RawData = obj.ToJson(),
                 ContentType = HttpConstants.JsonContentType,
+                Referrer = "https://wx.qq.com/?&lang=zh_CN"
             };
             return req;
         }
@@ -42,9 +48,14 @@ namespace WebWeChat.Im.Action
             var json = JObject.Parse(str);
             if (json["BaseResponse"]["Ret"].ToString() == "0")
             {
-                Session.SyncKey = json["SyncKey"];
+                Session.SyncKey = json["SyncCheckKey"];
                 var list = json["AddMsgList"].ToObject<List<Message>>();
-                return NotifyActionEventAsync(ActionEventType.EvtOK, list);
+                var newMsgs = list.Where(m => m.MsgType != MessageType.GetContact).ToList();
+                newMsgs.ForEach(m =>
+                {
+                    m.FromUser = Store.ContactMemberDic.GetOrDefault(m.FromUserName);
+                });
+                return NotifyActionEventAsync(ActionEventType.EvtOK, newMsgs);
             }
             throw WeChatException.CreateException(WeChatErrorCode.ResponseError);
 

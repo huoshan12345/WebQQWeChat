@@ -10,7 +10,7 @@ namespace Utility.HttpAction.Event
 {
     public class ActionEvent
     {
-        public ActionEventType Type { get; }
+        public ActionEventType Type { get; set; }
         public object Target { get; }
 
         private ActionEvent(ActionEventType type, object target)

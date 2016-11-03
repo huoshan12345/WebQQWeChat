@@ -22,7 +22,8 @@ namespace Utility.HttpAction.Action
             ActionEvent lastEvent = null;
             while (_queue.Count != 0)
             {
-                if (token.IsCancellationRequested) return ActionEvent.CreateEvent(ActionEventType.EvtCanceled, this);
+                if (token.IsCancellationRequested)
+                    return ActionEvent.CreateEvent(ActionEventType.EvtCanceled, this);
                 var action = _queue.First.Value;
                 _queue.RemoveFirst();
                 var result = await action.ExecuteAsync(token).ConfigureAwait(false);

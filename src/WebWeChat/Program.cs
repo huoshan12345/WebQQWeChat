@@ -11,6 +11,7 @@ using System.Runtime.InteropServices;
 using Utility.HttpAction.Event;
 using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
 using WebWeChat.Im.Bean;
 using WebWeChat.Im.Service.Interface;
 
@@ -19,7 +20,6 @@ namespace WebWeChat
     public class Program
     {
         private static readonly ManualResetEvent QuitEvent = new ManualResetEvent(false); // 用这个来保持控制台不退出
-
         private static Process _process = null;
         private static readonly WeChatNotifyEventListener Listener = (client, notifyEvent) =>
         {
@@ -55,7 +55,7 @@ namespace WebWeChat
                 case WeChatNotifyEventType.Message:
                     {
                         var msg = (Message)notifyEvent.Target;
-                        logger.LogInformation($"[{msg.MsgType.GetDescription()}]: {msg.Content}");
+                        logger.LogInformation($"[{msg.MsgType.GetDescription()}]: [来自{msg.FromUser?.NickName}]{msg.Content}");
                         break;
                     }
 
@@ -70,22 +70,37 @@ namespace WebWeChat
 
             }
         };
+
+        private static async Task TestWeChat()
+        {
+            using (var client = new WebWeChatClient(Listener))
+            {
+                var @event = await client.Login();
+                if (@event.Type == ActionEventType.EvtOK)
+                {
+                    // await client.GetContact(); // 登录过程中会获取一次联系人
+                    client.BeginSyncCheck();
+                }
+                else
+                {
+                    Console.WriteLine("登录失败");
+                }
+
+                QuitEvent.WaitOne();
+                // Console.Read(); // 不要用这句来保持不退出，会导致死锁
+                client.Dispose();
+            }
+        }
+
         public static void Main(string[] args)
         {
 #if NETCORE
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
 #endif
-            var client = new WebWeChatClient(Listener);
-            var @event = client.Login().Result;
-            if (@event.Type != ActionEventType.EvtOK)
-            {
-                Console.WriteLine("登录失败");
-            }
+            TestWeChat().Wait();
 
-            QuitEvent.WaitOne();
-            // Console.Read(); // 不要用这句来保持不退出，会导致死锁
-            client.Dispose();
             Startup.Dispose(); // 释放全局资源
+            Console.Read();
         }
 
 

@@ -1,8 +1,11 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using Utility.Helpers;
 using Utility.HttpAction.Core;
 using Utility.HttpAction.Event;
+using WebWeChat.Im.Action.ActionResult;
 using WebWeChat.Im.Core;
 
 namespace WebWeChat.Im.Action
@@ -10,13 +13,14 @@ namespace WebWeChat.Im.Action
     /// <summary>
     /// 等待扫码登录
     /// </summary>
+    [Description("等待扫码登录")]
     public class WatiForLoginAction : WeChatAction
     {
         private readonly Regex _regCode = new Regex(@"window.code=(\d+);");
         private readonly Regex _regUrl = new Regex(@"window.redirect_uri=""(\S+?)"";");
         private int _tip = 1;
 
-        public WatiForLoginAction(IWeChatContext context, ActionEventListener listener = null) 
+        public WatiForLoginAction(IWeChatContext context, ActionEventListener listener = null)
             : base(context, listener)
         {
         }
@@ -37,26 +41,28 @@ namespace WebWeChat.Im.Action
             if (match.Success)
             {
                 var code = match.Groups[1].Value;
-                switch (code)
+                var result = EnumHelper.ParseFromStrNum<WatiForLoginResult>(code);
+                switch (result)
                 {
-                    case "200":
+                    case WatiForLoginResult.Success:
                         {
                             var m = _regUrl.Match(str);
                             if (m.Success)
                             {
                                 Session.LoginUrl = $"{m.Groups[1].Value}&fun=new";
                                 Session.BaseUrl = Session.LoginUrl.Substring(0, Session.LoginUrl.LastIndexOf("/", StringComparison.OrdinalIgnoreCase));
-                                return NotifyActionEventAsync(ActionEventType.EvtOK);
                             }
                             break;
                         }
 
-                    case "201":
+                    case WatiForLoginResult.ScanCode:
                         _tip = 0;
-                        return NotifyActionEventAsync(ActionEventType.EvtRepeat);
+                        break;
 
-                    case "408": return NotifyErrorEventAsync(WeChatErrorCode.Timeout);
+                    case WatiForLoginResult.QRCodeInvalid:
+                        break;
                 }
+                return NotifyActionEventAsync(ActionEventType.EvtOK, result);
             }
             throw WeChatException.CreateException(WeChatErrorCode.ResponseError);
         }

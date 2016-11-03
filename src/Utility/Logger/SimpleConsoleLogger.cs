@@ -41,7 +41,7 @@ namespace Utility.Logger
             return SimpleConsoleLogScope.Push(Name, state);
         }
 
-        public virtual ConsoleColor GetColor(LogLevel logLevel)
+        protected virtual ConsoleColor GetColor(LogLevel logLevel)
         {
             switch (logLevel)
             {
@@ -55,26 +55,27 @@ namespace Utility.Logger
             }
         }
 
-        public virtual string GetMessage(string msg, Exception exception)
+        protected virtual string GetMessage(string msg, Exception exception)
         {
             return $"{DateTime.Now:HH:mm:ss}> {msg}";
         }
 
-        public virtual bool IsEnabled(string msg, LogLevel level)
+        protected virtual bool IsEnabled(string msg, LogLevel level)
         {
             return !msg.IsNullOrEmpty() && IsEnabled(level);
         }
-        
-        public virtual void WriteMessage(LogLevel logLevel, string logName, int eventId, string message, Exception exception)
+
+        protected virtual void WriteMessage(LogLevel logLevel, string logName, int eventId, string message, Exception exception)
         {
             if (!IsEnabled(message, logLevel)) return;
 
             var logLevelColor = GetColor(logLevel);
+            var msg = GetMessage(message, exception);
+
             lock (_syncObj)
             {
                 var color = Console.ForegroundColor;
                 Console.ForegroundColor = logLevelColor;
-                var msg = GetMessage(message, exception);
                 Console.WriteLine(msg);
                 Console.ForegroundColor = color;
             }

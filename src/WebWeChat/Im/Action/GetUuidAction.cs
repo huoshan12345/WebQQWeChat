@@ -1,4 +1,5 @@
-﻿using System.Text.RegularExpressions;
+﻿using System.ComponentModel;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Utility.HttpAction.Core;
 using Utility.HttpAction.Event;
@@ -9,6 +10,7 @@ namespace WebWeChat.Im.Action
     /// <summary>
     /// 获取UUID
     /// </summary>
+    [Description("获取UUID")]
     public class GetUuidAction : WeChatAction
     {
         private readonly Regex _reg = new Regex(@"window.QRLogin.code = (\d+); window.QRLogin.uuid = ""(\S+?)""");

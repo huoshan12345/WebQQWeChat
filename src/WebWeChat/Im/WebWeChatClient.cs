@@ -36,6 +36,8 @@ namespace WebWeChat.Im
 
             // 模块
             _services.AddSingleton<ILoginModule, LoginModule>();
+            _services.AddSingleton<IContactModule, ContactModule>();
+            _services.AddSingleton<IChatModule, ChatModule>();
             _services.AddSingleton<StoreModule>();
             _services.AddSingleton<SessionModule>();
             _services.AddSingleton<AccountModule>();
@@ -54,8 +56,12 @@ namespace WebWeChat.Im
 
         public Task<ActionEvent> Login(ActionEventListener listener = null)
         {
-            var login = GetModule<ILoginModule>();
-            return login.Login(listener);
+            return GetModule<ILoginModule>().Login(listener);
+        }
+
+        public void BeginSyncCheck()
+        {
+            GetModule<ILoginModule>().BeginSyncCheck();
         }
 
         /// <inheritdoc />
@@ -111,6 +117,16 @@ namespace WebWeChat.Im
             {
                 _logger.LogError($"销毁所有模块和服务失败: {e}");
             }
+        }
+
+        public Task<ActionEvent> GetContact(ActionEventListener listener = null)
+        {
+            return GetModule<IContactModule>().GetContact(listener);
+        }
+
+        public Task<ActionEvent> GetGroupMember(ActionEventListener listener = null)
+        {
+            return GetModule<IContactModule>().GetGroupMember(listener);
         }
     }
 }

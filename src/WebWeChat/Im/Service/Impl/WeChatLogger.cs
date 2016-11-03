@@ -24,7 +24,7 @@ namespace WebWeChat.Im.Service.Impl
         /// <param name="message"></param>
         /// <param name="exception"></param>
         /// <returns></returns>
-        public override string GetMessage(string message, Exception exception)
+        protected override string GetMessage(string message, Exception exception)
         {
             var userName = Context.GetModule<AccountModule>().User?.NickName;
             var prefix = userName.IsNullOrEmpty() ? string.Empty : $"[{userName}]";

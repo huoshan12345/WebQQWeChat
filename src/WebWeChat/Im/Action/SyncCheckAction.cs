@@ -1,10 +1,12 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Utility.Extensions;
+using Utility.Helpers;
 using Utility.HttpAction.Core;
 using Utility.HttpAction.Event;
 using WebWeChat.Im.Action.ActionResult;
@@ -14,6 +16,10 @@ using WebWeChat.Im.Module.Impl;
 
 namespace WebWeChat.Im.Action
 {
+    /// <summary>
+    /// 同步检查
+    /// </summary>
+    [Description("同步检查")]
     public class SyncCheckAction : WeChatAction
     {
         private readonly Regex _reg = new Regex(@"window.synccheck={retcode:""(\d+)"",selector:""(\d+)""}");
@@ -81,29 +87,21 @@ namespace WebWeChat.Im.Action
                         Session.SyncUrl = responseItem.RequestItem.RawUrl;
                         return this.ExecuteAsync();
                     }
-
                 }
-
-                SyncCheckResult result;
+                
                 switch (retcode)
                 {
                     case "1100":
                     case "1101": // 在手机上登出了微信
                         Session.State = SessionState.Offline;
-                        result = (SyncCheckResult)int.Parse(retcode);
-                        break;
+                        return NotifyActionEventAsync(ActionEventType.EvtOK, EnumHelper.ParseFromStrNum<SyncCheckResult>(retcode));
 
                     case "0":
                         var selector = match.Groups[2].Value;
-                        result = (SyncCheckResult)int.Parse(selector);
-                        break;
-
-                    default:
-                        throw WeChatException.CreateException(WeChatErrorCode.ResponseError);
+                        return NotifyActionEventAsync(ActionEventType.EvtOK, EnumHelper.ParseFromStrNum<SyncCheckResult>(selector));
                 }
-                return NotifyActionEventAsync(ActionEventType.EvtOK, result);
             }
-            else throw WeChatException.CreateException(WeChatErrorCode.ResponseError);
+            throw WeChatException.CreateException(WeChatErrorCode.ResponseError);
         }
 
         public override Task<ActionEvent> HandleExceptionAsync(Exception ex)

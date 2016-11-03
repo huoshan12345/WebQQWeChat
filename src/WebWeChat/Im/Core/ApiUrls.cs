@@ -16,16 +16,17 @@ namespace WebWeChat.Im.Core
         public const string GetContact = "{0}/webwxgetcontact?pass_ticket={1}&skey={2}&r={3}";
         public const string BatchGetContact = "{0}/webwxbatchgetcontact?type=ex&pass_ticket={1}&r={2}";
         // public const string SyncCheck = "{0}/synccheck";
-        // public const string WebwxSync = "{0}/webwxsync?sid={1}&skey={2}&pass_ticket={3}";
-        public const string WebwxSync = "{0}/webwxsync";
+        public const string WebwxSync = "{0}/webwxsync?sid={1}&skey={2}&lang=zh_CN&pass_ticket={3}";
+        // public const string WebwxSync = "{0}/webwxsync";
         public const string SendMsg = "{0}/webwxsendmsg";
 
         public static readonly string[] SyncHosts =
         {
             "webpush.wx.qq.com",
             "webpush.wx2.qq.com",
-            "webpush.weixin.qq.com",
-            "webpush2.weixin.qq.com",
+            "webpush.wx8.qq.com",
+            "webpush.web2.wechat.com",
+            "webpush.web.wechat.com",
             //"webpush.wechat.com",
             //"webpush1.wechat.com",
             //"webpush2.wechat.com",

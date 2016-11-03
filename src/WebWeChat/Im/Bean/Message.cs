@@ -97,5 +97,7 @@ namespace WebWeChat.Im.Bean
         public int ImgWidth { get; set; }
         public int SubMsgType { get; set; }
         public long NewMsgId { get; set; }
+
+        public ContactMember FromUser { get; set; }
     }
 }

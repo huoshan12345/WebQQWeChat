@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.ComponentModel;
+using System.Linq;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -13,6 +14,7 @@ namespace WebWeChat.Im.Action
     /// 微信初始化
     /// 获取初始化信息（账号头像信息、聊天好友、阅读等）
     /// </summary>
+    [Description("微信初始化")]
     public class WebwxInitAction : WeChatAction
     {
         public WebwxInitAction(IWeChatContext context, ActionEventListener listener = null) : base(context, listener)

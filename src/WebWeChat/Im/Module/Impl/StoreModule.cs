@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Utility.Extensions;
 using WebWeChat.Im.Bean;
 using WebWeChat.Im.Core;
 using WebWeChat.Im.Util;
@@ -19,7 +20,7 @@ namespace WebWeChat.Im.Module.Impl
         /// 目前理论上不会同时有多个线程同时操作，所以就用dic了
         /// </summary>
         public Dictionary<string, ContactMember> ContactMemberDic { get; set; } = new Dictionary<string, ContactMember>();
-
+        
         /// <summary>
         /// 特殊账号
         /// </summary>

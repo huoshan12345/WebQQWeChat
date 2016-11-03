@@ -1,4 +1,5 @@
-﻿using System.Drawing;
+﻿using System.ComponentModel;
+using System.Drawing;
 using System.Threading.Tasks;
 using Utility.HttpAction.Core;
 using Utility.HttpAction.Event;
@@ -6,13 +7,12 @@ using WebWeChat.Im.Core;
 
 namespace WebWeChat.Im.Action
 {
+    /// <summary>
+    /// 获取二维码
+    /// </summary>
+    [Description("获取二维码")]
     public class GetQRCodeAction : WeChatAction
     {
-        /// <summary>
-        /// 显示二维码
-        /// </summary>
-        /// <param name="context"></param>
-        /// <param name="listener"></param>
         public GetQRCodeAction(IWeChatContext context, ActionEventListener listener = null) : base(context, listener)
         {
         }

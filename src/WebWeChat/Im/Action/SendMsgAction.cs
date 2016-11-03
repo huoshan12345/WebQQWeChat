@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
@@ -11,6 +12,7 @@ using WebWeChat.Im.Util;
 
 namespace WebWeChat.Im.Action
 {
+    [Description("发送消息")]
     public class SendMsgAction : WeChatAction
     {
         private readonly MessageSent _msg;

@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.ComponentModel;
+using System.Threading.Tasks;
 using WebWeChat.Im.Core;
 using System.Xml.Linq;
 using Utility.HttpAction.Core;
@@ -7,13 +8,12 @@ using WebWeChat.Im.Module.Impl;
 
 namespace WebWeChat.Im.Action
 {
+    /// <summary>
+    /// 获取登录参数
+    /// </summary>
+    [Description("获取登录参数")]
     public class WebLoginAction : WeChatAction
     {
-        /// <summary>
-        /// 获取登录参数
-        /// </summary>
-        /// <param name="context"></param>
-        /// <param name="listener"></param>
         public WebLoginAction(IWeChatContext context, ActionEventListener listener = null)
             : base(context, listener)
         {

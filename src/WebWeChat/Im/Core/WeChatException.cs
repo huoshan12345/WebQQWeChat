@@ -72,6 +72,12 @@ namespace WebWeChat.Im.Core
             return Exceptions.GetOrAdd(errorCode, key => new WeChatException(errorCode, ""));
         }
 
+        public static WeChatException CreateException(WeChatErrorCode errorCode, string msg)
+        {
+            if (msg.IsNullOrEmpty()) return CreateException(errorCode);
+            return new WeChatException(errorCode, msg);
+        }
+
         public WeChatException(WeChatErrorCode errorCode, string msg) : base(msg)
         {
             ErrorCode = errorCode;

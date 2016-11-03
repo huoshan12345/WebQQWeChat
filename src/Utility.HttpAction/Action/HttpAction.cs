@@ -44,25 +44,24 @@ namespace Utility.HttpAction.Action
 
         public event ActionEventListener OnActionEvent;
 
-        public virtual Task<ActionEvent> HandleExceptionAsync(Exception ex)
+        public virtual async Task<ActionEvent> HandleExceptionAsync(Exception ex)
         {
             try
             {
                 if (RetryTimes < MaxReTryTimes)
                 {
-                    var result = NotifyActionEventAsync(ActionEvent.CreateEvent(ActionEventType.EvtRetry, ex));
-                    return result;
+                    return await NotifyActionEventAsync(ActionEvent.CreateEvent(ActionEventType.EvtRetry, ex));
+              
                 }
                 else
                 {
-                    return NotifyActionEventAsync(ActionEvent.CreateEvent(ActionEventType.EvtError, ex));
+                    return await NotifyActionEventAsync(ActionEvent.CreateEvent(ActionEventType.EvtError, ex));
                 }
             }
             catch (Exception e)
             {
                 throw new Exception($"throw an unhandled exception when excute [{nameof(HandleExceptionAsync)}] method.", e);
             }
-
         }
 
         public virtual async Task<ActionEvent> ExecuteAsync(CancellationToken token)

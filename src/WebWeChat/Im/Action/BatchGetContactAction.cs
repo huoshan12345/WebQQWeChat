@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
@@ -15,6 +16,7 @@ namespace WebWeChat.Im.Action
     /// <summary>
     /// 用于获取群成员
     /// </summary>
+    [Description("获取群成员")]
     public class BatchGetContactAction : WeChatAction
     {
         public BatchGetContactAction(IWeChatContext context, ActionEventListener listener = null)

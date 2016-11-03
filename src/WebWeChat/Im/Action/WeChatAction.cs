@@ -25,7 +25,7 @@ namespace WebWeChat.Im.Action
         protected AccountModule Account { get; set; }
 
         protected long Timestamp => DateTime.Now.ToTimestamp();
-        protected string ActionName => GetType().Name;
+        protected string ActionName => GetType().GetDescription();
 
         protected WeChatAction(IWeChatContext context, ActionEventListener listener = null) :
             base(context.GetSerivce<IHttpService>())
@@ -72,6 +72,7 @@ namespace WebWeChat.Im.Action
         protected override Task<ActionEvent> NotifyActionEventAsync(ActionEvent actionEvent)
         {
             var type = actionEvent.Type;
+            var typeName = type.GetDescription();
             var target = actionEvent.Target;
 
             switch (type)
@@ -79,22 +80,22 @@ namespace WebWeChat.Im.Action
                 case ActionEventType.EvtError:
                     {
                         var ex = (WeChatException)target;
-                        Logger.LogError($"[Action={ActionName}, Type={type}, {ex}");
+                        Logger.LogError($"[Action={ActionName}, Type={typeName}, {ex}");
                         Context.FireNotify(new WeChatNotifyEvent(WeChatNotifyEventType.Error, ex));
                         break;
                     }
                 case ActionEventType.EvtRetry:
                     {
                         var ex = (WeChatException)target;
-                        Logger.LogWarning($"[Action={ActionName}, Type={type}, RetryTimes={RetryTimes}][{ex.ToSimpleString()}]");
+                        Logger.LogWarning($"[Action={ActionName}, Type={typeName}, RetryTimes={RetryTimes}][{ex.ToSimpleString()}]");
                         break;
                     }
                 case ActionEventType.EvtCanceled:
-                    Logger.LogInformation($"[Action={ActionName}, Type={type}, Target={target}]");
+                    Logger.LogInformation($"[Action={ActionName}, Type={typeName}, Target={target}]");
                     break;
 
                 default:
-                    Logger.LogDebug($"[Action={ActionName}, Type={type}]");
+                    Logger.LogDebug($"[Action={ActionName}, Type={typeName}]");
                     break;
             }
             return base.NotifyActionEventAsync(actionEvent);

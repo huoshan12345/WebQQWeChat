@@ -19,5 +19,16 @@ namespace Utility.Extensions
         {
             return Task.WhenAll(sequence.Select(action).ToArray());
         }
+
+        public static Task ForEachAsync<T>(this IEnumerable<T> sequence, Action<T> action)
+        {
+            return Task.Run(() =>
+            {
+                foreach (var item in sequence)
+                {
+                    action(item);
+                }
+            });
+        }
     }
 }

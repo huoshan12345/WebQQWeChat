@@ -15,6 +15,8 @@ namespace WebWeChat.Im.Module.Impl
 
     public class SessionModule : WeChatModule
     {
+        private readonly IDictionary<string, string> _baseRequest = new Dictionary<string, string>();
+        private readonly Random _random = new Random();
 
         public SessionState State { get; set; } = SessionState.Offline;
 
@@ -52,25 +54,26 @@ namespace WebWeChat.Im.Module.Impl
             set { BaseRequest[nameof(Skey)] = value; }
         }
 
-        public string DeviceId
-        {
-            get { return BaseRequest.GetOrDefault(nameof(DeviceId)); }
-            set
-            {
-                BaseRequest[nameof(DeviceId)] = value;
-            }
-        }
+        public string DeviceId => BaseRequest.GetOrDefault(nameof(DeviceId));
 
         /// <summary>
         /// 基础请求参数
         /// 之所以放到dic里面，是因为很多的请求都需要这几个参数，所以放在一起方便json序列化
         /// </summary>
-        public IDictionary<string, string> BaseRequest { get; } = new Dictionary<string, string>();
+        public IDictionary<string, string> BaseRequest
+        {
+            get
+            {
+                var seed = _random.NextDouble();
+                var id = $"e{ seed.ToString("f15").Split('.')[1] }";
+                _baseRequest[nameof(DeviceId)] = id;
+                return _baseRequest;
+            }
+        }
 
         public SessionModule(IWeChatContext context) : base(context)
         {
-            var seed = new Random().NextDouble();
-            DeviceId = $"e{ seed.ToString("f15").Split('.')[1] }";
+            
         }
     }
 }

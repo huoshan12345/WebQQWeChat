@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
@@ -16,6 +17,7 @@ namespace WebWeChat.Im.Action
     /// <summary>
     /// 获取好友列表
     /// </summary>
+    [Description("获取好友列表")]
     public class GetContactAction : WeChatAction
     {
         public GetContactAction(IWeChatContext context, ActionEventListener listener = null)

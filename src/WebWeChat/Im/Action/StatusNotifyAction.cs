@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.ComponentModel;
+using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using WebWeChat.Im.Core;
@@ -9,8 +10,9 @@ using Utility.HttpAction.Event;
 namespace WebWeChat.Im.Action
 {
     /// <summary>
-    /// 开启微信状态通知
+    /// 开启状态通知
     /// </summary>
+    [Description("开启状态通知")]
     public class StatusNotifyAction : WeChatAction
     {
         public StatusNotifyAction(IWeChatContext context, ActionEventListener listener = null)

@@ -103,14 +103,12 @@ namespace Utility.HttpAction.Service
 
             var responseItem = new HttpResponseItem { RequestItem = requestItem };
             var httpRequest = GetHttpRequest(requestItem);
-            using (var response = await _httpClient.SendAsync(httpRequest, HttpCompletionOption.ResponseHeadersRead, token).ConfigureAwait(false))
-            {
-                response.EnsureSuccessStatusCode();
-                responseItem.StatusCode = response.StatusCode;
-                // ReadHeader(response, responseItem);
-                await ReadContentAsync(response, responseItem).ConfigureAwait(false);
-                return responseItem;
-            }
+            var response = await _httpClient.SendAsync(httpRequest, HttpCompletionOption.ResponseHeadersRead, token).ConfigureAwait(false);
+            response.EnsureSuccessStatusCode();
+            responseItem.StatusCode = response.StatusCode;
+            // ReadHeader(response, responseItem);
+            await ReadContentAsync(response, responseItem).ConfigureAwait(false);
+            return responseItem;
         }
 
         public virtual Cookie GetCookie(string name, string url)

@@ -6,7 +6,7 @@ using Newtonsoft.Json;
 
 namespace WebWeChat.Im.Bean
 {
-    public class ContactMember:GroupMember
+    public class ContactMember : GroupMember
     {
         /// <summary>
         /// 头像图片链接地址
