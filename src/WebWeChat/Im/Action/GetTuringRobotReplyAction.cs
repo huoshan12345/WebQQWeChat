@@ -2,31 +2,46 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
-using Utility.HttpAction.Core;
-using Utility.HttpAction.Event;
 using WebWeChat.Im.Core;
 using WebWeChat.Im.Util;
+using FxUtility.Extensions;
+using HttpAction.Core;
+using HttpAction.Event;
 
 namespace WebWeChat.Im.Action
 {
     public class GetTuringRobotReplyAction : WeChatAction
     {
         private readonly string _input;
+        private readonly string _key;
 
         public GetTuringRobotReplyAction(IWeChatContext context, string input, ActionEventListener listener = null)
             : base(context, listener)
         {
             _input = input;
+            _key = Config["TulingApiKey"];
+        }
+
+        public override Task<ActionEvent> ExecuteAsync(CancellationToken token)
+        {
+            return _key.IsNullOrEmpty() ? 
+                NotifyErrorEventAsync(WeChatErrorCode.ParameterError, nameof(_key)) : 
+                base.ExecuteAsync(token);
         }
 
         public override HttpRequestItem BuildRequest()
         {
-            var req = new HttpRequestItem(HttpMethodType.Post, ApiUrls.TulingRobot);
-            req.AddQueryValue("key", Config["TulingApiKey"]);
-            req.AddQueryValue("info", _input);
-            req.AddQueryValue("userid", Account.User.UserName);
+            var req = HttpRequestItem.CreateJsonRequest(ApiUrls.TulingRobot);
+            var obj = new
+            {
+                key = _key,
+                info = _input,
+                userid = Account.User.UserName,
+            };
+            req.RawData = obj.ToJson();
             return req;
         }
 
@@ -90,10 +105,10 @@ namespace WebWeChat.Im.Action
                     }
 
                 // 异常码
-                case "40001": throw WeChatException.CreateException(WeChatErrorCode.ResponseError, $"[参数key错误]:{str}");
-                case "40002": throw WeChatException.CreateException(WeChatErrorCode.ResponseError, $"[请求内容info为空]:{str}");
-                case "40004": throw WeChatException.CreateException(WeChatErrorCode.ResponseError, $"[当天请求次数已使用完]:{str}");
-                case "40007": throw WeChatException.CreateException(WeChatErrorCode.ResponseError, $"[数据格式异常]:{str}");
+                case "40001": return NotifyErrorEventAsync(WeChatException.CreateException(WeChatErrorCode.ResponseError, $"[参数key错误]:{str}"));
+                case "40002": return NotifyErrorEventAsync(WeChatException.CreateException(WeChatErrorCode.ResponseError, $"[请求内容info为空]:{str}"));
+                case "40004": return NotifyErrorEventAsync(WeChatException.CreateException(WeChatErrorCode.ResponseError, $"[当天请求次数已使用完]:{str}"));
+                case "40007": return NotifyErrorEventAsync(WeChatException.CreateException(WeChatErrorCode.ResponseError, $"[数据格式异常]:{str}"));
 
                 default:
                     reply = json["text"].ToString();

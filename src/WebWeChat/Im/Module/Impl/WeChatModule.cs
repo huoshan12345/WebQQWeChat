@@ -1,5 +1,5 @@
 ﻿using System;
-using Utility.HttpAction.Action;
+using HttpAction.Action;
 using WebWeChat.Im.Core;
 using WebWeChat.Im.Module.Interface;
 

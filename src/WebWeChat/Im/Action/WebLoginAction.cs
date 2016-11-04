@@ -2,8 +2,8 @@
 using System.Threading.Tasks;
 using WebWeChat.Im.Core;
 using System.Xml.Linq;
-using Utility.HttpAction.Core;
-using Utility.HttpAction.Event;
+using HttpAction.Core;
+using HttpAction.Event;
 using WebWeChat.Im.Module.Impl;
 
 namespace WebWeChat.Im.Action

@@ -3,9 +3,9 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using WebWeChat.Im.Core;
-using Utility.Extensions;
-using Utility.HttpAction.Core;
-using Utility.HttpAction.Event;
+using FxUtility.Extensions;
+using HttpAction.Core;
+using HttpAction.Event;
 
 namespace WebWeChat.Im.Action
 {

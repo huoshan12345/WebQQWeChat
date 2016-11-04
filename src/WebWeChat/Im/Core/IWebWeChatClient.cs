@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Utility.HttpAction.Event;
 using WebWeChat.Im.Module.Interface;
 
 namespace WebWeChat.Im.Core

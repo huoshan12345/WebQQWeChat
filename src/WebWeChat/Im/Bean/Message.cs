@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
-using Utility.Extensions;
-
 namespace WebWeChat.Im.Bean
 {
     public enum MessageType

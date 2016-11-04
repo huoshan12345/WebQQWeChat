@@ -18,7 +18,7 @@
   "buildOptions": {
     "emitEntryPoint": true,
     "copyToOutput": {
-      "include": [],
+      "include": [ "project.json" ],
       "exclude": [],
       "excludeFiles": [],
       "builtIns": {},
@@ -29,8 +29,8 @@
   "dependencies": {
     "Newtonsoft.Json": "9.0.1",
     "Microsoft.Extensions.Logging": "1.0.0",
-    "Utility.HttpAction": "1.0.0-*",
-    "Utility": "1.0.0-*",
+    "HttpAction": "1.0.0-*",
+    "FxUtility": "0.1.0-beta",
     "Microsoft.Extensions.Configuration": "1.0.0",
     "Microsoft.Extensions.Configuration.Json": "1.0.0",
     "Microsoft.Extensions.Configuration.UserSecrets": "1.0.0",

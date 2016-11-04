@@ -3,19 +3,16 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
-using Utility.Extensions;
-using Utility.HttpAction.Action;
-using Utility.HttpAction.Event;
-using Utility.HttpAction.Service;
 using WebWeChat.Im.Core;
 using WebWeChat.Im.Event;
-using WebWeChat.Im.Module;
 using WebWeChat.Im.Module.Impl;
-using WebWeChat.Im.Service.Interface;
+using FxUtility.Extensions;
+using HttpAction.Event;
+using HttpAction.Service;
 
 namespace WebWeChat.Im.Action
 {
-    public abstract class WeChatAction : HttpAction
+    public abstract class WeChatAction : HttpAction.Action.HttpAction
     {
         // 为了防止通知层级混乱，其他action不应该直接操作Context，本action也只是在报告错误时用到了。
         // 其他通知应该先通知到调用action的模块，由模块决定是否需要进一步通知
@@ -62,6 +59,11 @@ namespace WebWeChat.Im.Action
         protected Task<ActionEvent> NotifyErrorEventAsync(WeChatErrorCode code)
         {
             return NotifyErrorEventAsync(WeChatException.CreateException(code));
+        }
+
+        protected Task<ActionEvent> NotifyErrorEventAsync(WeChatErrorCode code, string msg)
+        {
+            return NotifyErrorEventAsync(WeChatException.CreateException(code, msg));
         }
 
         public override async Task<ActionEvent> ExecuteAsync(CancellationToken token)

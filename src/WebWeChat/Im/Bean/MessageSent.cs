@@ -1,5 +1,5 @@
-﻿using System;
-using Utility.Extensions;
+﻿using FxUtility.Extensions;
+using System;
 
 namespace WebWeChat.Im.Bean
 {

@@ -1,0 +1,22 @@
+﻿{
+  "version": "1.0.0-*",
+  "dependencies": {
+    "Microsoft.Extensions.Configuration.Abstractions": "1.0.0",
+    "Microsoft.Extensions.DependencyInjection.Abstractions": "1.0.0",
+    "FxUtility": "0.1.0-beta"
+  },
+  "frameworks": {
+    "netstandard1.6": {
+      "dependencies": {
+        "NETStandard.Library": "1.6.0",
+        "System.Reflection.TypeExtensions": "4.1.0",
+        "System.ComponentModel.Primitives": "4.1.0"
+      }
+    },
+    "net461": {
+      "dependencies": {
+        "System.Net.Http": "4.0.0.0"
+      }
+    }
+  }
+}

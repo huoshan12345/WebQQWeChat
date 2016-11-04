@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Utility.HttpAction.Event;
+using HttpAction.Event;
 using WebWeChat.Im.Bean;
 using WebWeChat.Im.Module.Impl;
 

@@ -2500,6 +2500,9 @@
           "lib/netstandard1.3/System.Xml.XPath.XDocument.dll": {}
         }
       },
+      "Utility/1.0.0": {
+        "type": "package"
+      },
       "HttpActionFrame/1.0.0": {
         "type": "project",
         "framework": ".NETStandard,Version=v1.6",
@@ -2516,24 +2519,6 @@
         },
         "runtime": {
           "netstandard1.6/HttpActionFrame.dll": {}
-        }
-      },
-      "Utility/1.0.0": {
-        "type": "project",
-        "framework": ".NETStandard,Version=v1.6",
-        "dependencies": {
-          "Microsoft.Extensions.Logging.Abstractions": "1.0.0",
-          "NETStandard.Library": "1.6.0",
-          "System.ComponentModel.Annotations": "4.1.0",
-          "System.ComponentModel.Primitives": "4.1.0",
-          "System.Linq.Queryable": "4.0.1",
-          "System.Reflection.TypeExtensions": "4.1.0"
-        },
-        "compile": {
-          "netstandard1.6/Utility.dll": {}
-        },
-        "runtime": {
-          "netstandard1.6/Utility.dll": {}
         }
       }
     },
@@ -2685,19 +2670,6 @@
           "lib/net45/_._": {}
         }
       },
-      "System.ComponentModel.Annotations/4.1.0": {
-        "type": "package",
-        "frameworkAssemblies": [
-          "System.ComponentModel.DataAnnotations",
-          "mscorlib"
-        ],
-        "compile": {
-          "ref/net461/System.ComponentModel.Annotations.dll": {}
-        },
-        "runtime": {
-          "lib/net461/System.ComponentModel.Annotations.dll": {}
-        }
-      },
       "System.Diagnostics.Debug/4.0.11": {
         "type": "package",
         "frameworkAssemblies": [
@@ -2844,6 +2816,15 @@
           "lib/net45/_._": {}
         }
       },
+      "Utility/1.0.0": {
+        "type": "package",
+        "compile": {
+          "lib/net45/_._": {}
+        },
+        "runtime": {
+          "lib/net45/_._": {}
+        }
+      },
       "HttpActionFrame/1.0.0": {
         "type": "project",
         "framework": ".NETFramework,Version=v4.6.1",
@@ -2858,24 +2839,6 @@
         },
         "runtime": {
           "net461/HttpActionFrame.dll": {}
-        }
-      },
-      "Utility/1.0.0": {
-        "type": "project",
-        "framework": ".NETFramework,Version=v4.6.1",
-        "dependencies": {
-          "Microsoft.Extensions.Logging.Abstractions": "1.0.0",
-          "System.ComponentModel.Annotations": "4.1.0",
-          "System.Net.Http": "4.1.0"
-        },
-        "frameworkAssemblies": [
-          "System.Runtime"
-        ],
-        "compile": {
-          "net461/Utility.dll": {}
-        },
-        "runtime": {
-          "net461/Utility.dll": {}
         }
       }
     }
@@ -3120,7 +3083,7 @@
       ]
     },
     "Microsoft.NETCore.App/1.0.1": {
-      "sha512": "Magix7ezmhzMc1pNIH7an8vkZYd7a5JjAhXJoYUw3ukRzRfYN2SLetRtQXe/3X9/otnMH1K1J5oOP/q5Mpv7Lg==",
+      "sha512": "M3iH7u95LntTkJtI/DqN/96MRlb8Wa0SjnXldxHA4FjlvEqghOhwK087bDZAZaTN9C4YHckvaYH3ka9eYWZZZw==",
       "type": "package",
       "path": "Microsoft.NETCore.App/1.0.1",
       "files": [
@@ -3168,7 +3131,7 @@
       ]
     },
     "Microsoft.NETCore.Jit/1.0.4": {
-      "sha512": "E3N/4tY7denm+CdHVnxLrdARQsUSjSZzd1pjUwSlGvGf9yDM6S8XcFWz9K7dFnB/g39ovTRjKEoXZWE3fX55gQ==",
+      "sha512": "IcHTGj+vTFcOu7/flwNg+CWIfTsxqHWgj08MKOtYwS5k0EuLvx6PrYsn7vHCV0SUTk1zbQ1l0EJj1UdxTMyx4w==",
       "type": "package",
       "path": "Microsoft.NETCore.Jit/1.0.4",
       "files": [
@@ -3193,7 +3156,7 @@
       ]
     },
     "Microsoft.NETCore.Runtime.CoreCLR/1.0.4": {
-      "sha512": "Bgou+2REFu7mW/gh7f3LUIpvnCHqdOxCgIYMnSM6MtmqthleuFXSuDjub5zlT0G78sHPhnPqUYA+j1J6hZK/8Q==",
+      "sha512": "r4/aP7VYcJ+W/rJVFU+jAdjF4KrsHRDYQJ+p8weUP5n65yLzWXlQTVY6OsR560aV5EF7jc65dqsNXIryUCrEkQ==",
       "type": "package",
       "path": "Microsoft.NETCore.Runtime.CoreCLR/1.0.4",
       "files": [
@@ -7974,15 +7937,21 @@
         "ref/xamarinwatchos10/_._"
       ]
     },
+    "Utility/1.0.0": {
+      "sha512": "tcVaZO0Id/qjASr/ggRROpbw26kxI67ms75ScqOhi2dkeq6zirkt75DI9cOidY+1m04Xoicn2tK91d6vH5VRUw==",
+      "type": "package",
+      "path": "Utility/1.0.0",
+      "files": [
+        "Utility.1.0.0.nupkg.sha512",
+        "Utility.nuspec",
+        "lib/Nagarro.Framework.Logging.dll",
+        "lib/net45/_._"
+      ]
+    },
     "HttpActionFrame/1.0.0": {
       "type": "project",
       "path": "../HttpActionFrame/project.json",
       "msbuildProject": "../HttpActionFrame/HttpActionFrame.xproj"
-    },
-    "Utility/1.0.0": {
-      "type": "project",
-      "path": "../Utility/project.json",
-      "msbuildProject": "../Utility/Utility.xproj"
     }
   },
   "projectFileDependencyGroups": {

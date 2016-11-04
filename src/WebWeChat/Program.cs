@@ -1,20 +1,16 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
-using Microsoft.Extensions.DependencyInjection;
+using System.Text;
 using WebWeChat.Im;
 using WebWeChat.Im.Event;
 using Microsoft.Extensions.Logging;
-using Utility.Extensions;
-using System.Runtime.InteropServices;
-using Utility.HttpAction.Event;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using WebWeChat.Im.Bean;
 using WebWeChat.Im.Module.Impl;
-using WebWeChat.Im.Service.Interface;
+using FxUtility.Extensions;
+using HttpAction.Event;
 
 namespace WebWeChat
 {
@@ -58,7 +54,7 @@ namespace WebWeChat
                         var msg = (Message)notifyEvent.Target;
                         logger.LogInformation($"[{msg.MsgType.GetDescription()} 来自 {msg.FromUser?.ShowName}]: {msg.Content}");
                         var userName = client.GetModule<AccountModule>().User.UserName;
-                        if (msg.FromUserName == userName)
+                        if (msg.FromUserName == userName && msg.MsgType == MessageType.Text && !msg.Content.IsNullOrEmpty())
                         {
                             var reply = await client.GetRobotReply(RobotType.Tuling, msg.Content);
                             if (reply.Type == ActionEventType.EvtOK)

@@ -5,12 +5,11 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using Utility.Extensions;
-using Utility.HttpAction.Core;
-using Utility.HttpAction.Event;
 using WebWeChat.Im.Bean;
 using WebWeChat.Im.Core;
-using WebWeChat.Im.Util;
+using FxUtility.Extensions;
+using HttpAction.Core;
+using HttpAction.Event;
 
 namespace WebWeChat.Im.Action
 {

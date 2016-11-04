@@ -1,9 +1,9 @@
 ﻿using System;
-using Utility.HttpAction;
-using Utility.HttpAction.Action;
-using Utility.HttpAction.Event;
+using HttpAction.Action;
+using HttpAction.Event;
 using WebWeChat.Im.Core;
 using WebWeChat.Im.Service.Interface;
+using HttpAction;
 
 namespace WebWeChat.Im.Action
 {

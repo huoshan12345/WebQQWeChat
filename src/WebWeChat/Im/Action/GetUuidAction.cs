@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using Utility.HttpAction.Core;
-using Utility.HttpAction.Event;
+using HttpAction.Core;
+using HttpAction.Event;
 using WebWeChat.Im.Core;
 
 namespace WebWeChat.Im.Action

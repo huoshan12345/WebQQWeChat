@@ -3,14 +3,14 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Threading.Tasks;
-using Utility.HttpAction;
-using Utility.HttpAction.Event;
+using HttpAction.Event;
 using WebWeChat.Im.Action;
 using WebWeChat.Im.Action.ActionResult;
 using WebWeChat.Im.Bean;
 using WebWeChat.Im.Core;
 using WebWeChat.Im.Event;
 using WebWeChat.Im.Module.Interface;
+using HttpAction;
 
 namespace WebWeChat.Im.Module.Impl
 {

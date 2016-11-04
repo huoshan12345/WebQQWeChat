@@ -2,9 +2,9 @@
 using System.ComponentModel;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using Utility.Helpers;
-using Utility.HttpAction.Core;
-using Utility.HttpAction.Event;
+using FxUtility.Helpers;
+using HttpAction.Core;
+using HttpAction.Event;
 using WebWeChat.Im.Action.ActionResult;
 using WebWeChat.Im.Core;
 
