@@ -39,6 +39,11 @@ namespace Utility.HttpAction.Action
             return NotifyActionEventAsync(target == null ? ActionEvent.EmptyEvents[type] : ActionEvent.CreateEvent(type, target));
         }
 
+        protected Task<ActionEvent> NotifyOkActionEventAsync(object target = null)
+        {
+            return NotifyActionEventAsync(ActionEventType.EvtOK, target);
+        }
+
         public abstract HttpRequestItem BuildRequest();
 
         public abstract Task<ActionEvent> HandleResponse(HttpResponseItem response);
@@ -52,7 +57,7 @@ namespace Utility.HttpAction.Action
                 if (RetryTimes < MaxReTryTimes)
                 {
                     return await NotifyActionEventAsync(ActionEvent.CreateEvent(ActionEventType.EvtRetry, ex));
-              
+
                 }
                 else
                 {

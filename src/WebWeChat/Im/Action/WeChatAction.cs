@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Utility.Extensions;
 using Utility.HttpAction.Action;
@@ -23,6 +24,7 @@ namespace WebWeChat.Im.Action
         protected SessionModule Session { get; set; }
         protected StoreModule Store { get; set; }
         protected AccountModule Account { get; set; }
+        protected IConfigurationRoot Config { get; set; }
 
         protected long Timestamp => DateTime.Now.ToTimestampMilli();
         protected string ActionName => GetType().GetDescription();
@@ -43,6 +45,7 @@ namespace WebWeChat.Im.Action
             Session = context.GetModule<SessionModule>();
             Store = context.GetModule<StoreModule>();
             Account = context.GetModule<AccountModule>();
+            Config = context.GetSerivce<IConfigurationRoot>();
         }
 
         public override Task<ActionEvent> HandleExceptionAsync(Exception ex)
@@ -53,7 +56,7 @@ namespace WebWeChat.Im.Action
 
         protected Task<ActionEvent> NotifyErrorEventAsync(WeChatException ex)
         {
-            return NotifyActionEventAsync(ActionEvent.CreateEvent(ActionEventType.EvtError, ex));
+            return NotifyActionEventAsync(ActionEventType.EvtError, ex);
         }
 
         protected Task<ActionEvent> NotifyErrorEventAsync(WeChatErrorCode code)
@@ -80,22 +83,22 @@ namespace WebWeChat.Im.Action
                 case ActionEventType.EvtError:
                     {
                         var ex = (WeChatException)target;
-                        Logger.LogError($"[Action={ActionName}, Type={typeName}, {ex}");
+                        Logger.LogError($"[Action={ActionName}, Result={typeName}, {ex}");
                         Context.FireNotify(new WeChatNotifyEvent(WeChatNotifyEventType.Error, ex));
                         break;
                     }
                 case ActionEventType.EvtRetry:
                     {
                         var ex = (WeChatException)target;
-                        Logger.LogWarning($"[Action={ActionName}, Type={typeName}, RetryTimes={RetryTimes}][{ex.ToSimpleString()}]");
+                        Logger.LogWarning($"[Action={ActionName}, Result={typeName}, RetryTimes={RetryTimes}][{ex.ToSimpleString()}]");
                         break;
                     }
                 case ActionEventType.EvtCanceled:
-                    Logger.LogInformation($"[Action={ActionName}, Type={typeName}, Target={target}]");
+                    Logger.LogWarning($"[Action={ActionName}, Result={typeName}, Target={target}]");
                     break;
 
                 default:
-                    Logger.LogDebug($"[Action={ActionName}, Type={typeName}]");
+                    Logger.LogInformation($"[Action={ActionName}, Result={typeName}]");
                     break;
             }
             return base.NotifyActionEventAsync(actionEvent);

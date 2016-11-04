@@ -20,6 +20,7 @@ namespace WebWeChat.Im.Core
         // public const string WebwxSync = "{0}/webwxsync";
         public const string SendMsg = "{0}/webwxsendmsg";
 
+
         public static readonly string[] SyncHosts =
         {
             "webpush.wx.qq.com",
@@ -33,5 +34,7 @@ namespace WebWeChat.Im.Core
             //"webpush1.wechatapp.com",
             //"webpush.wechatapp.com",
         };
+
+        public const string TulingRobot = "http://www.tuling123.com/openapi/api";
     }
 }

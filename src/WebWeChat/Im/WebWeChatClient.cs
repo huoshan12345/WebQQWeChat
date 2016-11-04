@@ -10,6 +10,7 @@ using Utility.HttpAction.Action;
 using Utility.HttpAction.Event;
 using Utility.HttpAction.Service;
 using WebWeChat.Im.Action;
+using WebWeChat.Im.Bean;
 using WebWeChat.Im.Core;
 using WebWeChat.Im.Event;
 using WebWeChat.Im.Module;
@@ -127,6 +128,16 @@ namespace WebWeChat.Im
         public Task<ActionEvent> GetGroupMember(ActionEventListener listener = null)
         {
             return GetModule<IContactModule>().GetGroupMember(listener);
+        }
+
+        public Task<ActionEvent> SendMsg(MessageSent msg, ActionEventListener listener = null)
+        {
+            return GetModule<IChatModule>().SendMsg(msg, listener);
+        }
+
+        public Task<ActionEvent> GetRobotReply(RobotType robotType, string input, ActionEventListener listener = null)
+        {
+            return GetModule<IChatModule>().GetRobotReply(robotType, input, listener);
         }
     }
 }

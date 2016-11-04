@@ -5,7 +5,7 @@ using WebWeChat.Im.Module.Interface;
 
 namespace WebWeChat.Im.Core
 {
-    public interface IWebWeChatClient : IDisposable, IWeChatContext, ILoginModule, IContactModule
+    public interface IWebWeChatClient : IDisposable, IWeChatContext, ILoginModule, IContactModule, IChatModule
     {
 
     }

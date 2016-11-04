@@ -13,6 +13,12 @@ using WebWeChat.Im.Module.Interface;
 
 namespace WebWeChat.Im.Module.Impl
 {
+    public enum RobotType
+    {
+        Tuling,
+    }
+
+
     public class ChatModule : WeChatModule, IChatModule
     {
         public ChatModule(IWeChatContext context) : base(context)
@@ -22,7 +28,13 @@ namespace WebWeChat.Im.Module.Impl
         public Task<ActionEvent> SendMsg(MessageSent msg, ActionEventListener listener = null)
         {
             return new SendMsgAction(Context, msg)
-                .ExecuteAsync();
+                .ExecuteAsyncAuto();
+        }
+
+        public Task<ActionEvent> GetRobotReply(RobotType robotType, string input, ActionEventListener listener = null)
+        {
+            return new GetTuringRobotReplyAction(Context, input)
+                .ExecuteAsyncAuto();
         }
     }
 }

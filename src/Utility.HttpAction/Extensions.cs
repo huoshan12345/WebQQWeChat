@@ -44,5 +44,20 @@ namespace Utility.HttpAction
             cts.CancelAfter(seconds * 1000);
             return actor.ExecuteAsync(cts.Token);
         }
+
+        /// <summary>
+        /// 当结果是重试或重复的时候自动再次执行
+        /// </summary>
+        /// <param name="actor"></param>
+        /// <returns></returns>
+        public static async Task<ActionEvent> ExecuteAsyncAuto(this IActor actor)
+        {
+            ActionEvent result;
+            do
+            {
+                result = await actor.ExecuteAsync();
+            } while (result.Type == ActionEventType.EvtRepeat || result.Type == ActionEventType.EvtRetry);
+            return result;
+        }
     }
 }

@@ -74,7 +74,7 @@
         public const int HTTP_TIME_OUT = 80000;
 
         public const string URL_ROBOT_TULING = "http://www.tuling123.com/openapi/api";
-        public const string ROBOT_TULING_KEY = "a94f7f3e48c331e86316b9522e552f80";
+        public const string ROBOT_TULING_KEY = "";
         public const string ROBOT_TULING_SECRET = "";
     }
 }

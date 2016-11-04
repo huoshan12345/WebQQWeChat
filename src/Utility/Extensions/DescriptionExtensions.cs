@@ -21,10 +21,9 @@ namespace Utility.Extensions
         {
             return EnumDic.GetOrAdd(@enum, (key) =>
             {
-                var type = key.GetType();
-                var field = type.GetTypeInfo().GetField(key.ToString());
-                //如果field为null则应该是组合位域值，
-                return field == null ? key.ToString() : GetDescription(field);
+                var str = key.ToString();
+                var field = key.GetType().GetTypeInfo().GetField(str);
+                return field == null ? str : GetDescription(field);
             });
         }
 
@@ -49,7 +48,7 @@ namespace Utility.Extensions
         public static string GetFullDescription(this Enum en)
         {
             var type = en.GetType();
-            var typeDesc = TypeDic.GetOrAdd(type, (key) => GetDescription(type));
+            var typeDesc = TypeDic.GetOrAdd(type, GetDescription);
             var enumDesc = en.GetDescription();
             return $"{typeDesc}-{enumDesc}";
         }

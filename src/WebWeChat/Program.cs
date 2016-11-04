@@ -13,6 +13,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using WebWeChat.Im.Bean;
+using WebWeChat.Im.Module.Impl;
 using WebWeChat.Im.Service.Interface;
 
 namespace WebWeChat
@@ -21,7 +22,7 @@ namespace WebWeChat
     {
         private static readonly ManualResetEvent QuitEvent = new ManualResetEvent(false); // 用这个来保持控制台不退出
         private static Process _process = null;
-        private static readonly WeChatNotifyEventListener Listener = (client, notifyEvent) =>
+        private static readonly WeChatNotifyEventListener Listener = async (client, notifyEvent) =>
         {
             var logger = client.GetSerivce<ILogger>();
             switch (notifyEvent.Type)
@@ -56,6 +57,15 @@ namespace WebWeChat
                     {
                         var msg = (Message)notifyEvent.Target;
                         logger.LogInformation($"[{msg.MsgType.GetDescription()} 来自 {msg.FromUser?.ShowName}]: {msg.Content}");
+                        var userName = client.GetModule<AccountModule>().User.UserName;
+                        if (msg.FromUserName == userName)
+                        {
+                            var reply = await client.GetRobotReply(RobotType.Tuling, msg.Content);
+                            if (reply.Type == ActionEventType.EvtOK)
+                            {
+                                await client.SendMsg(MessageSent.CreateTextMsg((string)reply.Target, userName, msg.ToUserName));
+                            }
+                        }
                         break;
                     }
 

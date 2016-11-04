@@ -17,12 +17,11 @@ namespace WebWeChat
         /// <summary>
         /// 全局的执行器
         /// </summary>
-        public static IActorDispatcher Dispatcher { get; } = new ActorDispatcher();
+        public static IActorDispatcher Dispatcher { get; private set; }
 
         static Startup()
         {
             BuildConfig();
-            Dispatcher.BeginExcute();
         }
 
         private static void BuildConfig()
@@ -39,12 +38,14 @@ namespace WebWeChat
 
         public static void ConfigureServices(IServiceCollection services)
         {
-            services.AddSingleton(Dispatcher);
+            services.AddSingleton<IActorDispatcher, ActorDispatcher>();
             services.AddSingleton(Configuration);
         }
 
         public static void Configure(IServiceProvider provider)
         {
+            Dispatcher = provider.GetService<IActorDispatcher>();
+            Dispatcher.BeginExcute();
         }
 
         public static void Dispose()

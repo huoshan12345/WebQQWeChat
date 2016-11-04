@@ -8,19 +8,33 @@ namespace WebWeChat.Im.Bean
     /// </summary>
     public class MessageSent
     {
-        public MessageType Type { get; set; }
-        public string Content { get; set; }
-        public string FromUserName { get; set; }
-        public string ToUserName { get; set; }
+        public MessageType Type { get; }
+        public string Content { get; }
+        public string FromUserName { get; }
+        public string ToUserName { get; }
         public string LocalID { get; }
         public string ClientMsgId { get; }
 
-        public MessageSent()
+        private MessageSent()
         {
             var time = DateTime.Now.ToTimestampMilli();
             var random = new Random().Next(0, 9999).ToString("d4");
             LocalID = $"{time}{random}";
             ClientMsgId = LocalID;
+        }
+
+        public MessageSent(MessageType type, string content, string fromUserName, string toUserName)
+            : this()
+        {
+            Type = type;
+            Content = content;
+            FromUserName = fromUserName;
+            ToUserName = toUserName;
+        }
+
+        public static MessageSent CreateTextMsg(string content, string fromUserName, string toUserName)
+        {
+            return new MessageSent(MessageType.Text, content, fromUserName, toUserName);
         }
     }
 }

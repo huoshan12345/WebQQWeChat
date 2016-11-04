@@ -41,6 +41,7 @@ namespace WebWeChat.Im.Module.Impl
                             break;
                         case WatiForLoginResult.QRCodeInvalid:
                             Context.FireNotify(new WeChatNotifyEvent(WeChatNotifyEventType.QRCodeInvalid));
+                            @event.Type = ActionEventType.EvtError; // 令后续动作不再执行
                             break;
                         case WatiForLoginResult.ScanCode:
                             @event.Type = ActionEventType.EvtRepeat;
