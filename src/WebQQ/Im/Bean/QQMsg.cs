@@ -4,6 +4,7 @@ using System.Text;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using WebQQ.Im.Bean.Content;
+using WebQQ.Im.Core;
 
 namespace WebQQ.Im.Bean
 {

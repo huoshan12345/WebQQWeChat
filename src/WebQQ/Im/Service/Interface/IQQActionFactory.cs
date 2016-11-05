@@ -3,15 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using HttpAction.Action;
-using WebWeChat.Im.Core;
+using WebQQ.Im.Core;
 
-namespace WebWeChat.Im.Service.Interface
+namespace WebQQ.Im.Service.Interface
 {
-    public interface IWeChatActionFactory : IActionFactory
+    public interface IQQActionFactory : IActionFactory
     {
         /// <summary>
         /// 对象上下文
         /// </summary>
-        IWeChatContext Context { get; }
+        IQQContext Context { get; }
     }
 }

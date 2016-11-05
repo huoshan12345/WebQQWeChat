@@ -16,7 +16,7 @@ namespace WebQQ.Util
 {
     public class Resource
     {
-        private static readonly HttpClient _httpClient = new HttpClient();
+        private static readonly HttpClient HttpClient = new HttpClient();
 
         public static Stream LoadEmbededResource(string name)
         {
@@ -36,7 +36,7 @@ namespace WebQQ.Util
 
         public static async Task<Stream> LoadServerResourceAsync(string url)
         {
-            var stream = await _httpClient.GetStreamAsync(url).ConfigureAwait(false);
+            var stream = await HttpClient.GetStreamAsync(url).ConfigureAwait(false);
             return stream;
         }
 

@@ -1,4 +1,6 @@
-﻿namespace WebQQ.Im.Event
+﻿using WebQQ.Im.Core;
+
+namespace WebQQ.Im.Event
 {
     public delegate void QQNotifyEventListener(IQQClient sender, QQNotifyEvent e);
 

@@ -1,6 +1,7 @@
 ﻿using System;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using WebQQ.Im.Core;
 
 namespace WebQQ.Im.Bean.Content
 {

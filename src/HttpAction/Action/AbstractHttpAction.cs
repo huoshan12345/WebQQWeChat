@@ -7,7 +7,7 @@ using HttpAction.Service;
 
 namespace HttpAction.Action
 {
-    public abstract class HttpAction : IHttpAction
+    public abstract class AbstractHttpAction : IHttpAction
     {
         protected virtual int MaxReTryTimes { get; set; } = 3;
 
@@ -15,7 +15,7 @@ namespace HttpAction.Action
         protected int RetryTimes { get; set; }
         protected IHttpService HttpService { get; set; }
 
-        protected HttpAction(IHttpService httpHttpService)
+        protected AbstractHttpAction(IHttpService httpHttpService)
         {
             HttpService = httpHttpService;
         }

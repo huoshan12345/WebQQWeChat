@@ -1,21 +1,27 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.IO;
 using System.Net;
 using System.Text;
+using FxUtility.Extensions;
 using Newtonsoft.Json;
-using Utility.Extensions;
 
-namespace WebQQ.Im
+namespace WebQQ.Im.Core
 {
-    
+
 
     public class QQException : Exception
     {
+        private static readonly ConcurrentDictionary<QQErrorCode, QQException> Exceptions
+            = new ConcurrentDictionary<QQErrorCode, QQException>();
+
         private static QQErrorCode GetErrorCode(Exception e)
         {
-            if (e is TimeoutException) return QQErrorCode.IOTimeout;
-            if (e is IOException) return QQErrorCode.IOError;
-            if (e is ArgumentException) return QQErrorCode.InvalidParameter;
+            e = e.InnerException ?? e;
+
+            if (e is TimeoutException) return QQErrorCode.Timeout;
+            if (e is IOException) return QQErrorCode.IoError;
+            if (e is ArgumentException) return QQErrorCode.ParameterError;
             if (e is JsonException) return QQErrorCode.JsonError;
 
             var webEx = e as WebException;
@@ -23,47 +29,38 @@ namespace WebQQ.Im
             {
                 switch (webEx.Status)
                 {
-                    case WebExceptionStatus.Success: break;
+                    case WebExceptionStatus.Success:
+                        break;
 
-                    case WebExceptionStatus.NameResolutionFailure: return QQErrorCode.InvalidParameter;
+                    case WebExceptionStatus.NameResolutionFailure:
+                        return QQErrorCode.ParameterError;
 
                     case WebExceptionStatus.ConnectFailure:
                     case WebExceptionStatus.ReceiveFailure:
                     case WebExceptionStatus.SendFailure:
                     case WebExceptionStatus.PipelineFailure:
-                        return QQErrorCode.IOError;
+                        return QQErrorCode.IoError;
+
+                    case WebExceptionStatus.Timeout:
+                        return QQErrorCode.Timeout;
+                    case WebExceptionStatus.UnknownError:
+                        return QQErrorCode.UnknownError;
 
                     case WebExceptionStatus.RequestCanceled:
-                        break;
                     case WebExceptionStatus.ProtocolError:
-                        break;
                     case WebExceptionStatus.ConnectionClosed:
-                        break;
                     case WebExceptionStatus.TrustFailure:
-                        break;
                     case WebExceptionStatus.SecureChannelFailure:
-                        break;
                     case WebExceptionStatus.ServerProtocolViolation:
-                        break;
                     case WebExceptionStatus.KeepAliveFailure:
-                        break;
                     case WebExceptionStatus.Pending:
-                        break;
-                    case WebExceptionStatus.Timeout: return QQErrorCode.IOTimeout;
-
                     case WebExceptionStatus.ProxyNameResolutionFailure:
-                        break;
-                    case WebExceptionStatus.UnknownError: return QQErrorCode.UnknownError;
                     case WebExceptionStatus.MessageLengthLimitExceeded:
-                        break;
                     case WebExceptionStatus.CacheEntryNotFound:
-                        break;
                     case WebExceptionStatus.RequestProhibitedByCachePolicy:
-                        break;
                     case WebExceptionStatus.RequestProhibitedByProxy:
-                        break;
                     default:
-                        break;
+                        return QQErrorCode.IoError;
                 }
             }
 
@@ -72,9 +69,15 @@ namespace WebQQ.Im
 
         public QQErrorCode ErrorCode { get; set; }
 
-        public QQException(QQErrorCode errorCode) : base(errorCode.ToString())
+        public static QQException CreateException(QQErrorCode errorCode)
         {
-            ErrorCode = errorCode;
+            return Exceptions.GetOrAdd(errorCode, key => new QQException(errorCode, ""));
+        }
+
+        public static QQException CreateException(QQErrorCode errorCode, string msg)
+        {
+            if (msg.IsNullOrEmpty()) return CreateException(errorCode);
+            return new QQException(errorCode, msg);
         }
 
         public QQException(QQErrorCode errorCode, string msg) : base(msg)
@@ -98,7 +101,7 @@ namespace WebQQ.Im
 
         public override string ToString()
         {
-            var msg = new StringBuilder($"ErrorCode={ErrorCode}, ErrorMsg={Message}, StackTrace=");
+            var msg = new StringBuilder($"ErrorCode={ErrorCode}, ErrorMsg={this.GetAllMessages()}, StackTrace=");
             msg.AppendLineIf($"{Environment.NewLine}{StackTrace}", StackTrace != null);
             return msg.ToString();
         }

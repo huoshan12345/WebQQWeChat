@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Drawing;
-using HttpActionFrame.Core;
-using HttpActionFrame.Event;
+using System.Threading.Tasks;
+using HttpAction.Core;
+using HttpAction.Event;
 using WebQQ.Im.Core;
 
 namespace WebQQ.Im.Action
 {
-    public class GetQRCodeAction : AbstractWebQQAction
+    public class GetQRCodeAction : QQAction
     {
         public GetQRCodeAction(IQQContext context, ActionEventListener listener) : base(context, listener) { }
 
@@ -22,13 +23,13 @@ namespace WebQQ.Im.Action
             req.AddQueryValue("t", new Random().NextDouble());
             //req.AddRefer(QQConstants.URL_LOGIN_PAGE);
             //req.AddHeader(HttpConstants.SetCookie, "qrsig=dG0lVGD8IhpDl1cMsy4qgghLk24rOwSK9YVq2YlWAjBzJ69tIE-9sFkMttULkrww; PATH=/; DOMAIN=ptlogin2.qq.com;");
-            req.ResultType = ResponseResultType.Stream;
+            req.ResultType = HttpResultType.Stream;
             return req;
         }
 
-        public override void OnHttpContent(HttpResponseItem responseItem)
+        public override Task<ActionEvent> HandleResponse(HttpResponseItem response)
         {
-            NotifyActionEvent(ActionEventType.EvtOK, Image.FromStream(responseItem.ResponseStream));
+            return NotifyActionEventAsync(ActionEventType.EvtOK, Image.FromStream(response.ResponseStream));
         }
     }
 }

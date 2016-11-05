@@ -18,9 +18,9 @@ namespace WebWeChat.Im.Bean
         ///
         /// </summary>
         public int ContactFlag { get; set; }
-
+        
         /// <summary>
-        /// 成员数量，只有在群组信息中才有效
+        /// 成员数量，只有在群组信息中才有效 
         /// </summary>
         public int MemberCount { get; set; }
 

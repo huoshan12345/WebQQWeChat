@@ -1,6 +1,6 @@
-﻿using System;
+﻿using FxUtility.Extensions;
+using System;
 using System.ComponentModel;
-using Utility.Extensions;
 
 namespace WebQQ.Im.Event
 {
@@ -60,19 +60,25 @@ namespace WebQQ.Im.Event
         /// 二维码已就绪
         /// </summary>
         [Description("二维码已就绪")]
-        QrcodeReady,
+        QRCodeReady,
 
         /// <summary>
         /// 二维码失效
         /// </summary>
         [Description("二维码失效")]
-        QrcodeInvalid,
+        QRCodeInvalid,
 
         /// <summary>
         /// 二维码验证成功
         /// </summary>
         [Description("二维码验证成功")]
-        QrcodeSuccess
+        QRCodeSuccess,
+
+        /// <summary>
+        /// 错误
+        /// </summary>
+        [Description("错误")]
+        Error,
     }
 
     public class QQNotifyEvent: EventArgs

@@ -1,27 +1,25 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Drawing;
 using System.Text;
-using HttpActionFrame.Event;
+using FxUtility.Extensions;
 using Microsoft.Extensions.Logging;
-using Utility.Extensions;
 using WebQQ.Im;
 using WebQQ.Im.Bean;
 using WebQQ.Im.Bean.Content;
-using WebQQ.Im.Core;
 using WebQQ.Im.Event;
-using WebQQ.Im.Service.Log;
+using WebQQ.Im.Module.Impl;
+using System.Reflection;
 
 namespace WebQQ
 {
     /// <summary>
     /// 使用二维码登录WebQQ
     /// </summary>
-    public class QRcodeLoginTest
+    public class Program
     {
         private static readonly QQNotifyEventListener Listener = (client, notifyEvent) =>
         {
-            var logger = client.GetSerivce<IQQLogger>(QQServiceType.Log);
+            var logger = client.GetSerivce<ILogger>();
             switch (notifyEvent.Type)
             {
                 case QQNotifyEventType.LoginSuccess:
@@ -46,7 +44,7 @@ namespace WebQQ
                         {
                             Type = QQMsgType.BUDDY_MSG,
                             To = revMsg.From,
-                            From = client.Account,
+                            From = client.GetModule<AccountModule>().User,
                             Date = DateTime.Now,
                         };
                         msgReply.AddContentItem(new TextItem("hello from iqq")); // 添加文本内容
@@ -57,7 +55,7 @@ namespace WebQQ
                         break;
                     }
 
-                case QQNotifyEventType.QrcodeReady:
+                case QQNotifyEventType.QRCodeReady:
                     {
                         var verify = (Image)notifyEvent.Target;
                         const string path = "verify.png";
@@ -66,12 +64,12 @@ namespace WebQQ
                         break;
                     }
 
-                case QQNotifyEventType.QrcodeSuccess:
+                case QQNotifyEventType.QRCodeSuccess:
                     {
                         break;
                     }
 
-                case QQNotifyEventType.QrcodeInvalid:
+                case QQNotifyEventType.QRCodeInvalid:
                     {
                         logger.LogWarning("二维码已失效");
                         break;
@@ -85,45 +83,14 @@ namespace WebQQ
             }
         };
 
-        private static TimeSpan TestAction(Action action, int times)
-        {
-            var watch = new Stopwatch();
-            watch.Start();
-            for (var i = 0; i < times; i++)
-            {
-                action();
-            }
-            watch.Stop();
-            return watch.Elapsed;
-        }
-
         public static void Main(string[] args)
         {
 #if NETCORE
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
 #endif
-
-            // 测试每一种控制台颜色
-            //foreach (var @enum in EnumExtension.GetValues<ConsoleColor>())
-            //{
-            //    Console.ForegroundColor = @enum;
-            //    Console.WriteLine("颜色和编码测试");
-            //}
-
             // 获取二维码
-            // var qq = new WebQQClient("", "", Listener, null, new QQConsoleLogger());
-            var qq = new WebQQClient();
-
-            var timeSpan = TestAction(() =>
-            {
-                var @event = qq.LoginWithQRCode().WaitFinalEvent();
-                if (@event.Type != ActionEventType.EvtOK)
-                {
-                    Console.WriteLine("xxxxxxxxxxxxxx");
-                }
-            }, 100);
-
-            Console.WriteLine(timeSpan.TotalMilliseconds);
+            var qq = new WebQQClient(Listener);
+            qq.Login().Wait();
 
             Console.Read();
         }

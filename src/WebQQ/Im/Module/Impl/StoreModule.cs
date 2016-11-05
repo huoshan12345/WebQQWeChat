@@ -3,14 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using WebQQ.Im.Bean;
 using WebQQ.Im.Bean.Content;
+using WebQQ.Im.Core;
 
-namespace WebQQ.Im.Core
+namespace WebQQ.Im.Module.Impl
 {
 
     /// <summary>
     /// 存储QQ相关的数据 如好友列表，分组列表，群列表，在线好友等
     /// </summary>
-    public class QQStore : IQQLifeCycle
+    public class StoreModule : QQModule
     {
         private readonly ConcurrentDictionary<long, QQBuddy> _buddyMap; // uin => QQBudy, 快速通过uin查找QQ好友
         private readonly ConcurrentDictionary<long, QQStranger> _strangerMap; // uin => QQStranger, 快速通过uin查找临时会话用户
@@ -22,7 +23,7 @@ namespace WebQQ.Im.Core
         /**
          * <p>Constructor for QQStore.</p>
          */
-        public QQStore()
+        public StoreModule(IQQContext context) : base(context)
         {
             this._buddyMap = new ConcurrentDictionary<long, QQBuddy>();
             this._strangerMap = new ConcurrentDictionary<long, QQStranger>();

@@ -1,21 +1,21 @@
-﻿using WebQQ.Im.Bean;
+﻿using System.Threading.Tasks;
+using WebQQ.Im.Bean;
 using WebQQ.Im.Event;
 using WebQQ.Im.Module;
+using WebQQ.Im.Module.Interface;
+using WebQQ.Im.Service.Interface;
 
 namespace WebQQ.Im.Core
 {
     public interface IQQContext
     {
-        void FireNotify(QQNotifyEvent qqNotifyEvent);
+        T GetModule<T>() where T : IQQModule;
 
-        T GetModule<T>(QQModuleType type) where T : IQQModule;
+        // 获取服务，该服务既可以是全局共享的，也可以是qq实例特有的，所以不要求T继承IQQService
+        T GetSerivce<T>();
 
-        T GetSerivce<T>(QQServiceType type) where T : IQQService;
+        void FireNotify(QQNotifyEvent notifyEvent);
 
-        QQAccount Account { get; set; }
-
-        QQSession Session { get; set; }
-
-        QQStore Store { get; set; }
+        Task FireNotifyAsync(QQNotifyEvent notifyEvent);
     }
 }

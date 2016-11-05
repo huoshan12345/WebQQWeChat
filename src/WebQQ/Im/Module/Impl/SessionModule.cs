@@ -1,7 +1,9 @@
-﻿namespace WebQQ.Im.Core
+﻿using WebQQ.Im.Core;
+
+namespace WebQQ.Im.Module.Impl
 {
 
-    public enum QQSessionState
+    public enum SessionState
     {
         Offline,
         Online,
@@ -13,30 +15,16 @@
     /// <summary>
     /// QQSession保存了每次登陆时候的状态信息
     /// </summary>
-    public class QQSession
+    public class SessionModule : QQModule
     {
-        private volatile QQSessionState _state; // 作为指令关键字，确保本条指令不会因编译器的优化而省略，且要求每次直接读值.
-        public QQSessionState State
+        private volatile SessionState _state; // 作为指令关键字，确保本条指令不会因编译器的优化而省略，且要求每次直接读值.
+        public SessionState State
         {
             get { return _state; }
             set { _state = value; }
         }
 
-        private long _clientId;
-        public long ClientId
-        {
-            get
-            {
-                if (_clientId == 0)
-                {
-                   // _clientId = new Random().Next(); //random??
-                    _clientId = 53999199;
-                }
-                return _clientId;
-            }
-            set { _clientId = value; }
-        }
-
+        public long ClientId { get; set; } = 53999199;
         public string SessionId { get; set; }
         public string Vfwebqq { get; set; }
         public string Ptwebqq { get; set; }
@@ -49,6 +37,10 @@
         public int PollErrorCnt { get; set; }
         public string CapCd { get; set; }
         public string Psessionid { get; set; }
+
+        public SessionModule(IQQContext context) : base(context)
+        {
+        }
     }
 
 }

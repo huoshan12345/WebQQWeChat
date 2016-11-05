@@ -1,22 +1,17 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
 using System.Threading.Tasks;
 using HttpAction.Event;
 using HttpAction.Service;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Logging;
-using WebWeChat.Im.Action;
 using WebWeChat.Im.Bean;
 using WebWeChat.Im.Core;
 using WebWeChat.Im.Event;
-using WebWeChat.Im.Module;
 using WebWeChat.Im.Module.Impl;
 using WebWeChat.Im.Module.Interface;
 using WebWeChat.Im.Service.Impl;
 using WebWeChat.Im.Service.Interface;
+using System.Reflection;
 
 namespace WebWeChat.Im
 {

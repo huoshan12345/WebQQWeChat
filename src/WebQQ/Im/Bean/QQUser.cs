@@ -173,40 +173,5 @@ namespace WebQQ.Im.Bean
             var m = obj as QQUser;
             return (m?.Uin == Uin);
         }
-
-        public void ParseFromJson(JObject json)
-        {
-            Occupation = json["occupation"].ToString();
-            Phone = json["phone"].ToString();
-            Allow = (QQAllow)json["allow"].ToObject<int>();
-            College = json["college"].ToString();
-            Uin = json["uin"].ToObject<long>();
-            Constel = json["constel"].ToObject<int>();
-            Blood = json["blood"].ToObject<int>();
-            Homepage = json["homepage"].ToString();
-            Stat = json["stat"].ToObject<int>();
-            VipLevel = json["vip_info"].ToObject<int>(); // VIP等级 0为非VIP
-            Country = json["country"].ToString();
-            City = json["city"].ToString();
-            Personal = json["personal"].ToString();
-            Nickname = json["nick"].ToString();
-            ChineseZodiac = json["shengxiao"].ToObject<int>();
-            Email = json["vip_info"].ToString();
-            Province = json["province"].ToString();
-            Gender = json["gender"].ToString();
-            Mobile = json["mobile"].ToString();
-            if (json["reg_time"] != null)
-            {
-                RegTime = json["reg_time"].ToObject<int>();
-            }
-            if (json["client_type"] != null)
-            {
-                ClientType = QQClientTypeInfo.ValueOfRaw(json["client_type"].ToObject<int>());
-            }
-            if (json["birthday"] != null)
-            {
-                Birthday = DateUtils.Parse(json["birthday"].ToObject<JObject>());
-            }
-        }
     }
 }

@@ -27,15 +27,14 @@
   },
 
   "dependencies": {
-    "Newtonsoft.Json": "9.0.1",
-    "Microsoft.Extensions.Logging": "1.0.0",
-    "HttpAction": "1.0.0-*",
     "FxUtility": "0.1.0-beta",
+    "HttpAction": "1.0.0-*",
     "Microsoft.Extensions.Configuration": "1.0.0",
     "Microsoft.Extensions.Configuration.Json": "1.0.0",
     "Microsoft.Extensions.Configuration.UserSecrets": "1.0.0",
     "Microsoft.Extensions.DependencyInjection": "1.0.0",
-    "System.Runtime.InteropServices.RuntimeInformation": "4.0.0"
+    "Newtonsoft.Json": "9.0.1",
+    "System.Reflection.TypeExtensions": "4.1.0"
   },
 
   "frameworks": {
@@ -43,10 +42,10 @@
       "frameworkAssemblies": {
         "System.Drawing": "4.0.0.0",
         "System.Xml.Linq": "4.0.0.0",
-        "System.Xml": "4.0.0.0"
+        "System.Xml": "4.0.0.0",
+        "System.Net.Http": "4.0.0.0"
       },
       "dependencies": {
-        "System.Net.Http": "4.0.0"
       },
       "buildOptions": {
         "define": [ "NET" ],
@@ -55,16 +54,16 @@
     },
     "netcoreapp1.1": {
       "dependencies": {
+        "CoreCompat.System.Drawing": "1.0.0-*",
         "Microsoft.NETCore.App": {
           "version": "1.0.1-*",
           "type": "platform"
         },
+        "runtime.linux-x64.CoreCompat.System.Drawing": "1.0.0-*",
+        "runtime.osx.10.10-x64.CoreCompat.System.Drawing": "1.0.1-*",
         "System.Collections.NonGeneric": "4.0.1",
         "System.ComponentModel.Primitives": "4.1.0",
         "System.Text.Encoding.CodePages": "4.0.1",
-        "CoreCompat.System.Drawing": "1.0.0-*",
-        "runtime.linux-x64.CoreCompat.System.Drawing": "1.0.0-*",
-        "runtime.osx.10.10-x64.CoreCompat.System.Drawing": "1.0.1-*",
         "System.Xml.XDocument": "4.0.11"
       },
       "buildOptions": {
