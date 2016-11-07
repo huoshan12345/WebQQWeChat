@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 
 namespace WebQQ.Im.Event
 {
@@ -12,16 +13,19 @@ namespace WebQQ.Im.Event
         /// <summary>
         /// 二维码未失效
         /// </summary>
+        [Description("未失效")]
         Valid,
 
         /// <summary>
         /// 二维码失效
         /// </summary>
+        [Description("已失效")]
         Invalid,
 
         /// <summary>
         /// 二维码认证中
         /// </summary>
+        [Description("认证中")]
         Auth,
     }
 

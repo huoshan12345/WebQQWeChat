@@ -1,8 +1,10 @@
 using System;
 using System.Drawing;
 using System.Threading.Tasks;
+using FxUtility.Extensions;
 using HttpAction;
 using HttpAction.Event;
+using Microsoft.Extensions.Logging;
 using WebQQ.Im.Action;
 using WebQQ.Im.Core;
 using WebQQ.Im.Event;
@@ -32,31 +34,35 @@ namespace WebQQ.Im.Module.Impl
                     if (@event.Type == ActionEventType.EvtOK)
                     {
                         var verify = (Image) @event.Target;
-                        await Context.FireNotifyAsync(new QQNotifyEvent(QQNotifyEventType.QRCodeReady, verify));
+                        await Context.FireNotifyAsync(QQNotifyEvent.CreateEvent(QQNotifyEventType.QRCodeReady, verify));
                     }
                 })
                 .PushAction<CheckQRCodeAction>(async (sender, @event) => // 2.»ñÈ¡¶þÎ¬ÂëÉ¨Ãè×´Ì¬
                 {
                     if (@event.Type != ActionEventType.EvtOK) return;
 
-                    var eventArgs = (CheckQRCodeArgs)@event.Target;
-                    switch (eventArgs.Status)
+                    var args = (CheckQRCodeArgs)@event.Target;
+                    switch (args.Status)
                     {
                         case QRCodeStatus.OK:
-                            Context.FireNotify(new QQNotifyEvent(QQNotifyEventType.QRCodeSuccess));
+                            Context.GetModule<SessionModule>().CheckSigUrl = args.Msg;
+                            Context.FireNotify(QQNotifyEvent.CreateEvent(QQNotifyEventType.QRCodeSuccess));
                             break;
 
                         case QRCodeStatus.Valid:
                         case QRCodeStatus.Auth:
-                            await Task.Delay(3000);
+                            Context.GetSerivce<ILogger>().LogInformation($"¶þÎ¬Âë×´Ì¬£º{args.Status.GetDescription()}");
                             @event.Type = ActionEventType.EvtRepeat;
+                            await Task.Delay(3000);
                             break;
 
                         case QRCodeStatus.Invalid:
-                            Context.FireNotify(new QQNotifyEvent(QQNotifyEventType.QRCodeInvalid, eventArgs.Msg));
+                            Context.FireNotify(QQNotifyEvent.CreateEvent(QQNotifyEventType.QRCodeInvalid, args.Msg));
                             break;
                     }
                 })
+                .PushAction<CheckSigAction>()
+                .PushAction<GetVfwebqqAction>()
                 .ExecuteAsync();
         }
     }

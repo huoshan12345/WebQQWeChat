@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using HttpAction.Event;
@@ -26,15 +27,21 @@ namespace HttpAction.Action
                     return ActionEvent.CreateEvent(ActionEventType.EvtCanceled, this);
                 }
                 var action = _queue.First.Value;
-                var result = await action.ExecuteAsync(token).ConfigureAwait(false);
-                if (result.Type != ActionEventType.EvtRetry && result.Type != ActionEventType.EvtRepeat)
+                var result = await action.ExecuteAsync(token).ConfigureAwait(false); ;
+                switch (result.Type)
                 {
-                    _queue.RemoveFirst();
-                }
-                else if(result.Type != ActionEventType.EvtOK)
-                {
-                    _queue.Clear();
-                    return result;
+                    case ActionEventType.EvtOK:
+                        _queue.RemoveFirst();
+                        break;
+
+                    case ActionEventType.EvtError:
+                    case ActionEventType.EvtCanceled:
+                        _queue.Clear();
+                        return result;
+
+                    case ActionEventType.EvtRetry:
+                    case ActionEventType.EvtRepeat:
+                        continue;
                 }
                 lastEvent = result;
             }

@@ -68,6 +68,16 @@ namespace HttpAction.Core
             };
         }
 
+        public static HttpRequestItem CreateFormRequest(string url)
+        {
+            return new HttpRequestItem(HttpMethodType.Post, url);
+        }
+
+        public static HttpRequestItem CreateGetRequest(string url)
+        {
+            return new HttpRequestItem(HttpMethodType.Get, url);
+        }
+
         public HttpRequestItem(HttpMethodType method, string rawUrl, IDictionary<string, string> queryValues)
             : this(method, rawUrl)
         {

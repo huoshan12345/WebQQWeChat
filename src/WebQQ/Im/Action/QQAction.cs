@@ -27,7 +27,7 @@ namespace WebQQ.Im.Action
         protected long Timestamp => DateTime.Now.ToTimestampMilli();
         protected string ActionName => GetType().GetDescription();
 
-        protected QQAction(IQQContext context, ActionEventListener listener)
+        protected QQAction(IQQContext context, ActionEventListener listener = null)
             : base(context.GetSerivce<IHttpService>())
         {
             SetContext(context);
@@ -87,7 +87,7 @@ namespace WebQQ.Im.Action
                     {
                         var ex = (QQException)target;
                         Logger.LogError($"[Action={ActionName}, Result={typeName}, {ex}");
-                        await Context.FireNotifyAsync(new QQNotifyEvent(QQNotifyEventType.Error, ex));
+                        await Context.FireNotifyAsync(QQNotifyEvent.CreateEvent(QQNotifyEventType.Error, ex));
                         break;
                     }
                 case ActionEventType.EvtRetry:

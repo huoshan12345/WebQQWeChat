@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using HttpAction.Core;
 using HttpAction.Event;
 using HttpAction.Service;
+using System.Linq;
 
 namespace HttpAction.Action
 {
@@ -20,20 +21,27 @@ namespace HttpAction.Action
             HttpService = httpHttpService;
         }
 
-        protected virtual Task<ActionEvent> NotifyActionEventAsync(ActionEvent actionEvent)
+        protected virtual async Task<ActionEvent> NotifyActionEventAsync(ActionEvent actionEvent)
         {
-            return Task.Run(() =>
+            try
             {
                 if (actionEvent.Type == ActionEventType.EvtRetry) ++RetryTimes;
                 else RetryTimes = 0;
-                OnActionEvent?.Invoke(this, actionEvent); // 这里不要异步执行
+                if (OnActionEvent != null)
+                {
+                    await OnActionEvent.Invoke(this, actionEvent); 
+                }
                 return actionEvent;
-            });
+            }
+            catch (Exception ex)
+            {
+                return await HandleExceptionAsync(ex);
+            }
         }
 
         protected virtual Task<ActionEvent> NotifyActionEventAsync(ActionEventType type, object target = null)
         {
-            return NotifyActionEventAsync(target == null ? ActionEvent.EmptyEvents[type] : ActionEvent.CreateEvent(type, target));
+            return NotifyActionEventAsync(ActionEvent.CreateEvent(type, target));
         }
 
         protected Task<ActionEvent> NotifyOkActionEventAsync(object target = null)

@@ -9,7 +9,7 @@ namespace WebQQ.Im.Action
 {
     public class CheckQRCodeAction : QQAction
     {
-        public CheckQRCodeAction(IQQContext context, ActionEventListener listener) : base(context, listener) { }
+        public CheckQRCodeAction(IQQContext context, ActionEventListener listener = null) : base(context, listener) { }
 
         public override HttpRequestItem BuildRequest()
         {

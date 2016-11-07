@@ -1,6 +1,9 @@
 ﻿using FxUtility.Extensions;
 using System;
+using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.ComponentModel;
+using HttpAction.Event;
 
 namespace WebQQ.Im.Event
 {
@@ -81,22 +84,32 @@ namespace WebQQ.Im.Event
         Error,
     }
 
-    public class QQNotifyEvent: EventArgs
+    public class QQNotifyEvent : EventArgs
     {
+        private static readonly ConcurrentDictionary<QQNotifyEventType, QQNotifyEvent> EmptyEvents;
+
         public QQNotifyEventType Type { get; }
         public object Target { get; }
 
-        public QQNotifyEvent(QQNotifyEventType type, object target)
+        static QQNotifyEvent()
+        {
+            EmptyEvents = new ConcurrentDictionary<QQNotifyEventType, QQNotifyEvent>();
+        }
+
+        private QQNotifyEvent(QQNotifyEventType type, object target = null)
         {
             Type = type;
             Target = target;
         }
 
-        public QQNotifyEvent(QQNotifyEventType type) : this(type, null) { }
-
         public override string ToString()
         {
             return $"{Type.GetFullDescription()}, target={Target ?? ""}]";
+        }
+
+        public static QQNotifyEvent CreateEvent(QQNotifyEventType type, object target = null)
+        {
+            return target == null ? EmptyEvents.GetOrAdd(type, key => new QQNotifyEvent(key)) : new QQNotifyEvent(type, target);
         }
     }
 }

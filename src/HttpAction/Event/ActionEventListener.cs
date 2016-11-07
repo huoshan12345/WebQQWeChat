@@ -1,6 +1,7 @@
-﻿using HttpAction.Action;
+﻿using System.Threading.Tasks;
+using HttpAction.Action;
 
 namespace HttpAction.Event
 {
-    public delegate void ActionEventListener(IAction sender, ActionEvent actionEvent);
+    public delegate Task ActionEventListener(IAction sender, ActionEvent actionEvent);
 }

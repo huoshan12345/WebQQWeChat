@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Drawing;
 using System.Text;
 using FxUtility.Extensions;
@@ -17,16 +18,15 @@ namespace WebQQ
     /// </summary>
     public class Program
     {
+        private static Process _process = null;
         private static readonly QQNotifyEventListener Listener = (client, notifyEvent) =>
         {
             var logger = client.GetSerivce<ILogger>();
             switch (notifyEvent.Type)
             {
                 case QQNotifyEventType.LoginSuccess:
-                    {
-                        logger.LogInformation("登录成功");
-                        break;
-                    }
+                    logger.LogInformation("登录成功");
+                    break;
 
                 case QQNotifyEventType.GroupMsg:
                     {
@@ -61,25 +61,25 @@ namespace WebQQ
                         const string path = "verify.png";
                         verify.Save(path);
                         logger.LogInformation("请扫描在项目根目录下qrcode.png图片");
+#if NET
+                        _process = Process.Start(path);
+#endif
                         break;
                     }
+
 
                 case QQNotifyEventType.QRCodeSuccess:
-                    {
-                        break;
-                    }
+                    _process?.Kill();
+                    break;
 
                 case QQNotifyEventType.QRCodeInvalid:
-                    {
-                        logger.LogWarning("二维码已失效");
-                        break;
-                    }
+                    _process?.Kill();
+                    logger.LogWarning("二维码已失效");
+                    break;
 
                 default:
-                    {
-                        logger.LogInformation(notifyEvent.Type.GetFullDescription());
-                        break;
-                    }
+                    logger.LogInformation(notifyEvent.Type.GetFullDescription());
+                    break;
             }
         };
 

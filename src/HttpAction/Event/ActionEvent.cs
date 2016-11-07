@@ -25,7 +25,7 @@ namespace HttpAction.Event
             return $"{Type.GetFullDescription()}, target={Target ?? ""}]";
         }
 
-        public static IReadOnlyDictionary<ActionEventType, ActionEvent> EmptyEvents { get; }
+        private static readonly IReadOnlyDictionary<ActionEventType, ActionEvent> EmptyEvents;
 
         static ActionEvent()
         {
