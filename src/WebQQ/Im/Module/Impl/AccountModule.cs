@@ -5,7 +5,7 @@ namespace WebQQ.Im.Module.Impl
 {
     public class AccountModule : QQModule
     {
-        public QQUser User { get; set; }
+        public QQUser User { get; set; } = new QQUser();
 
         public AccountModule(IQQContext context) : base(context)
         {

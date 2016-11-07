@@ -10,7 +10,7 @@ namespace WebQQ.Im.Service.Impl
 {
     public class QQLogger : SimpleConsoleLogger, IQQService
     {
-        public QQLogger(IQQContext context, LogLevel minLevel = LogLevel.Information) : base("WebQQ")
+        public QQLogger(IQQContext context, LogLevel minLevel = LogLevel.Information) : base("WebQQ", minLevel)
         {
             if (context == null) throw new ArgumentNullException(nameof(context));
             Context = context;

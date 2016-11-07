@@ -77,5 +77,10 @@ namespace WebQQ.Im.Bean
                     || stat == AWAY || stat == SILENT
                     || stat == BUSY || stat == HIDDEN);
         }
+
+        public static bool IsGeneralOnline(QQStatusType stat)
+        {
+            return stat != QQStatusType.Offline;
+        }
     }
 }

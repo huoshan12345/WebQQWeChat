@@ -1,4 +1,5 @@
-﻿using WebQQ.Im.Core;
+﻿using WebQQ.Im.Bean;
+using WebQQ.Im.Core;
 
 namespace WebQQ.Im.Module.Impl
 {
@@ -25,22 +26,22 @@ namespace WebQQ.Im.Module.Impl
         }
 
         public long ClientId { get; set; } = 53999199;
-        //public string SessionId { get; set; }
+        public string SessionId { get; set; }
         public string Vfwebqq { get; set; }
-        //public string Ptwebqq { get; set; }
+        public string Ptwebqq { get; set; }
         //public string LoginSig { get; set; }
         //public string CfaceKey { get; set; }
         //public string CfaceSig { get; set; }
         //public string EmailAuthKey { get; set; }
-        //public int Index { get; set; }
-        //public int Port { get; set; }
+        public int Index { get; set; }
+        public int Port { get; set; }
         //public int PollErrorCnt { get; set; }
         //public string CapCd { get; set; }
         //public string Psessionid { get; set; }
 
         public string CheckSigUrl { get; set; }
 
-    public SessionModule(IQQContext context) : base(context)
+        public SessionModule(IQQContext context) : base(context)
         {
         }
     }

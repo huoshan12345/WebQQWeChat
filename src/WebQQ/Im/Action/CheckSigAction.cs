@@ -21,6 +21,8 @@ namespace WebQQ.Im.Action
 
         public override Task<ActionEvent> HandleResponse(HttpResponseItem response)
         {
+            var ptwebqq = HttpService.GetCookie("ptwebqq", Session.CheckSigUrl).Value;
+            Session.Ptwebqq = ptwebqq;
             return NotifyActionEventAsync(ActionEventType.EvtOK);
         }
     }

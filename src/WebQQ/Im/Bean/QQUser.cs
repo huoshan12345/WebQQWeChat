@@ -11,12 +11,12 @@ namespace WebQQ.Im.Bean
     /// QQ普通用户，保存了所有用户的基本信息
     /// </summary>
     // 
-    public abstract class QQUser
+    public class QQUser
     {
         /// <summary>
         /// 标识
         /// </summary>
-        public long Uin { get; set; } = -2;
+        public long Uin { get; set; }
 
         /// <summary>
         /// QQ号
@@ -26,7 +26,7 @@ namespace WebQQ.Im.Bean
         /// <summary>
         /// 状态
         /// </summary>
-        public QQStatus Status { get; set; } = QQStatus.OFFLINE;
+        public QQStatusType Status { get; set; } = QQStatusType.Offline;
 
         /// <summary>
         /// 客户类型

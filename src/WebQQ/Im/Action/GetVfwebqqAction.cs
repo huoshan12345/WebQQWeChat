@@ -19,10 +19,11 @@ namespace WebQQ.Im.Action
         public override HttpRequestItem BuildRequest()
         {
             var req = HttpRequestItem.CreateGetRequest(ApiUrls.GetVfwebqq);
-            req.AddQueryValue("ptwebqq", HttpService.GetCookie("ptwebqq", ApiUrls.GetVfwebqq).Value);
+            req.AddQueryValue("ptwebqq", Session.Ptwebqq);
             req.AddQueryValue("clientid", Session.ClientId);
             req.AddQueryValue("psessionid", "");
             req.AddQueryValue("t", Timestamp);
+            req.Referrer = "http://s.web2.qq.com/proxy.html?v=20130916001&callback=1&id=1";
             return req;
         }
 

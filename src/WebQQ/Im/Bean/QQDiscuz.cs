@@ -37,7 +37,7 @@ namespace WebQQ.Im.Bean
         {
             foreach (var mem in Members)
             {
-                mem.Status = QQStatus.OFFLINE;
+                mem.Status = QQStatusType.Offline;
             }
         }
         public void AddMemeber(QQDiscuzMember user)

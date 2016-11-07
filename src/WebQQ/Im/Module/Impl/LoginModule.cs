@@ -46,23 +46,24 @@ namespace WebQQ.Im.Module.Impl
                     {
                         case QRCodeStatus.OK:
                             Context.GetModule<SessionModule>().CheckSigUrl = args.Msg;
-                            Context.FireNotify(QQNotifyEvent.CreateEvent(QQNotifyEventType.QRCodeSuccess));
+                            await Context.FireNotifyAsync(QQNotifyEvent.CreateEvent(QQNotifyEventType.QRCodeSuccess));
                             break;
 
                         case QRCodeStatus.Valid:
                         case QRCodeStatus.Auth:
-                            Context.GetSerivce<ILogger>().LogInformation($"¶þÎ¬Âë×´Ì¬£º{args.Status.GetDescription()}");
+                            Context.GetSerivce<ILogger>().LogDebug($"¶þÎ¬Âë×´Ì¬£º{args.Status.GetDescription()}");
                             @event.Type = ActionEventType.EvtRepeat;
                             await Task.Delay(3000);
                             break;
 
                         case QRCodeStatus.Invalid:
-                            Context.FireNotify(QQNotifyEvent.CreateEvent(QQNotifyEventType.QRCodeInvalid, args.Msg));
+                            await Context.FireNotifyAsync(QQNotifyEvent.CreateEvent(QQNotifyEventType.QRCodeInvalid, args.Msg));
                             break;
                     }
                 })
                 .PushAction<CheckSigAction>()
                 .PushAction<GetVfwebqqAction>()
+                .PushAction<ChannelLoginAction>()
                 .ExecuteAsync();
         }
     }
