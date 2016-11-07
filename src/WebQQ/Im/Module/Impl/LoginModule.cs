@@ -35,6 +35,28 @@ namespace WebQQ.Im.Module.Impl
                         await Context.FireNotifyAsync(new QQNotifyEvent(QQNotifyEventType.QRCodeReady, verify));
                     }
                 })
+                .PushAction<CheckQRCodeAction>(async (sender, @event) => // 2.»ñÈ¡¶þÎ¬ÂëÉ¨Ãè×´Ì¬
+                {
+                    if (@event.Type != ActionEventType.EvtOK) return;
+
+                    var eventArgs = (CheckQRCodeArgs)@event.Target;
+                    switch (eventArgs.Status)
+                    {
+                        case QRCodeStatus.OK:
+                            Context.FireNotify(new QQNotifyEvent(QQNotifyEventType.QRCodeSuccess));
+                            break;
+
+                        case QRCodeStatus.Valid:
+                        case QRCodeStatus.Auth:
+                            await Task.Delay(3000);
+                            @event.Type = ActionEventType.EvtRepeat;
+                            break;
+
+                        case QRCodeStatus.Invalid:
+                            Context.FireNotify(new QQNotifyEvent(QQNotifyEventType.QRCodeInvalid, eventArgs.Msg));
+                            break;
+                    }
+                })
                 .ExecuteAsync();
         }
     }

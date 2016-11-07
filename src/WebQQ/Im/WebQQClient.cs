@@ -39,7 +39,7 @@ namespace WebQQ.Im
 
             // 服务
             _services.AddSingleton<IHttpService, QQHttp>();
-            _services.AddSingleton<ILogger>(provider => new QQLogger(this, LogLevel.Information));
+            _services.AddSingleton<ILogger>(provider => new QQLogger(this, LogLevel.Debug));
             _services.AddSingleton<IQQActionFactory, QQActionFactory>();
 
             _serviceProvider = _services.BuildServiceProvider();

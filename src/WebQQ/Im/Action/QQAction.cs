@@ -101,7 +101,7 @@ namespace WebQQ.Im.Action
                     break;
 
                 default:
-                    Logger.LogInformation($"[Action={ActionName}, Result={typeName}]");
+                    Logger.LogDebug($"[Action={ActionName}, Result={typeName}]");
                     break;
             }
             return await base.NotifyActionEventAsync(actionEvent);

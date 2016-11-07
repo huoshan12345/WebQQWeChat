@@ -154,5 +154,39 @@ namespace WebQQ.Util
             }
             return (hash & 0x7fffffff).ToString();
         }
+
+        /// <summary>
+        /// 用于获取好友列表
+        /// 由js改写而来
+        /// </summary>
+        /// <param name="uin"></param>
+        /// <param name="ptwebqq"></param>
+        /// <returns></returns>
+        public static string Hash(long uin, string ptwebqq)
+        {
+            var n = new char[4];
+            for (var i = 0; i < ptwebqq.Length; i++)
+            {
+                n[i % 4] ^= ptwebqq[i];
+            }
+            var u = new[] { "EC", "OK" };
+            var v = new char[4];
+            v[0] = (char)((uin >> 24 & 255) ^ u[0][0]);
+            v[1] = (char)(uin >> 16 & 255 ^ u[0][1]);
+            v[2] = (char)(uin >> 8 & 255 ^ u[1][0]);
+            v[3] = (char)(uin & 255 ^ u[1][1]);
+            var u1 = new char[8];
+            for (var i = 0; i < u1.Length; i++)
+            {
+                u1[i] = i % 2 == 0 ? n[i >> 1] : v[i >> 1];
+            }
+            var v1 = new StringBuilder(2 * u1.Length);
+            foreach (var ch in u1)
+            {
+                v1.Append(n[ch >> 4 & 15]);
+                v1.Append(n[ch & 15]);
+            }
+            return v1.ToString();
+        }
     }
 }

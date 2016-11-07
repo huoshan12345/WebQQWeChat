@@ -51,10 +51,10 @@ namespace WebQQ.Im.Action
                     //case "0": NotifyActionEvent(QQActionEventType.EVT_OK, m.Groups[3].Value); break;
                     //case "66": throw new QQException(QQErrorCode.QRCODE_OK, m.Groups[5].Value);
                     //case "67": throw new QQException(QQErrorCode.QRCODE_AUTH, m.Groups[5].Value);
-                    case "0": return NotifyActionEventAsync(ActionEventType.EvtOK, new CheckQRCodeArgs(QRCodeStatus.OK, m.Groups[3].Value)); break;
-                    case "66": return NotifyActionEventAsync(ActionEventType.EvtOK, new CheckQRCodeArgs(QRCodeStatus.Valid, m.Groups[5].Value)); break;
-                    case "67": return NotifyActionEventAsync(ActionEventType.EvtOK, new CheckQRCodeArgs(QRCodeStatus.Auth, m.Groups[5].Value)); break;
-                    case "65": return NotifyActionEventAsync(ActionEventType.EvtOK, new CheckQRCodeArgs(QRCodeStatus.Invalid, m.Groups[5].Value)); break;
+                    case "0": return NotifyActionEventAsync(ActionEventType.EvtOK, new CheckQRCodeArgs(QRCodeStatus.OK, m.Groups[3].Value)); 
+                    case "66": return NotifyActionEventAsync(ActionEventType.EvtOK, new CheckQRCodeArgs(QRCodeStatus.Valid, m.Groups[5].Value));
+                    case "67": return NotifyActionEventAsync(ActionEventType.EvtOK, new CheckQRCodeArgs(QRCodeStatus.Auth, m.Groups[5].Value)); 
+                    case "65": return NotifyActionEventAsync(ActionEventType.EvtOK, new CheckQRCodeArgs(QRCodeStatus.Invalid, m.Groups[5].Value));
 
                 }
             }

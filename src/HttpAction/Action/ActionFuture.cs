@@ -21,16 +21,19 @@ namespace HttpAction.Action
             while (_queue.Count != 0)
             {
                 if (token.IsCancellationRequested)
-                    return ActionEvent.CreateEvent(ActionEventType.EvtCanceled, this);
-                var action = _queue.First.Value;
-                _queue.RemoveFirst();
-                var result = await action.ExecuteAsync(token).ConfigureAwait(false);
-                if (result.Type == ActionEventType.EvtRetry || result.Type == ActionEventType.EvtRepeat)
                 {
-                    _queue.AddFirst(action);
+                    _queue.Clear();
+                    return ActionEvent.CreateEvent(ActionEventType.EvtCanceled, this);
+                }
+                var action = _queue.First.Value;
+                var result = await action.ExecuteAsync(token).ConfigureAwait(false);
+                if (result.Type != ActionEventType.EvtRetry && result.Type != ActionEventType.EvtRepeat)
+                {
+                    _queue.RemoveFirst();
                 }
                 else if(result.Type != ActionEventType.EvtOK)
                 {
+                    _queue.Clear();
                     return result;
                 }
                 lastEvent = result;
