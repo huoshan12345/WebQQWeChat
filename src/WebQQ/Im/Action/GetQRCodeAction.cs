@@ -13,7 +13,7 @@ namespace WebQQ.Im.Action
 
         public override HttpRequestItem BuildRequest()
         {
-            var req = new HttpRequestItem(HttpMethodType.Get, QQConstants.URL_GET_QRCODE);
+            var req = new HttpRequestItem(HttpMethodType.Get, ApiUrls.GetQRCode);
             req.AddQueryValue("appid", QQConstants.APPID);
             req.AddQueryValue("e", "0");
             req.AddQueryValue("l", "M");

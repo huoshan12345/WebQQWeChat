@@ -24,6 +24,11 @@ namespace WebQQ.Util
             return token.ToObject<JObject>();
         }
 
+        public static string ToSimpleString(this JToken obj)
+        {
+            return obj.ToString(Formatting.None);
+        }
+
         public static int ToInt(this JToken token)
         {
             return token.ToObject<int>();

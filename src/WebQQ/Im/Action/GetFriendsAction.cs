@@ -4,25 +4,29 @@ using System.Linq;
 using System.Threading.Tasks;
 using HttpAction.Core;
 using HttpAction.Event;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using WebQQ.Im.Core;
 using WebQQ.Util;
 
 namespace WebQQ.Im.Action
 {
-    public class GetVfwebqqAction:QQAction
+    public class GetFriendsAction : QQAction
     {
-        public GetVfwebqqAction(IQQContext context, ActionEventListener listener = null) : base(context, listener)
+        public GetFriendsAction(IQQContext context, ActionEventListener listener = null) : base(context, listener)
         {
         }
 
         public override HttpRequestItem BuildRequest()
         {
-            var req = HttpRequestItem.CreateGetRequest(ApiUrls.GetVfwebqq);
-            req.AddQueryValue("ptwebqq", Session.Ptwebqq);
-            req.AddQueryValue("clientid", Session.ClientId);
-            req.AddQueryValue("psessionid", "");
-            req.AddQueryValue("t", Timestamp);
+            var json = new JObject
+            {
+                {"h", "hello"},
+                {"vfwebqq", Session.Vfwebqq},
+                {"hash", QQEncryptor.GetHash(Account.User.Uin.ToString(), Session.Ptwebqq)}
+            }.ToString(Formatting.None);
+            var req = HttpRequestItem.CreateFormRequest(ApiUrls.GetFriends);
+            req.AddQueryValue("r", json);
             req.Referrer = ApiUrls.ReferrerS;
             return req;
         }
@@ -32,8 +36,6 @@ namespace WebQQ.Im.Action
             var json = response.ResponseString.ToJsonObj();
             if (json["retcode"].ToString() == "0")
             {
-                var ret = json["result"].ToJsonObj();
-                Session.Vfwebqq = ret["vfwebqq"].ToString();
                 return NotifyActionEventAsync(ActionEventType.EvtOK);
             }
             else

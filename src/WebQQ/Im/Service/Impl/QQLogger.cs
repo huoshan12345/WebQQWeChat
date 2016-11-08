@@ -10,10 +10,11 @@ namespace WebQQ.Im.Service.Impl
 {
     public class QQLogger : SimpleConsoleLogger, IQQService
     {
+        private readonly IQQContext _context;
         public QQLogger(IQQContext context, LogLevel minLevel = LogLevel.Information) : base("WebQQ", minLevel)
         {
             if (context == null) throw new ArgumentNullException(nameof(context));
-            Context = context;
+            _context = context;
         }
 
         /// <summary>
@@ -24,11 +25,9 @@ namespace WebQQ.Im.Service.Impl
         /// <returns></returns>
         protected override string GetMessage(string message, Exception exception)
         {
-            var userName = Context.GetModule<AccountModule>().User?.QQ;
-            var prefix = userName.IsDefault() ? string.Empty : $"[{userName}]";
+            var userName = _context.GetModule<AccountModule>().User?.QQ;
+            var prefix = userName.IsNullOrDefault() ? string.Empty : $"[{userName}]";
             return $"{DateTime.Now:HH:mm:ss}> {prefix}{message}";
         }
-
-        public IQQContext Context { get; set; }
     }
 }

@@ -13,7 +13,7 @@ namespace WebQQ.Im.Action
 
         public override HttpRequestItem BuildRequest()
         {
-            var req = new HttpRequestItem(HttpMethodType.Get, QQConstants.URL_CHECK_QRCODE);
+            var req = new HttpRequestItem(HttpMethodType.Get, ApiUrls.CheckQRCode);
             req.AddQueryValue("webqq_type", "10");
             req.AddQueryValue("remember_uin", "1");
             req.AddQueryValue("login2qq", "1");

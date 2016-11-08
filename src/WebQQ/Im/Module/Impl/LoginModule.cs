@@ -63,7 +63,16 @@ namespace WebQQ.Im.Module.Impl
                 })
                 .PushAction<CheckSigAction>()
                 .PushAction<GetVfwebqqAction>()
-                .PushAction<ChannelLoginAction>()
+                .PushAction<ChannelLoginAction>(async (sender, @event) => // 2.»ñÈ¡¶þÎ¬ÂëÉ¨Ãè×´Ì¬
+                {
+                    if (@event.Type != ActionEventType.EvtOK) return;
+                    await Context.FireNotifyAsync(QQNotifyEvent.CreateEvent(QQNotifyEventType.LoginSuccess));
+                })
+                //.PushAction<GetFriendsAction>()
+                //.PushAction<GetGroupNameListAction>()
+                .PushAction<GetDiscuzListAction>()
+                .PushAction<GetSelfInfoAction>()
+                .PushAction<GetOnlineBuddiesAction>()
                 .ExecuteAsync();
         }
     }
