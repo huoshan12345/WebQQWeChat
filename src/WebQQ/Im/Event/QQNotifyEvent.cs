@@ -86,15 +86,11 @@ namespace WebQQ.Im.Event
 
     public class QQNotifyEvent : EventArgs
     {
-        private static readonly ConcurrentDictionary<QQNotifyEventType, QQNotifyEvent> EmptyEvents;
+        private static readonly ConcurrentDictionary<QQNotifyEventType, QQNotifyEvent> EmptyEvents
+            = new ConcurrentDictionary<QQNotifyEventType, QQNotifyEvent>();
 
         public QQNotifyEventType Type { get; }
         public object Target { get; }
-
-        static QQNotifyEvent()
-        {
-            EmptyEvents = new ConcurrentDictionary<QQNotifyEventType, QQNotifyEvent>();
-        }
 
         private QQNotifyEvent(QQNotifyEventType type, object target = null)
         {

@@ -25,16 +25,14 @@ namespace HttpAction.Action
         {
             try
             {
+                if (OnActionEvent != null) await OnActionEvent.Invoke(this, actionEvent);
                 if (actionEvent.Type == ActionEventType.EvtRetry) ++RetryTimes;
                 else RetryTimes = 0;
-                if (OnActionEvent != null)
-                {
-                    await OnActionEvent.Invoke(this, actionEvent); 
-                }
                 return actionEvent;
             }
             catch (Exception ex)
             {
+                ++RetryTimes;
                 return await HandleExceptionAsync(ex);
             }
         }

@@ -24,46 +24,41 @@ namespace WebWeChat.Im.Module.Impl
         {
             return new WeChatActionFuture(Context, listener)
                 .PushAction<GetUuidAction>()
-                .PushAction<GetQRCodeAction>((sender, @event) =>
+                .PushAction<GetQRCodeAction>(async (sender, @event) =>
                 {
-                    if (@event.Type != ActionEventType.EvtOK)
-                    {
-                        var verify = (Image)@event.Target;
-                        Context.FireNotify(new WeChatNotifyEvent(WeChatNotifyEventType.QRCodeReady, verify));
-                    }
-                    return Task.CompletedTask;
+                    if (@event.Type != ActionEventType.EvtOK) return;
+
+                    var verify = (Image)@event.Target;
+                    await Context.FireNotifyAsync(WeChatNotifyEvent.CreateEvent(WeChatNotifyEventType.QRCodeReady, verify));
                 })
-                .PushAction<WatiForLoginAction>((sender, @event) =>
+                .PushAction<WatiForLoginAction>(async (sender, @event) =>
                 {
-                    if (@event.Type == ActionEventType.EvtOK)
+                    if (@event.Type != ActionEventType.EvtOK) return;
+
+                    var result = (WatiForLoginResult)@event.Target;
+                    switch (result)
                     {
-                        var result = (WatiForLoginResult)@event.Target;
-                        switch (result)
-                        {
-                            case WatiForLoginResult.Success:
-                                Context.FireNotify(new WeChatNotifyEvent(WeChatNotifyEventType.QRCodeSuccess));
-                                break;
-                            case WatiForLoginResult.QRCodeInvalid:
-                                Context.FireNotify(new WeChatNotifyEvent(WeChatNotifyEventType.QRCodeInvalid));
-                                @event.Type = ActionEventType.EvtError; // 令后续动作不再执行
-                                break;
-                            case WatiForLoginResult.ScanCode:
-                                @event.Type = ActionEventType.EvtRepeat;
-                                break;
-                        }
+                        case WatiForLoginResult.Success:
+                            await Context.FireNotifyAsync(WeChatNotifyEvent.CreateEvent(WeChatNotifyEventType.QRCodeSuccess));
+                            break;
+                        case WatiForLoginResult.QRCodeInvalid:
+                            await
+                                Context.FireNotifyAsync(WeChatNotifyEvent.CreateEvent(WeChatNotifyEventType.QRCodeInvalid));
+                            @event.Type = ActionEventType.EvtError; // 令后续动作不再执行
+                            break;
+                        case WatiForLoginResult.ScanCode:
+                            @event.Type = ActionEventType.EvtRepeat;
+                            break;
                     }
-                    return Task.CompletedTask;
                 })
                 .PushAction<WebLoginAction>()
                 .PushAction<WebwxInitAction>()
                 .PushAction<StatusNotifyAction>()
-                .PushAction<GetContactAction>((sender, @event) =>
+                .PushAction<GetContactAction>(async (sender, @event) =>
                 {
-                    if (@event.Type != ActionEventType.EvtOK)
-                    {
-                        Context.FireNotify(new WeChatNotifyEvent(WeChatNotifyEventType.LoginSuccess));
-                    }
-                    return Task.CompletedTask;
+                    if (@event.Type != ActionEventType.EvtOK) return;
+
+                    await Context.FireNotifyAsync(WeChatNotifyEvent.CreateEvent(WeChatNotifyEventType.LoginSuccess));
                 })
                 .ExecuteAsync();
         }
@@ -74,7 +69,6 @@ namespace WebWeChat.Im.Module.Impl
             var wxSync = new WebwxSyncAction(Context, async (s, e) =>
             {
                 if (e.Type == ActionEventType.EvtRetry) return;
-
                 Dispatcher.PushActor(sync);
                 if (e.Type == ActionEventType.EvtOK)
                 {
@@ -82,7 +76,7 @@ namespace WebWeChat.Im.Module.Impl
                     // if (msgs.Count == 0) await Task.Delay(5 * 1000);
                     foreach (var msg in msgs)
                     {
-                        var notify = new WeChatNotifyEvent(WeChatNotifyEventType.Message, msg);
+                        var notify = WeChatNotifyEvent.CreateEvent(WeChatNotifyEventType.Message, msg);
                         await Context.FireNotifyAsync(notify);
                     }
                 }
@@ -93,7 +87,7 @@ namespace WebWeChat.Im.Module.Impl
                 if (@event.Type == ActionEventType.EvtError)
                 {
                     Context.GetModule<SessionModule>().State = SessionState.Offline;
-                    Context.FireNotify(new WeChatNotifyEvent(WeChatNotifyEventType.Offline));
+                    Context.FireNotify(WeChatNotifyEvent.CreateEvent(WeChatNotifyEventType.Offline));
                 }
                 else if (@event.Type == ActionEventType.EvtOK)
                 {
@@ -102,7 +96,7 @@ namespace WebWeChat.Im.Module.Impl
                     {
                         case SyncCheckResult.Offline:
                         case SyncCheckResult.Kicked:
-                            Context.FireNotify(new WeChatNotifyEvent(WeChatNotifyEventType.Offline));
+                            Context.FireNotify(WeChatNotifyEvent.CreateEvent(WeChatNotifyEventType.Offline));
                             return Task.CompletedTask;
 
                         case SyncCheckResult.UsingPhone:

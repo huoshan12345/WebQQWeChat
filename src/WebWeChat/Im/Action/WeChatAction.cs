@@ -87,7 +87,7 @@ namespace WebWeChat.Im.Action
                     {
                         var ex = (WeChatException)target;
                         Logger.LogError($"[Action={ActionName}, Result={typeName}, {ex}");
-                        await Context.FireNotifyAsync(new WeChatNotifyEvent(WeChatNotifyEventType.Error, ex));
+                        await Context.FireNotifyAsync(WeChatNotifyEvent.CreateEvent(WeChatNotifyEventType.Error, ex));
                         break;
                     }
                 case ActionEventType.EvtRetry:

@@ -18,6 +18,7 @@ namespace WebWeChat
     {
         private static readonly ManualResetEvent QuitEvent = new ManualResetEvent(false); // 用这个来保持控制台不退出
         private static Process _process = null;
+
         private static readonly WeChatNotifyEventListener Listener = async (client, notifyEvent) =>
         {
             var logger = client.GetSerivce<ILogger>();
@@ -40,13 +41,14 @@ namespace WebWeChat
                     }
 
                 case WeChatNotifyEventType.QRCodeSuccess:
-                    _process?.Kill();
+                    if (_process != null && !_process.HasExited) _process.Kill();
                     logger.LogInformation("请在手机上点击确认以登录");
                     break;
 
                 case WeChatNotifyEventType.QRCodeInvalid:
-                    _process?.Kill();
+                    if(_process != null && !_process.HasExited) _process.Kill();
                     logger.LogWarning("二维码已失效");
+                    QuitEvent.Set();
                     break;
 
                 case WeChatNotifyEventType.Message:
@@ -91,10 +93,7 @@ namespace WebWeChat
                 {
                     Console.WriteLine("登录失败");
                 }
-
                 QuitEvent.WaitOne();
-                // Console.Read(); // 不要用这句来保持不退出，会导致死锁
-                client.Dispose();
             }
         }
 
@@ -104,10 +103,8 @@ namespace WebWeChat
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
 #endif
             TestWeChat().Wait();
-
             Startup.Dispose(); // 释放全局资源
             Console.Read();
         }
-
     }
 }
