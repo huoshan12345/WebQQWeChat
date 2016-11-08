@@ -37,10 +37,10 @@ namespace WebQQ.Im.Action
 
         public override Task<ActionEvent> HandleResponse(HttpResponseItem response)
         {
-            var json = response.ResponseString.ToJsonObj();
+            var json = response.ResponseString.ToJObject();
             if (json["retcode"].ToString() == "0")
             {
-                var ret = json["result"].ToJsonObj();
+                var ret = json["result"].ToJObject();
                 Account.User.Uin = ret["uin"].ToObject<long>();
                 Account.User.QQ = ret["uin"].ToObject<long>();
                 Session.SessionId = ret["psessionid"].ToString();

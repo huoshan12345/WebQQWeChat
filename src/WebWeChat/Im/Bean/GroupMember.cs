@@ -17,7 +17,7 @@ namespace WebWeChat.Im.Bean
         /// </summary>
         public string NickName { get; set; }
 
-        public int AttrStatus { get; set; }
+        public long AttrStatus { get; set; }
 
         /// <summary>
         /// 用户名拼音缩写

@@ -155,8 +155,7 @@ namespace WebQQ.Im.Bean
         /// <summary>
         /// 头像
         /// </summary>
-        [JsonIgnore]
-        public Image Face { get; set; }
+        public int Face { get; set; }
 
         /// <summary>
         /// 对方加好友验证请求设置
@@ -164,14 +163,5 @@ namespace WebQQ.Im.Bean
         public QQAllow Allow { get; set; }
 
         public override string ToString() => $"QQUser [qq={QQ}, nickname={Nickname}, status={Status}]";
-
-        public override int GetHashCode() => (int)this.Uin;
-
-        public override bool Equals(object obj)
-        {
-            if (obj == null || this == obj) return false;
-            var m = obj as QQUser;
-            return (m?.Uin == Uin);
-        }
     }
 }

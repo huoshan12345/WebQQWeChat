@@ -61,7 +61,9 @@ namespace WebWeChat
                             var reply = await client.GetRobotReply(RobotType.Tuling, msg.Content);
                             if (reply.Type == ActionEventType.EvtOK)
                             {
-                                await client.SendMsg(MessageSent.CreateTextMsg((string)reply.Target, userName, msg.ToUserName));
+                                var text = (string) reply.Target;
+                                text = $"{text} --来自机器人回复";
+                                await client.SendMsg(MessageSent.CreateTextMsg(text, userName, msg.ToUserName));
                             }
                         }
                         break;

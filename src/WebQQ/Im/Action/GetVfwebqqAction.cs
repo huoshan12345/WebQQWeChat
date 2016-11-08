@@ -29,10 +29,10 @@ namespace WebQQ.Im.Action
 
         public override Task<ActionEvent> HandleResponse(HttpResponseItem response)
         {
-            var json = response.ResponseString.ToJsonObj();
+            var json = response.ResponseString.ToJObject();
             if (json["retcode"].ToString() == "0")
             {
-                var ret = json["result"].ToJsonObj();
+                var ret = json["result"].ToJObject();
                 Session.Vfwebqq = ret["vfwebqq"].ToString();
                 return NotifyActionEventAsync(ActionEventType.EvtOK);
             }

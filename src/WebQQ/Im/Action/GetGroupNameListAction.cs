@@ -32,7 +32,7 @@ namespace WebQQ.Im.Action
 
         public override Task<ActionEvent> HandleResponse(HttpResponseItem response)
         {
-            var json = response.ResponseString.ToJsonObj();
+            var json = response.ResponseString.ToJObject();
             if (json["retcode"].ToString() == "0")
             {
                 return NotifyActionEventAsync(ActionEventType.EvtOK);

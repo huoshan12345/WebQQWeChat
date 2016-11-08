@@ -63,7 +63,7 @@ namespace WebQQ.Im.Module.Impl
                 })
                 .PushAction<CheckSigAction>()
                 .PushAction<GetVfwebqqAction>()
-                .PushAction<ChannelLoginAction>(async (sender, @event) => // 2.»ñÈ¡¶þÎ¬ÂëÉ¨Ãè×´Ì¬
+                .PushAction<ChannelLoginAction>(async (sender, @event) =>
                 {
                     if (@event.Type != ActionEventType.EvtOK) return;
                     await Context.FireNotifyAsync(QQNotifyEvent.CreateEvent(QQNotifyEventType.LoginSuccess));
