@@ -3,7 +3,7 @@
   "version": 2,
   "targets": {
     ".NETFramework,Version=v4.6.1": {
-      "FxUtility/0.1.0-beta": {
+      "FxUtility/0.1.1": {
         "type": "package",
         "dependencies": {
           "Microsoft.Extensions.Logging.Abstractions": "1.0.0",
@@ -248,7 +248,7 @@
       }
     },
     ".NETStandard,Version=v1.6": {
-      "FxUtility/0.1.0-beta": {
+      "FxUtility/0.1.1": {
         "type": "package",
         "dependencies": {
           "Microsoft.Extensions.Logging.Abstractions": "1.0.0",
@@ -1464,12 +1464,12 @@
     }
   },
   "libraries": {
-    "FxUtility/0.1.0-beta": {
-      "sha512": "MZBTrzGcD0szraRi2Mbvm7R30yCufZ/VT/c74s4o21oSHPjvxJ2bbLvGmcOnCJe9OsnPhbp+f5Dx9jtD+bAMUA==",
+    "FxUtility/0.1.1": {
+      "sha512": "p4pFS9XtzesMYdKdO8WHDXP2vRcbrKP/Hh/MFKqEhmxodlQqHrXJFH2wka0S/7ET80KETdXKkF3XYvLIYkJ33A==",
       "type": "package",
-      "path": "FxUtility/0.1.0-beta",
+      "path": "FxUtility/0.1.1",
       "files": [
-        "FxUtility.0.1.0-beta.nupkg.sha512",
+        "FxUtility.0.1.1.nupkg.sha512",
         "FxUtility.nuspec",
         "lib/net461/FxUtility.dll",
         "lib/netstandard1.6/FxUtility.dll"
@@ -4723,7 +4723,7 @@
   },
   "projectFileDependencyGroups": {
     "": [
-      "FxUtility >= 0.1.0-beta",
+      "FxUtility >= 0.1.1",
       "Microsoft.Extensions.Configuration.Abstractions >= 1.0.0",
       "Microsoft.Extensions.DependencyInjection.Abstractions >= 1.0.0"
     ],

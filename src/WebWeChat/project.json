@@ -27,7 +27,7 @@
   },
 
   "dependencies": {
-    "FxUtility": "0.1.0-beta",
+    "FxUtility": "0.1.1",
     "HttpAction": "1.0.0-*",
     "Microsoft.Extensions.Configuration": "1.0.0",
     "Microsoft.Extensions.Configuration.Json": "1.0.0",

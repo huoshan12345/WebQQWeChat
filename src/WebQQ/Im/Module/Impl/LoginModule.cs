@@ -68,8 +68,8 @@ namespace WebQQ.Im.Module.Impl
                     if (@event.Type != ActionEventType.EvtOK) return;
                     await Context.FireNotifyAsync(QQNotifyEvent.CreateEvent(QQNotifyEventType.LoginSuccess));
                 })
-                //.PushAction<GetFriendsAction>()
-                //.PushAction<GetGroupNameListAction>()
+                .PushAction<GetFriendsAction>()
+                .PushAction<GetGroupNameListAction>()
                 .PushAction<GetDiscuzListAction>()
                 .PushAction<GetSelfInfoAction>()
                 .PushAction<GetOnlineBuddiesAction>()

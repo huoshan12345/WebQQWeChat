@@ -17,13 +17,11 @@ namespace WebQQ.Im.Bean
         public string Name { get; set; }
 
         // key是好友的uin
-        private readonly ConcurrentDictionary<long, Friend> _friends = new ConcurrentDictionary<long, Friend>();
+        public ConcurrentDictionary<long, Friend> Friends { get; }= new ConcurrentDictionary<long, Friend>();
 
         public void AddFriend(Friend friend)
         {
-            _friends[friend.Uin] = friend;
+            Friends[friend.Uin] = friend;
         }
-
-        public IEnumerable<Friend> GetFriends => _friends.Values;
     }
 }

@@ -6,7 +6,7 @@
     // 
     public class QQGroupMember : QQStranger
     {
-        public QQGroup Group { get; set; }
+        public Group Group { get; set; }
 
         public string Card { get; set; }
     }

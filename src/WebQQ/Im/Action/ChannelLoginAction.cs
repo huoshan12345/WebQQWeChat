@@ -41,8 +41,8 @@ namespace WebQQ.Im.Action
             if (json["retcode"].ToString() == "0")
             {
                 var ret = json["result"].ToJObject();
-                Account.User.Uin = ret["uin"].ToObject<long>();
-                Account.User.QQ = ret["uin"].ToObject<long>();
+                Account.User.Uin = ret["uin"].ToLong();
+                Account.User.QQ = Account.User.Uin;
                 Session.SessionId = ret["psessionid"].ToString();
                 Account.User.Status = ret["status"].ToString().ToEnum(QQStatusType.Online);
                 Session.State = SessionState.Online;

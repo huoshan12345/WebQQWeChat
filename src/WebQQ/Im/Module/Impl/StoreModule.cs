@@ -14,40 +14,58 @@ namespace WebQQ.Im.Module.Impl
     /// </summary>
     public class StoreModule : QQModule
     {
-        // 主键是Category的index
-        private readonly ConcurrentDictionary<long, Category> _categories = new ConcurrentDictionary<long, Category>();
 
-        // key是好友的uin
-        private readonly ConcurrentDictionary<long, Friend> _friends = new ConcurrentDictionary<long, Friend>();
+        /// <summary>
+        /// 主键是Category的index
+        /// </summary>
+        public ConcurrentDictionary<long, Category> Categories { get; } = new ConcurrentDictionary<long, Category>();
+
+        /// <summary>
+        /// 主键是Group的Gid
+        /// </summary>
+        public ConcurrentDictionary<long, Group> Groups { get; } = new ConcurrentDictionary<long, Group>();
+        
+        /// <summary>
+        /// key是好友的uin
+        /// </summary>
+        public ConcurrentDictionary<long, Friend> Friends { get; } = new ConcurrentDictionary<long, Friend>();
 
         public StoreModule(IQQContext context) : base(context)
         {
         }
 
-        public IEnumerable<Friend> GetFriends => _friends.Values;
-
         public void AddCategory(Category category)
         {
-            _categories[category.Index] = category;
+            Categories[category.Index] = category;
         }
 
         public void AddFriend(Friend friend)
         {
-            if (_categories.ContainsKey(friend.CategoryIndex))
+            if (Categories.ContainsKey(friend.CategoryIndex))
             {
-                _categories[friend.CategoryIndex].AddFriend(friend);
+                Categories[friend.CategoryIndex].AddFriend(friend);
             }
             else
             {
                 AddCategory(new Category() { Index = friend.CategoryIndex });
                 AddFriend(friend);
             }
-            _friends[friend.Uin] = friend;
+            Friends[friend.Uin] = friend;
         }
 
         public Friend GetFriendByUin(long uin)
         {
-            return _friends.GetOrDefault(uin);
+            return Friends.GetOrDefault(uin);
+        }
+
+        public void AddGroup(Group group)
+        {
+            Groups[group.Gid] = group;
+        }
+
+        public Group GetGroupByGid(long gid)
+        {
+            return Groups.GetOrDefault(gid);
         }
     }
 }

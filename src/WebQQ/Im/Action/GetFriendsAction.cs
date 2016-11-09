@@ -24,10 +24,10 @@ namespace WebQQ.Im.Action
             {
                 {"h", "hello"},
                 {"vfwebqq", Session.Vfwebqq},
-                {"hash", QQEncryptor.GetHash(Account.User.Uin.ToString(), Session.Ptwebqq)}
-            }.ToString(Formatting.None);
+                {"hash", QQEncryptor.Hash(Account.User.Uin, Session.Ptwebqq)}
+            };
             var req = HttpRequestItem.CreateFormRequest(ApiUrls.GetFriends);
-            req.AddQueryValue("r", json);
+            req.AddQueryValue("r", json.ToSimpleString());
             req.Referrer = ApiUrls.ReferrerS;
             return req;
         }
@@ -80,36 +80,40 @@ namespace WebQQ.Im.Action
             var json = response.ResponseString.ToJObject();
             if (json["retcode"].ToString() == "0")
             {
-                var result = json["result"].ToObject<JObject>();
+                var result = json["result"];
 
                 // 分组
-                var categories = result["categories"].ToObject<JArray>();
-                foreach (var category in categories)
-                {
-                    var obj = new Category
-                    {
-                        Index = category["index"].ToObject<int>(),
-                        Name = category["name"].ToString(),
-                        Sort = category["sort"].ToObject<int>()
-                    };
-                    Store.AddCategory(obj);
-                }
+                //var categories = result["categories"].ToJArray();
+                //foreach (var category in categories)
+                //{
+                //    var obj = new Category
+                //    {
+                //        Index = category["index"].ToObject<int>(),
+                //        Name = category["name"].ToString(),
+                //        Sort = category["sort"].ToObject<int>()
+                //    };
+                //    Store.AddCategory(obj);
+                //}
+                var categories = result["categories"].ToObject<List<Category>>();
+                categories.ForEach(Store.AddCategory);
 
                 // 好友
-                var friends = result["friends"].ToObject<JArray>();
-                foreach (var friend in friends)
-                {
-                    var obj = new Friend
-                    {
-                        Uin = friend["uin"].ToLong(),
-                        CategoryIndex = friend["categories"].ToInt(),
-                        Flag = friend["flag"].ToInt(),
-                    };
-                    Store.AddFriend(obj);
-                }
+                //var friends = result["friends"].ToJArray();
+                //foreach (var friend in friends)
+                //{
+                //    var obj = new Friend
+                //    {
+                //        Uin = friend["uin"].ToLong(),
+                //        CategoryIndex = friend["categories"].ToInt(),
+                //        Flag = friend["flag"].ToInt(),
+                //    };
+                //    Store.AddFriend(obj);
+                //}
+                var friends = result["friends"].ToObject<List<Friend>>();
+                friends.ForEach(Store.AddFriend);
 
                 // 好友信息 face/flag/nick/uin
-                var infos = result["info"].ToObject<JArray>();
+                var infos = result["info"].ToJArray();
                 foreach (var info in infos)
                 {
                     var uin = info["uin"].ToObject<long>();
@@ -124,9 +128,9 @@ namespace WebQQ.Im.Action
                 foreach (var markname in marknames)
                 {
                     var uin = markname["uin"].ToObject<long>();
-                    var buddy = Store.GetFriendByUin(uin);
-                    buddy.MarkName = markname["markname"].ToString();
-                    buddy.MarknameType = markname["type"].ToInt();
+                    var friend = Store.GetFriendByUin(uin);
+                    friend.MarkName = markname["markname"].ToString();
+                    friend.MarknameType = markname["type"].ToInt();
                 }
 
                 // 好友vip信息
@@ -134,9 +138,9 @@ namespace WebQQ.Im.Action
                 foreach (var vipInfo in vipInfos)
                 {
                     var uin = vipInfo["u"].ToLong();
-                    var buddy = Store.GetFriendByUin(uin);
-                    buddy.VipLevel = vipInfo["vip_level"].ToInt();
-                    buddy.IsVip = vipInfo["is_vip"].ToInt() != 0;
+                    var friend = Store.GetFriendByUin(uin);
+                    friend.VipLevel = vipInfo["vip_level"].ToInt();
+                    friend.IsVip = vipInfo["is_vip"].ToInt() != 0;
                 }
                 return NotifyActionEventAsync(ActionEventType.EvtOK);
             }

@@ -27,7 +27,7 @@
           "lib/netstandard1.3/CoreCompat.System.Drawing.dll": {}
         }
       },
-      "FxUtility/0.1.0-beta": {
+      "FxUtility/0.1.1": {
         "type": "package",
         "dependencies": {
           "Microsoft.Extensions.Logging.Abstractions": "1.0.0",
@@ -2529,7 +2529,7 @@
         "type": "project",
         "framework": ".NETStandard,Version=v1.6",
         "dependencies": {
-          "FxUtility": "0.1.0-beta",
+          "FxUtility": "0.1.1",
           "Microsoft.Extensions.Configuration.Abstractions": "1.0.0",
           "Microsoft.Extensions.DependencyInjection.Abstractions": "1.0.0",
           "NETStandard.Library": "1.6.0",
@@ -2545,7 +2545,7 @@
       }
     },
     ".NETFramework,Version=v4.6.1": {
-      "FxUtility/0.1.0-beta": {
+      "FxUtility/0.1.1": {
         "type": "package",
         "dependencies": {
           "Microsoft.Extensions.Logging.Abstractions": "1.0.0",
@@ -2961,7 +2961,7 @@
         "type": "project",
         "framework": ".NETFramework,Version=v4.6.1",
         "dependencies": {
-          "FxUtility": "0.1.0-beta",
+          "FxUtility": "0.1.1",
           "Microsoft.Extensions.Configuration.Abstractions": "1.0.0",
           "Microsoft.Extensions.DependencyInjection.Abstractions": "1.0.0",
           "System.Net.Http": "4.0.0"
@@ -2987,12 +2987,12 @@
         "lib/netstandard1.3/CoreCompat.System.Drawing.dll"
       ]
     },
-    "FxUtility/0.1.0-beta": {
-      "sha512": "MZBTrzGcD0szraRi2Mbvm7R30yCufZ/VT/c74s4o21oSHPjvxJ2bbLvGmcOnCJe9OsnPhbp+f5Dx9jtD+bAMUA==",
+    "FxUtility/0.1.1": {
+      "sha512": "p4pFS9XtzesMYdKdO8WHDXP2vRcbrKP/Hh/MFKqEhmxodlQqHrXJFH2wka0S/7ET80KETdXKkF3XYvLIYkJ33A==",
       "type": "package",
-      "path": "FxUtility/0.1.0-beta",
+      "path": "FxUtility/0.1.1",
       "files": [
-        "FxUtility.0.1.0-beta.nupkg.sha512",
+        "FxUtility.0.1.1.nupkg.sha512",
         "FxUtility.nuspec",
         "lib/net461/FxUtility.dll",
         "lib/netstandard1.6/FxUtility.dll"
@@ -3280,7 +3280,7 @@
       ]
     },
     "Microsoft.NETCore.App/1.0.1": {
-      "sha512": "Magix7ezmhzMc1pNIH7an8vkZYd7a5JjAhXJoYUw3ukRzRfYN2SLetRtQXe/3X9/otnMH1K1J5oOP/q5Mpv7Lg==",
+      "sha512": "M3iH7u95LntTkJtI/DqN/96MRlb8Wa0SjnXldxHA4FjlvEqghOhwK087bDZAZaTN9C4YHckvaYH3ka9eYWZZZw==",
       "type": "package",
       "path": "Microsoft.NETCore.App/1.0.1",
       "files": [
@@ -3328,7 +3328,7 @@
       ]
     },
     "Microsoft.NETCore.Jit/1.0.4": {
-      "sha512": "E3N/4tY7denm+CdHVnxLrdARQsUSjSZzd1pjUwSlGvGf9yDM6S8XcFWz9K7dFnB/g39ovTRjKEoXZWE3fX55gQ==",
+      "sha512": "IcHTGj+vTFcOu7/flwNg+CWIfTsxqHWgj08MKOtYwS5k0EuLvx6PrYsn7vHCV0SUTk1zbQ1l0EJj1UdxTMyx4w==",
       "type": "package",
       "path": "Microsoft.NETCore.Jit/1.0.4",
       "files": [
@@ -3353,7 +3353,7 @@
       ]
     },
     "Microsoft.NETCore.Runtime.CoreCLR/1.0.4": {
-      "sha512": "Bgou+2REFu7mW/gh7f3LUIpvnCHqdOxCgIYMnSM6MtmqthleuFXSuDjub5zlT0G78sHPhnPqUYA+j1J6hZK/8Q==",
+      "sha512": "r4/aP7VYcJ+W/rJVFU+jAdjF4KrsHRDYQJ+p8weUP5n65yLzWXlQTVY6OsR560aV5EF7jc65dqsNXIryUCrEkQ==",
       "type": "package",
       "path": "Microsoft.NETCore.Runtime.CoreCLR/1.0.4",
       "files": [
@@ -8084,7 +8084,7 @@
   },
   "projectFileDependencyGroups": {
     "": [
-      "FxUtility >= 0.1.0-beta",
+      "FxUtility >= 0.1.1",
       "HttpAction >= 1.0.0-*",
       "Microsoft.Extensions.Configuration >= 1.0.0",
       "Microsoft.Extensions.Configuration.Json >= 1.0.0",

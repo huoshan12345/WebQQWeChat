@@ -46,7 +46,7 @@ namespace WebQQ.Im.Bean
         /// <summary>
         /// 所在群
         /// </summary>
-        public QQGroup Group { get; set; }
+        public Group Group { get; set; }
         /// <summary>
         /// 讨论组
         /// </summary>

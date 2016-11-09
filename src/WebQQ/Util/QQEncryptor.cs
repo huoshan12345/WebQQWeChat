@@ -11,75 +11,8 @@ namespace WebQQ.Util
     public static class QQEncryptor
     {
         private static readonly Regex RegMd5 = new Regex(@"^([a-fA-F0-9]{32})$");
-        /// <summary>
-        /// 连接两个字节数组
-        /// </summary>
-        /// <param name="b1"></param>
-        /// <param name="b2"></param>
-        /// <returns></returns>
-        private static byte[] JoinBytes(byte[] b1, byte[] b2)
-        {
-            var b3 = new byte[b1.Length + b2.Length];
-            Array.Copy(b1, b3, b1.Length);
-            Array.Copy(b2, 0, b3, b1.Length, b2.Length);
-            return b3;
-        }
 
-        /// <summary>
-        /// 加密字符串，并转换十六进制表示的字符串
-        /// </summary>
-        /// <param name="input"></param>
-        /// <returns></returns>
-        public static string Md5(string input)
-        {
-            return Encoding.UTF8.GetBytes(input).ToMd5String();
-        }
-
-        /// <summary>
-        /// 对QQ信息进行加密
-        /// </summary>
-        /// <param name="uin">QQ号</param>
-        /// <param name="password"></param>
-        /// <param name="verifyCode"></param>
-        /// <returns></returns>
-        private static string Md5QQ(long uin, string password, string verifyCode)
-        {
-            return Md5QQ(uin, password.ToUtf8Bytes().ToMd5(), verifyCode);
-        }
-
-        /// <summary>
-        /// 对QQ信息进行加密
-        /// </summary>
-        /// <param name="uin">QQ号</param>
-        /// <param name="md5Pwd"></param>
-        /// <param name="verifyCode">验证码</param>
-        /// <returns></returns>
-        private static string Md5QQ(long uin, byte[] md5Pwd, string verifyCode)
-        {
-            var b1 = md5Pwd;
-            var b2 = BitConverter.GetBytes(uin);
-            if (BitConverter.IsLittleEndian)
-            {
-                Array.Reverse(b2); // 此处要用大端模式
-            }
-            var s1 = JoinBytes(b1, b2).ToMd5String();
-            return Md5(s1 + verifyCode.ToUpper());
-        }
-
-        private static string LongToHexString(long uin)
-        {
-            var buffer = BitConverter.GetBytes(uin);
-            if (BitConverter.IsLittleEndian)
-            {
-                Array.Reverse(buffer); // 此处要用大端模式
-            }
-            var builder = new StringBuilder();
-            for (var i = 0; i < buffer.Length; i++)
-            {
-                builder.Append(buffer[i].ToString("X2"));
-            }
-            return builder.ToString();
-        }
+        private static readonly string[] HexChars = { "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "A", "B", "C", "D", "E", "F" };
 
         /// <summary>
         /// 判断是不是MD5字符串
@@ -89,22 +22,6 @@ namespace WebQQ.Util
         private static bool IsMd5(string input)
         {
             return RegMd5.IsMatch(input);
-        }
-
-        private static string RsaQQ(long uin, string password, string verifyCode)
-        {
-            var js = Resource.LoadLocalResource("encrypt.js", stream => stream.ToString(Encoding.UTF8));
-            object[] args = { password, uin, verifyCode.ToUpper(), IsMd5(password).ToString().ToLower() };
-            var code = string.Format("getEncryption('{0}','{1}','{2}',{3})", args);
-            var engine = new Jint.Engine();
-            engine.Execute(js);
-            var s = engine.Execute(code).GetCompletionValue().AsString();
-            return s;
-        }
-
-        public static string EncryptQQ(long uin, string password, string verifyCode)
-        {
-            return RsaQQ(uin, password, verifyCode);
         }
 
         /// <summary>
@@ -183,8 +100,8 @@ namespace WebQQ.Util
             var v1 = new StringBuilder(2 * u1.Length);
             foreach (var ch in u1)
             {
-                v1.Append(n[ch >> 4 & 15]);
-                v1.Append(n[ch & 15]);
+                v1.Append(HexChars[ch >> 4 & 15]);
+                v1.Append(HexChars[ch & 15]);
             }
             return v1.ToString();
         }
