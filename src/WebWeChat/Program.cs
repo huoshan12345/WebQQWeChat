@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Drawing;
+using System.Drawing.Imaging;
 using System.Text;
 using WebWeChat.Im;
 using WebWeChat.Im.Event;
@@ -32,7 +33,7 @@ namespace WebWeChat
                     {
                         var verify = (Image)notifyEvent.Target;
                         const string path = "verify.png";
-                        verify.Save(path);
+                        verify.Save(path, ImageFormat.Png);
                         logger.LogInformation($"请扫描在项目根目录下{path}图片");
 #if NET
                         _process = Process.Start(path);

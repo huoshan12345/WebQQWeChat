@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Drawing;
+using System.Drawing.Imaging;
 using System.Text;
 using FxUtility.Extensions;
 using Microsoft.Extensions.Logging;
@@ -59,8 +60,8 @@ namespace WebQQ
                     {
                         var verify = (Image)notifyEvent.Target;
                         const string path = "verify.png";
-                        verify.Save(path);
-                        logger.LogInformation("请扫描在项目根目录下qrcode.png图片");
+                        verify.Save(path, ImageFormat.Png);
+                        logger.LogInformation($"请扫描在项目根目录下{path}图片");
 #if NET
                         _process = Process.Start(path);
 #endif

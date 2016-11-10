@@ -17,7 +17,8 @@ namespace HttpAction.Core
             }
         }
 
-        public string RawUrl { get; }
+        public Uri Uri { get; }
+        public string RawUrl => Uri.AbsoluteUri;
         public Encoding EncodingType { get; set; }
         public HttpMethodType Method { get; set; }
         public HttpResultType ResultType { get; set; }
@@ -44,13 +45,14 @@ namespace HttpAction.Core
 
         public HttpRequestItem(HttpMethodType method, string rawUrl)
         {
-            RawUrl = rawUrl;
+            Uri = new Uri(rawUrl);
+            // RawUrl = rawUrl;
             Method = method;
             HeaderMap = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
             {
-                //[HttpConstants.ContentType] = Method == HttpMethodType.Post
-                //    ? HttpConstants.DefaultPostContentType : HttpConstants.DefaultGetContentType,
-                // [HttpConstants.Host] = new Uri(rawUrl).Host,
+                [HttpConstants.ContentType] = Method == HttpMethodType.Post
+                    ? HttpConstants.DefaultPostContentType : HttpConstants.DefaultGetContentType,
+                [HttpConstants.Host] = Uri.Host,
             };
             if (Method != HttpMethodType.Get)
             {
