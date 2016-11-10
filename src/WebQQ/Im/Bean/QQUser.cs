@@ -1,36 +1,37 @@
 ﻿using System;
-using System.Drawing;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using WebQQ.Util;
 
 namespace WebQQ.Im.Bean
 {
-    /// <summary>
-    /// QQ普通用户，保存了所有用户的基本信息
-    /// </summary>
     public class QQUser
-    {
-        public DateTime BirthdayDate { get; set; }
-
-        /// <summary>
-        /// 生日
-        /// </summary>
-        private Birthday _birthday;
-        public Birthday Birthday
-        {
-            get { return _birthday; }
-            set
-            {
-                _birthday = value;
-                BirthdayDate = new DateTime(_birthday.Year, _birthday.Month, _birthday.Day);
-            }
-        }
-
-        /// <summary>
+    {        /// <summary>
         /// 头像
         /// </summary>
         public int Face { get; set; }
+
+        /// <summary>
+        /// 标识
+        /// </summary>
+        public long Uin { get; set; }
+
+        /// <summary>
+        /// 个性签名
+        /// </summary>
+        [JsonProperty("lnick")]
+        public string LongNick { get; set; }
+
+        /// <summary>
+        /// 昵称
+        /// </summary>
+        public string Nick { get; set; }
+
+        /// <summary>
+        /// 备注
+        /// </summary>
+        public string MarkName { get; set; }
 
         /// <summary>
         /// 电话
@@ -46,44 +47,32 @@ namespace WebQQ.Im.Bean
         /// </summary>
         public AllowType Allow { get; set; }
 
-        /// <summary>
-        /// 毕业院校
-        /// </summary>
-        public string College { get; set; }
 
         /// <summary>
-        /// 标识
+        /// 邮箱
         /// </summary>
-        public long Uin { get; set; }
-        
-        /// <summary>
-        /// 血型
-        /// </summary>
-        public int Blood { get; set; }
+        public string Email { get; set; }
 
         /// <summary>
-        /// 星座
+        /// 省
         /// </summary>
-        public int Constel { get; set; }
+        public string Province { get; set; }
 
         /// <summary>
-        /// 个性签名
+        /// 账户（目前是qq号）
         /// </summary>
-        public string Lnick { get; set; }
+        public long Account { get; set; }
 
-        public string Vfwebqq { get; set; }
 
         /// <summary>
-        /// 个人主页
+        /// 性别
         /// </summary>
-        public string Homepage { get; set; }
+        public string Gender { get; set; }
 
         /// <summary>
-        /// VIP等级
+        /// 手机
         /// </summary>
-        [JsonProperty("vip_info")]
-        public int VipInfo { get; set; }
-
+        public string Mobile { get; set; }
         /// <summary>
         /// 城市
         /// </summary>
@@ -105,34 +94,49 @@ namespace WebQQ.Im.Bean
         public int Shengxiao { get; set; }
 
         /// <summary>
-        /// 昵称
+        /// 血型
         /// </summary>
-        public string Nick { get; set; }
+        public int Blood { get; set; }
 
         /// <summary>
-        /// 邮箱
+        /// 星座
         /// </summary>
-        public string Email { get; set; }
+        public int Constel { get; set; }
+
+
+        public string Vfwebqq { get; set; }
 
         /// <summary>
-        /// 省
+        /// 个人主页
         /// </summary>
-        public string Province { get; set; }
+        public string Homepage { get; set; }
 
         /// <summary>
-        /// 账户（目前是qq号）
+        /// VIP等级
         /// </summary>
-        public long Account { get; set; }
+        [JsonProperty("vip_info")]
+        public int VipInfo { get; set; }
 
         /// <summary>
-        /// 性别
+        /// 毕业院校
         /// </summary>
-        public string Gender { get; set; }
+        public string College { get; set; }
+
+        public DateTime BirthdayDate { get; set; }
 
         /// <summary>
-        /// 手机
+        /// 生日
         /// </summary>
-        public string Mobile { get; set; }
+        private Birthday _birthday;
+        public Birthday Birthday
+        {
+            get { return _birthday; }
+            set
+            {
+                _birthday = value;
+                BirthdayDate = new DateTime(_birthday.Year, _birthday.Month, _birthday.Day);
+            }
+        }
     }
 
     public class Birthday

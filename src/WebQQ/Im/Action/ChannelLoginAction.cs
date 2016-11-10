@@ -32,7 +32,7 @@ namespace WebQQ.Im.Action
                 {"psessionid", ""}
             }.ToString(Formatting.None);
             req.AddQueryValue("r", json);
-            req.AddHeader(HttpConstants.Referrer, ApiUrls.Referrer);
+            req.Referrer = ApiUrls.Referrer;
             return req;
         }
 

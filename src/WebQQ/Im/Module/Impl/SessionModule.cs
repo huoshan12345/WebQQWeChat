@@ -3,14 +3,10 @@ using WebQQ.Im.Core;
 
 namespace WebQQ.Im.Module.Impl
 {
-
     public enum SessionState
     {
         Offline,
         Online,
-        Kicked,
-        Logining,
-        Error
     }
 
     /// <summary>

@@ -40,24 +40,6 @@ namespace WebQQ.Util
         }
 
         /// <summary>
-        /// 获取好友列表时计算的Hash参数 v2014.06.14更新
-        /// </summary>
-        /// <param name="uin"></param>
-        /// <param name="ptwebqq"></param>
-        /// <returns></returns>
-        public static string GetHash(string uin, string ptwebqq)
-        {
-            const string url = "https://raw.githubusercontent.com/im-qq/webqq-core/master/src/main/resources/hash.js";
-            var js = Resource.LoadResourceAsync("hash.js", url, item => item.ToString(Encoding.UTF8)).Result;
-            object[] args = { uin, ptwebqq };
-            var code = string.Format("hash('{0}','{1}')", args);
-            var engine = new Jint.Engine();
-            engine.Execute(js);
-            var s = engine.Execute(code).GetCompletionValue().AsString();
-            return s;
-        }
-
-        /// <summary>
         /// 计算GTK(gtk啥东东？)这个数在操作群和空间时会用到。
         /// </summary>
         /// <param name="skey"></param>

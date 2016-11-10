@@ -115,7 +115,7 @@ namespace WebQQ.Im.Action
                 {
                     var uin = vipInfo["u"].ToLong();
                     var friend = Store.GetFriendByUin(uin);
-                    friend.VipInfo = vipInfo["vip_level"].ToInt();
+                    friend.VipLevel = vipInfo["vip_level"].ToInt();
                     friend.IsVip = vipInfo["is_vip"].ToInt() != 0;
                 }
                 return NotifyActionEventAsync(ActionEventType.EvtOK);

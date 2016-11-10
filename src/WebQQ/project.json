@@ -18,7 +18,7 @@
   "buildOptions": {
     "emitEntryPoint": true,
     "copyToOutput": {
-      "include": [ "Resources/hash.js" ],
+      "include": [ "project.json" ],
       "exclude": [ "" ],
       "excludeFiles": [ "" ],
       "builtIns": {},
@@ -44,7 +44,6 @@
         "System.Net.Http": "4.0.0.0"
       },
       "dependencies": {
-        "Jint": "2.9.1"
       },
       "buildOptions": {
         "define": [ "NET" ],
@@ -54,7 +53,6 @@
     "netcoreapp1.1": {
       "dependencies": {
         "CoreCompat.System.Drawing": "1.0.0-*",
-        "Jint-netcore": "2.7.1-final",
         "Microsoft.NETCore.App": {
           "version": "1.0.1-*",
           "type": "platform"
@@ -71,5 +69,6 @@
       }
     }
 
-  }
+  },
+  "userSecretsId": "aspnet-WebQQ-20161110030549"
 }

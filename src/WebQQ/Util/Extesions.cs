@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using FxUtility.Extensions;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
@@ -44,15 +45,20 @@ namespace WebQQ.Util
             return token.ToObject<long>();
         }
 
-        //public static T ToEnum<T>(this string value, T defaultValue = default(T)) where T : struct, IConvertible
-        //{
-        //    if (string.IsNullOrEmpty(value))
-        //    {
-        //        return defaultValue;
-        //    }
+        public static T ToEnum<T>(this JToken token) where T : struct, IConvertible
+        {
+            return token.ToString().ToEnum<T>();
+        }
 
-        //    T result;
-        //    return Enum.TryParse(value, true, out result) ? result : defaultValue;
-        //}
+        public static bool GetAndDo<TKey, TValue>(this IDictionary<TKey, TValue> dic, TKey key,  Action<TValue> action)
+        {
+            var item = dic.GetOrDefault(key);
+            if (item != null)
+            {
+                action(item);
+                return true;
+            }
+            else return false;
+        }
     }
 }

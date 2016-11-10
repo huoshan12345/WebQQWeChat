@@ -41,7 +41,7 @@ namespace WebWeChat.Im
             _services.AddSingleton<IHttpService, WeChatHttp>();
             _services.AddSingleton<ILogger>(provider => new WeChatLogger(this, LogLevel.Information));
             _services.AddSingleton<IWeChatActionFactory, WeChatActionFactory>();
-            
+
             _serviceProvider = _services.BuildServiceProvider();
             Startup.Configure(_serviceProvider);
 
@@ -74,7 +74,7 @@ namespace WebWeChat.Im
 
         public Task FireNotifyAsync(WeChatNotifyEvent notifyEvent)
         {
-            return Task.Run(()=> FireNotify(notifyEvent));
+            return Task.Run(() => FireNotify(notifyEvent));
         }
 
         /// <inheritdoc />

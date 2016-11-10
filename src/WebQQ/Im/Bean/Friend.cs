@@ -1,14 +1,34 @@
 ﻿using FxUtility.Extensions;
+using Newtonsoft.Json;
 
 namespace WebQQ.Im.Bean
 {
-
     /// <summary>
-    /// QQ好友，出现在好友列表的用户
+    /// QQ好友
     /// </summary>
-    
-    public class Friend : QQUser
+    public class Friend
     {
+        /// <summary>
+        /// 头像
+        /// </summary>
+        public int Face { get; set; }
+
+        /// <summary>
+        /// 标识
+        /// </summary>
+        public long Uin { get; set; }
+
+        /// <summary>
+        /// 个性签名
+        /// </summary>
+        [JsonProperty("lnick")]
+        public string LongNick { get; set; }
+
+        /// <summary>
+        /// 昵称
+        /// </summary>
+        public string Nick { get; set; }
+
         /// <summary>
         /// 备注
         /// </summary>
@@ -26,7 +46,7 @@ namespace WebQQ.Im.Bean
 
         public string ShowName => MarkName.IsNullOrEmpty() ? (Nick.IsNullOrEmpty() ? Uin.ToString() : Nick) : MarkName;
 
-        // public int VipLevel { get; set; } // 可以用QQUser.VipInfo代替
+        public int VipLevel { get; set; } // 可以用QQUser.VipInfo代替
 
         public bool IsVip { get; set; }
     }
