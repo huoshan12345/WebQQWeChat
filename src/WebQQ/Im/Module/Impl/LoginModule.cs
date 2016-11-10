@@ -70,9 +70,9 @@ namespace WebQQ.Im.Module.Impl
                 })
                 .PushAction<GetFriendsAction>()
                 .PushAction<GetGroupNameListAction>()
-                .PushAction<GetDiscuzListAction>()
+                .PushAction<GetDiscussionListAction>()
                 .PushAction<GetSelfInfoAction>()
-                .PushAction<GetOnlineBuddiesAction>()
+                .PushAction<GetOnlineFriendsAction>()
                 .ExecuteAsync();
         }
     }

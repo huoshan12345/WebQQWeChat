@@ -25,8 +25,8 @@ namespace WebQQ.Im.Service.Impl
         /// <returns></returns>
         protected override string GetMessage(string message, Exception exception)
         {
-            var userName = _context.GetModule<AccountModule>().User?.QQ;
-            var prefix = userName.IsNullOrDefault() ? string.Empty : $"[{userName}]";
+            var userName = _context.GetModule<SessionModule>().Uin;
+            var prefix = userName.IsDefault() ? string.Empty : $"[{userName}]";
             return $"{DateTime.Now:HH:mm:ss}> {prefix}{message}";
         }
     }

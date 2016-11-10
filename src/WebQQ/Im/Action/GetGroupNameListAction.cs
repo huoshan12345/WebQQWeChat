@@ -23,7 +23,7 @@ namespace WebQQ.Im.Action
             var json = new JObject
             {
                 {"vfwebqq", Session.Vfwebqq},
-                {"hash", QQEncryptor.Hash(Account.User.Uin, Session.Ptwebqq)}
+                {"hash", QQEncryptor.Hash(Session.Uin, Session.Ptwebqq)}
             };
             req.AddQueryValue("r", json.ToSimpleString());
             req.Referrer = ApiUrls.Referrer;
@@ -64,8 +64,7 @@ namespace WebQQ.Im.Action
             {
                 var result = json["result"];
 
-                var gNameList = result["gnamelist"].ToJArray();
-                var groups = gNameList.ToObject<List<Group>>();
+                var groups = result["gnamelist"].ToObject<List<Group>>();
                 groups.ForEach(Store.AddGroup);
 
                 // 用不上

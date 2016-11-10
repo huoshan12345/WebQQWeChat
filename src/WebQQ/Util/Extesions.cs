@@ -44,15 +44,15 @@ namespace WebQQ.Util
             return token.ToObject<long>();
         }
 
-        public static T ToEnum<T>(this string value, T defaultValue = default(T)) where T : struct, IConvertible
-        {
-            if (string.IsNullOrEmpty(value))
-            {
-                return defaultValue;
-            }
+        //public static T ToEnum<T>(this string value, T defaultValue = default(T)) where T : struct, IConvertible
+        //{
+        //    if (string.IsNullOrEmpty(value))
+        //    {
+        //        return defaultValue;
+        //    }
 
-            T result;
-            return Enum.TryParse(value, true, out result) ? result : defaultValue;
-        }
+        //    T result;
+        //    return Enum.TryParse(value, true, out result) ? result : defaultValue;
+        //}
     }
 }

@@ -11,6 +11,7 @@ using WebQQ.Im.Bean;
 using WebQQ.Im.Core;
 using WebQQ.Im.Module.Impl;
 using WebQQ.Util;
+using FxUtility.Extensions;
 
 namespace WebQQ.Im.Action
 {
@@ -40,11 +41,10 @@ namespace WebQQ.Im.Action
             var json = response.ResponseString.ToJObject();
             if (json["retcode"].ToString() == "0")
             {
-                var ret = json["result"].ToJObject();
-                Account.User.Uin = ret["uin"].ToLong();
-                Account.User.QQ = Account.User.Uin;
+                var ret = json["result"];
+                Session.Uin = ret["uin"].ToLong();
                 Session.SessionId = ret["psessionid"].ToString();
-                Account.User.Status = ret["status"].ToString().ToEnum(QQStatusType.Online);
+                Session.QQStatus = ret["status"].ToString().ToEnum(QQStatusType.Online);
                 Session.State = SessionState.Online;
                 Session.Index = ret["index"].ToInt();
                 Session.Port = ret["port"].ToInt();

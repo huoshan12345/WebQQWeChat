@@ -15,8 +15,8 @@ namespace WebQQ.Im.Core
         public const string Referrer = "http://d1.web2.qq.com/proxy.html?v=20151105001&callback=1&id=2";
         public const string ReferrerS = "http://s.web2.qq.com/proxy.html?v=20130916001&callback=1&id=1";
         public const string GetGroupNameList = "http://s.web2.qq.com/api/get_group_name_list_mask2";
-        public const string GetDiscuzList = "http://s.web2.qq.com/api/get_discus_list";
+        public const string GetDiscussionList = "http://s.web2.qq.com/api/get_discus_list";
         public const string GetSelfInfo = "http://s.web2.qq.com/api/get_self_info2";
-        public const string GetOnlineBuddies = "http://d1.web2.qq.com/channel/get_online_buddies2";
+        public const string GetOnlineFriends = "http://d1.web2.qq.com/channel/get_online_buddies2";
     }
 }

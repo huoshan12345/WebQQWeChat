@@ -21,7 +21,6 @@ namespace WebQQ.Im.Action
         protected ILogger Logger { get; set; }
         protected SessionModule Session { get; set; }
         protected StoreModule Store { get; set; }
-        protected AccountModule Account { get; set; }
         protected IConfigurationRoot Config { get; set; }
 
         protected long Timestamp => DateTime.Now.ToTimestampMilli();
@@ -42,7 +41,6 @@ namespace WebQQ.Im.Action
             Logger = context.GetSerivce<ILogger>();
             Session = context.GetModule<SessionModule>();
             Store = context.GetModule<StoreModule>();
-            Account = context.GetModule<AccountModule>();
             Config = context.GetSerivce<IConfigurationRoot>();
         }
 

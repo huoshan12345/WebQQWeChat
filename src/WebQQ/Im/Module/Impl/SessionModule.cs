@@ -25,10 +25,15 @@ namespace WebQQ.Im.Module.Impl
             set { _state = value; }
         }
 
+        public long Uin { get; set; }
+        public QQStatusType QQStatus { get; set; } = QQStatusType.Offline;
+        public QQUser User { get; set; }
+
         public long ClientId { get; set; } = 53999199;
         public string SessionId { get; set; }
         public string Vfwebqq { get; set; }
         public string Ptwebqq { get; set; }
+
         //public string LoginSig { get; set; }
         //public string CfaceKey { get; set; }
         //public string CfaceSig { get; set; }
@@ -38,6 +43,8 @@ namespace WebQQ.Im.Module.Impl
         //public int PollErrorCnt { get; set; }
         //public string CapCd { get; set; }
         //public string Psessionid { get; set; }
+
+
 
         public string CheckSigUrl { get; set; }
 

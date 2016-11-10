@@ -24,7 +24,7 @@ namespace WebQQ.Im.Action
             {
                 {"h", "hello"},
                 {"vfwebqq", Session.Vfwebqq},
-                {"hash", QQEncryptor.Hash(Account.User.Uin, Session.Ptwebqq)}
+                {"hash", QQEncryptor.Hash(Session.Uin, Session.Ptwebqq)}
             };
             var req = HttpRequestItem.CreateFormRequest(ApiUrls.GetFriends);
             req.AddQueryValue("r", json.ToSimpleString());
@@ -82,33 +82,9 @@ namespace WebQQ.Im.Action
             {
                 var result = json["result"];
 
-                // 分组
-                //var categories = result["categories"].ToJArray();
-                //foreach (var category in categories)
-                //{
-                //    var obj = new Category
-                //    {
-                //        Index = category["index"].ToObject<int>(),
-                //        Name = category["name"].ToString(),
-                //        Sort = category["sort"].ToObject<int>()
-                //    };
-                //    Store.AddCategory(obj);
-                //}
                 var categories = result["categories"].ToObject<List<Category>>();
                 categories.ForEach(Store.AddCategory);
 
-                // 好友
-                //var friends = result["friends"].ToJArray();
-                //foreach (var friend in friends)
-                //{
-                //    var obj = new Friend
-                //    {
-                //        Uin = friend["uin"].ToLong(),
-                //        CategoryIndex = friend["categories"].ToInt(),
-                //        Flag = friend["flag"].ToInt(),
-                //    };
-                //    Store.AddFriend(obj);
-                //}
                 var friends = result["friends"].ToObject<List<Friend>>();
                 friends.ForEach(Store.AddFriend);
 
@@ -120,7 +96,7 @@ namespace WebQQ.Im.Action
                     var friend = Store.GetFriendByUin(uin);
                     friend.Face = info["face"].ToInt();
                     friend.InfoFlag = info["flag"].ToInt();
-                    friend.Nickname = info["nick"].ToString();
+                    friend.Nick = info["nick"].ToString();
                 }
 
                 // 好友备注 uin/markname/type
@@ -139,7 +115,7 @@ namespace WebQQ.Im.Action
                 {
                     var uin = vipInfo["u"].ToLong();
                     var friend = Store.GetFriendByUin(uin);
-                    friend.VipLevel = vipInfo["vip_level"].ToInt();
+                    friend.VipInfo = vipInfo["vip_level"].ToInt();
                     friend.IsVip = vipInfo["is_vip"].ToInt() != 0;
                 }
                 return NotifyActionEventAsync(ActionEventType.EvtOK);

@@ -50,7 +50,7 @@ namespace WebQQ.Im.Bean
         /// <summary>
         /// 讨论组
         /// </summary>
-        public QQDiscuz Discuz { get; set; }
+        public Discussion Discussion { get; set; }
         /// <summary>
         /// 发送时间
         /// </summary>

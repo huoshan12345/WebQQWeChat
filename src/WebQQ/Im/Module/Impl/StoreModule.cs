@@ -14,21 +14,29 @@ namespace WebQQ.Im.Module.Impl
     /// </summary>
     public class StoreModule : QQModule
     {
-
         /// <summary>
+        /// 好友分组
         /// 主键是Category的index
         /// </summary>
-        public ConcurrentDictionary<long, Category> Categories { get; } = new ConcurrentDictionary<long, Category>();
+        public ConcurrentDictionary<long, Category> CategoryDic { get; } = new ConcurrentDictionary<long, Category>();
 
         /// <summary>
+        /// 群
         /// 主键是Group的Gid
         /// </summary>
-        public ConcurrentDictionary<long, Group> Groups { get; } = new ConcurrentDictionary<long, Group>();
-        
+        public ConcurrentDictionary<long, Group> GroupDic { get; } = new ConcurrentDictionary<long, Group>();
+
         /// <summary>
+        /// 讨论组
+        /// 主键是Discuz的Did
+        /// </summary>
+        public ConcurrentDictionary<long, Discussion> DiscussionDic { get; } = new ConcurrentDictionary<long, Discussion>();
+
+        /// <summary>
+        /// 好友
         /// key是好友的uin
         /// </summary>
-        public ConcurrentDictionary<long, Friend> Friends { get; } = new ConcurrentDictionary<long, Friend>();
+        public ConcurrentDictionary<long, Friend> FriendDic { get; } = new ConcurrentDictionary<long, Friend>();
 
         public StoreModule(IQQContext context) : base(context)
         {
@@ -36,36 +44,46 @@ namespace WebQQ.Im.Module.Impl
 
         public void AddCategory(Category category)
         {
-            Categories[category.Index] = category;
+            CategoryDic[category.Index] = category;
         }
 
         public void AddFriend(Friend friend)
         {
-            if (Categories.ContainsKey(friend.CategoryIndex))
+            if (CategoryDic.ContainsKey(friend.CategoryIndex))
             {
-                Categories[friend.CategoryIndex].AddFriend(friend);
+                CategoryDic[friend.CategoryIndex].AddFriend(friend);
             }
             else
             {
                 AddCategory(new Category() { Index = friend.CategoryIndex });
                 AddFriend(friend);
             }
-            Friends[friend.Uin] = friend;
+            FriendDic[friend.Uin] = friend;
         }
 
         public Friend GetFriendByUin(long uin)
         {
-            return Friends.GetOrDefault(uin);
+            return FriendDic.GetOrDefault(uin);
         }
 
         public void AddGroup(Group group)
         {
-            Groups[group.Gid] = group;
+            GroupDic[group.Gid] = group;
         }
 
         public Group GetGroupByGid(long gid)
         {
-            return Groups.GetOrDefault(gid);
+            return GroupDic.GetOrDefault(gid);
+        }
+
+        public void AddDiscussion(Discussion discussion)
+        {
+            DiscussionDic[discussion.Did] = discussion;
+        }
+
+        public Discussion GetDiscuzByDid(long did)
+        {
+            return DiscussionDic.GetOrDefault(did);
         }
     }
 }

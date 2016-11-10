@@ -20,7 +20,14 @@ namespace WebQQ.Im.Bean
 
         public int InfoFlag { get; set; }
 
-        public string ShowName => MarkName.IsNullOrEmpty() ? (Nickname.IsNullOrEmpty() ? Uin.ToString() : Nickname) : MarkName;
+        public int ClientType { get; set; }
 
+        public QQStatusType Status { get; set; }
+
+        public string ShowName => MarkName.IsNullOrEmpty() ? (Nick.IsNullOrEmpty() ? Uin.ToString() : Nick) : MarkName;
+
+        // public int VipLevel { get; set; } // 可以用QQUser.VipInfo代替
+
+        public bool IsVip { get; set; }
     }
 }
