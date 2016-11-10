@@ -19,17 +19,18 @@ namespace WebQQ.Im.Service.Impl
             Context = context;
         }
 
-        public override IAction CreateAction(Type actionType, params object[] args)
+        public override IAction CreateAction<T>(params object[] parameters)
         {
+            var type = typeof(T);
             // 把Context作为第一个参数加进去
-            if (typeof(QQAction).GetTypeInfo().IsAssignableFrom(actionType))
+            if (typeof(QQAction).GetTypeInfo().IsAssignableFrom(type))
             {
-                var newArgs = new object[args.Length + 1];
+                var newArgs = new object[parameters.Length + 1];
                 newArgs[0] = Context;
-                args.CopyTo(newArgs, 1);
-                args = newArgs;
+                parameters.CopyTo(newArgs, 1);
+                parameters = newArgs;
             }
-            return base.CreateAction(actionType, args);
+            return base.CreateAction<T>(parameters);
         }
     }
 }

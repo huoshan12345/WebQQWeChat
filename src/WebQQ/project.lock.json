@@ -27,7 +27,7 @@
           "lib/netstandard1.3/CoreCompat.System.Drawing.dll": {}
         }
       },
-      "FxUtility/0.1.1": {
+      "FxUtility/0.1.2": {
         "type": "package",
         "dependencies": {
           "Microsoft.Extensions.Logging.Abstractions": "1.0.0",
@@ -2529,7 +2529,7 @@
         "type": "project",
         "framework": ".NETStandard,Version=v1.6",
         "dependencies": {
-          "FxUtility": "0.1.1",
+          "FxUtility": "0.1.2",
           "Microsoft.Extensions.Configuration.Abstractions": "1.0.0",
           "Microsoft.Extensions.DependencyInjection.Abstractions": "1.0.0",
           "NETStandard.Library": "1.6.0",
@@ -2545,7 +2545,7 @@
       }
     },
     ".NETFramework,Version=v4.6.1": {
-      "FxUtility/0.1.1": {
+      "FxUtility/0.1.2": {
         "type": "package",
         "dependencies": {
           "Microsoft.Extensions.Logging.Abstractions": "1.0.0",
@@ -2961,7 +2961,7 @@
         "type": "project",
         "framework": ".NETFramework,Version=v4.6.1",
         "dependencies": {
-          "FxUtility": "0.1.1",
+          "FxUtility": "0.1.2",
           "Microsoft.Extensions.Configuration.Abstractions": "1.0.0",
           "Microsoft.Extensions.DependencyInjection.Abstractions": "1.0.0",
           "System.Net.Http": "4.0.0"
@@ -2987,13 +2987,13 @@
         "lib/netstandard1.3/CoreCompat.System.Drawing.dll"
       ]
     },
-    "FxUtility/0.1.1": {
-      "sha512": "p4pFS9XtzesMYdKdO8WHDXP2vRcbrKP/Hh/MFKqEhmxodlQqHrXJFH2wka0S/7ET80KETdXKkF3XYvLIYkJ33A==",
+    "FxUtility/0.1.2": {
+      "sha512": "2+WQwLW5b7cznrvZCmnMp00H0zcMg9vTuigBGd8APVQGzz/srJZO1ZbTFavWtlGb0/i+UsZqGTIxk3ljPGCpkA==",
       "type": "package",
-      "path": "FxUtility/0.1.1",
+      "path": "FxUtility/0.1.2",
       "files": [
-        "FxUtility.0.1.1.nupkg.sha512",
-        "FxUtility.nuspec",
+        "fxutility.0.1.2.nupkg.sha512",
+        "fxutility.nuspec",
         "lib/net461/FxUtility.dll",
         "lib/netstandard1.6/FxUtility.dll"
       ]
@@ -8084,7 +8084,7 @@
   },
   "projectFileDependencyGroups": {
     "": [
-      "FxUtility >= 0.1.1",
+      "FxUtility >= 0.1.2",
       "HttpAction >= 1.0.0-*",
       "Microsoft.Extensions.Configuration >= 1.0.0",
       "Microsoft.Extensions.Configuration.Json >= 1.0.0",

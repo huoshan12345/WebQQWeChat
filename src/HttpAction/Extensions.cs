@@ -30,7 +30,7 @@ namespace HttpAction
 
         public static IAction CreateAction<T>(this IActionFactory factory, params object[] args) where T : IAction
         {
-            return factory.CreateAction(typeof(T), args);
+            return factory.CreateAction<T>(args);
         }
 
         public static Task<ActionEvent> ExecuteAsync(this IActor actor)

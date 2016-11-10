@@ -10,19 +10,7 @@ namespace WebQQ.Util
     /// </summary>
     public static class QQEncryptor
     {
-        private static readonly Regex RegMd5 = new Regex(@"^([a-fA-F0-9]{32})$");
-
         private static readonly string[] HexChars = { "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "A", "B", "C", "D", "E", "F" };
-
-        /// <summary>
-        /// 判断是不是MD5字符串
-        /// </summary>
-        /// <param name="input"></param>
-        /// <returns></returns>
-        private static bool IsMd5(string input)
-        {
-            return RegMd5.IsMatch(input);
-        }
 
         /// <summary>
         /// 登录邮箱时用到的，auth_token

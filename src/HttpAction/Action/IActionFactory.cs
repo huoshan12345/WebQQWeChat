@@ -4,6 +4,6 @@ namespace HttpAction.Action
 {
     public interface IActionFactory
     {
-        IAction CreateAction(Type actionType, params object[] parameters);
+        IAction CreateAction<T>(params object[] parameters) where T : IAction;
     }
 }
