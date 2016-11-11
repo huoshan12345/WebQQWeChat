@@ -9,12 +9,14 @@ namespace WebQQ.Im.Action
 {
     public class GetQRCodeAction : QQAction
     {
+        private const string AppId = "501004106";
+
         public GetQRCodeAction(IQQContext context, ActionEventListener listener = null) : base(context, listener) { }
 
         public override HttpRequestItem BuildRequest()
         {
             var req = new HttpRequestItem(HttpMethodType.Get, ApiUrls.GetQRCode);
-            req.AddQueryValue("appid", QQConstants.APPID);
+            req.AddQueryValue("appid", AppId);
             req.AddQueryValue("e", "0");
             req.AddQueryValue("l", "M");
             req.AddQueryValue("s", "5");

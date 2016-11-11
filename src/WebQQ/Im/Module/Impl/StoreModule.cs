@@ -4,6 +4,8 @@ using System.Linq;
 using FxUtility.Extensions;
 using WebQQ.Im.Bean;
 using WebQQ.Im.Bean.Content;
+using WebQQ.Im.Bean.Friend;
+using WebQQ.Im.Bean.Group;
 using WebQQ.Im.Core;
 
 namespace WebQQ.Im.Module.Impl
@@ -24,7 +26,7 @@ namespace WebQQ.Im.Module.Impl
         /// 群
         /// 主键是Group的Gid
         /// </summary>
-        public ConcurrentDictionary<long, Group> GroupDic { get; } = new ConcurrentDictionary<long, Group>();
+        public ConcurrentDictionary<long, QQGroup> GroupDic { get; } = new ConcurrentDictionary<long, QQGroup>();
 
         /// <summary>
         /// 讨论组
@@ -36,7 +38,7 @@ namespace WebQQ.Im.Module.Impl
         /// 好友
         /// key是好友的uin
         /// </summary>
-        public ConcurrentDictionary<long, Friend> FriendDic { get; } = new ConcurrentDictionary<long, Friend>();
+        public ConcurrentDictionary<long, QQFriend> FriendDic { get; } = new ConcurrentDictionary<long, QQFriend>();
 
         public StoreModule(IQQContext context) : base(context)
         {
@@ -47,7 +49,7 @@ namespace WebQQ.Im.Module.Impl
             CategoryDic[category.Index] = category;
         }
 
-        public void AddFriend(Friend friend)
+        public void AddFriend(QQFriend friend)
         {
             if (CategoryDic.ContainsKey(friend.CategoryIndex))
             {
@@ -61,17 +63,17 @@ namespace WebQQ.Im.Module.Impl
             FriendDic[friend.Uin] = friend;
         }
 
-        public Friend GetFriendByUin(long uin)
+        public QQFriend GetFriendByUin(long uin)
         {
             return FriendDic.GetOrDefault(uin);
         }
 
-        public void AddGroup(Group group)
+        public void AddGroup(QQGroup group)
         {
             GroupDic[group.Gid] = group;
         }
 
-        public Group GetGroupByGid(long gid)
+        public QQGroup GetGroupByGid(long gid)
         {
             return GroupDic.GetOrDefault(gid);
         }

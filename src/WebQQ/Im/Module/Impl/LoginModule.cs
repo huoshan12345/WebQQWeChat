@@ -1,5 +1,6 @@
 using System;
 using System.Drawing;
+using System.Linq;
 using System.Threading.Tasks;
 using FxUtility.Extensions;
 using HttpAction;
@@ -45,13 +46,13 @@ namespace WebQQ.Im.Module.Impl
                     switch (args.Status)
                     {
                         case QRCodeStatus.OK:
-                            Context.GetModule<SessionModule>().CheckSigUrl = args.Msg;
+                            Session.CheckSigUrl = args.Msg;
                             await Context.FireNotifyAsync(QQNotifyEvent.CreateEvent(QQNotifyEventType.QRCodeSuccess));
                             break;
 
                         case QRCodeStatus.Valid:
                         case QRCodeStatus.Auth:
-                            Context.GetSerivce<ILogger>().LogDebug($"¶þÎ¬Âë×´Ì¬£º{args.Status.GetDescription()}");
+                            Logger.LogDebug($"¶þÎ¬Âë×´Ì¬£º{args.Status.GetDescription()}");
                             @event.Type = ActionEventType.EvtRepeat;
                             await Task.Delay(3000);
                             break;
@@ -69,7 +70,15 @@ namespace WebQQ.Im.Module.Impl
                     await Context.FireNotifyAsync(QQNotifyEvent.CreateEvent(QQNotifyEventType.LoginSuccess));
                 })
                 .PushAction<GetFriendsAction>()
-                .PushAction<GetGroupNameListAction>()
+                .PushAction<GetGroupNameListAction>(async (sender, @event) =>
+                {
+                    if (@event.Type != ActionEventType.EvtOK) return;
+                    var group = Store.GroupDic.FirstOrDefault().Value;
+                    if (group != null)
+                    {
+                        await new GetGroupInfoAction(Context, group).ExecuteAsyncAuto();
+                    }
+                })
                 .PushAction<GetDiscussionListAction>()
                 .PushAction<GetSelfInfoAction>()
                 .PushAction<GetOnlineFriendsAction>()

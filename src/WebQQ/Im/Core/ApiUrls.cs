@@ -20,6 +20,7 @@ namespace WebQQ.Im.Core
         public const string GetOnlineFriends = "http://d1.web2.qq.com/channel/get_online_buddies2";
         public const string GetFriendLongNick = "http://s.web2.qq.com/api/get_single_long_nick";
         public const string SendFriendMsg = "https://d1.web2.qq.com/channel/send_buddy_msg2";
+        public const string GetGroupInfo = "http://s.web2.qq.com/api/get_group_info_ext2";
         public const string SendGroupMsg = "https://d1.web2.qq.com/channel/send_qun_msg2";
     }
 }

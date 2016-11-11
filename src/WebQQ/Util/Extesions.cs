@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using FxUtility.Extensions;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -15,9 +16,9 @@ namespace WebQQ.Util
             return JsonConvert.SerializeObject(obj, formatting);
         }
 
-        public static JObject ToJObject(this string str)
+        public static JToken ToJToken(this string str)
         {
-            return JObject.Parse(str);
+            return JToken.Parse(str);
         }
 
         public static JObject ToJObject(this JToken token)
@@ -50,15 +51,9 @@ namespace WebQQ.Util
             return token.ToString().ToEnum<T>();
         }
 
-        public static bool GetAndDo<TKey, TValue>(this IDictionary<TKey, TValue> dic, TKey key,  Action<TValue> action)
+        public static T MapTo<T>(this object obj)
         {
-            var item = dic.GetOrDefault(key);
-            if (item != null)
-            {
-                action(item);
-                return true;
-            }
-            else return false;
+            return Mapper.Map<T>(obj);
         }
     }
 }

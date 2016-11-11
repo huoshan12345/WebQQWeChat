@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using HttpAction.Core;
 using HttpAction.Event;
 using Newtonsoft.Json;
@@ -9,6 +10,8 @@ using Newtonsoft.Json.Linq;
 using WebQQ.Im.Bean;
 using WebQQ.Im.Core;
 using WebQQ.Util;
+using FxUtility.Extensions;
+using WebQQ.Im.Bean.Friend;
 
 namespace WebQQ.Im.Action
 {
@@ -77,7 +80,7 @@ namespace WebQQ.Im.Action
                     }
                 }             
              */
-            var json = response.ResponseString.ToJObject();
+            var json = response.ResponseString.ToJToken();
             if (json["retcode"].ToString() == "0")
             {
                 var result = json["result"];
@@ -85,39 +88,30 @@ namespace WebQQ.Im.Action
                 var categories = result["categories"].ToObject<List<Category>>();
                 categories.ForEach(Store.AddCategory);
 
-                var friends = result["friends"].ToObject<List<Friend>>();
+                var friends = result["friends"].ToObject<List<QQFriend>>();
                 friends.ForEach(Store.AddFriend);
 
                 // 好友信息 face/flag/nick/uin
-                var infos = result["info"].ToJArray();
+                var infos = result["info"].ToObject<FriendInfo[]>();
                 foreach (var info in infos)
                 {
-                    var uin = info["uin"].ToObject<long>();
-                    var friend = Store.GetFriendByUin(uin);
-                    friend.Face = info["face"].ToInt();
-                    friend.InfoFlag = info["flag"].ToInt();
-                    friend.Nick = info["nick"].ToString();
+                    Store.FriendDic.GetAndDo(info.Uin, m => Mapper.Map(info, m));
                 }
 
                 // 好友备注 uin/markname/type
-                var marknames = result["marknames"].ToObject<JArray>();
+                var marknames = result["marknames"].ToObject<FriendMarkName[]>();
                 foreach (var markname in marknames)
                 {
-                    var uin = markname["uin"].ToObject<long>();
-                    var friend = Store.GetFriendByUin(uin);
-                    friend.MarkName = markname["markname"].ToString();
-                    friend.MarknameType = markname["type"].ToInt();
+                    Store.FriendDic.GetAndDo(markname.Uin, m => Mapper.Map(markname, m));
                 }
 
-                // 好友vip信息
-                var vipInfos = result["vipinfo"].ToObject<JArray>();
-                foreach (var vipInfo in vipInfos)
+                // vip信息
+                var mVipInfo = result["vipinfo"].ToObject<UserVipInfo[]>();
+                foreach (var vip in mVipInfo)
                 {
-                    var uin = vipInfo["u"].ToLong();
-                    var friend = Store.GetFriendByUin(uin);
-                    friend.VipLevel = vipInfo["vip_level"].ToInt();
-                    friend.IsVip = vipInfo["is_vip"].ToInt() != 0;
+                    Store.FriendDic.GetAndDo(vip.Uin, m => Mapper.Map(vip, m));
                 }
+
                 return NotifyActionEventAsync(ActionEventType.EvtOK);
             }
             else

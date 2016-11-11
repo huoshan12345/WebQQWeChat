@@ -1,12 +1,12 @@
 ﻿using FxUtility.Extensions;
 using Newtonsoft.Json;
 
-namespace WebQQ.Im.Bean
+namespace WebQQ.Im.Bean.Friend
 {
     /// <summary>
     /// QQ好友
     /// </summary>
-    public class Friend
+    public class QQFriend
     {
         /// <summary>
         /// 头像
@@ -43,11 +43,11 @@ namespace WebQQ.Im.Bean
         public int ClientType { get; set; }
 
         public QQStatusType Status { get; set; }
+        
+        public int VipLevel { get; set; }
+        
+        public int IsVip { get; set; }
 
         public string ShowName => MarkName.IsNullOrEmpty() ? (Nick.IsNullOrEmpty() ? Uin.ToString() : Nick) : MarkName;
-
-        public int VipLevel { get; set; } // 可以用QQUser.VipInfo代替
-
-        public bool IsVip { get; set; }
     }
 }

@@ -75,18 +75,13 @@ namespace HttpAction.Action
 
         public virtual async Task<ActionEvent> ExecuteAsync(CancellationToken token)
         {
+            HttpRequestItem requestItem = null;
             if (!token.IsCancellationRequested)
             {
-#if DEBUG
-                HttpRequestItem req = null;
-#endif
                 ++ExcuteTimes;
                 try
                 {
-                    var requestItem = BuildRequest();
-#if DEBUG
-                    req = requestItem;
-#endif
+                    requestItem = BuildRequest();
                     var response = await HttpService.ExecuteHttpRequestAsync(requestItem, token).ConfigureAwait(false);
                     return await HandleResponse(response).ConfigureAwait(false);
                 }
@@ -97,11 +92,11 @@ namespace HttpAction.Action
                     ex = ex.InnerException ?? ex;
 #if DEBUG
                     // 此处用于生成请求信息，然后用fiddler等工具测试
-                    if (req?.RawUrl.Contains("webwxsync") == true || req?.RawUrl.Contains("synccheck") == true)
+                    if (requestItem != null)
                     {
-                        var url = req.RawUrl;
-                        var header = req.GetRequestHeader(HttpService.GetCookies(req.RawUrl));
-                        var data = req.RawData;
+                        var url = requestItem.RawUrl;
+                        var header = requestItem.GetRequestHeader(HttpService.GetCookies(requestItem.RawUrl));
+                        var data = requestItem.RawData;
                         var len = data.Length;
                     }
 #endif

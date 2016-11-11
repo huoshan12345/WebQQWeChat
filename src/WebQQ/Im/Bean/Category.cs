@@ -1,6 +1,7 @@
 ﻿using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
+using WebQQ.Im.Bean.Friend;
 
 namespace WebQQ.Im.Bean
 {
@@ -17,9 +18,9 @@ namespace WebQQ.Im.Bean
         public string Name { get; set; }
 
         // key是好友的uin
-        public ConcurrentDictionary<long, Friend> Friends { get; }= new ConcurrentDictionary<long, Friend>();
+        public ConcurrentDictionary<long, QQFriend> Friends { get; }= new ConcurrentDictionary<long, QQFriend>();
 
-        public void AddFriend(Friend friend)
+        public void AddFriend(QQFriend friend)
         {
             Friends[friend.Uin] = friend;
         }

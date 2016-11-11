@@ -9,6 +9,9 @@ namespace WebQQ.Im.Action
 {
     public class CheckQRCodeAction : QQAction
     {
+        private const string JsVer = "10153";
+        private readonly Regex _reg = new Regex(@"ptuiCB\('(\d+)','(\d+)','(.*?)','(\d+)','(.*?)', '(.*?)'\)");
+
         public CheckQRCodeAction(IQQContext context, ActionEventListener listener = null) : base(context, listener) { }
 
         public override HttpRequestItem BuildRequest()
@@ -31,7 +34,7 @@ namespace WebQQ.Im.Action
             req.AddQueryValue("t", "1");
             req.AddQueryValue("g", "1");
             req.AddQueryValue("js_type", "0");
-            req.AddQueryValue("js_ver", QQConstants.JSVER);
+            req.AddQueryValue("js_ver", JsVer);
             req.AddQueryValue("login_sig", "");
             req.AddQueryValue("pt_randsalt", "0");
             return req;
@@ -39,23 +42,17 @@ namespace WebQQ.Im.Action
 
         public override Task<ActionEvent> HandleResponse(HttpResponseItem response)
         {
-
-            var rex = new Regex(QQConstants.REGXP_LOGIN);
             var str = response.ResponseString;
-            var m = rex.Match(str);
+            var m = _reg.Match(str);
             if (m.Success)
             {
                 var ret = m.Groups[1].Value;
                 switch (ret)
                 {
-                    //case "0": NotifyActionEvent(QQActionEventType.EVT_OK, m.Groups[3].Value); break;
-                    //case "66": throw new QQException(QQErrorCode.QRCODE_OK, m.Groups[5].Value);
-                    //case "67": throw new QQException(QQErrorCode.QRCODE_AUTH, m.Groups[5].Value);
                     case "0": return NotifyActionEventAsync(ActionEventType.EvtOK, new CheckQRCodeArgs(QRCodeStatus.OK, m.Groups[3].Value)); 
                     case "66": return NotifyActionEventAsync(ActionEventType.EvtOK, new CheckQRCodeArgs(QRCodeStatus.Valid, m.Groups[5].Value));
                     case "67": return NotifyActionEventAsync(ActionEventType.EvtOK, new CheckQRCodeArgs(QRCodeStatus.Auth, m.Groups[5].Value)); 
                     case "65": return NotifyActionEventAsync(ActionEventType.EvtOK, new CheckQRCodeArgs(QRCodeStatus.Invalid, m.Groups[5].Value));
-
                 }
             }
             return NotifyErrorEventAsync(QQErrorCode.ResponseError);

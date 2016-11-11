@@ -7,7 +7,8 @@ using Newtonsoft.Json;
 namespace WebQQ.Im.Bean
 {
     public class QQUser
-    {        /// <summary>
+    {        
+        /// <summary>
         /// 头像
         /// </summary>
         public int Face { get; set; }

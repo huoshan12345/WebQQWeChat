@@ -61,7 +61,7 @@ namespace WebQQ.Im.Action
                     }
                 }             
              */
-            var json = response.ResponseString.ToJObject();
+            var json = response.ResponseString.ToJToken();
             if (json["retcode"].ToString() == "0")
             {
                 Session.User = json["result"].ToObject<QQUser>();

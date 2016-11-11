@@ -18,11 +18,12 @@ namespace WebWeChat.Im.Action
         // 为了防止通知层级混乱，其他action不应该直接操作Context，本action也只是在报告错误时用到了。
         // 其他通知应该先通知到调用action的模块，由模块决定是否需要进一步通知
         private IWeChatContext Context { get; set; }
-        protected ILogger Logger { get; set; }
-        protected SessionModule Session { get; set; }
-        protected StoreModule Store { get; set; }
-        protected AccountModule Account { get; set; }
-        protected IConfigurationRoot Config { get; set; }
+
+        protected ILogger Logger => Context.GetSerivce<ILogger>();
+        protected SessionModule Session => Context.GetModule<SessionModule>();
+        protected StoreModule Store => Context.GetModule<StoreModule>();
+        protected AccountModule Account => Context.GetModule<AccountModule>();
+        protected IConfigurationRoot Config => Context.GetSerivce<IConfigurationRoot>();
 
         protected long Timestamp => DateTime.Now.ToTimestampMilli();
         protected string ActionName => GetType().GetDescription();
@@ -30,20 +31,8 @@ namespace WebWeChat.Im.Action
         protected WeChatAction(IWeChatContext context, ActionEventListener listener = null) :
             base(context.GetSerivce<IHttpService>())
         {
-            SetContext(context);
-            OnActionEvent += listener;
-        }
-
-        public void SetContext(IWeChatContext context)
-        {            
-            if (context == Context) return;
             Context = context;
-            HttpService = context.GetSerivce<IHttpService>();
-            Logger = context.GetSerivce<ILogger>();
-            Session = context.GetModule<SessionModule>();
-            Store = context.GetModule<StoreModule>();
-            Account = context.GetModule<AccountModule>();
-            Config = context.GetSerivce<IConfigurationRoot>();
+            OnActionEvent += listener;
         }
 
         public override Task<ActionEvent> HandleExceptionAsync(Exception ex)

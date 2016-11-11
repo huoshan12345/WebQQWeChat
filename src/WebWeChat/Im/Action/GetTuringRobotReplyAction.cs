@@ -48,7 +48,7 @@ namespace WebWeChat.Im.Action
         public override Task<ActionEvent> HandleResponse(HttpResponseItem response)
         {
             var str = response.ResponseString;
-            var json = str.ToJsonObj();
+            var json = str.ToJToken();
             var code = json["code"].ToString();
             var reply = "";
 

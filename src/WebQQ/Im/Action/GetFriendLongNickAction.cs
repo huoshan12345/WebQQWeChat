@@ -8,6 +8,8 @@ using Newtonsoft.Json.Linq;
 using WebQQ.Im.Bean;
 using WebQQ.Im.Core;
 using WebQQ.Util;
+using FxUtility.Extensions;
+using WebQQ.Im.Bean.Friend;
 
 namespace WebQQ.Im.Action
 {
@@ -16,9 +18,9 @@ namespace WebQQ.Im.Action
     /// </summary>
     public class GetFriendLongNickAction : QQAction
     {
-        private readonly Friend _friend;
+        private readonly QQFriend _friend;
 
-        public GetFriendLongNickAction(IQQContext context, Friend friend, ActionEventListener listener = null) : base(context, listener)
+        public GetFriendLongNickAction(IQQContext context, QQFriend friend, ActionEventListener listener = null) : base(context, listener)
         {
             _friend = friend;
         }
@@ -45,7 +47,7 @@ namespace WebQQ.Im.Action
                     ]
                 }
              */
-            var json = response.ResponseString.ToJObject();
+            var json = response.ResponseString.ToJToken();
             if (json["retcode"].ToString() == "0")
             {
                 var result = json["result"];

@@ -38,13 +38,13 @@ namespace WebQQ.Im.Action
 
         public override Task<ActionEvent> HandleResponse(HttpResponseItem response)
         {
-            var json = response.ResponseString.ToJObject();
+            var json = response.ResponseString.ToJToken();
             if (json["retcode"].ToString() == "0")
             {
                 var ret = json["result"];
                 Session.Uin = ret["uin"].ToLong();
-                Session.SessionId = ret["psessionid"].ToString();
                 Session.QQStatus = ret["status"].ToString().ToEnum(QQStatusType.Online);
+                Session.SessionId = ret["psessionid"].ToString();
                 Session.State = SessionState.Online;
                 Session.Index = ret["index"].ToInt();
                 Session.Port = ret["port"].ToInt();

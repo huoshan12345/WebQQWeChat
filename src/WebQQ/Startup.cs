@@ -2,9 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using HttpAction.Action;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using WebQQ.Im.Bean;
+using WebQQ.Im.Bean.Friend;
+using WebQQ.Im.Bean.Group;
 
 namespace WebQQ
 {
@@ -44,6 +48,20 @@ namespace WebQQ
         {
             Dispatcher = provider.GetService<IActorDispatcher>();
             Dispatcher.BeginExcute();
+
+
+            Mapper.Initialize(x =>
+            {
+                x.CreateMap<GroupInfo, QQGroup>();
+                x.CreateMap<GroupMemberCard, GroupMember>();
+                x.CreateMap<GroupMemberInfo, GroupMember>();
+                x.CreateMap<GroupMemberStatus, GroupMember>();
+                x.CreateMap<UserVipInfo, GroupMember>();
+
+                x.CreateMap<FriendMarkName, QQFriend>();
+                x.CreateMap<FriendInfo, QQFriend>();
+                x.CreateMap<UserVipInfo, QQFriend>();
+            });
         }
 
         public static void Dispose()

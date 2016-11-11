@@ -40,7 +40,7 @@ namespace WebWeChat.Im.Action
 
         public override Task<ActionEvent> HandleResponse(HttpResponseItem response)
         {
-            var json = response.ResponseString.ToJsonObj();
+            var json = response.ResponseString.ToJToken();
             if (json["BaseResponse"]["Ret"].ToString() == "0")
             {
                 return NotifyActionEventAsync(ActionEventType.EvtOK);

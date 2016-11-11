@@ -7,6 +7,7 @@ using Newtonsoft.Json.Linq;
 using WebQQ.Im.Core;
 using WebQQ.Util;
 using WebQQ.Im.Bean;
+using WebQQ.Im.Bean.Group;
 
 
 namespace WebQQ.Im.Action
@@ -59,12 +60,12 @@ namespace WebQQ.Im.Action
                     }
                 }
              */
-            var json = response.ResponseString.ToJObject();
+            var json = response.ResponseString.ToJToken();
             if (json["retcode"].ToString() == "0")
             {
                 var result = json["result"];
 
-                var groups = result["gnamelist"].ToObject<List<Group>>();
+                var groups = result["gnamelist"].ToObject<List<QQGroup>>();
                 groups.ForEach(Store.AddGroup);
 
                 // 用不上

@@ -17,11 +17,11 @@ namespace WebQQ.Im.Action
     {
         // 为了防止通知层级混乱，其他action不应该直接操作Context，本action也只是在报告错误时用到了。
         // 其他通知应该先通知到调用action的模块，由模块决定是否需要进一步通知
-        private IQQContext Context { get; set; }
-        protected ILogger Logger { get; set; }
-        protected SessionModule Session { get; set; }
-        protected StoreModule Store { get; set; }
-        protected IConfigurationRoot Config { get; set; }
+        private IQQContext Context { get;}
+        protected ILogger Logger => Context.GetSerivce<ILogger>();
+        protected IConfigurationRoot Config => Context.GetSerivce<IConfigurationRoot>();
+        protected SessionModule Session => Context.GetModule<SessionModule>();
+        protected StoreModule Store => Context.GetModule<StoreModule>();
 
         protected long Timestamp => DateTime.Now.ToTimestampMilli();
         protected string ActionName => GetType().GetDescription();
@@ -29,19 +29,8 @@ namespace WebQQ.Im.Action
         protected QQAction(IQQContext context, ActionEventListener listener = null)
             : base(context.GetSerivce<IHttpService>())
         {
-            SetContext(context);
+            Context = context; 
             OnActionEvent += listener;
-        }
-
-        public void SetContext(IQQContext context)
-        {            
-            if (context == Context) return;
-            Context = context;
-            HttpService = context.GetSerivce<IHttpService>();
-            Logger = context.GetSerivce<ILogger>();
-            Session = context.GetModule<SessionModule>();
-            Store = context.GetModule<StoreModule>();
-            Config = context.GetSerivce<IConfigurationRoot>();
         }
 
         public override Task<ActionEvent> HandleExceptionAsync(Exception ex)

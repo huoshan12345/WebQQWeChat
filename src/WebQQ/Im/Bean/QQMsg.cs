@@ -4,6 +4,7 @@ using System.Text;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using WebQQ.Im.Bean.Content;
+using WebQQ.Im.Bean.Group;
 using WebQQ.Im.Core;
 
 namespace WebQQ.Im.Bean
@@ -46,7 +47,7 @@ namespace WebQQ.Im.Bean
         /// <summary>
         /// 所在群
         /// </summary>
-        public Group Group { get; set; }
+        public QQGroup Group { get; set; }
         /// <summary>
         /// 讨论组
         /// </summary>
