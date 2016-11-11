@@ -69,7 +69,14 @@ namespace WebQQ.Im.Module.Impl
                     if (@event.Type != ActionEventType.EvtOK) return;
                     await Context.FireNotifyAsync(QQNotifyEvent.CreateEvent(QQNotifyEventType.LoginSuccess));
                 })
-                .PushAction<GetFriendsAction>()
+                .PushAction<GetFriendsAction>(async (sender, @event) =>
+                {
+                    if (@event.Type != ActionEventType.EvtOK) return;
+                    var obj = Store.FriendDic.FirstOrDefault().Value;
+                    if (obj == null) return;
+                    await new GetFriendLongNickAction(Context, obj).ExecuteAsyncAuto();
+                    await new GetFriendQQNumberAction(Context, obj).ExecuteAsyncAuto();
+                })
                 .PushAction<GetGroupNameListAction>(async (sender, @event) =>
                 {
                     if (@event.Type != ActionEventType.EvtOK) return;
@@ -79,7 +86,15 @@ namespace WebQQ.Im.Module.Impl
                         await new GetGroupInfoAction(Context, group).ExecuteAsyncAuto();
                     }
                 })
-                .PushAction<GetDiscussionListAction>()
+                .PushAction<GetDiscussionListAction>(async (sender, @event) =>
+                {
+                    if (@event.Type != ActionEventType.EvtOK) return;
+                    var dis = Store.DiscussionDic.FirstOrDefault().Value;
+                    if (dis != null)
+                    {
+                        await new GetDiscussionInfoAction(Context, dis).ExecuteAsyncAuto();
+                    }
+                })
                 .PushAction<GetSelfInfoAction>()
                 .PushAction<GetOnlineFriendsAction>()
                 .ExecuteAsync();

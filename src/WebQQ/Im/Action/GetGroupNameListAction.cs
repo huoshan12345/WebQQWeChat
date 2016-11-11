@@ -83,9 +83,7 @@ namespace WebQQ.Im.Action
                 foreach (var gMark in gMarkList)
                 {
                     var gid = gMark["uin"].ToLong();
-                    var group = Store.GetGroupByGid(gid);
-                    if (group.IsNotNull())
-                        group.MarkName = gMark["markname"].ToString();
+                    Store.GroupDic.GetAndDo(gid, group => group.MarkName = gMark["markname"].ToString());
                 }
 
                 return NotifyActionEventAsync(ActionEventType.EvtOK);

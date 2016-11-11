@@ -4,6 +4,7 @@ using System.Text;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using WebQQ.Im.Bean.Content;
+using WebQQ.Im.Bean.Discussion;
 using WebQQ.Im.Bean.Group;
 using WebQQ.Im.Core;
 
@@ -51,7 +52,7 @@ namespace WebQQ.Im.Bean
         /// <summary>
         /// 讨论组
         /// </summary>
-        public Discussion Discussion { get; set; }
+        public QQDiscussion Discussion { get; set; }
         /// <summary>
         /// 发送时间
         /// </summary>

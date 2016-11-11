@@ -1,13 +1,14 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Concurrent;
+using Newtonsoft.Json;
+using WebQQ.Im.Bean.Group;
 
-namespace WebQQ.Im.Bean
+namespace WebQQ.Im.Bean.Discussion
 {
     /// <summary>
     /// QQ讨论组
     /// </summary>
     
-    public class Discussion
+    public class QQDiscussion
     {
         /// <summary>
         /// 讨论组ID，每次登陆都固定，视为没有变换
@@ -18,9 +19,7 @@ namespace WebQQ.Im.Bean
         /// </summary>
         public string Name { get; set; }
 
-        ///// <summary>
-        ///// 创建者的UIN
-        ///// </summary>
-        //public long Owner { get; set; }
+        [JsonIgnore]
+        public ConcurrentDictionary<long, DiscussionMember> Members { get; } = new ConcurrentDictionary<long, DiscussionMember>();
     }
 }

@@ -4,6 +4,7 @@ using System.Linq;
 using FxUtility.Extensions;
 using WebQQ.Im.Bean;
 using WebQQ.Im.Bean.Content;
+using WebQQ.Im.Bean.Discussion;
 using WebQQ.Im.Bean.Friend;
 using WebQQ.Im.Bean.Group;
 using WebQQ.Im.Core;
@@ -32,7 +33,7 @@ namespace WebQQ.Im.Module.Impl
         /// 讨论组
         /// 主键是Discuz的Did
         /// </summary>
-        public ConcurrentDictionary<long, Discussion> DiscussionDic { get; } = new ConcurrentDictionary<long, Discussion>();
+        public ConcurrentDictionary<long, QQDiscussion> DiscussionDic { get; } = new ConcurrentDictionary<long, QQDiscussion>();
 
         /// <summary>
         /// 好友
@@ -78,12 +79,12 @@ namespace WebQQ.Im.Module.Impl
             return GroupDic.GetOrDefault(gid);
         }
 
-        public void AddDiscussion(Discussion discussion)
+        public void AddDiscussion(QQDiscussion discussion)
         {
             DiscussionDic[discussion.Did] = discussion;
         }
 
-        public Discussion GetDiscuzByDid(long did)
+        public QQDiscussion GetDiscuzByDid(long did)
         {
             return DiscussionDic.GetOrDefault(did);
         }

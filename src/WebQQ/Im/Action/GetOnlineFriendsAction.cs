@@ -2,10 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using FxUtility.Extensions;
 using HttpAction.Core;
 using HttpAction.Event;
 using WebQQ.Im.Bean;
+using WebQQ.Im.Bean.Friend;
 using WebQQ.Im.Core;
 using WebQQ.Util;
 
@@ -45,16 +47,10 @@ namespace WebQQ.Im.Action
             var json = response.ResponseString.ToJToken();
             if (json["retcode"].ToString() == "0")
             {
-                var result = json["result"].ToJArray();
-                foreach (var token in result)
+                var result = json["result"].ToObject<FriendOnlineInfo[]>();
+                foreach (var info in result)
                 {
-                    var uin = token["uin"].ToLong();
-                    var buddy = Store.GetFriendByUin(uin);
-                    if (buddy != null)
-                    {
-                        buddy.Status = token["status"].ToString().ToEnum<QQStatusType>();
-                        buddy.ClientType = token["client_type"].ToInt();
-                    }
+                    Store.FriendDic.GetAndDo(info.Uin, friend => Mapper.Map(info, friend));
                 }
                 return NotifyActionEventAsync(ActionEventType.EvtOK);
             }

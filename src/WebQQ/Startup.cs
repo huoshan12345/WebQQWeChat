@@ -7,6 +7,7 @@ using HttpAction.Action;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using WebQQ.Im.Bean;
+using WebQQ.Im.Bean.Discussion;
 using WebQQ.Im.Bean.Friend;
 using WebQQ.Im.Bean.Group;
 
@@ -55,12 +56,17 @@ namespace WebQQ
                 x.CreateMap<GroupInfo, QQGroup>();
                 x.CreateMap<GroupMemberCard, GroupMember>();
                 x.CreateMap<GroupMemberInfo, GroupMember>();
-                x.CreateMap<GroupMemberStatus, GroupMember>();
+                x.CreateMap<UserStatus, GroupMember>();
                 x.CreateMap<UserVipInfo, GroupMember>();
 
                 x.CreateMap<FriendMarkName, QQFriend>();
                 x.CreateMap<FriendInfo, QQFriend>();
                 x.CreateMap<UserVipInfo, QQFriend>();
+                x.CreateMap<FriendOnlineInfo, QQFriend>();
+                x.CreateMap<QQUser, QQFriend>();
+                x.CreateMap<DiscussionMemberStatus, DiscussionMember>();
+
+
             });
         }
 

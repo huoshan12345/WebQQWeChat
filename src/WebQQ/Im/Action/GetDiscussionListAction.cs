@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using HttpAction.Core;
 using HttpAction.Event;
 using WebQQ.Im.Bean;
+using WebQQ.Im.Bean.Discussion;
 using WebQQ.Im.Core;
 using WebQQ.Util;
 
@@ -46,7 +47,7 @@ namespace WebQQ.Im.Action
             if (json["retcode"].ToString() == "0")
             {
                 var result = json["result"];
-                var list = result["dnamelist"].ToObject<List<Discussion>>();
+                var list = result["dnamelist"].ToObject<List<QQDiscussion>>();
                 list.ForEach(Store.AddDiscussion);
                 return NotifyActionEventAsync(ActionEventType.EvtOK);
             }

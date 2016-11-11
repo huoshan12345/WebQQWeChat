@@ -107,7 +107,7 @@ namespace WebQQ.Im.Action
                 }
 
                 // 成员状态
-                var mStatus = result["stats"].ToObject<GroupMemberStatus[]>();
+                var mStatus = result["stats"].ToObject<UserStatus[]>();
                 foreach (var status in mStatus)
                 {
                     members.GetAndDo(status.Uin, member => Mapper.Map(status, member));
@@ -128,6 +128,8 @@ namespace WebQQ.Im.Action
                 }
 
                 Mapper.Map(groupInfo, _group);
+
+                _group.Members.Clear();
                 _group.Members.AddOrUpdateRange(members);
 
                 return NotifyActionEventAsync(ActionEventType.EvtOK);
