@@ -15,7 +15,7 @@ using WebQQ.Im.Bean.Friend;
 
 namespace WebQQ.Im.Action
 {
-    public class GetFriendsAction : QQAction
+    public class GetFriendsAction : WebQQAction
     {
         public GetFriendsAction(IQQContext context, ActionEventListener listener = null) : base(context, listener)
         {
@@ -27,7 +27,7 @@ namespace WebQQ.Im.Action
             {
                 {"h", "hello"},
                 {"vfwebqq", Session.Vfwebqq},
-                {"hash", QQEncryptor.Hash(Session.Uin, Session.Ptwebqq)}
+                {"hash", QQEncryptor.Hash(Session.User.Uin, Session.Ptwebqq)}
             };
             var req = HttpRequestItem.CreateFormRequest(ApiUrls.GetFriends);
             req.AddQueryValue("r", json.ToSimpleString());
@@ -92,7 +92,7 @@ namespace WebQQ.Im.Action
                 friends.ForEach(Store.AddFriend);
 
                 // 好友信息 face/flag/nick/uin
-                var infos = result["info"].ToObject<FriendInfo[]>();
+                var infos = result["info"].ToObject<FriendBaseInfo[]>();
                 foreach (var info in infos)
                 {
                     Store.FriendDic.GetAndDo(info.Uin, m => Mapper.Map(info, m));

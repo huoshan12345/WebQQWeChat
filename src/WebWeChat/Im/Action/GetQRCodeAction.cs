@@ -11,7 +11,7 @@ namespace WebWeChat.Im.Action
     /// 获取二维码
     /// </summary>
     [Description("获取二维码")]
-    public class GetQRCodeAction : WeChatAction
+    public class GetQRCodeAction : WebWeChatAction
     {
         public GetQRCodeAction(IWeChatContext context, ActionEventListener listener = null) : base(context, listener)
         {

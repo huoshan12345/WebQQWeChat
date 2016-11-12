@@ -13,7 +13,7 @@ using WebQQ.Util;
 
 namespace WebQQ.Im.Action
 {
-    public class GetGroupInfoAction : QQAction
+    public class GetGroupInfoAction : WebQQAction
     {
         private readonly QQGroup _group;
 

@@ -20,7 +20,7 @@ namespace WebWeChat.Im.Service.Impl
         public override IAction CreateAction<T>(params object[] parameters)
         {
             var type = typeof(T);
-            if (typeof(WeChatAction).GetTypeInfo().IsAssignableFrom(type))
+            if (typeof(WebWeChatAction).GetTypeInfo().IsAssignableFrom(type))
             {
                 var newArgs = new object[parameters.Length + 1];
                 newArgs[0] = Context;

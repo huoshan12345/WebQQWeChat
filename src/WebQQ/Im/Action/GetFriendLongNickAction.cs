@@ -16,7 +16,7 @@ namespace WebQQ.Im.Action
     /// <summary>
     /// 获取好友个性签名
     /// </summary>
-    public class GetFriendLongNickAction : QQAction
+    public class GetFriendLongNickAction : WebQQAction
     {
         private readonly QQFriend _friend;
 

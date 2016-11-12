@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using HttpAction.Core;
 using HttpAction.Event;
 using WebQQ.Im.Bean;
@@ -10,7 +11,7 @@ using WebQQ.Util;
 
 namespace WebQQ.Im.Action
 {
-    public class GetSelfInfoAction : QQAction
+    public class GetSelfInfoAction : WebQQAction
     {
         public GetSelfInfoAction(IQQContext context, ActionEventListener listener = null) : base(context, listener)
         {
@@ -64,7 +65,8 @@ namespace WebQQ.Im.Action
             var json = response.ResponseString.ToJToken();
             if (json["retcode"].ToString() == "0")
             {
-                Session.User = json["result"].ToObject<QQUser>();
+                var info = json["result"].ToObject<SelfInfo>();
+                Mapper.Map(info, Session.User);
                 return NotifyActionEventAsync(ActionEventType.EvtOK);
             }
             else

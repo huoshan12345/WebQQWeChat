@@ -23,7 +23,7 @@ namespace WebQQ.Im.Service.Impl
         {
             var type = typeof(T);
             // 把Context作为第一个参数加进去
-            if (typeof(QQAction).GetTypeInfo().IsAssignableFrom(type))
+            if (typeof(WebQQAction).GetTypeInfo().IsAssignableFrom(type))
             {
                 var newArgs = new object[parameters.Length + 1];
                 newArgs[0] = Context;

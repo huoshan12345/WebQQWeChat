@@ -13,7 +13,7 @@ using WebWeChat.Im.Util;
 namespace WebWeChat.Im.Action
 {
     [Description("发送消息")]
-    public class SendMsgAction : WeChatAction
+    public class SendMsgAction : WebWeChatAction
     {
         private readonly MessageSent _msg;
 

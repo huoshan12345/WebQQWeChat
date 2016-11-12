@@ -31,28 +31,11 @@ namespace WebQQ
 
                 case QQNotifyEventType.GroupMsg:
                     {
-                        var revMsg = (QQMsg)notifyEvent.Target;
-                        logger.LogInformation($"群[{revMsg.Group.Name}]-好友[{revMsg.From.Nick}]：{revMsg.GetText()}");
                         break;
                     }
 
                 case QQNotifyEventType.ChatMsg:
                     {
-                        var revMsg = (QQMsg)notifyEvent.Target;
-                        logger.LogInformation($"好友[{revMsg.From.Nick}]：{revMsg.GetText()}");
-
-                        var msgReply = new QQMsg()
-                        {
-                            Type = QQMsgType.BUDDY_MSG,
-                            To = revMsg.From,
-                            From = client.GetModule<SessionModule>().User,
-                            Date = DateTime.Now,
-                        };
-                        msgReply.AddContentItem(new TextItem("hello from iqq")); // 添加文本内容
-                        msgReply.AddContentItem(new FaceItem(0));            // QQ id为0的表情
-                        msgReply.AddContentItem(new FontItem());             // 使用默认字体
-
-                        // client.SendMsg(msgReply);
                         break;
                     }
 

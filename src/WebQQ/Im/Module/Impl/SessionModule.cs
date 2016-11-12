@@ -20,10 +20,8 @@ namespace WebQQ.Im.Module.Impl
             get { return _state; }
             set { _state = value; }
         }
-
-        public long Uin { get; set; }
-        public QQStatusType QQStatus { get; set; } = QQStatusType.Offline;
-        public QQUser User { get; set; }
+        
+        public QQUser User { get; set; } = new QQUser();
 
         public long ClientId { get; set; } = 53999199;
         public string SessionId { get; set; }

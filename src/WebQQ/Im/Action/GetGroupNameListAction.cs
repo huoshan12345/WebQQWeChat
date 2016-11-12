@@ -12,7 +12,7 @@ using WebQQ.Im.Bean.Group;
 
 namespace WebQQ.Im.Action
 {
-    public class GetGroupNameListAction : QQAction
+    public class GetGroupNameListAction : WebQQAction
     {
         public GetGroupNameListAction(IQQContext context, ActionEventListener listener = null) : base(context, listener)
         {
@@ -24,7 +24,7 @@ namespace WebQQ.Im.Action
             var json = new JObject
             {
                 {"vfwebqq", Session.Vfwebqq},
-                {"hash", QQEncryptor.Hash(Session.Uin, Session.Ptwebqq)}
+                {"hash", QQEncryptor.Hash(Session.User.Uin, Session.Ptwebqq)}
             };
             req.AddQueryValue("r", json.ToSimpleString());
             req.Referrer = ApiUrls.Referrer;

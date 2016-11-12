@@ -13,7 +13,7 @@ using WebQQ.Util;
 
 namespace WebQQ.Im.Action
 {
-    public class GetOnlineFriendsAction : QQAction
+    public class GetOnlineFriendsAction : WebQQAction
     {
         public GetOnlineFriendsAction(IQQContext context, ActionEventListener listener = null) : base(context, listener)
         {

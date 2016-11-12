@@ -67,7 +67,7 @@ namespace WebQQ.Im.Action
                     }
                 }
             */
-            var info =  json["result"].ToObject<QQUser>();
+            var info =  json["result"].ToObject<FriendInfo>();
             Mapper.Map(info, _friend);
         }
     }

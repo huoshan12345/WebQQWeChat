@@ -13,7 +13,7 @@ using WebQQ.Im.Bean;
 
 namespace WebQQ.Im.Action
 {
-    public class GetDiscussionInfoAction : QQAction
+    public class GetDiscussionInfoAction : WebQQAction
     {
         private readonly QQDiscussion _discussion;
         public GetDiscussionInfoAction(IQQContext context, QQDiscussion discussion, ActionEventListener listener = null) : base(context, listener)

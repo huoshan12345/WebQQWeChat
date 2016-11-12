@@ -10,7 +10,7 @@ using WebQQ.Util;
 
 namespace WebQQ.Im.Action
 {
-    public class GetVfwebqqAction:QQAction
+    public class GetVfwebqqAction : WebQQAction
     {
         public GetVfwebqqAction(IQQContext context, ActionEventListener listener = null) : base(context, listener)
         {

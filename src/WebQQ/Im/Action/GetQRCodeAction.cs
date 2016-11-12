@@ -7,7 +7,7 @@ using WebQQ.Im.Core;
 
 namespace WebQQ.Im.Action
 {
-    public class GetQRCodeAction : QQAction
+    public class GetQRCodeAction : WebQQAction
     {
         private const string AppId = "501004106";
 

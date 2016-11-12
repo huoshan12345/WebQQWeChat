@@ -7,7 +7,7 @@ using WebQQ.Im.Event;
 
 namespace WebQQ.Im.Action
 {
-    public class CheckQRCodeAction : QQAction
+    public class CheckQRCodeAction : WebQQAction
     {
         private const string JsVer = "10153";
         private readonly Regex _reg = new Regex(@"ptuiCB\('(\d+)','(\d+)','(.*?)','(\d+)','(.*?)', '(.*?)'\)");

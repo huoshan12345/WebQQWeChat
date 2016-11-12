@@ -15,7 +15,7 @@ namespace WebQQ.Im.Action
     /// <summary>
     /// 获取信息类的qqaction的基类
     /// </summary>
-    public abstract class WebQQInfoAction : QQAction
+    public abstract class WebQQInfoAction : WebQQAction
     {
         private static readonly ConcurrentDictionary<Type, string> UrlApiDic = new ConcurrentDictionary<Type, string>();
 

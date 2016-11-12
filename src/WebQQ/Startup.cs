@@ -53,6 +53,8 @@ namespace WebQQ
 
             Mapper.Initialize(x =>
             {
+                x.CreateMap<SelfInfo, QQUser>();
+
                 x.CreateMap<GroupInfo, QQGroup>();
                 x.CreateMap<GroupMemberCard, GroupMember>();
                 x.CreateMap<GroupMemberInfo, GroupMember>();
@@ -60,10 +62,10 @@ namespace WebQQ
                 x.CreateMap<UserVipInfo, GroupMember>();
 
                 x.CreateMap<FriendMarkName, QQFriend>();
-                x.CreateMap<FriendInfo, QQFriend>();
+                x.CreateMap<FriendBaseInfo, QQFriend>();
                 x.CreateMap<UserVipInfo, QQFriend>();
                 x.CreateMap<FriendOnlineInfo, QQFriend>();
-                x.CreateMap<QQUser, QQFriend>();
+                x.CreateMap<FriendInfo, QQFriend>();
                 x.CreateMap<DiscussionMemberStatus, DiscussionMember>();
 
 

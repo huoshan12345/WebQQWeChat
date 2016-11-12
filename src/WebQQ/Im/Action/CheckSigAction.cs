@@ -4,11 +4,12 @@ using System.Linq;
 using System.Threading.Tasks;
 using HttpAction.Core;
 using HttpAction.Event;
+using HttpAction.Service;
 using WebQQ.Im.Core;
 
 namespace WebQQ.Im.Action
 {
-    public class CheckSigAction:QQAction
+    public class CheckSigAction : WebQQAction
     {
         public CheckSigAction(IQQContext context, ActionEventListener listener = null) : base(context, listener)
         {

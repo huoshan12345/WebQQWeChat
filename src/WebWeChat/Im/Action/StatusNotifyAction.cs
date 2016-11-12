@@ -13,7 +13,7 @@ namespace WebWeChat.Im.Action
     /// 开启状态通知
     /// </summary>
     [Description("开启状态通知")]
-    public class StatusNotifyAction : WeChatAction
+    public class StatusNotifyAction : WebWeChatAction
     {
         public StatusNotifyAction(IWeChatContext context, ActionEventListener listener = null)
             : base(context, listener)

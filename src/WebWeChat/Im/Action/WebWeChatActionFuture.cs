@@ -7,11 +7,11 @@ using HttpAction;
 
 namespace WebWeChat.Im.Action
 {
-    public class WeChatActionFuture : ActionFuture
+    public class WebWeChatActionFuture : ActionFuture
     {
         protected IWeChatActionFactory ActionFactory { get; }
 
-        public WeChatActionFuture(IWeChatContext context, ActionEventListener listener = null)
+        public WebWeChatActionFuture(IWeChatContext context, ActionEventListener listener = null)
             : base(listener)
         {
             ActionFactory = context.GetSerivce<IWeChatActionFactory>();
@@ -26,10 +26,10 @@ namespace WebWeChat.Im.Action
         /// <typeparam name="T"></typeparam>
         /// <param name="args"></param>
         /// <returns></returns>
-        public WeChatActionFuture PushAction<T>(params object[] args) where T : WeChatAction
+        public WebWeChatActionFuture PushAction<T>(params object[] args) where T : WebWeChatAction
         {
             var action = ActionFactory.CreateAction<T>(args);
-            return (WeChatActionFuture)base.PushAction(action);
+            return (WebWeChatActionFuture)base.PushAction(action);
         }
 
         /// <summary>
@@ -39,16 +39,16 @@ namespace WebWeChat.Im.Action
         /// <typeparam name="T"></typeparam>
         /// <param name="listener"></param>
         /// <returns></returns>
-        public WeChatActionFuture PushAction<T>(ActionEventListener listener) where T : WeChatAction
+        public WebWeChatActionFuture PushAction<T>(ActionEventListener listener) where T : WebWeChatAction
         {
             var action = ActionFactory.CreateAction<T>(listener);
-            return (WeChatActionFuture)base.PushAction(action);
+            return (WebWeChatActionFuture)base.PushAction(action);
         }
 
-        public WeChatActionFuture PushAction<T>(object obj, ActionEventListener listener) where T : WeChatAction
+        public WebWeChatActionFuture PushAction<T>(object obj, ActionEventListener listener) where T : WebWeChatAction
         {
             var action = ActionFactory.CreateAction<T>(obj, listener);
-            return (WeChatActionFuture)base.PushAction(action);
+            return (WebWeChatActionFuture)base.PushAction(action);
         }
     }
 }

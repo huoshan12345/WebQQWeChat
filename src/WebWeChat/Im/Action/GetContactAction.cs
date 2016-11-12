@@ -17,7 +17,7 @@ namespace WebWeChat.Im.Action
     /// 获取好友列表
     /// </summary>
     [Description("获取好友列表")]
-    public class GetContactAction : WeChatAction
+    public class GetContactAction : WebWeChatAction
     {
         public GetContactAction(IWeChatContext context, ActionEventListener listener = null)
             : base(context, listener)

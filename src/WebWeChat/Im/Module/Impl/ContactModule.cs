@@ -13,14 +13,14 @@ namespace WebWeChat.Im.Module.Impl
         public Task<ActionEvent> GetContact(ActionEventListener listener = null)
         {
             // 如果直接new一个Action并执行的话也可以，但是不能自动重试
-            return new WeChatActionFuture(Context, listener)
+            return new WebWeChatActionFuture(Context, listener)
                 .PushAction<GetContactAction>()
                 .ExecuteAsync();
         }
 
         public Task<ActionEvent> GetGroupMember(ActionEventListener listener = null)
         {
-            return new WeChatActionFuture(Context, listener)
+            return new WebWeChatActionFuture(Context, listener)
                .PushAction<BatchGetContactAction>()
                .ExecuteAsync();
         }

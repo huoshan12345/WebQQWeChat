@@ -29,7 +29,7 @@ namespace WebQQ.Im.Module.Impl
 
         public Task<ActionEvent> Login(ActionEventListener listener)
         {
-            return new QQActionFuture(Context, listener)
+            return new WebQQActionFuture(Context, listener)
                 .PushAction<GetQRCodeAction>(async (sender, @event) => // 1.ЛёШЁЖўЮЌТы
                 {
                     if (@event.Type == ActionEventType.EvtOK)

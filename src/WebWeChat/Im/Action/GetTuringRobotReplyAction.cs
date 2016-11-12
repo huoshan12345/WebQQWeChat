@@ -13,7 +13,7 @@ using HttpAction.Event;
 
 namespace WebWeChat.Im.Action
 {
-    public class GetTuringRobotReplyAction : WeChatAction
+    public class GetTuringRobotReplyAction : WebWeChatAction
     {
         private readonly string _input;
         private readonly string _key;

@@ -18,11 +18,12 @@ namespace WebQQ.Im.Core
         public const string GetDiscussionList = "http://s.web2.qq.com/api/get_discus_list";
         public const string GetSelfInfo = "http://s.web2.qq.com/api/get_self_info2";
         public const string GetOnlineFriends = "http://d1.web2.qq.com/channel/get_online_buddies2";
-        public const string GetFriendLongNick = "http://s.web2.qq.com/api/get_single_long_nick";
+        public const string GetFriendLongNick = "http://s.web2.qq.com/api/get_single_long_nick2";
         public const string SendFriendMsg = "https://d1.web2.qq.com/channel/send_buddy_msg2";
         public const string GetGroupInfo = "http://s.web2.qq.com/api/get_group_info_ext2";
         public const string SendGroupMsg = "https://d1.web2.qq.com/channel/send_qun_msg2";
         public const string GetDiscussionInfo = "http://d1.web2.qq.com/channel/get_discu_info";
         public const string GetFriendQQNumber = "http://s.web2.qq.com/api/get_friend_uin2";
+        public const string GetFriendInfo = "http://s.web2.qq.com/api/get_friend_info2";
     }
 }

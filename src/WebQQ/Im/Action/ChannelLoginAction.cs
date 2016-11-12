@@ -15,7 +15,7 @@ using FxUtility.Extensions;
 
 namespace WebQQ.Im.Action
 {
-    public class ChannelLoginAction : QQAction
+    public class ChannelLoginAction : WebQQAction
     {
         public ChannelLoginAction(IQQContext context, ActionEventListener listener = null) : base(context, listener)
         {
@@ -30,8 +30,8 @@ namespace WebQQ.Im.Action
                 {"ptwebqq", Session.Ptwebqq},
                 {"clientid", Session.ClientId},
                 {"psessionid", ""}
-            }.ToString(Formatting.None);
-            req.AddQueryValue("r", json);
+            };
+            req.AddQueryValue("r", json.ToSimpleString());
             req.Referrer = ApiUrls.Referrer;
             return req;
         }
@@ -42,8 +42,8 @@ namespace WebQQ.Im.Action
             if (json["retcode"].ToString() == "0")
             {
                 var ret = json["result"];
-                Session.Uin = ret["uin"].ToLong();
-                Session.QQStatus = ret["status"].ToString().ToEnum(QQStatusType.Online);
+                Session.User.Uin = ret["uin"].ToLong();
+                Session.User.Status = ret["status"].ToEnum(QQStatusType.Online);
                 Session.SessionId = ret["psessionid"].ToString();
                 Session.State = SessionState.Online;
                 Session.Index = ret["index"].ToInt();

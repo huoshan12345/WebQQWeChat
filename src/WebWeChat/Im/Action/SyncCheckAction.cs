@@ -19,7 +19,7 @@ namespace WebWeChat.Im.Action
     /// 同步检查
     /// </summary>
     [Description("同步检查")]
-    public class SyncCheckAction : WeChatAction
+    public class SyncCheckAction : WebWeChatAction
     {
         private readonly Regex _reg = new Regex(@"window.synccheck={retcode:""(\d+)"",selector:""(\d+)""}");
         private int _hostIndex = 0;

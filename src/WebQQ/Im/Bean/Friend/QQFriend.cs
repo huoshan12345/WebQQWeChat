@@ -6,13 +6,19 @@ namespace WebQQ.Im.Bean.Friend
     /// <summary>
     /// QQ好友
     /// </summary>
-    public class QQFriend : FriendInfo
+    public class QQFriend : SelfInfo
     {
+        public long Uin { get; set; }
+
+        public int Face { get; set; }
+
+        public int InfoFlag { get; set; }
+
+        public string Nick { get; set; }
 
         /// <summary>
         /// 个性签名
         /// </summary>
-        [JsonProperty("lnick")]
         public string LongNick { get; set; }
 
         /// <summary>

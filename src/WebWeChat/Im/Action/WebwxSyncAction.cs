@@ -17,7 +17,7 @@ namespace WebWeChat.Im.Action
     /// 消息同步
     /// </summary>
     [Description("消息同步")]
-    public class WebwxSyncAction : WeChatAction
+    public class WebwxSyncAction : WebWeChatAction
     {
         public WebwxSyncAction(IWeChatContext context, ActionEventListener listener = null) : base(context, listener)
         {

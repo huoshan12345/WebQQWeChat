@@ -11,7 +11,7 @@ using WebQQ.Util;
 
 namespace WebQQ.Im.Action
 {
-    public class GetDiscussionListAction : QQAction
+    public class GetDiscussionListAction : WebQQAction
     {
         public GetDiscussionListAction(IQQContext context, ActionEventListener listener = null) : base(context, listener)
         {

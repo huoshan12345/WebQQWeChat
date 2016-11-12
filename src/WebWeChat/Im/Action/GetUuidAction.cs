@@ -11,7 +11,7 @@ namespace WebWeChat.Im.Action
     /// 获取UUID
     /// </summary>
     [Description("获取UUID")]
-    public class GetUuidAction : WeChatAction
+    public class GetUuidAction : WebWeChatAction
     {
         private readonly Regex _reg = new Regex(@"window.QRLogin.code = (\d+); window.QRLogin.uuid = ""(\S+?)""");
 

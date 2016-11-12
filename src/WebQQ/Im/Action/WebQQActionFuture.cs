@@ -6,11 +6,11 @@ using WebQQ.Im.Service.Interface;
 
 namespace WebQQ.Im.Action
 {
-    public class QQActionFuture : ActionFuture
+    public class WebQQActionFuture : ActionFuture
     {
         protected IQQActionFactory ActionFactory { get; }
 
-        public QQActionFuture(IQQContext context, ActionEventListener listener = null)
+        public WebQQActionFuture(IQQContext context, ActionEventListener listener = null)
             : base(listener)
         {
             ActionFactory = context.GetSerivce<IQQActionFactory>();
@@ -24,10 +24,10 @@ namespace WebQQ.Im.Action
         /// <typeparam name="T"></typeparam>
         /// <param name="args"></param>
         /// <returns></returns>
-        public QQActionFuture PushAction<T>(params object[] args) where T : QQAction
+        public WebQQActionFuture PushAction<T>(params object[] args) where T : WebQQAction
         {
             var action = ActionFactory.CreateAction<T>(args);
-            return (QQActionFuture)base.PushAction(action);
+            return (WebQQActionFuture)base.PushAction(action);
         }
 
         /// <summary>
@@ -37,16 +37,16 @@ namespace WebQQ.Im.Action
         /// <typeparam name="T"></typeparam>
         /// <param name="listener"></param>
         /// <returns></returns>
-        public QQActionFuture PushAction<T>(ActionEventListener listener) where T : QQAction
+        public WebQQActionFuture PushAction<T>(ActionEventListener listener) where T : WebQQAction
         {
             var action = ActionFactory.CreateAction<T>(listener);
-            return (QQActionFuture)base.PushAction(action);
+            return (WebQQActionFuture)base.PushAction(action);
         }
 
-        public QQActionFuture PushAction<T>(object obj, ActionEventListener listener) where T : QQAction
+        public WebQQActionFuture PushAction<T>(object obj, ActionEventListener listener) where T : WebQQAction
         {
             var action = ActionFactory.CreateAction<T>(obj, listener);
-            return (QQActionFuture)base.PushAction(action);
+            return (WebQQActionFuture)base.PushAction(action);
         }
     }
 }

@@ -14,7 +14,7 @@ namespace WebWeChat.Im.Action
     /// 等待扫码登录
     /// </summary>
     [Description("等待扫码登录")]
-    public class WatiForLoginAction : WeChatAction
+    public class WatiForLoginAction : WebWeChatAction
     {
         private readonly Regex _regCode = new Regex(@"window.code=(\d+);");
         private readonly Regex _regUrl = new Regex(@"window.redirect_uri=""(\S+?)"";");

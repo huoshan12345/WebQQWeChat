@@ -16,7 +16,7 @@ namespace WebWeChat.Im.Action
     /// 用于获取群成员
     /// </summary>
     [Description("获取群成员")]
-    public class BatchGetContactAction : WeChatAction
+    public class BatchGetContactAction : WebWeChatAction
     {
         public BatchGetContactAction(IWeChatContext context, ActionEventListener listener = null)
             : base(context, listener)

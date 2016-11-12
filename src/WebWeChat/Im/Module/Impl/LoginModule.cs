@@ -22,7 +22,7 @@ namespace WebWeChat.Im.Module.Impl
 
         public Task<ActionEvent> Login(ActionEventListener listener = null)
         {
-            return new WeChatActionFuture(Context, listener)
+            return new WebWeChatActionFuture(Context, listener)
                 .PushAction<GetUuidAction>()
                 .PushAction<GetQRCodeAction>(async (sender, @event) =>
                 {
