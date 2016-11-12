@@ -24,12 +24,12 @@ namespace HttpAction.Service
                 CookieContainer = _cookieContainer,
             };
             _httpClient = new HttpClient(handler);
-            // _httpClient.DefaultRequestHeaders.Add(HttpConstants.UserAgent, HttpConstants.DefaultUserAgent);
+            _httpClient.DefaultRequestHeaders.Add(HttpConstants.UserAgent, HttpConstants.DefaultUserAgent);
         }
 
         private static HttpRequestMessage GetHttpRequest(HttpRequestItem item)
         {
-            var request = new HttpRequestMessage(new HttpMethod(item.Method.ToString()), item.GetUrl());
+            var request = new HttpRequestMessage(new HttpMethod(item.Method.ToString().ToUpper()), item.GetUrl());
             switch (item.Method)
             {
                 case HttpMethodType.Post:
