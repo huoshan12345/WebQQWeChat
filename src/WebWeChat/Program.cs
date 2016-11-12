@@ -56,7 +56,7 @@ namespace WebWeChat
                     {
                         var msg = (Message)notifyEvent.Target;
                         logger.LogInformation($"[{msg.MsgType.GetDescription()} 来自 {msg.FromUser?.ShowName}]: {msg.Content}");
-                        var userName = client.GetModule<AccountModule>().User.UserName;
+                        var userName = client.GetModule<SessionModule>().User.UserName;
                         if (msg.FromUserName == userName && msg.MsgType == MessageType.Text && !msg.Content.IsNullOrEmpty())
                         {
                             var reply = await client.GetRobotReply(RobotType.Tuling, msg.Content);

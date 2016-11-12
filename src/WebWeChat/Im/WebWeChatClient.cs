@@ -35,7 +35,6 @@ namespace WebWeChat.Im
             _services.AddSingleton<IChatModule, ChatModule>();
             _services.AddSingleton<StoreModule>();
             _services.AddSingleton<SessionModule>();
-            _services.AddSingleton<AccountModule>();
 
             // 服务
             _services.AddSingleton<IHttpService, WeChatHttp>();

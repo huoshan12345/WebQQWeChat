@@ -9,11 +9,12 @@ using WebQQ.Im.Bean.Discussion;
 using WebQQ.Im.Core;
 using WebQQ.Util;
 using FxUtility.Extensions;
+using Newtonsoft.Json.Linq;
 using WebQQ.Im.Bean;
 
 namespace WebQQ.Im.Action
 {
-    public class GetDiscussionInfoAction : WebQQAction
+    public class GetDiscussionInfoAction : WebQQInfoAction
     {
         private readonly QQDiscussion _discussion;
         public GetDiscussionInfoAction(IQQContext context, QQDiscussion discussion, ActionEventListener listener = null) : base(context, listener)
@@ -21,19 +22,17 @@ namespace WebQQ.Im.Action
             _discussion = discussion;
         }
 
-        public override HttpRequestItem BuildRequest()
+        protected override void ModifyRequest(HttpRequestItem req)
         {
-            var req = HttpRequestItem.CreateGetRequest(ApiUrls.GetDiscussionInfo);
             req.AddQueryValue("clientid", Session.ClientId);
             req.AddQueryValue("psessionid", Session.SessionId);
             req.AddQueryValue("vfwebqq", Session.Vfwebqq);
             req.AddQueryValue("t", Timestamp);
             req.AddQueryValue("did", _discussion.Did);
             req.Referrer = ApiUrls.Referrer;
-            return req;
         }
 
-        public override Task<ActionEvent> HandleResponse(HttpResponseItem response)
+        protected override void HandleResult(JToken json)
         {
             /*
                 {
@@ -65,38 +64,28 @@ namespace WebQQ.Im.Action
                     "retcode": 0
                 }             
              */
-            var json = response.ResponseString.ToJToken();
-            if (json["retcode"].ToString() == "0")
+
+            var result = json["result"];
+
+            // 成员列表
+            var members = result["info"]["mem_list"].ToObject<DiscussionMember[]>().Distinct(m => m.Uin).ToDictionary(m => m.Uin, m => m);
+
+            // 昵称
+            var mInfo = result["mem_info"].ToJArray();
+            foreach (var info in mInfo)
             {
-                var result = json["result"];
-
-                // 成员列表
-                var members = result["info"]["mem_list"].ToObject<DiscussionMember[]>().Distinct(m => m.Uin).ToDictionary(m => m.Uin, m => m);
-
-                // 昵称
-                var mInfo = result["mem_info"].ToJArray();
-                foreach (var info in mInfo)
-                {
-                    var key = info["uin"].ToLong();
-                    members.GetAndDo(key, m => m.Nick = info["nick"].ToString());
-                }
-
-                // 成员状态
-                var mStatus = result["mem_status"].ToObject<DiscussionMemberStatus[]>();
-                foreach (var status in mStatus)
-                {
-                    members.GetAndDo(status.Uin, member => Mapper.Map(status, member));
-                }
-
-                _discussion.Members.Clear();
-                _discussion.Members.AddOrUpdateRange(members);
-
-                return NotifyActionEventAsync(ActionEventType.EvtOK);
+                var key = info["uin"].ToLong();
+                members.GetAndDo(key, m => m.Nick = info["nick"].ToString());
             }
-            else
+
+            // 成员状态
+            var mStatus = result["mem_status"].ToObject<DiscussionMemberStatus[]>();
+            foreach (var status in mStatus)
             {
-                throw new QQException(QQErrorCode.ResponseError, response.ResponseString);
+                members.GetAndDo(status.Uin, member => Mapper.Map(status, member));
             }
+
+            _discussion.Members.ReplaceBy(members);
         }
     }
 }

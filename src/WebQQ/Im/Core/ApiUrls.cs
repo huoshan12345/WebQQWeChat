@@ -25,5 +25,6 @@ namespace WebQQ.Im.Core
         public const string GetDiscussionInfo = "http://d1.web2.qq.com/channel/get_discu_info";
         public const string GetFriendQQNumber = "http://s.web2.qq.com/api/get_friend_uin2";
         public const string GetFriendInfo = "http://s.web2.qq.com/api/get_friend_info2";
+        public const string PollMsg = "http://d1.web2.qq.com/channel/poll2";
     }
 }

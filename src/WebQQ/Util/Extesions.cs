@@ -55,5 +55,10 @@ namespace WebQQ.Util
         {
             return Mapper.Map<T>(obj);
         }
+
+        public static void MapTo(this object source, object dest)
+        {
+            Mapper.Map(source, dest);
+        }
     }
 }

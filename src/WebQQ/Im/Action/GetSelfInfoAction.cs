@@ -66,7 +66,7 @@ namespace WebQQ.Im.Action
             if (json["retcode"].ToString() == "0")
             {
                 var info = json["result"].ToObject<SelfInfo>();
-                Mapper.Map(info, Session.User);
+                info.MapTo(Session.User);
                 return NotifyActionEventAsync(ActionEventType.EvtOK);
             }
             else

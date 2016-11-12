@@ -39,7 +39,7 @@ namespace WebWeChat.Im.Action
             {
                 key = _key,
                 info = _input,
-                userid = Account.User.UserName,
+                userid = Session.User.UserName,
             };
             req.RawData = obj.ToJson();
             return req;

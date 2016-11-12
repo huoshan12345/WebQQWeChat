@@ -15,15 +15,14 @@ using FxUtility.Extensions;
 
 namespace WebQQ.Im.Action
 {
-    public class ChannelLoginAction : WebQQAction
+    public class ChannelLoginAction : WebQQInfoAction
     {
         public ChannelLoginAction(IQQContext context, ActionEventListener listener = null) : base(context, listener)
         {
         }
 
-        public override HttpRequestItem BuildRequest()
+        protected override void ModifyRequest(HttpRequestItem req)
         {
-            var req = HttpRequestItem.CreateFormRequest(ApiUrls.ChannelLogin);
             var json = new JObject
             {
                 {"status", QQStatusType.Online.ToString().ToLower()},
@@ -33,27 +32,17 @@ namespace WebQQ.Im.Action
             };
             req.AddQueryValue("r", json.ToSimpleString());
             req.Referrer = ApiUrls.Referrer;
-            return req;
         }
 
-        public override Task<ActionEvent> HandleResponse(HttpResponseItem response)
+        protected override void HandleResult(JToken json)
         {
-            var json = response.ResponseString.ToJToken();
-            if (json["retcode"].ToString() == "0")
-            {
-                var ret = json["result"];
-                Session.User.Uin = ret["uin"].ToLong();
-                Session.User.Status = ret["status"].ToEnum(QQStatusType.Online);
-                Session.SessionId = ret["psessionid"].ToString();
-                Session.State = SessionState.Online;
-                Session.Index = ret["index"].ToInt();
-                Session.Port = ret["port"].ToInt();
-                return NotifyActionEventAsync(ActionEventType.EvtOK);
-            }
-            else
-            {
-                throw new QQException(QQErrorCode.ResponseError, response.ResponseString);
-            }
+            var ret = json["result"];
+            Session.User.Uin = ret["uin"].ToLong();
+            Session.User.Status = ret["status"].ToEnum(QQStatusType.Online);
+            Session.SessionId = ret["psessionid"].ToString();
+            Session.State = SessionState.Online;
+            Session.Index = ret["index"].ToInt();
+            Session.Port = ret["port"].ToInt();
         }
     }
 }

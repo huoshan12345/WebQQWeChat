@@ -27,8 +27,8 @@ namespace WebWeChat.Im.Action
             {
                 Session.BaseRequest,
                 Code = 3,
-                FromUserName = Session.User["UserName"],
-                ToUserName = Session.User["UserName"],
+                FromUserName = Session.UserToken["UserName"],
+                ToUserName = Session.UserToken["UserName"],
                 ClientMsgId = Timestamp
             };
             var req = new HttpRequestItem(HttpMethodType.Post, url)
