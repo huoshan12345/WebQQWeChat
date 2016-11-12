@@ -16,7 +16,7 @@ namespace WebQQ.Im.Action
     /// <summary>
     /// 获取好友个性签名
     /// </summary>
-    public class GetFriendLongNickAction : WebQQAction
+    public class GetFriendLongNickAction : WebQQInfoAction
     {
         private readonly QQFriend _friend;
 
@@ -25,16 +25,16 @@ namespace WebQQ.Im.Action
             _friend = friend;
         }
 
-        public override HttpRequestItem BuildRequest()
+
+        protected override void ModifyRequest(HttpRequestItem req)
         {
-            var req = HttpRequestItem.CreateGetRequest(ApiUrls.GetFriendLongNick);
             req.AddQueryValue("tuin", _friend.Uin);
             req.AddQueryValue("vfwebqq", Session.Vfwebqq);
             req.AddQueryValue("t", Timestamp);
-            return req;
+            req.Referrer = ApiUrls.ReferrerS;
         }
 
-        public override Task<ActionEvent> HandleResponse(HttpResponseItem response)
+        protected override void HandleResult(JToken json)
         {
             /*
                 {
@@ -47,18 +47,7 @@ namespace WebQQ.Im.Action
                     ]
                 }
              */
-            var json = response.ResponseString.ToJToken();
-            if (json["retcode"].ToString() == "0")
-            {
-                var result = json["result"];
-                var uin = result["uin"].ToLong();
-                Store.FriendDic.GetAndDo(uin, friend => friend.LongNick = result["lnick"].ToString());
-                return NotifyActionEventAsync(ActionEventType.EvtOK);
-            }
-            else
-            {
-                throw new QQException(QQErrorCode.ResponseError, response.ResponseString);
-            }
+            _friend.LongNick = json["result"][0]["lnick"].ToString();
         }
     }
 }

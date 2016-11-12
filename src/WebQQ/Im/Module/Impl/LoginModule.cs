@@ -76,6 +76,7 @@ namespace WebQQ.Im.Module.Impl
                     if (obj == null) return;
                     await new GetFriendLongNickAction(Context, obj).ExecuteAsyncAuto();
                     await new GetFriendQQNumberAction(Context, obj).ExecuteAsyncAuto();
+                    await new GetFriendInfoAction(Context, obj).ExecuteAsyncAuto();
                 })
                 .PushAction<GetGroupNameListAction>(async (sender, @event) =>
                 {

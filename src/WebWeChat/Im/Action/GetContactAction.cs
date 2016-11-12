@@ -90,9 +90,13 @@ namespace WebWeChat.Im.Action
                 if (json["BaseResponse"]["Ret"].ToString() == "0")
                 {
                     Store.MemberCount = json["MemberCount"].ToObject<int>();
-                    var list = json["MemberList"].ToObject<List<ContactMember>>();
-                    Store.ContactMemberDic = list.ToDictionary(m => m.UserName);
-                    Account.User = Store.ContactMemberDic[Session.User["UserName"].ToString()];
+                    var list = json["MemberList"].ToObject<ContactMember[]>();
+                    Store.ContactMemberDic.ReplaceBy(list, m => m.UserName);
+
+                    var selfName = Session.UserToken["UserName"].ToString();
+                    Session.User = Store.ContactMemberDic[selfName];
+                    Store.ContactMemberDic.Remove(selfName);
+
                     Logger.LogInformation($"应有{Store.MemberCount}个联系人，读取到联系人{Store.ContactMemberDic.Count}个");
                     Logger.LogInformation($"共有{Store.GroupCount}个群|{Store.FriendCount}个好友|{Store.SpecialUserCount}个特殊账号|{Store.PublicUserCount}公众号或服务号");
                     return NotifyActionEventAsync(ActionEventType.EvtOK);

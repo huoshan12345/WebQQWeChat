@@ -17,19 +17,18 @@ namespace WebQQ.Im.Action
     {
         // 为了防止通知层级混乱，其他action不应该直接操作Context，本action也只是在报告错误时用到了。
         // 其他通知应该先通知到调用action的模块，由模块决定是否需要进一步通知
-        private IQQContext Context { get;}
-        protected ILogger Logger => Context.GetSerivce<ILogger>();
-        protected IConfigurationRoot Config => Context.GetSerivce<IConfigurationRoot>();
-        protected SessionModule Session => Context.GetModule<SessionModule>();
-        protected StoreModule Store => Context.GetModule<StoreModule>();
-
+        private readonly IQQContext _context;
+        protected ILogger Logger => _context.GetSerivce<ILogger>();
+        protected IConfigurationRoot Config => _context.GetSerivce<IConfigurationRoot>();
+        protected SessionModule Session => _context.GetModule<SessionModule>();
+        protected StoreModule Store => _context.GetModule<StoreModule>();
         protected long Timestamp => DateTime.Now.ToTimestampMilli();
         protected string ActionName => GetType().GetDescription();
 
         protected WebQQAction(IQQContext context, ActionEventListener listener = null)
             : base(context.GetSerivce<IHttpService>())
         {
-            Context = context; 
+            _context = context; 
             OnActionEvent += listener;
         }
 
@@ -74,7 +73,7 @@ namespace WebQQ.Im.Action
                     {
                         var ex = (QQException)target;
                         Logger.LogError($"[Action={ActionName}, Result={typeName}, {ex}");
-                        await Context.FireNotifyAsync(QQNotifyEvent.CreateEvent(QQNotifyEventType.Error, ex));
+                        await _context.FireNotifyAsync(QQNotifyEvent.CreateEvent(QQNotifyEventType.Error, ex));
                         break;
                     }
                 case ActionEventType.EvtRetry:

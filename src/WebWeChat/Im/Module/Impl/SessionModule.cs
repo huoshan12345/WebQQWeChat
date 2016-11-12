@@ -5,6 +5,7 @@ using Newtonsoft.Json.Linq;
 
 using WebWeChat.Im.Core;
 using FxUtility.Extensions;
+using WebWeChat.Im.Bean;
 
 namespace WebWeChat.Im.Module.Impl
 {
@@ -37,7 +38,9 @@ namespace WebWeChat.Im.Module.Impl
 
         public string SyncKeyStr => SyncKey?["List"].ToArray().Select(m => $"{m["Key"]}_{m["Val"]}").JoinWith("|");
 
-        public JToken User { get; set; }
+        public JToken UserToken { get; set; }
+
+        public ContactMember User { get; set; }
 
         public string Sid
         {
