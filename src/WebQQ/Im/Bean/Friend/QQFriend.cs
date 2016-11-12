@@ -6,15 +6,9 @@ namespace WebQQ.Im.Bean.Friend
     /// <summary>
     /// QQ好友
     /// </summary>
-    public class QQFriend : SelfInfo
+    public class QQFriend : FriendInfo
     {
-        public long Uin { get; set; }
-
-        public int Face { get; set; }
-
         public int InfoFlag { get; set; }
-
-        public string Nick { get; set; }
 
         /// <summary>
         /// 个性签名
@@ -31,8 +25,6 @@ namespace WebQQ.Im.Bean.Friend
         public int CategoryIndex { get; set; }
 
         public int ClientType { get; set; }
-
-        public QQStatusType Status { get; set; }
 
         public int VipLevel { get; set; }
 
