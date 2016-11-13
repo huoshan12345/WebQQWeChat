@@ -63,7 +63,7 @@ namespace WebWeChat
                             if (reply.Type == ActionEventType.EvtOK)
                             {
                                 var text = (string) reply.Target;
-                                text = $"{text} --来自机器人回复";
+                                text = $"{text}  --来自机器人回复";
                                 await client.SendMsg(MessageSent.CreateTextMsg(text, userName, msg.ToUserName));
                             }
                         }

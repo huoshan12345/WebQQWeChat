@@ -10,6 +10,7 @@ using WebWeChat.Im.Core;
 using FxUtility.Extensions;
 using HttpAction.Core;
 using HttpAction.Event;
+using WebWeChat.Im.Util;
 
 namespace WebWeChat.Im.Action
 {
@@ -30,7 +31,7 @@ namespace WebWeChat.Im.Action
             var obj = new { Session.BaseRequest };
             var req = new HttpRequestItem(HttpMethodType.Post, url)
             {
-                RawData = JsonConvert.SerializeObject(obj),
+                RawData = obj.ToJson(),
                 ContentType = HttpConstants.JsonContentType
             };
             return req;
@@ -83,31 +84,25 @@ namespace WebWeChat.Im.Action
                     "Seq": 0
                 }
             */
-            var str = responseItem.ResponseString;
-            if (!str.IsNullOrEmpty())
+            var json = responseItem.ResponseString.ToJToken();
+            if (json["BaseResponse"]["Ret"].ToString() == "0")
             {
-                var json = JObject.Parse(str);
-                if (json["BaseResponse"]["Ret"].ToString() == "0")
-                {
-                    Store.MemberCount = json["MemberCount"].ToObject<int>();
-                    var list = json["MemberList"].ToObject<ContactMember[]>();
-                    Store.ContactMemberDic.ReplaceBy(list, m => m.UserName);
+                Store.MemberCount = json["MemberCount"].ToObject<int>();
+                var list = json["MemberList"].ToObject<ContactMember[]>();
+                Store.ContactMemberDic.ReplaceBy(list, m => m.UserName);
 
-                    var selfName = Session.UserToken["UserName"].ToString();
-                    Session.User = Store.ContactMemberDic[selfName];
-                    Store.ContactMemberDic.Remove(selfName);
+                var selfName = Session.UserToken["UserName"].ToString();
+                Session.User = Store.ContactMemberDic[selfName];
+                Store.ContactMemberDic.Remove(selfName);
 
-                    Logger.LogInformation($"应有{Store.MemberCount}个联系人，读取到联系人{Store.ContactMemberDic.Count}个");
-                    Logger.LogInformation($"共有{Store.GroupCount}个群|{Store.FriendCount}个好友|{Store.SpecialUserCount}个特殊账号|{Store.PublicUserCount}公众号或服务号");
-                    return NotifyActionEventAsync(ActionEventType.EvtOK);
-                }
-                else
-                {
-                    throw new WeChatException(WeChatErrorCode.ResponseError, json["BaseResponse"]["ErrMsg"].ToString());
-                }
-
+                Logger.LogInformation($"应有{Store.MemberCount}个联系人，读取到联系人{Store.ContactMemberDic.Count}个");
+                Logger.LogInformation($"共有{Store.GroupCount}个群|{Store.FriendCount}个好友|{Store.SpecialUserCount}个特殊账号|{Store.PublicUserCount}公众号或服务号");
+                return NotifyActionEventAsync(ActionEventType.EvtOK);
             }
-            throw WeChatException.CreateException(WeChatErrorCode.ResponseError);
+            else
+            {
+                throw new WeChatException(WeChatErrorCode.ResponseError, responseItem.ResponseString);
+            }
         }
     }
 }

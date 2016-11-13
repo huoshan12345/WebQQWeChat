@@ -10,21 +10,9 @@ using WebWeChat.Im.Module;
 
 namespace WebWeChat
 {
-    public class Startup
+    public static class Startup
     {
-        public static IConfigurationRoot Configuration { get; private set; }
-
-        /// <summary>
-        /// 全局的执行器
-        /// </summary>
-        public static IActorDispatcher Dispatcher { get; private set; }
-
-        static Startup()
-        {
-            BuildConfig();
-        }
-
-        private static void BuildConfig()
+        private static IConfigurationRoot BuildConfig()
         {
             var builder = new ConfigurationBuilder()
                 .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
@@ -33,24 +21,20 @@ namespace WebWeChat
             {
                 builder.AddUserSecrets();
             }
-            Configuration = builder.Build();
+            return builder.Build();
         }
 
         public static void ConfigureServices(IServiceCollection services)
         {
-            services.AddSingleton<IActorDispatcher, ActorDispatcher>();
-            services.AddSingleton(Configuration);
+            services.AddSingleton(p => BuildConfig());
         }
 
         public static void Configure(IServiceProvider provider)
         {
-            Dispatcher = provider.GetService<IActorDispatcher>();
-            Dispatcher.BeginExcute();
         }
 
         public static void Dispose()
         {
-            Dispatcher.Dispose();
         }
     }
 }

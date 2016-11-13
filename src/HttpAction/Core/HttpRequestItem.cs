@@ -100,7 +100,8 @@ namespace HttpAction.Core
         public void AddQueryValue(string key, object value)
         {
             if (_rawData.Length != 0) _rawData.Append("&");
-            _rawData.Append($"{key.UrlEncode()}={value.SafeToString().UrlEncode()}");
+            var valueStr = (value as string) ?? value.SafeToString();
+            _rawData.Append($"{key.UrlEncode()}={valueStr.UrlEncode()}");
         }
 
         public void AddQueryString(string str)

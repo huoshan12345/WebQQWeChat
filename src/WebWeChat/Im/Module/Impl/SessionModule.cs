@@ -36,7 +36,7 @@ namespace WebWeChat.Im.Module.Impl
 
         public JToken SyncKey { get; set; }
 
-        public string SyncKeyStr => SyncKey?["List"].ToArray().Select(m => $"{m["Key"]}_{m["Val"]}").JoinWith("|");
+        public string SyncKeyStr => SyncKey?["List"]?.ToArray().Select(m => $"{m["Key"]}_{m["Val"]}").JoinWith("|");
 
         public JToken UserToken { get; set; }
 

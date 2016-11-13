@@ -1,5 +1,7 @@
 ﻿using System;
 using HttpAction.Action;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using WebWeChat.Im.Core;
 using WebWeChat.Im.Module.Interface;
 
@@ -11,11 +13,12 @@ namespace WebWeChat.Im.Module.Impl
         {
             if (context == null) throw new ArgumentNullException(nameof(context));
             Context = context;
-            Dispatcher = Context.GetSerivce<IActorDispatcher>();
         }
 
-        public IWeChatContext Context { get; }
-
-        public IActorDispatcher Dispatcher { get; }
+        protected IWeChatContext Context { get; set; }
+        protected ILogger Logger => Context.GetSerivce<ILogger>();
+        protected IConfigurationRoot Config => Context.GetSerivce<IConfigurationRoot>();
+        protected SessionModule Session => Context.GetModule<SessionModule>();
+        protected StoreModule Store => Context.GetModule<StoreModule>();
     }
 }

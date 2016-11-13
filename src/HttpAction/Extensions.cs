@@ -25,7 +25,7 @@ namespace HttpAction
 
         public static string GetRequestHeader(this HttpRequestItem request, CookieContainer cookieContainer)
         {
-            return GetRequestHeader(request, cookieContainer.GetCookies(new Uri(request.RawUrl)));
+            return GetRequestHeader(request, cookieContainer.GetCookies(request.Uri));
         }
 
         public static IAction CreateAction<T>(this IActionFactory factory, params object[] args) where T : IAction

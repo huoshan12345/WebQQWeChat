@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Threading.Tasks;
+using FxUtility.Extensions;
 using HttpAction.Event;
 using WebWeChat.Im.Action;
 using WebWeChat.Im.Action.ActionResult;
@@ -42,8 +43,7 @@ namespace WebWeChat.Im.Module.Impl
                             await Context.FireNotifyAsync(WeChatNotifyEvent.CreateEvent(WeChatNotifyEventType.QRCodeSuccess));
                             break;
                         case WatiForLoginResult.QRCodeInvalid:
-                            await
-                                Context.FireNotifyAsync(WeChatNotifyEvent.CreateEvent(WeChatNotifyEventType.QRCodeInvalid));
+                            await Context.FireNotifyAsync(WeChatNotifyEvent.CreateEvent(WeChatNotifyEventType.QRCodeInvalid));
                             @event.Type = ActionEventType.EvtError; // 令后续动作不再执行
                             break;
                         case WatiForLoginResult.ScanCode:
@@ -69,7 +69,7 @@ namespace WebWeChat.Im.Module.Impl
             var wxSync = new WebwxSyncAction(Context, async (s, e) =>
             {
                 if (e.Type == ActionEventType.EvtRetry) return;
-                Dispatcher.PushActor(sync);
+                sync.ExecuteAsync().Forget();
                 if (e.Type == ActionEventType.EvtOK)
                 {
                     var msgs = (IList<Message>)e.Target;
@@ -107,12 +107,12 @@ namespace WebWeChat.Im.Module.Impl
                         case SyncCheckResult.Nothing:
                             break;
                     }
-                    Dispatcher.PushActor(result == SyncCheckResult.Nothing ? sender : wxSync);
+                    (result == SyncCheckResult.Nothing ? sender : wxSync).ExecuteAsyncAuto().Forget();
                 }
                 return Task.CompletedTask;
             };
 
-            Dispatcher.PushActor(sync);
+            sync.ExecuteAsyncAuto().Forget();
         }
     }
 }

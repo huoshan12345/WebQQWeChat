@@ -28,8 +28,10 @@ namespace WebWeChat.Im.Action
         public override HttpRequestItem BuildRequest()
         {
             var req = new HttpRequestItem(HttpMethodType.Post, ApiUrls.CheckQRCode);
+            req.AddQueryValue("loginicon", "true");
             req.AddQueryValue("tip", _tip);
             req.AddQueryValue("uuid", Session.Uuid);
+            req.AddQueryValue("r", ~Timestamp);
             req.AddQueryValue("_", Session.Seq++);
             return req;
         }
@@ -49,7 +51,7 @@ namespace WebWeChat.Im.Action
                             var m = _regUrl.Match(str);
                             if (m.Success)
                             {
-                                Session.LoginUrl = $"{m.Groups[1].Value}&fun=new";
+                                Session.LoginUrl = $"{m.Groups[1].Value}&fun=new&version=v2";
                                 Session.BaseUrl = Session.LoginUrl.Substring(0, Session.LoginUrl.LastIndexOf("/", StringComparison.OrdinalIgnoreCase));
                             }
                             break;

@@ -16,7 +16,6 @@ namespace WebQQ.Im.Module.Impl
         protected IQQContext Context { get; set; }
         protected ILogger Logger => Context.GetSerivce<ILogger>();
         protected IConfigurationRoot Config => Context.GetSerivce<IConfigurationRoot>();
-        protected IActorDispatcher Dispatcher => Context.GetSerivce<IActorDispatcher>();
         protected SessionModule Session => Context.GetModule<SessionModule>();
         protected StoreModule Store => Context.GetModule<StoreModule>();
 
