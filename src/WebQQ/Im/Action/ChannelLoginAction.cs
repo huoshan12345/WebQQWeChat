@@ -23,9 +23,10 @@ namespace WebQQ.Im.Action
 
         protected override void ModifyRequest(HttpRequestItem req)
         {
+            req.Method = HttpMethodType.Post;
             var json = new JObject
             {
-                {"status", QQStatusType.Online.ToString().ToLower()},
+                {"status", QQStatusType.Online.ToLowerString()},
                 {"ptwebqq", Session.Ptwebqq},
                 {"clientid", Session.ClientId},
                 {"psessionid", ""}
