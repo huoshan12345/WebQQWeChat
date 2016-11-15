@@ -75,6 +75,8 @@ namespace WebQQ
             // 获取二维码
             var qq = new WebQQClient(Listener);
             qq.Login().Wait();
+            qq.BeginPoll();
+
 
             Console.Read();
         }

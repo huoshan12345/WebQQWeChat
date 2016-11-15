@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using WebWeChat.Im.Bean;
 using WebWeChat.Im.Core;
-using WebWeChat.Im.Util;
+using WebWeChat.Util;
 
 namespace WebWeChat.Im.Module.Impl
 {

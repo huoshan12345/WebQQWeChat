@@ -8,7 +8,7 @@ using HttpAction.Event;
 using Newtonsoft.Json.Linq;
 using WebWeChat.Im.Bean;
 using WebWeChat.Im.Core;
-using WebWeChat.Im.Util;
+using WebWeChat.Util;
 
 namespace WebWeChat.Im.Action
 {

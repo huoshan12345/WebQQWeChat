@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using FxUtility.Extensions;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using WebWeChat.Im.Bean;
-using FxUtility.Extensions;
 
-namespace WebWeChat.Im.Util
+namespace WebWeChat.Util
 {
     public static class Extesions
     {

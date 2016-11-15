@@ -20,7 +20,7 @@ namespace WebQQ.Im.Module.Impl
     {
         public void BeginPoll()
         {
-            throw new NotImplementedException();
+            new PollMsgAction(Context).ExecuteAsyncAuto().Forget();
         }
 
         public LoginModule(IQQContext context) : base(context)
@@ -34,7 +34,7 @@ namespace WebQQ.Im.Module.Impl
                 {
                     if (@event.Type == ActionEventType.EvtOK)
                     {
-                        var verify = (Image) @event.Target;
+                        var verify = (Image)@event.Target;
                         await Context.FireNotifyAsync(QQNotifyEvent.CreateEvent(QQNotifyEventType.QRCodeReady, verify));
                     }
                 })

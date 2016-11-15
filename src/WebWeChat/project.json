@@ -5,7 +5,10 @@
   "configurations": {
     "Debug": {
       "buildOptions": {
-        "define": [ "DEBUG" ]
+        "define": [ "DEBUG" ],
+        "copyToOutput": {
+          "include": [ "project.json" ]
+        }
       }
     },
     "Release": {
@@ -18,7 +21,7 @@
   "buildOptions": {
     "emitEntryPoint": true,
     "copyToOutput": {
-      "include": [ "project.json" ],
+      "include": [],
       "exclude": [],
       "excludeFiles": [],
       "builtIns": {},

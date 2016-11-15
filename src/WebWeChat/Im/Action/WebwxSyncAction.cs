@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
 using WebWeChat.Im.Bean;
 using WebWeChat.Im.Core;
-using WebWeChat.Im.Util;
 using FxUtility.Extensions;
 using HttpAction.Core;
 using HttpAction.Event;
+using WebWeChat.Util;
 
 namespace WebWeChat.Im.Action
 {

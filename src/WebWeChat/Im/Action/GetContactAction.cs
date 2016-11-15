@@ -10,7 +10,7 @@ using WebWeChat.Im.Core;
 using FxUtility.Extensions;
 using HttpAction.Core;
 using HttpAction.Event;
-using WebWeChat.Im.Util;
+using WebWeChat.Util;
 
 namespace WebWeChat.Im.Action
 {

@@ -1,15 +1,15 @@
-﻿namespace WebQQ.Im.Bean.Content
+﻿using Newtonsoft.Json.Linq;
+
+namespace WebQQ.Im.Bean.Content
 {
-    
+
     public class TextItem : IContentItem
     {
-        public string Content { get; set; }
-
-        public TextItem() { }
+        public string Content { get; }
 
         public TextItem(string text)
         {
-            FromJson(text);
+            Content = text;
         }
 
         public ContentItemType Type => ContentItemType.Text;
@@ -19,15 +19,9 @@
             return Content;
         }
 
-        public void FromJson(string text)
-        {
-            Content = text;
-        }
-
-        public string ToText()
+        public string GetText()
         {
             return Content;
         }
     }
-
 }
