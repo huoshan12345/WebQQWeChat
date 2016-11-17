@@ -87,7 +87,7 @@ namespace WebWeChat.Im.Action
                         return this.ExecuteAsync();
                     }
                 }
-                
+
                 switch (retcode)
                 {
                     case "1100":
@@ -97,7 +97,12 @@ namespace WebWeChat.Im.Action
 
                     case "0":
                         var selector = match.Groups[2].Value;
-                        return NotifyActionEventAsync(ActionEventType.EvtOK, EnumHelper.ParseFromStrNum<SyncCheckResult>(selector));
+                        return NotifyActionEventAsync(ActionEventType.EvtOK, EnumHelper.ParseFromStrNum<SyncCheckResult>(selector,
+                            s =>
+                            {
+                                Logger.LogWarning($"cannot convert {s} to enum type : {nameof(SyncCheckResult)}");
+                                return SyncCheckResult.Nothing;
+                            }));
                 }
             }
             throw WeChatException.CreateException(WeChatErrorCode.ResponseError);
