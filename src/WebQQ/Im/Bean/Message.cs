@@ -30,12 +30,12 @@ namespace WebQQ.Im.Bean
         [JsonProperty("msg_type")]
         public int MsgType { get; set; }
         [JsonProperty("time")]
-        public int Time { get; set; }
+        public long Time { get; set; }
         [JsonProperty("to_uin")]
-        public int ToUin { get; set; }
+        public long ToUin { get; set; }
         [JsonProperty("group_code")]
-        public int GroupCode { get; set; }
-        [JsonProperty("to_uin")]
-        public int SendUin { get; set; }
+        public long GroupCode { get; set; }
+        [JsonProperty("send_uin")]
+        public long SendUin { get; set; }
     }
 }

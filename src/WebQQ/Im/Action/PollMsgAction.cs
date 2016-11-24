@@ -26,6 +26,7 @@ namespace WebQQ.Im.Action
 
         protected override void ModifyRequest(HttpRequestItem req)
         {
+            req.Method = HttpMethodType.Post;
             var json = new JObject
             {
                 {"clientid", Session.ClientId},
@@ -34,7 +35,7 @@ namespace WebQQ.Im.Action
                 {"ptwebqq", Session.Ptwebqq}
             };
             req.AddQueryValue("r", json.ToSimpleString());
-            req.Referrer = ApiUrls.Referrer;
+            req.Referrer = "https://d1.web2.qq.com/cfproxy.html?v=20151105001&callback=1";
         }
 
         public override Task<ActionEvent> HandleResponse(HttpResponseItem response)

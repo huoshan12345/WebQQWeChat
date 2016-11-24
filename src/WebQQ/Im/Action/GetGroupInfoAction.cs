@@ -100,37 +100,31 @@ namespace WebQQ.Im.Action
                 var members = result["ginfo"]["members"].ToObject<GroupMember[]>().Distinct(m => m.Uin).ToDictionary(m => m.Uin, m => m);
 
                 // 成员信息
-                var mInfo = result["minfo"].ToObject<GroupMemberInfo[]>();
-                foreach (var info in mInfo)
+                result["minfo"].ToObject<GroupMemberInfo[]>().ForEach(m =>
                 {
-                    members.GetAndDo(info.Uin, member => Mapper.Map(info, member));
-                }
+                    members.GetAndDo(m.Uin, member => Mapper.Map(m, member));
+                });
 
                 // 成员状态
-                var mStatus = result["stats"].ToObject<UserStatus[]>();
-                foreach (var status in mStatus)
+                result["stats"]?.ToObject<UserStatus[]>().ForEach(m =>
                 {
-                    members.GetAndDo(status.Uin, member => Mapper.Map(status, member));
-                }
+                    members.GetAndDo(m.Uin, member => Mapper.Map(m, member));
+                });
 
                 // 成员名片
-                var mCards = result["cards"].ToObject<GroupMemberCard[]>();
-                foreach (var card in mCards)
+                result["cards"]?.ToObject<GroupMemberCard[]>().ForEach(card =>
                 {
                     members.GetAndDo(card.Uin, member => Mapper.Map(card, member));
-                }
+                });
 
                 // vip信息
-                var mVipInfo = result["vipinfo"].ToObject<UserVipInfo[]>();
-                foreach (var vip in mVipInfo)
+                result["vipinfo"]?.ToObject<UserVipInfo[]>().ForEach(m =>
                 {
-                    members.GetAndDo(vip.Uin, member => Mapper.Map(vip, member));
-                }
+                    members.GetAndDo(m.Uin, member => Mapper.Map(m, member));
+                });
 
-                Mapper.Map(groupInfo, _group);
-
-                _group.Members.Clear();
-                _group.Members.AddOrUpdateRange(members);
+                groupInfo.MapTo(_group);
+                _group.Members.ReplaceBy(members);
 
                 return NotifyActionEventAsync(ActionEventType.EvtOK);
             }
