@@ -192,3 +192,4 @@ ModelManifest.xml
 /.vs
 /src/WebWeChat/verify.png
 /src/WebQQ/verify.png
+*.nupkg
