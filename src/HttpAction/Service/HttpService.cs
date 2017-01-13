@@ -12,10 +12,10 @@ namespace HttpAction.Service
     public class HttpService : IHttpService, IDisposable
     {
         protected readonly CookieContainer _cookieContainer;
-        protected readonly HttpClient _httpClient;
+        protected HttpClient _httpClient;
         private static readonly string[] NotAddHeaderNames = { HttpConstants.ContentType };
 
-        public HttpService()
+        public HttpService(IWebProxy proxy = null)
         {
             _cookieContainer = new CookieContainer();
             var handler = new HttpClientHandler
@@ -23,8 +23,24 @@ namespace HttpAction.Service
                 AllowAutoRedirect = true,
                 CookieContainer = _cookieContainer,
             };
+            _httpClient = CreateHttpClient(proxy);
+        }
+
+        private HttpClient CreateHttpClient(IWebProxy proxy)
+        {
+            var handler = new HttpClientHandler
+            {
+                AllowAutoRedirect = true,
+                CookieContainer = _cookieContainer,
+            };
+            if (proxy != null)
+            {
+                handler.UseProxy = true;
+                handler.Proxy = proxy;
+            }
             _httpClient = new HttpClient(handler);
             _httpClient.DefaultRequestHeaders.Add(HttpConstants.UserAgent, HttpConstants.DefaultUserAgent);
+            return _httpClient;
         }
 
         private static HttpRequestMessage GetHttpRequest(HttpRequestItem item)
@@ -82,9 +98,15 @@ namespace HttpAction.Service
             }
         }
 
-        public virtual void SetHttpProxy(ProxyType proxyType, string proxyHost, int proxyPort, string proxyAuthUser, string proxyAuthPassword)
+        public virtual void SetHttpProxy(IWebProxy proxy)
         {
-            // TODO
+            var client = CreateHttpClient(proxy);
+            var oldClient = _httpClient;
+            lock (_httpClient)
+            {
+                _httpClient = client;
+            }
+            oldClient.Dispose();
         }
 
         public virtual async Task<HttpResponseItem> ExecuteHttpRequestAsync(HttpRequestItem requestItem, CancellationToken token)

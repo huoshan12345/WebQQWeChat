@@ -7,15 +7,7 @@ namespace HttpAction.Service
 {
     public interface IHttpService
     {
-        /// <summary>
-        /// 设置HTTP代理
-        /// </summary>
-        /// <param name="proxyType">代理类型</param>
-        /// <param name="proxyHost">代理主机</param>
-        /// <param name="proxyPort">代理端口</param>
-        /// <param name="proxyAuthUser">认证用户名， 如果不需要认证，设置为null</param>
-        /// <param name="proxyAuthPassword">认证密码，如果不需要认证，设置为null</param>
-        void SetHttpProxy(ProxyType proxyType, string proxyHost, int proxyPort, string proxyAuthUser, string proxyAuthPassword);
+        void SetHttpProxy(IWebProxy proxy);
 
         /// <summary>
         /// 执行一个HTTP请求
