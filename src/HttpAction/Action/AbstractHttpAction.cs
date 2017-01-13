@@ -37,7 +37,7 @@ namespace HttpAction.Action
             }
         }
 
-        protected virtual Task<ActionEvent> NotifyActionEventAsync(ActionEventType type, object target = null)
+        protected Task<ActionEvent> NotifyActionEventAsync(ActionEventType type, object target = null)
         {
             return NotifyActionEventAsync(ActionEvent.CreateEvent(type, target));
         }
@@ -102,6 +102,7 @@ namespace HttpAction.Action
 #endif
                     return await HandleExceptionAsync(ex).ConfigureAwait(false);
                 }
+                RetryTimes = 0;
             }
             return await NotifyActionEventAsync(ActionEvent.CreateEvent(ActionEventType.EvtCanceled, this)).ConfigureAwait(false);
         }

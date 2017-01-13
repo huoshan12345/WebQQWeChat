@@ -18,11 +18,6 @@ namespace HttpAction.Service
         public HttpService(IWebProxy proxy = null)
         {
             _cookieContainer = new CookieContainer();
-            var handler = new HttpClientHandler
-            {
-                AllowAutoRedirect = true,
-                CookieContainer = _cookieContainer,
-            };
             _httpClient = CreateHttpClient(proxy);
         }
 

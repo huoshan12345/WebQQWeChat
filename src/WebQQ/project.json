@@ -35,7 +35,7 @@
   "dependencies": {
     "AutoMapper": "5.2.0",
     "FxUtility": "0.1.5",
-    "HttpAction": "0.1.0-*",
+    "HttpAction": "0.1.1-*",
     "Microsoft.Extensions.Configuration": "1.1.0",
     "Microsoft.Extensions.Configuration.Json": "1.1.0",
     "Microsoft.Extensions.Configuration.UserSecrets": "1.1.0",
