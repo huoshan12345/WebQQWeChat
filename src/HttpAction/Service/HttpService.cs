@@ -5,6 +5,7 @@ using System.Net;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
+using FxUtility.Extensions;
 using HttpAction.Core;
 
 namespace HttpAction.Service
@@ -13,7 +14,7 @@ namespace HttpAction.Service
     {
         protected readonly CookieContainer _cookieContainer;
         protected HttpClient _httpClient;
-        private static readonly string[] NotAddHeaderNames = { HttpConstants.ContentType };
+        private static readonly string[] NotAddHeaderNames = { HttpConstants.ContentType, HttpConstants.Cookie };
 
         public HttpService(IWebProxy proxy = null)
         {
@@ -27,18 +28,22 @@ namespace HttpAction.Service
             {
                 AllowAutoRedirect = true,
                 CookieContainer = _cookieContainer,
+                UseCookies = true
             };
             if (proxy != null)
             {
                 handler.UseProxy = true;
                 handler.Proxy = proxy;
             }
-            _httpClient = new HttpClient(handler);
+            _httpClient = new HttpClient(handler)
+            {
+                Timeout = TimeSpan.FromSeconds(60)
+            };
             _httpClient.DefaultRequestHeaders.Add(HttpConstants.UserAgent, HttpConstants.DefaultUserAgent);
             return _httpClient;
         }
 
-        private static HttpRequestMessage GetHttpRequest(HttpRequestItem item)
+        private HttpRequestMessage GetHttpRequest(HttpRequestItem item)
         {
             var request = new HttpRequestMessage(new HttpMethod(item.Method.ToString().ToUpper()), item.GetUrl());
             switch (item.Method)
@@ -59,6 +64,11 @@ namespace HttpAction.Service
             foreach (var header in item.HeaderMap.Where(h => !NotAddHeaderNames.Contains(h.Key)))
             {
                 request.Headers.Add(header.Key, header.Value);
+            }
+            var cookies = item.HeaderMap.GetOrDefault(HttpConstants.Cookie);
+            if (!cookies.IsNullOrEmpty())
+            {
+                _cookieContainer.SetCookies(request.RequestUri, cookies);
             }
             return request;
         }
@@ -119,6 +129,8 @@ namespace HttpAction.Service
                 return responseItem;
             }
         }
+
+
 
         public virtual Cookie GetCookie(string name, string url)
         {
