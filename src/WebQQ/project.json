@@ -34,8 +34,8 @@
 
   "dependencies": {
     "AutoMapper": "5.2.0",
-    "FclEx.Component": "0.1.7",
-    "FclEx.Json": "0.1.7",
+    "FclEx.Component": "0.1.8",
+    "FclEx.Json": "0.1.8",
     "HttpAction": "0.1.1-*",
     "Microsoft.Extensions.Configuration": "1.1.0",
     "Microsoft.Extensions.Configuration.Json": "1.1.0",

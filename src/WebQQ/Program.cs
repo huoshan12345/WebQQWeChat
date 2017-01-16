@@ -11,6 +11,7 @@ using WebQQ.Im.Bean.Content;
 using WebQQ.Im.Event;
 using WebQQ.Im.Module.Impl;
 using System.Reflection;
+using HttpAction.Event;
 
 namespace WebQQ
 {

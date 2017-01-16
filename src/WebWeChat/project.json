@@ -35,8 +35,8 @@
     "Microsoft.Extensions.Configuration.Json": "1.1.0",
     "Microsoft.Extensions.Configuration.UserSecrets": "1.1.0",
     "Microsoft.Extensions.DependencyInjection": "1.1.0",
-    "FclEx.Component": "0.1.7",
-    "FclEx.Json": "0.1.7"
+    "FclEx.Component": "0.1.8",
+    "FclEx.Json": "0.1.8"
   },
 
   "frameworks": {
