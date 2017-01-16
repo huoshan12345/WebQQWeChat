@@ -1,5 +1,5 @@
 ﻿using System;
-using FxUtility.Extensions;
+using FclEx.Extensions;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using WebQQ.Im.Core;

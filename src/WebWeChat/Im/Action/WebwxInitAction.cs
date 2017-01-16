@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using WebWeChat.Im.Core;
-using FxUtility.Extensions;
+using FclEx.Extensions;
 using HttpAction.Core;
 using HttpAction.Event;
 

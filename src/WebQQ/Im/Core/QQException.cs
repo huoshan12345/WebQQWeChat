@@ -3,7 +3,7 @@ using System.Collections.Concurrent;
 using System.IO;
 using System.Net;
 using System.Text;
-using FxUtility.Extensions;
+using FclEx.Extensions;
 using Newtonsoft.Json;
 
 namespace WebQQ.Im.Core

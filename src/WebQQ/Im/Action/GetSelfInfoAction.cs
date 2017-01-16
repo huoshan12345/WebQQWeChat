@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using FclEx.Extesions;
 using HttpAction.Core;
 using HttpAction.Event;
 using WebQQ.Im.Bean;

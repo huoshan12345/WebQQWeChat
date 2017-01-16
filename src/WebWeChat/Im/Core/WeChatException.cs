@@ -4,7 +4,7 @@ using System.IO;
 using System.Net;
 using System.Text;
 using Newtonsoft.Json;
-using FxUtility.Extensions;
+using FclEx.Extensions;
 
 namespace WebWeChat.Im.Core
 {

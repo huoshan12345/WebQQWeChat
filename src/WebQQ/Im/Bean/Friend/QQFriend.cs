@@ -1,4 +1,4 @@
-﻿using FxUtility.Extensions;
+﻿using FclEx.Extensions;
 using Newtonsoft.Json;
 
 namespace WebQQ.Im.Bean.Friend

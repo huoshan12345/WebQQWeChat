@@ -10,7 +10,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using WebWeChat.Im.Bean;
 using WebWeChat.Im.Module.Impl;
-using FxUtility.Extensions;
+using FclEx.Extensions;
 using HttpAction.Event;
 
 namespace WebWeChat

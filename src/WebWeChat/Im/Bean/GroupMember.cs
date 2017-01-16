@@ -1,5 +1,5 @@
 ﻿using Newtonsoft.Json;
-using FxUtility.Extensions;
+using FclEx.Extensions;
 
 namespace WebWeChat.Im.Bean
 {

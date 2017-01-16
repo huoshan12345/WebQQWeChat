@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
-using FxUtility.Extensions;
+using FclEx.Extensions;
 using HttpAction.Action;
 using HttpAction.Event;
 using HttpAction.Service;
@@ -10,6 +10,7 @@ using Microsoft.Extensions.Logging;
 using WebQQ.Im.Core;
 using WebQQ.Im.Event;
 using WebQQ.Im.Module.Impl;
+using WebQQ.Im.Service.Impl;
 
 namespace WebQQ.Im.Action
 {

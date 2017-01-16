@@ -1,8 +1,8 @@
 {
   "dependencies": {
+    "FclEx": "0.1.7",
     "Microsoft.Extensions.Configuration.Abstractions": "1.1.0",
-    "Microsoft.Extensions.DependencyInjection.Abstractions": "1.1.0",
-    "FxUtility": "0.1.5",
+    "Microsoft.Extensions.DependencyInjection.Abstractions": "1.1.0"
   },
   "packOptions": {
     "summary": "a simple http lib",
@@ -26,9 +26,9 @@
     },
     "net461": {
       "dependencies": {
-        "System.Net.Http": "4.0.0.0",
+        "System.Net.Http": "4.0.0.0"
       }
     }
   },
-  "version": "0.1.1-beta2-*"
+  "version": "0.1.1-beta2"
 }

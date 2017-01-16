@@ -2,7 +2,7 @@ using System;
 using System.Drawing;
 using System.Linq;
 using System.Threading.Tasks;
-using FxUtility.Extensions;
+using FclEx.Extensions;
 using HttpAction;
 using HttpAction.Event;
 using Microsoft.Extensions.Logging;

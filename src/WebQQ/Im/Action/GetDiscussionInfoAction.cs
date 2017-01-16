@@ -8,7 +8,8 @@ using HttpAction.Event;
 using WebQQ.Im.Bean.Discussion;
 using WebQQ.Im.Core;
 using WebQQ.Util;
-using FxUtility.Extensions;
+using FclEx.Extensions;
+using FclEx.Extesions;
 using Newtonsoft.Json.Linq;
 using WebQQ.Im.Bean;
 

@@ -1,4 +1,4 @@
-﻿using FxUtility.Extensions;
+﻿using FclEx.Extensions;
 using System;
 using System.Collections.Concurrent;
 

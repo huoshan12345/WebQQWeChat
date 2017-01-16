@@ -1,6 +1,6 @@
 ﻿using System.Collections.Concurrent;
 using System.Threading.Tasks;
-using TaskExtensions = FxUtility.Extensions.TaskExtensions;
+using FclEx.Extensions;
 
 namespace HttpAction.Action
 {
@@ -26,7 +26,7 @@ namespace HttpAction.Action
         private static bool DispatchAction(IActor actor)
         {
             if (actor == null) return true;
-            TaskExtensions.Forget(actor.ExecuteAsyncAuto());
+            actor.ExecuteAsyncAuto().Forget();
             return !(actor is ExitActor);
         }
 

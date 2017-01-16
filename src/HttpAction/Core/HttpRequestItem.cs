@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using FxUtility.Extensions;
+using FclEx.Extensions;
 
 namespace HttpAction.Core
 {

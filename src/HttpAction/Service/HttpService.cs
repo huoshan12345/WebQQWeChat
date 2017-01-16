@@ -5,7 +5,7 @@ using System.Net;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
-using FxUtility.Extensions;
+using FclEx.Extensions;
 using HttpAction.Core;
 
 namespace HttpAction.Service

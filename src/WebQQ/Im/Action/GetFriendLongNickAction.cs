@@ -8,7 +8,7 @@ using Newtonsoft.Json.Linq;
 using WebQQ.Im.Bean;
 using WebQQ.Im.Core;
 using WebQQ.Util;
-using FxUtility.Extensions;
+using FclEx.Extensions;
 using WebQQ.Im.Bean.Friend;
 
 namespace WebQQ.Im.Action

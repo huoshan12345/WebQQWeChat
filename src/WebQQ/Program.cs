@@ -3,7 +3,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Text;
-using FxUtility.Extensions;
+using FclEx.Extensions;
 using Microsoft.Extensions.Logging;
 using WebQQ.Im;
 using WebQQ.Im.Bean;

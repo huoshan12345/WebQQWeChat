@@ -4,7 +4,7 @@ using System.Linq;
 using Newtonsoft.Json.Linq;
 
 using WebWeChat.Im.Core;
-using FxUtility.Extensions;
+using FclEx.Extensions;
 using WebWeChat.Im.Bean;
 
 namespace WebWeChat.Im.Module.Impl

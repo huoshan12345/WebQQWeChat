@@ -1,4 +1,4 @@
-﻿using FxUtility.Extensions;
+﻿using FclEx.Extensions;
 using System;
 
 namespace WebWeChat.Im.Bean

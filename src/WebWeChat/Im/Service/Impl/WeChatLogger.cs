@@ -1,10 +1,10 @@
 ﻿using System;
-using FxUtility.Logger;
 using Microsoft.Extensions.Logging;
 using WebWeChat.Im.Core;
 using WebWeChat.Im.Module.Impl;
 using WebWeChat.Im.Service.Interface;
-using FxUtility.Extensions;
+using FclEx.Extensions;
+using FclEx.Logger;
 
 namespace WebWeChat.Im.Service.Impl
 {

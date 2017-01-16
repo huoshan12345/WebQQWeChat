@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using FxUtility.Extensions;
+using FclEx.Extensions;
 using Newtonsoft.Json.Linq;
 using WebQQ.Util;
 
