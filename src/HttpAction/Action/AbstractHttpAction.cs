@@ -83,10 +83,10 @@ namespace HttpAction.Action
                 {
                     requestItem = BuildRequest();
                     var response = await HttpService.ExecuteHttpRequestAsync(requestItem, token).ConfigureAwait(false);
-                    return await HandleResponse(response).ConfigureAwait(false);
+                    var result = await HandleResponse(response).ConfigureAwait(false);
+                    RetryTimes = 0;
+                    return result;
                 }
-                catch (TaskCanceledException) { }
-                catch (OperationCanceledException) { }
                 catch (Exception ex)
                 {
                     ex = ex.InnerException ?? ex;
@@ -100,9 +100,9 @@ namespace HttpAction.Action
                         var len = data.Length;
                     }
 #endif
+                    // ++RetryTimes;
                     return await HandleExceptionAsync(ex).ConfigureAwait(false);
                 }
-                RetryTimes = 0;
             }
             return await NotifyActionEventAsync(ActionEvent.CreateEvent(ActionEventType.EvtCanceled, this)).ConfigureAwait(false);
         }
