@@ -57,15 +57,9 @@ namespace HttpAction.Action
         {
             try
             {
-                if (RetryTimes < MaxReTryTimes)
-                {
-                    return await NotifyActionEventAsync(ActionEvent.CreateEvent(ActionEventType.EvtRetry, ex));
-
-                }
-                else
-                {
-                    return await NotifyActionEventAsync(ActionEvent.CreateEvent(ActionEventType.EvtError, ex));
-                }
+                var @event = ActionEvent.CreateEvent(RetryTimes < MaxReTryTimes ?
+                    ActionEventType.EvtRetry : ActionEventType.EvtError, ex);
+                return await NotifyActionEventAsync(@event);
             }
             catch (Exception e)
             {
@@ -84,7 +78,7 @@ namespace HttpAction.Action
                     requestItem = BuildRequest();
                     var response = await HttpService.ExecuteHttpRequestAsync(requestItem, token).ConfigureAwait(false);
                     var result = await HandleResponse(response).ConfigureAwait(false);
-                    RetryTimes = 0;
+                    // RetryTimes = 0;
                     return result;
                 }
                 catch (Exception ex)
