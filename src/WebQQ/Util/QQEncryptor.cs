@@ -75,5 +75,15 @@ namespace WebQQ.Util
             }
             return v1.ToString();
         }
+
+        public static string GetPtqrtoken(string qrsig)
+        {
+            var e = 0;
+            for (int i = 0, n = qrsig.Length; n > i; ++i)
+            {
+                e += (e << 5) + qrsig[i];
+            }
+            return (2147483647 & e).ToString();
+        }
     }
 }

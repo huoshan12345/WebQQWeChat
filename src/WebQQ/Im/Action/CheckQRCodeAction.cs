@@ -4,6 +4,7 @@ using HttpAction.Core;
 using HttpAction.Event;
 using WebQQ.Im.Core;
 using WebQQ.Im.Event;
+using WebQQ.Util;
 
 namespace WebQQ.Im.Action
 {
@@ -16,7 +17,9 @@ namespace WebQQ.Im.Action
 
         public override HttpRequestItem BuildRequest()
         {
+            var qrsig = HttpService.GetCookie("qrsig", ApiUrls.CheckQRCode).Value;
             var req = new HttpRequestItem(HttpMethodType.Get, ApiUrls.CheckQRCode);
+            req.AddQueryValue("ptqrtoken", QQEncryptor.GetPtqrtoken(qrsig));
             req.AddQueryValue("webqq_type", "10");
             req.AddQueryValue("remember_uin", "1");
             req.AddQueryValue("login2qq", "1");
