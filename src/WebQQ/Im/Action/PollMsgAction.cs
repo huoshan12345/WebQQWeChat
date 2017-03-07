@@ -10,6 +10,7 @@ using HttpAction.Event;
 using Newtonsoft.Json.Linq;
 using WebQQ.Im.Bean;
 using WebQQ.Im.Bean.Content;
+using WebQQ.Im.Bean.Group;
 using WebQQ.Im.Core;
 using WebQQ.Im.Event;
 using WebQQ.Im.Module.Impl;
@@ -106,6 +107,7 @@ namespace WebQQ.Im.Action
                     }
                 }
             }
+            
             return NotifyActionEventAsync(ActionEventType.EvtOK, notifyEvents);
         }
 
@@ -158,7 +160,7 @@ namespace WebQQ.Im.Action
             return msg;
         }
 
-        private Message HandleGroupMessage(JToken resultValue)
+        private GroupMessage HandleGroupMessage(JToken resultValue)
         {
             /*
                  {
@@ -195,8 +197,8 @@ namespace WebQQ.Im.Action
                     "retcode": 0
                 }
              */
-            var msg = resultValue.ToObject<Message>();
-            msg.Type = MessageType.Group;
+            var msg = resultValue.ToObject<GroupMessage>();
+            msg.Group = Store.GetOrAddGroupByGid(msg.GroupCode); // 此处的GroupCode实际上是Group的gid
             msg.Contents = ContentFatory.ParseContents(resultValue["content"].ToJArray());
             return msg;
         }

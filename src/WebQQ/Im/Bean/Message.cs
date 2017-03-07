@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using FclEx.Extensions;
 using Newtonsoft.Json;
 using WebQQ.Im.Bean.Content;
 
@@ -37,5 +38,10 @@ namespace WebQQ.Im.Bean
         public long GroupCode { get; set; }
         [JsonProperty("send_uin")]
         public long SendUin { get; set; }
+
+        public string GetText()
+        {
+            return string.Join("", Contents.Select(m => m.GetText()).Where(m => !m.IsNullOrWhiteSpace()));
+        }
     }
 }

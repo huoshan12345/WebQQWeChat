@@ -1,4 +1,5 @@
-﻿using System.Collections.Concurrent;
+﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using FclEx.Extensions;
@@ -25,7 +26,7 @@ namespace WebQQ.Im.Module.Impl
 
         /// <summary>
         /// 群
-        /// 主键是Group的Gid
+        /// 主键是Group的Code
         /// </summary>
         public ConcurrentDictionary<long, QQGroup> GroupDic { get; } = new ConcurrentDictionary<long, QQGroup>();
 
@@ -77,6 +78,17 @@ namespace WebQQ.Im.Module.Impl
         public QQGroup GetGroupByGid(long gid)
         {
             return GroupDic.GetOrDefault(gid);
+        }
+
+        public QQGroup GetOrAddGroupByGid(long code)
+        {
+            var g = GetGroupByGid(code);
+            if (g == null)
+            {
+                g = new QQGroup() { Code = code };
+                AddGroup(g);
+            }
+            return g;
         }
 
         public void AddDiscussion(QQDiscussion discussion)

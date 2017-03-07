@@ -59,5 +59,21 @@ namespace HttpAction
             } while (result.Type == ActionEventType.EvtRepeat || result.Type == ActionEventType.EvtRetry);
             return result;
         }
+
+        /// <summary>
+        /// 当结果是重试或重复的时候自动再次执行
+        /// </summary>
+        /// <param name="actor"></param>
+        /// <param name="endCondition"></param>
+        /// <returns></returns>
+        public static async Task<ActionEvent> ExecuteForeverAsync(this IActor actor, Func<ActionEvent, bool> endCondition = null)
+        {
+            ActionEvent result;
+            do
+            {
+                result = await actor.ExecuteAsyncAuto();
+            } while (endCondition == null || endCondition(result));
+            return result;
+        }
     }
 }

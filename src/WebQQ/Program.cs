@@ -12,6 +12,7 @@ using WebQQ.Im.Event;
 using WebQQ.Im.Module.Impl;
 using System.Reflection;
 using HttpAction.Event;
+using WebQQ.Im.Bean.Group;
 
 namespace WebQQ
 {
@@ -29,16 +30,6 @@ namespace WebQQ
                 case QQNotifyEventType.LoginSuccess:
                     logger.LogInformation("登录成功");
                     break;
-
-                case QQNotifyEventType.GroupMsg:
-                    {
-                        break;
-                    }
-
-                case QQNotifyEventType.ChatMsg:
-                    {
-                        break;
-                    }
 
                 case QQNotifyEventType.QRCodeReady:
                     {
@@ -62,6 +53,13 @@ namespace WebQQ
                     logger.LogWarning("二维码已失效");
                     break;
 
+                case QQNotifyEventType.GroupMsg:
+                    {
+                        var msg = (GroupMessage)notifyEvent.Target;
+                        logger.LogInformation($"[群消息][{msg.Group.ShowName}]{msg.GetText()}");
+                        break;
+                    }
+                case QQNotifyEventType.ChatMsg:
                 default:
                     logger.LogInformation(notifyEvent.Type.GetFullDescription());
                     break;

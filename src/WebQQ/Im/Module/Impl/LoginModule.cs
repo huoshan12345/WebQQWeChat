@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Threading.Tasks;
@@ -20,7 +21,17 @@ namespace WebQQ.Im.Module.Impl
     {
         public void BeginPoll()
         {
-            new PollMsgAction(Context).ExecuteAsyncAuto().Forget();
+            new PollMsgAction(Context, async (sender, @event) => // 1.ЛёШЁЖўЮЌТы
+            {
+                if (@event.Type == ActionEventType.EvtOK)
+                {
+                    foreach (var e in (List<QQNotifyEvent>)@event.Target)
+                    {
+                        Context.FireNotifyAsync(e).Forget();
+                    }
+                    await Task.CompletedTask;
+                }
+            }).ExecuteForeverAsync().Forget();
         }
 
         public LoginModule(IQQContext context) : base(context)
