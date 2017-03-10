@@ -44,8 +44,7 @@
       "frameworkAssemblies": {
         "System.Drawing": "4.0.0.0",
         "System.Xml.Linq": "4.0.0.0",
-        "System.Xml": "4.0.0.0",
-        "System.Net.Http": "4.0.0.0"
+        "System.Xml": "4.0.0.0"
       },
       "dependencies": {
       },

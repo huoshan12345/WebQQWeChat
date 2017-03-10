@@ -3594,8 +3594,7 @@
         "dependencies": {
           "FclEx": "0.1.8",
           "Microsoft.Extensions.Configuration.Abstractions": "1.1.1",
-          "Microsoft.Extensions.DependencyInjection.Abstractions": "1.1.0",
-          "System.Net.Http": "4.1.1"
+          "Microsoft.Extensions.DependencyInjection.Abstractions": "1.1.0"
         },
         "compile": {
           "net461/HttpAction.dll": {}
@@ -8967,7 +8966,6 @@
     ],
     ".NETFramework,Version=v4.6.1": [
       "System.Drawing >= 4.0.0",
-      "System.Net.Http >= 4.0.0",
       "System.Xml >= 4.0.0",
       "System.Xml.Linq >= 4.0.0"
     ]
