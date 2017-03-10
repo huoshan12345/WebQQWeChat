@@ -14,20 +14,30 @@ namespace HttpAction.Service
     {
         protected readonly CookieContainer _cookieContainer;
         protected HttpClient _httpClient;
-        private static readonly string[] NotAddHeaderNames = { HttpConstants.ContentType, HttpConstants.Cookie };
+        private static readonly string[] _notAddHeaderNames = { HttpConstants.ContentType, HttpConstants.Cookie };
 
         public HttpService(IWebProxy proxy = null)
         {
             _cookieContainer = new CookieContainer();
-            _httpClient = CreateHttpClient(proxy);
+            _httpClient = CreateHttpClient(_cookieContainer, proxy);
         }
 
-        private HttpClient CreateHttpClient(IWebProxy proxy)
+        public HttpService(HttpClientHandler handler)
+        {
+            if (handler.UseCookies && handler.CookieContainer == null)
+            {
+                _cookieContainer = new CookieContainer();
+                handler.CookieContainer = _cookieContainer;
+            }
+            _httpClient = new HttpClient(handler);
+        }
+
+        private static HttpClient CreateHttpClient(CookieContainer cc, IWebProxy proxy)
         {
             var handler = new HttpClientHandler
             {
                 AllowAutoRedirect = true,
-                CookieContainer = _cookieContainer,
+                CookieContainer = cc,
                 UseCookies = true
             };
             if (proxy != null)
@@ -35,12 +45,12 @@ namespace HttpAction.Service
                 handler.UseProxy = true;
                 handler.Proxy = proxy;
             }
-            _httpClient = new HttpClient(handler)
+            var httpClient = new HttpClient(handler)
             {
                 Timeout = TimeSpan.FromSeconds(60)
             };
-            _httpClient.DefaultRequestHeaders.Add(HttpConstants.UserAgent, HttpConstants.DefaultUserAgent);
-            return _httpClient;
+            httpClient.DefaultRequestHeaders.Add(HttpConstants.UserAgent, HttpConstants.DefaultUserAgent);
+            return httpClient;
         }
 
         private HttpRequestMessage GetHttpRequest(HttpRequestItem item)
@@ -61,7 +71,7 @@ namespace HttpAction.Service
                 default:
                     break;
             }
-            foreach (var header in item.HeaderMap.Where(h => !NotAddHeaderNames.Contains(h.Key)))
+            foreach (var header in item.HeaderMap.Where(h => !_notAddHeaderNames.Contains(h.Key)))
             {
                 request.Headers.Add(header.Key, header.Value);
             }
@@ -75,6 +85,7 @@ namespace HttpAction.Service
 
         private static void ReadHeader(HttpResponseMessage response, HttpResponseItem responseItem)
         {
+            responseItem.StatusCode = response.StatusCode;
             foreach (var header in response.Headers)
             {
                 responseItem.Headers[header.Key] = header.Value.ToList();
@@ -105,7 +116,7 @@ namespace HttpAction.Service
 
         public virtual void SetHttpProxy(IWebProxy proxy)
         {
-            var client = CreateHttpClient(proxy);
+            var client = CreateHttpClient(_cookieContainer, proxy);
             var oldClient = _httpClient;
             lock (_httpClient)
             {
@@ -120,17 +131,24 @@ namespace HttpAction.Service
 
             var responseItem = new HttpResponseItem { RequestItem = requestItem };
             var httpRequest = GetHttpRequest(requestItem);
-            using (var response = await _httpClient.SendAsync(httpRequest, HttpCompletionOption.ResponseHeadersRead, token).ConfigureAwait(false))
+            HttpResponseMessage response = null;
+            try
             {
+                response = await _httpClient.SendAsync(httpRequest, HttpCompletionOption.ResponseHeadersRead, token).ConfigureAwait(false);
+                while (response.StatusCode == HttpStatusCode.Redirect && response.Headers.Location != null)
+                {
+                    response = await _httpClient.GetAsync(response.Headers.Location, token).ConfigureAwait(false);
+                }
                 response.EnsureSuccessStatusCode();
-                responseItem.StatusCode = response.StatusCode;
                 ReadHeader(response, responseItem);
                 await ReadContentAsync(response, responseItem).ConfigureAwait(false);
                 return responseItem;
             }
+            finally
+            {
+                response?.Dispose();
+            }
         }
-
-
 
         public virtual Cookie GetCookie(string name, string url)
         {
