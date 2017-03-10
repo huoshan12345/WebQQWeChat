@@ -13,10 +13,14 @@ namespace WebQQ.Im.Event
     [Description("QQ通知事件类型")]
     public enum QQNotifyEventType
     {
+        NeedUpdateGroups = -2,
+        
+        NeedUpdateFriends = -1,
+
         /// <summary>
         /// 登录成功
         /// </summary>
-        LoginSuccess,
+        LoginSuccess = 0,
         /** 重新登录成功 **/
         ReloginSuccess,
         /** 网络连接出错，客户端已经掉线 */

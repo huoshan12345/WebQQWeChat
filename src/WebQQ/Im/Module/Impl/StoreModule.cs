@@ -70,6 +70,28 @@ namespace WebQQ.Im.Module.Impl
             return FriendDic.GetOrDefault(uin);
         }
 
+        public QQFriend GetOrAddFriendByUin(long uin)
+        {
+            var f = FriendDic.GetOrDefault(uin);
+            if (f == null)
+            {
+                f = new QQFriend() {Uin = uin};
+                AddFriend(f);
+            }
+            return f;
+        }
+
+        public QQFriend GetOrAddFriendByUin(long uin, Func<long, QQFriend> func)
+        {
+            var f = FriendDic.GetOrDefault(uin);
+            if (f == null)
+            {
+                f = func(uin);
+                AddFriend(f);
+            }
+            return f;
+        }
+
         public void AddGroup(QQGroup group)
         {
             GroupDic[group.Gid] = group;
@@ -80,12 +102,23 @@ namespace WebQQ.Im.Module.Impl
             return GroupDic.GetOrDefault(gid);
         }
 
-        public QQGroup GetOrAddGroupByGid(long code)
+        public QQGroup GetOrAddGroupByGid(long gid)
         {
-            var g = GetGroupByGid(code);
+            var g = GetGroupByGid(gid);
             if (g == null)
             {
-                g = new QQGroup() { Code = code };
+                g = new QQGroup() { Gid = gid };
+                AddGroup(g);
+            }
+            return g;
+        }
+
+        public QQGroup GetOrAddGroupByGid(long gid, Func<long, QQGroup> func)
+        {
+            var g = GetGroupByGid(gid);
+            if (g == null)
+            {
+                g = func(gid);
                 AddGroup(g);
             }
             return g;

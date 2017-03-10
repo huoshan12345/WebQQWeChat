@@ -10,6 +10,7 @@ using HttpAction.Event;
 using Newtonsoft.Json.Linq;
 using WebQQ.Im.Bean;
 using WebQQ.Im.Bean.Content;
+using WebQQ.Im.Bean.Friend;
 using WebQQ.Im.Bean.Group;
 using WebQQ.Im.Core;
 using WebQQ.Im.Event;
@@ -18,9 +19,12 @@ using WebQQ.Util;
 
 namespace WebQQ.Im.Action
 {
+    /// <summary>
+    /// 轮询，用来获取新消息
+    /// </summary>
     public class PollMsgAction : WebQQInfoAction
     {
-        private static readonly ConcurrentDictionary<string, MethodInfo> MethodDic = new ConcurrentDictionary<string, MethodInfo>();
+        private static readonly ConcurrentDictionary<string, MethodInfo> _methodDic = new ConcurrentDictionary<string, MethodInfo>();
 
         public PollMsgAction(IQQContext context, ActionEventListener listener = null) : base(context, listener)
         {
@@ -75,31 +79,22 @@ namespace WebQQ.Im.Action
                     var value = item["value"];
                     switch (type)
                     {
-                        case PollType.InputNotify:
-                            break;
-
                         case PollType.Message:
-                            notifyEvents.Add(QQNotifyEvent.CreateEvent(QQNotifyEventType.ChatMsg, HandleMessage(value)));
+                            HandleMessage(value, notifyEvents);
                             break;
 
                         case PollType.GroupMessage:
-                            notifyEvents.Add(QQNotifyEvent.CreateEvent(QQNotifyEventType.GroupMsg, HandleGroupMessage(value)));
+                            HandleGroupMessage(value, notifyEvents);
                             break;
 
+                        case PollType.InputNotify:
                         case PollType.DiscussionMessage:
-                            break;
                         case PollType.SessionMessage:
-                            break;
                         case PollType.ShakeMessage:
-                            break;
                         case PollType.KickMessage:
-                            break;
                         case PollType.BuddiesStatusChange:
-                            break;
                         case PollType.SystemMessage:
-                            break;
                         case PollType.GroupWebMessage:
-                            break;
                         case PollType.SysGroupMsg:
                             break;
                         default:
@@ -107,11 +102,11 @@ namespace WebQQ.Im.Action
                     }
                 }
             }
-            
+
             return NotifyActionEventAsync(ActionEventType.EvtOK, notifyEvents);
         }
 
-        private Message HandleMessage(JToken resultValue)
+        private void HandleMessage(JToken resultValue, List<QQNotifyEvent> events)
         {
             /*
                 {
@@ -154,13 +149,18 @@ namespace WebQQ.Im.Action
                     "retcode": 0
                 }             
              */
-            var msg = resultValue.ToObject<Message>();
-            msg.Type = MessageType.Friend;
+            var msg = resultValue.ToObject<FriendMessage>();
+            msg.Friend = Store.GetOrAddFriendByUin(msg.FromUin, u =>
+            {
+                events.Add(QQNotifyEvent.CreateEvent(QQNotifyEventType.NeedUpdateFriends));
+                return new QQFriend() { Uin = u };
+            });
             msg.Contents = ContentFatory.ParseContents(resultValue["content"].ToJArray());
-            return msg;
+
+            events.Add(QQNotifyEvent.CreateEvent(QQNotifyEventType.ChatMsg, msg));
         }
 
-        private GroupMessage HandleGroupMessage(JToken resultValue)
+        private void HandleGroupMessage(JToken resultValue, List<QQNotifyEvent> events)
         {
             /*
                  {
@@ -197,10 +197,16 @@ namespace WebQQ.Im.Action
                     "retcode": 0
                 }
              */
+
             var msg = resultValue.ToObject<GroupMessage>();
-            msg.Group = Store.GetOrAddGroupByGid(msg.GroupCode); // 此处的GroupCode实际上是Group的gid
+            msg.Group = Store.GetOrAddGroupByGid(msg.GroupCode, u =>
+            {
+                events.Add(QQNotifyEvent.CreateEvent(QQNotifyEventType.NeedUpdateGroups));
+                return new QQGroup { Gid = u };
+            }); // 此处的GroupCode实际上是Group的gid
             msg.Contents = ContentFatory.ParseContents(resultValue["content"].ToJArray());
-            return msg;
+
+            events.Add(QQNotifyEvent.CreateEvent(QQNotifyEventType.ChatMsg, msg));
         }
     }
 }

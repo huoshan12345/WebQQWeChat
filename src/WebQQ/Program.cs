@@ -12,6 +12,7 @@ using WebQQ.Im.Event;
 using WebQQ.Im.Module.Impl;
 using System.Reflection;
 using HttpAction.Event;
+using WebQQ.Im.Bean.Friend;
 using WebQQ.Im.Bean.Group;
 
 namespace WebQQ
@@ -60,6 +61,12 @@ namespace WebQQ
                         break;
                     }
                 case QQNotifyEventType.ChatMsg:
+                    {
+                        var msg = (FriendMessage)notifyEvent.Target;
+                        logger.LogInformation($"[好友消息][{msg.Friend.ShowName}]{msg.GetText()}");
+                        break;
+                    }
+
                 default:
                     logger.LogInformation(notifyEvent.Type.GetFullDescription());
                     break;

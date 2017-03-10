@@ -21,16 +21,36 @@ namespace WebQQ.Im.Module.Impl
     {
         public void BeginPoll()
         {
-            new PollMsgAction(Context, async (sender, @event) => // 1.获取二维码
+            new PollMsgAction(Context, (sender, @event) => // 1.获取二维码
             {
                 if (@event.Type == ActionEventType.EvtOK)
                 {
-                    foreach (var e in (List<QQNotifyEvent>)@event.Target)
+                    foreach (var notifyEvent in (List<QQNotifyEvent>)@event.Target)
                     {
-                        Context.FireNotifyAsync(e).Forget();
+                        switch (notifyEvent.Type)
+                        {
+                            case QQNotifyEventType.NeedUpdateFriends:
+                                new GetFriendsAction(Context, (a, e) =>
+                                {
+                                    if (@event.Type == ActionEventType.EvtOK)
+                                    {
+                                        new GetOnlineFriendsAction(Context).ExecuteAsyncAuto().Forget();
+                                    }
+                                    return Task.CompletedTask;
+                                }).ExecuteAsyncAuto().Forget();
+                                break;
+
+                            case QQNotifyEventType.NeedUpdateGroups:
+                                new GetGroupNameListAction(Context).ExecuteAsyncAuto().Forget();
+                                break;
+
+                            default:
+                                if (notifyEvent.Type >= 0) Context.FireNotifyAsync(notifyEvent).Forget(); // 仅通知大于0的
+                                break;
+                        }
                     }
-                    await Task.CompletedTask;
                 }
+                return Task.CompletedTask;
             }).ExecuteForeverAsync().Forget();
         }
 

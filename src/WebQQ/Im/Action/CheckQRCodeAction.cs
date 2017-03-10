@@ -10,7 +10,7 @@ namespace WebQQ.Im.Action
 {
     public class CheckQRCodeAction : WebQQAction
     {
-        private const string JsVer = "10153";
+        private const string JsVer = "10194";
         private readonly Regex _reg = new Regex(@"ptuiCB\('(\d+)','(\d+)','(.*?)','(\d+)','(.*?)', '(.*?)'\)");
 
         public CheckQRCodeAction(IQQContext context, ActionEventListener listener = null) : base(context, listener) { }
@@ -32,7 +32,7 @@ namespace WebQQ.Im.Action
             req.AddQueryValue("pttype", "1");
             req.AddQueryValue("dumy", "");
             req.AddQueryValue("fp", "loginerroralert");
-            req.AddQueryValue("action", "0-0-205298");
+            req.AddQueryValue("action", "0-0-10194");
             req.AddQueryValue("mibao_css", "m_webqq");
             req.AddQueryValue("t", "1");
             req.AddQueryValue("g", "1");
