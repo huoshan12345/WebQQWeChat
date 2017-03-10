@@ -44,14 +44,14 @@
           "lib/netstandard1.3/CoreCompat.System.Drawing.dll": {}
         }
       },
-      "FclEx/0.1.8": {
+      "FclEx/0.1.9": {
         "type": "package",
         "dependencies": {
-          "NETStandard.Library": "1.6.0",
-          "System.ComponentModel.Annotations": "4.1.0",
-          "System.ComponentModel.Primitives": "4.1.0",
-          "System.Linq.Queryable": "4.0.1",
-          "System.Reflection.TypeExtensions": "4.1.0"
+          "NETStandard.Library": "1.6.1",
+          "System.ComponentModel.Annotations": "4.3.0",
+          "System.ComponentModel.Primitives": "4.3.0",
+          "System.Linq.Queryable": "4.3.0",
+          "System.Reflection.TypeExtensions": "4.3.0"
         },
         "compile": {
           "lib/netstandard1.6/FclEx.dll": {}
@@ -60,12 +60,12 @@
           "lib/netstandard1.6/FclEx.dll": {}
         }
       },
-      "FclEx.Component/0.1.8": {
+      "FclEx.Component/0.1.9": {
         "type": "package",
         "dependencies": {
-          "FclEx": "0.1.8",
+          "FclEx": "0.1.9",
           "Microsoft.Extensions.Logging.Abstractions": "1.0.0",
-          "NETStandard.Library": "1.6.0"
+          "NETStandard.Library": "1.6.1"
         },
         "compile": {
           "lib/netstandard1.6/FclEx.Component.dll": {}
@@ -74,11 +74,11 @@
           "lib/netstandard1.6/FclEx.Component.dll": {}
         }
       },
-      "FclEx.Json/0.1.8": {
+      "FclEx.Json/0.1.9": {
         "type": "package",
         "dependencies": {
-          "FclEx": "0.1.8",
-          "NETStandard.Library": "1.6.0",
+          "FclEx": "0.1.9",
+          "NETStandard.Library": "1.6.1",
           "Newtonsoft.Json": "9.0.1"
         },
         "compile": {
@@ -1052,20 +1052,20 @@
           "lib/netstandard1.3/System.ComponentModel.dll": {}
         }
       },
-      "System.ComponentModel.Annotations/4.1.0": {
+      "System.ComponentModel.Annotations/4.3.0": {
         "type": "package",
         "dependencies": {
-          "System.Collections": "4.0.11",
-          "System.ComponentModel": "4.0.1",
-          "System.Globalization": "4.0.11",
-          "System.Linq": "4.1.0",
-          "System.Reflection": "4.1.0",
-          "System.Reflection.Extensions": "4.0.1",
-          "System.Resources.ResourceManager": "4.0.1",
-          "System.Runtime": "4.1.0",
-          "System.Runtime.Extensions": "4.1.0",
-          "System.Text.RegularExpressions": "4.1.0",
-          "System.Threading": "4.0.11"
+          "System.Collections": "4.3.0",
+          "System.ComponentModel": "4.3.0",
+          "System.Globalization": "4.3.0",
+          "System.Linq": "4.3.0",
+          "System.Reflection": "4.3.0",
+          "System.Reflection.Extensions": "4.3.0",
+          "System.Resources.ResourceManager": "4.3.0",
+          "System.Runtime": "4.3.0",
+          "System.Runtime.Extensions": "4.3.0",
+          "System.Text.RegularExpressions": "4.3.0",
+          "System.Threading": "4.3.0"
         },
         "compile": {
           "ref/netstandard1.4/System.ComponentModel.Annotations.dll": {}
@@ -1578,17 +1578,17 @@
           "lib/netstandard1.3/_._": {}
         }
       },
-      "System.Linq.Queryable/4.0.1": {
+      "System.Linq.Queryable/4.3.0": {
         "type": "package",
         "dependencies": {
-          "System.Collections": "4.0.11",
-          "System.Diagnostics.Debug": "4.0.11",
-          "System.Linq": "4.1.0",
-          "System.Linq.Expressions": "4.1.0",
-          "System.Reflection": "4.1.0",
-          "System.Reflection.Extensions": "4.0.1",
-          "System.Resources.ResourceManager": "4.0.1",
-          "System.Runtime": "4.1.0"
+          "System.Collections": "4.3.0",
+          "System.Diagnostics.Debug": "4.3.0",
+          "System.Linq": "4.3.0",
+          "System.Linq.Expressions": "4.3.0",
+          "System.Reflection": "4.3.0",
+          "System.Reflection.Extensions": "4.3.0",
+          "System.Resources.ResourceManager": "4.3.0",
+          "System.Runtime": "4.3.0"
         },
         "compile": {
           "ref/netstandard1.0/System.Linq.Queryable.dll": {}
@@ -2699,7 +2699,7 @@
         "type": "project",
         "framework": ".NETStandard,Version=v1.6",
         "dependencies": {
-          "FclEx": "0.1.8",
+          "FclEx": "0.1.9",
           "Microsoft.Extensions.Configuration.Abstractions": "1.1.1",
           "Microsoft.Extensions.DependencyInjection.Abstractions": "1.1.0",
           "NETStandard.Library": "1.6.1",
@@ -2724,12 +2724,11 @@
           "lib/net45/AutoMapper.dll": {}
         }
       },
-      "FclEx/0.1.8": {
+      "FclEx/0.1.9": {
         "type": "package",
         "dependencies": {
-          "System.ComponentModel.Annotations": "4.1.0",
-          "System.Diagnostics.Contracts": "4.0.0",
-          "System.Net.Http": "4.0.0"
+          "NETStandard.Library": "1.6.1",
+          "System.ComponentModel.Annotations": "4.3.0"
         },
         "compile": {
           "lib/net461/FclEx.dll": {}
@@ -2738,12 +2737,12 @@
           "lib/net461/FclEx.dll": {}
         }
       },
-      "FclEx.Component/0.1.8": {
+      "FclEx.Component/0.1.9": {
         "type": "package",
         "dependencies": {
-          "FclEx": "0.1.8",
+          "FclEx": "0.1.9",
           "Microsoft.Extensions.Logging.Abstractions": "1.0.0",
-          "System.Runtime": "4.0.20"
+          "NETStandard.Library": "1.6.1"
         },
         "compile": {
           "lib/net461/FclEx.Component.dll": {}
@@ -2752,10 +2751,11 @@
           "lib/net461/FclEx.Component.dll": {}
         }
       },
-      "FclEx.Json/0.1.8": {
+      "FclEx.Json/0.1.9": {
         "type": "package",
         "dependencies": {
-          "FclEx": "0.1.8",
+          "FclEx": "0.1.9",
+          "NETStandard.Library": "1.6.1",
           "Newtonsoft.Json": "9.0.1"
         },
         "compile": {
@@ -3060,7 +3060,7 @@
           "lib/net45/_._": {}
         }
       },
-      "System.ComponentModel.Annotations/4.1.0": {
+      "System.ComponentModel.Annotations/4.3.0": {
         "type": "package",
         "frameworkAssemblies": [
           "System.ComponentModel.DataAnnotations",
@@ -3083,15 +3083,6 @@
         },
         "runtime": {
           "lib/net46/System.Console.dll": {}
-        }
-      },
-      "System.Diagnostics.Contracts/4.0.0": {
-        "type": "package",
-        "compile": {
-          "ref/net45/_._": {}
-        },
-        "runtime": {
-          "lib/net45/_._": {}
         }
       },
       "System.Diagnostics.Debug/4.3.0": {
@@ -3631,7 +3622,7 @@
         "type": "project",
         "framework": ".NETFramework,Version=v4.6.1",
         "dependencies": {
-          "FclEx": "0.1.8",
+          "FclEx": "0.1.9",
           "Microsoft.Extensions.Configuration.Abstractions": "1.1.1",
           "Microsoft.Extensions.DependencyInjection.Abstractions": "1.1.0"
         },
@@ -3671,34 +3662,34 @@
         "lib/netstandard1.3/CoreCompat.System.Drawing.dll"
       ]
     },
-    "FclEx/0.1.8": {
-      "sha512": "x+d7ULsNd7J16dG/cyHB4ZSGnoZ5ppqv1zmFzCmjP9sOeTG5ADpl7S3ao0p0vjrw9fkKUGa2UMd8ufYZn96WJw==",
+    "FclEx/0.1.9": {
+      "sha512": "1NmfTLeFf6uCGg3INFzqoSdawhZZw0ehrIy8yqgbA8HVDDqj6m+EApvwx/8z5Az5l27t+R4Omu7HL8+rdAT36w==",
       "type": "package",
-      "path": "FclEx/0.1.8",
+      "path": "FclEx/0.1.9",
       "files": [
-        "FclEx.0.1.8.nupkg.sha512",
+        "FclEx.0.1.9.nupkg.sha512",
         "FclEx.nuspec",
         "lib/net461/FclEx.dll",
         "lib/netstandard1.6/FclEx.dll"
       ]
     },
-    "FclEx.Component/0.1.8": {
-      "sha512": "EUQ/xZFbXGrCIqOl/FH4n3BEqmpJI9HLzauUNikLw7J+HBPBil0a8ZI66odp8VQ0n9Uiu33W9YLhCuwyVgQ2gg==",
+    "FclEx.Component/0.1.9": {
+      "sha512": "8xjhO6Njs3BbhMyqKrzBC7aJW6MId0XaWXXArspAxMGR513Y7/iOKkzVEYp7zGJx/u9nqzOh0IhFerXj2Uyj3g==",
       "type": "package",
-      "path": "FclEx.Component/0.1.8",
+      "path": "FclEx.Component/0.1.9",
       "files": [
-        "FclEx.Component.0.1.8.nupkg.sha512",
+        "FclEx.Component.0.1.9.nupkg.sha512",
         "FclEx.Component.nuspec",
         "lib/net461/FclEx.Component.dll",
         "lib/netstandard1.6/FclEx.Component.dll"
       ]
     },
-    "FclEx.Json/0.1.8": {
-      "sha512": "cMwoa6+8vMXXi7mFpqi5Rh6b0Uw0kFYl7dzxLHOssW2QOn7pHhRxq13eLROdOaXPRHXq17MQ3cPHqajAxu0rsw==",
+    "FclEx.Json/0.1.9": {
+      "sha512": "54TLtGjRRCPF6NjGmIxwbRfYHliqQdBpbysU/E68CLgzhlpqEFYT0HgXlvmTzzeIwrx6nfoQNEUIfHxlFvS8Vg==",
       "type": "package",
-      "path": "FclEx.Json/0.1.8",
+      "path": "FclEx.Json/0.1.9",
       "files": [
-        "FclEx.Json.0.1.8.nupkg.sha512",
+        "FclEx.Json.0.1.9.nupkg.sha512",
         "FclEx.Json.nuspec",
         "lib/net461/FclEx.Json.dll",
         "lib/netstandard1.6/FclEx.Json.dll"
@@ -4841,12 +4832,12 @@
         "ref/xamarinwatchos10/_._"
       ]
     },
-    "System.ComponentModel.Annotations/4.1.0": {
-      "sha512": "rhnz80h8NnHJzoi0nbQJLRR2cJznyqG168q1bgoSpe5qpaME2SguXzuEzpY68nFCi2kBgHpbU4bRN2cP3unYRA==",
+    "System.ComponentModel.Annotations/4.3.0": {
+      "sha512": "SY2RLItHt43rd8J9D8M8e8NM4m+9WLN2uUd9G0n1I4hj/7w+v3pzK6ZBjexlG1/2xvLKQsqir3UGVSyBTXMLWA==",
       "type": "package",
-      "path": "System.ComponentModel.Annotations/4.1.0",
+      "path": "System.ComponentModel.Annotations/4.3.0",
       "files": [
-        "System.ComponentModel.Annotations.4.1.0.nupkg.sha512",
+        "System.ComponentModel.Annotations.4.3.0.nupkg.sha512",
         "System.ComponentModel.Annotations.nuspec",
         "ThirdPartyNotices.txt",
         "dotnet_library_license.txt",
@@ -5040,39 +5031,6 @@
         "ref/xamarinmac20/_._",
         "ref/xamarintvos10/_._",
         "ref/xamarinwatchos10/_._"
-      ]
-    },
-    "System.Diagnostics.Contracts/4.0.0": {
-      "sha512": "lMc7HNmyIsu0pKTdA4wf+FMq5jvouUd+oUpV4BdtyqoV0Pkbg9u/7lTKFGqpjZRQosWHq1+B32Lch2wf4AmloA==",
-      "type": "package",
-      "path": "System.Diagnostics.Contracts/4.0.0",
-      "files": [
-        "System.Diagnostics.Contracts.4.0.0.nupkg.sha512",
-        "System.Diagnostics.Contracts.nuspec",
-        "lib/DNXCore50/System.Diagnostics.Contracts.dll",
-        "lib/net45/_._",
-        "lib/netcore50/System.Diagnostics.Contracts.dll",
-        "lib/win8/_._",
-        "lib/wp80/_._",
-        "lib/wpa81/_._",
-        "ref/dotnet/System.Diagnostics.Contracts.dll",
-        "ref/dotnet/System.Diagnostics.Contracts.xml",
-        "ref/dotnet/de/System.Diagnostics.Contracts.xml",
-        "ref/dotnet/es/System.Diagnostics.Contracts.xml",
-        "ref/dotnet/fr/System.Diagnostics.Contracts.xml",
-        "ref/dotnet/it/System.Diagnostics.Contracts.xml",
-        "ref/dotnet/ja/System.Diagnostics.Contracts.xml",
-        "ref/dotnet/ko/System.Diagnostics.Contracts.xml",
-        "ref/dotnet/ru/System.Diagnostics.Contracts.xml",
-        "ref/dotnet/zh-hans/System.Diagnostics.Contracts.xml",
-        "ref/dotnet/zh-hant/System.Diagnostics.Contracts.xml",
-        "ref/net45/_._",
-        "ref/netcore50/System.Diagnostics.Contracts.dll",
-        "ref/netcore50/System.Diagnostics.Contracts.xml",
-        "ref/win8/_._",
-        "ref/wp80/_._",
-        "ref/wpa81/_._",
-        "runtimes/win8-aot/lib/netcore50/System.Diagnostics.Contracts.dll"
       ]
     },
     "System.Diagnostics.Debug/4.3.0": {
@@ -6244,12 +6202,12 @@
         "ref/xamarinwatchos10/_._"
       ]
     },
-    "System.Linq.Queryable/4.0.1": {
-      "sha512": "Yn/WfYe9RoRfmSLvUt2JerP0BTGGykCZkQPgojaxgzF2N0oPo+/AhB8TXOpdCcNlrG3VRtsamtK2uzsp3cqRVw==",
+    "System.Linq.Queryable/4.3.0": {
+      "sha512": "In1Bmmvl/j52yPu3xgakQSI0YIckPUr870w4K5+Lak3JCCa8hl+my65lABOuKfYs4ugmZy25ScFerC4nz8+b6g==",
       "type": "package",
-      "path": "System.Linq.Queryable/4.0.1",
+      "path": "System.Linq.Queryable/4.3.0",
       "files": [
-        "System.Linq.Queryable.4.0.1.nupkg.sha512",
+        "System.Linq.Queryable.4.3.0.nupkg.sha512",
         "System.Linq.Queryable.nuspec",
         "ThirdPartyNotices.txt",
         "dotnet_library_license.txt",
@@ -9000,8 +8958,8 @@
   "projectFileDependencyGroups": {
     "": [
       "AutoMapper >= 5.2.0",
-      "FclEx.Component >= 0.1.8",
-      "FclEx.Json >= 0.1.8",
+      "FclEx.Component >= 0.1.9",
+      "FclEx.Json >= 0.1.9",
       "HttpAction >= 0.1.1-*",
       "Microsoft.Extensions.Configuration >= 1.1.0",
       "Microsoft.Extensions.Configuration.Json >= 1.1.0",
@@ -9020,8 +8978,7 @@
       "runtime.osx.10.10-x64.CoreCompat.System.Drawing >= 1.0.1-*"
     ],
     ".NETFramework,Version=v4.6.1": [
-      "System.Drawing >= 4.0.0",
-      "System.Net.Http >= 4.0.0"
+      "System.Drawing >= 4.0.0"
     ]
   },
   "tools": {},
