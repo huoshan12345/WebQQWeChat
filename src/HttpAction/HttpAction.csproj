@@ -2,6 +2,14 @@
 
   <PropertyGroup>
     <TargetFrameworks>netstandard1.6;net461</TargetFrameworks>
+    <Authors>huoshan12345</Authors>
+    <Company />
+    <Description>a simple http lib</Description>
+    <PackageProjectUrl>https://github.com/huoshan12345/WebQQWeChat/tree/master/src/HttpAction</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/huoshan12345/WebQQWeChat</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageTags>http</PackageTags>
+    <Version>0.1.2</Version>
   </PropertyGroup>
 
   <ItemGroup>

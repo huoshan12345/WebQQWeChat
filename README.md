@@ -18,5 +18,5 @@
 ![BatchHangQQ](https://raw.githubusercontent.com/huoshan12345/iQQ.Net/master/pic/BatchHangQQ.png)
 
 ##开发环境
-1. [Visual Studio 2015 with Update 3](https://www.visualstudio.com/zh-hans/downloads/)  
+1. [Visual Studio 2017](https://www.visualstudio.com/zh-hans/downloads/)  
 2. [.NET Core 1.0](https://www.microsoft.com/net/download)
