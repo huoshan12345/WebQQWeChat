@@ -10,8 +10,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\src\WebQQ\WebQQ.csproj" />
-    <ProjectReference Include="..\src\WebWeChat\WebWeChat.csproj" />
+    <ProjectReference Include="..\WebQQ\WebQQ.csproj" />
+    <ProjectReference Include="..\WebWeChat\WebWeChat.csproj" />
   </ItemGroup>
 
   <PropertyGroup Condition=" '$(TargetFramework)' == 'net461' ">
