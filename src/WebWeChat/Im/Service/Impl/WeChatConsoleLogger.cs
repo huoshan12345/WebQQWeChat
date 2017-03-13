@@ -8,13 +8,12 @@ using FclEx.Logger;
 
 namespace WebWeChat.Im.Service.Impl
 {
-    public class WeChatLogger : SimpleConsoleLogger, IWeChatService
+    public class WeChatConsoleLogger : SimpleConsoleLogger, IWeChatService
     {
-        public IWeChatContext Context { get; set; }
+        public IWeChatContext Context { get; }
 
-        public WeChatLogger(IWeChatContext context, LogLevel minLevel = LogLevel.Information) : base("WeChat", minLevel)
+        public WeChatConsoleLogger(IWeChatContext context, LogLevel minLevel = LogLevel.Information) : base("WeChat", minLevel)
         {
-            if (context == null) throw new ArgumentNullException(nameof(context));
             Context = context;
         }
 
@@ -26,9 +25,13 @@ namespace WebWeChat.Im.Service.Impl
         /// <returns></returns>
         protected override string GetMessage(string message, Exception exception)
         {
-            var userName = Context.GetModule<SessionModule>().User?.NickName;
+            var userName = Context?.GetModule<SessionModule>().User?.NickName;
             var prefix = userName.IsNullOrEmpty() ? string.Empty : $"[{userName}]";
             return $"{DateTime.Now:HH:mm:ss}> {prefix}{message}";
+        }
+
+        public void Dispose()
+        {
         }
     }
 }

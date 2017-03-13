@@ -1,0 +1,27 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFrameworks>net461;netcoreapp1.1</TargetFrameworks>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="verify.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\src\WebQQ\WebQQ.csproj" />
+    <ProjectReference Include="..\src\WebWeChat\WebWeChat.csproj" />
+  </ItemGroup>
+
+  <PropertyGroup Condition=" '$(TargetFramework)' == 'net461' ">
+    <DefineConstants>$(DefineConstants);NET</DefineConstants>
+    <PlatformTarget>anycpu</PlatformTarget>
+  </PropertyGroup>
+
+  <PropertyGroup Condition=" '$(TargetFramework)' == 'netcoreapp1.1' ">
+    <DefineConstants>$(DefineConstants);NETCORE</DefineConstants>
+    <DebugType>portable</DebugType>
+  </PropertyGroup>
+
+</Project>

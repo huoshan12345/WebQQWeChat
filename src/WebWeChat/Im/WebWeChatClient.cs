@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using HttpAction.Event;
 using HttpAction.Service;
@@ -12,6 +13,9 @@ using WebWeChat.Im.Module.Interface;
 using WebWeChat.Im.Service.Impl;
 using WebWeChat.Im.Service.Interface;
 using System.Reflection;
+using FclEx.Logger;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace WebWeChat.Im
 {
@@ -22,11 +26,21 @@ namespace WebWeChat.Im
         private readonly IServiceProvider _serviceProvider;
         private readonly ILogger _logger;
 
-        public WebWeChatClient(WeChatNotifyEventListener notifyListener = null)
+        public static IServiceCollection CommonServices { get; } = new ServiceCollection();
+
+        static WebWeChatClient()
+        {
+            CommonServices.AddSingleton<ILogger, EmptyLogger>();
+            CommonServices.AddSingleton<IConfigurationRoot>(p => Startup.BuildConfig());
+        }
+
+        public WebWeChatClient(Action<IServiceCollection> configureServices = null)
         {
             _services = new ServiceCollection();
-            Startup.ConfigureServices(_services);
-
+            foreach (var service in CommonServices)
+            {
+                _services.Add(service);
+            }
             _services.AddSingleton<IWeChatContext>(this);
 
             // 模块
@@ -37,15 +51,39 @@ namespace WebWeChat.Im
             _services.AddSingleton<SessionModule>();
 
             // 服务
-            _services.AddSingleton<IHttpService, WeChatHttp>();
-            _services.AddSingleton<ILogger>(provider => new WeChatLogger(this, LogLevel.Information));
+            _services.AddSingleton<IHttpService, HttpService>();
             _services.AddSingleton<IWeChatActionFactory, WeChatActionFactory>();
 
+            configureServices?.Invoke(_services);
             _serviceProvider = _services.BuildServiceProvider();
-            Startup.Configure(_serviceProvider);
 
-            _notifyListener = notifyListener;
+            _notifyListener = GetSerivce<WeChatNotifyEventListener>();
             _logger = GetSerivce<ILogger>();
+        }
+
+        /// <summary>
+        /// 构造方法，初始化模块和服务
+        /// </summary>
+        public WebWeChatClient(ILogger logger, WeChatNotifyEventListener notifyListener) : this(m =>
+        {
+            if (logger != null) m.AddSingleton(logger);
+            if (notifyListener != null) m.AddSingleton(notifyListener);
+        })
+        {
+        }
+
+        /// <summary>
+        /// 构造方法，初始化模块和服务
+        /// </summary>
+        public WebWeChatClient(Func<IWeChatContext, ILogger> loggerFunc, WeChatNotifyEventListener notifyListener) : this(m =>
+         {
+             if (loggerFunc != null)
+             {
+                 m.AddSingleton<ILogger>(p => loggerFunc(p.GetRequiredService<IWeChatContext>()));
+             }
+             if (notifyListener != null) m.AddSingleton(notifyListener);
+         })
+        {
         }
 
         public Task<ActionEvent> Login(ActionEventListener listener = null)
@@ -58,22 +96,19 @@ namespace WebWeChat.Im
             GetModule<ILoginModule>().BeginSyncCheck();
         }
 
-        /// <inheritdoc />
-        public void FireNotify(WeChatNotifyEvent notifyEvent)
+        public async Task FireNotifyAsync(WeChatNotifyEvent notifyEvent)
         {
             try
             {
-                _notifyListener?.Invoke(this, notifyEvent);
+                if (_notifyListener != null)
+                {
+                    await _notifyListener(this, notifyEvent);
+                }
             }
             catch (Exception ex)
             {
                 _logger.LogError($"FireNotify Error!! {ex}", ex);
             }
-        }
-
-        public Task FireNotifyAsync(WeChatNotifyEvent notifyEvent)
-        {
-            return Task.Run(() => FireNotify(notifyEvent));
         }
 
         /// <inheritdoc />
@@ -93,24 +128,19 @@ namespace WebWeChat.Im
         /// </summary>
         public void Dispose()
         {
-            try
+            foreach (var service in _services.Where(m => m != null && typeof(IWeChatService).IsAssignableFrom(m.ServiceType)))
             {
-                foreach (var service in _services)
+                try
                 {
-                    var serviceType = service.ServiceType;
-                    if (typeof(IDisposable).IsAssignableFrom(serviceType) &&
-                        (typeof(IWeChatModule).IsAssignableFrom(serviceType)
-                        || typeof(IWeChatService).IsAssignableFrom(serviceType)))
-                    {
-                        var obj = (IDisposable)service.ImplementationInstance;
-                        obj.Dispose();
-                    }
+                    var obj = (IWeChatService)service.ImplementationInstance;
+                    if (obj != _logger) obj.Dispose();
+                }
+                catch (Exception e)
+                {
+                    _logger.LogError($"销毁所有模块和服务失败: {e}");
                 }
             }
-            catch (Exception e)
-            {
-                _logger.LogError($"销毁所有模块和服务失败: {e}");
-            }
+            (_logger as IWeChatService)?.Dispose(); // 最后释放logger
         }
 
         public Task<ActionEvent> GetContact(ActionEventListener listener = null)
@@ -132,5 +162,7 @@ namespace WebWeChat.Im
         {
             return GetModule<IChatModule>().GetRobotReply(robotType, input, listener);
         }
+
+        public IWeChatContext Context => this;
     }
 }

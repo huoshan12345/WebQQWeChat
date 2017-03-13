@@ -67,6 +67,20 @@ namespace WebQQ.Im
         /// <summary>
         /// 构造方法，初始化模块和服务
         /// </summary>
+        public WebQQClient(Func<IQQContext, ILogger> loggerFunc, QQNotifyEventListener notifyListener) : this(m =>
+         {
+             if (loggerFunc != null)
+             {
+                 m.AddSingleton<ILogger>(p => loggerFunc(p.GetRequiredService<IQQContext>()));
+             }
+             if (notifyListener != null) m.AddSingleton(notifyListener);
+         })
+        {
+        }
+
+        /// <summary>
+        /// 构造方法，初始化模块和服务
+        /// </summary>
         public WebQQClient(Action<IServiceCollection> configureServices = null)
         {
             _services = new ServiceCollection();
@@ -87,21 +101,10 @@ namespace WebQQ.Im
             _services.AddSingleton<IQQActionFactory, QQActionFactory>();
 
             configureServices?.Invoke(_services);
-            InitContext();
-
             _serviceProvider = _services.BuildServiceProvider();
 
             _notifyListener = GetSerivce<QQNotifyEventListener>();
             _logger = GetSerivce<ILogger>();
-        }
-
-        private void InitContext()
-        {
-            foreach (var service in _services.Where(m => typeof(IQQService).IsAssignableFrom(m.ServiceType)))
-            {
-                var obj = (IQQService)service.ImplementationInstance;
-                obj.Context = this;
-            }
         }
 
         public T GetSerivce<T>()

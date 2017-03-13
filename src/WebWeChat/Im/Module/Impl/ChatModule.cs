@@ -13,10 +13,6 @@ using HttpAction;
 
 namespace WebWeChat.Im.Module.Impl
 {
-    public enum RobotType
-    {
-        Tuling,
-    }
 
 
     public class ChatModule : WeChatModule, IChatModule

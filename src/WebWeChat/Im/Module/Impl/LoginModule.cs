@@ -82,12 +82,12 @@ namespace WebWeChat.Im.Module.Impl
                 }
             });
 
-            sync.OnActionEvent += (sender, @event) =>
+            sync.OnActionEvent += async (sender, @event) =>
             {
                 if (@event.Type == ActionEventType.EvtError)
                 {
                     Context.GetModule<SessionModule>().State = SessionState.Offline;
-                    Context.FireNotify(WeChatNotifyEvent.CreateEvent(WeChatNotifyEventType.Offline));
+                    await Context.FireNotifyAsync(WeChatNotifyEvent.CreateEvent(WeChatNotifyEventType.Offline));
                 }
                 else if (@event.Type == ActionEventType.EvtOK)
                 {
@@ -96,8 +96,8 @@ namespace WebWeChat.Im.Module.Impl
                     {
                         case SyncCheckResult.Offline:
                         case SyncCheckResult.Kicked:
-                            Context.FireNotify(WeChatNotifyEvent.CreateEvent(WeChatNotifyEventType.Offline));
-                            return Task.CompletedTask;
+                            await Context.FireNotifyAsync(WeChatNotifyEvent.CreateEvent(WeChatNotifyEventType.Offline));
+                            return;
 
                         case SyncCheckResult.UsingPhone:
                         case SyncCheckResult.NewMsg:
@@ -109,7 +109,6 @@ namespace WebWeChat.Im.Module.Impl
                     }
                     (result == SyncCheckResult.Nothing ? sender : wxSync).ExecuteAsyncAuto().Forget();
                 }
-                return Task.CompletedTask;
             };
 
             sync.ExecuteAsyncAuto().Forget();

@@ -12,15 +12,15 @@ using WebWeChat.Im.Bean;
 using WebWeChat.Im.Module.Impl;
 using FclEx.Extensions;
 using HttpAction.Event;
+using WebWeChat.Im.Service.Impl;
 
 namespace WebWeChat
 {
     public class Program
     {
-        private static readonly ManualResetEvent QuitEvent = new ManualResetEvent(false); // 用这个来保持控制台不退出
         private static Process _process = null;
 
-        private static readonly WeChatNotifyEventListener Listener = async (client, notifyEvent) =>
+        private static readonly WeChatNotifyEventListener _listener = async (client, notifyEvent) =>
         {
             var logger = client.GetSerivce<ILogger>();
             switch (notifyEvent.Type)
@@ -49,7 +49,6 @@ namespace WebWeChat
                 case WeChatNotifyEventType.QRCodeInvalid:
                     if(_process != null && !_process.HasExited) _process.Kill();
                     logger.LogWarning("二维码已失效");
-                    QuitEvent.Set();
                     break;
 
                 case WeChatNotifyEventType.Message:
@@ -72,7 +71,6 @@ namespace WebWeChat
 
                 case WeChatNotifyEventType.Offline:
                     logger.LogCritical("微信已经掉线");
-                    QuitEvent.Set();
                     break;
 
                 default:
@@ -82,12 +80,15 @@ namespace WebWeChat
             }
         };
 
-        private static async Task TestWeChat()
+        public static void Main(string[] args)
         {
-            using (var client = new WebWeChatClient(Listener))
+#if NETCORE
+            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+#endif
+            var client = new WebWeChatClient(m => new WeChatConsoleLogger(m, LogLevel.Debug), _listener);
+            client.Login((s, e) =>
             {
-                var @event = await client.Login();
-                if (@event.Type == ActionEventType.EvtOK)
+                if (e.Type == ActionEventType.EvtOK)
                 {
                     // await client.GetContact(); // 登录过程中会获取一次联系人
                     client.BeginSyncCheck();
@@ -96,17 +97,9 @@ namespace WebWeChat
                 {
                     Console.WriteLine("登录失败");
                 }
-                QuitEvent.WaitOne();
-            }
-        }
+                return Task.CompletedTask;
+            });
 
-        public static void Main(string[] args)
-        {
-#if NETCORE
-            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
-#endif
-            TestWeChat().Wait();
-            Startup.Dispose(); // 释放全局资源
             Console.Read();
         }
     }

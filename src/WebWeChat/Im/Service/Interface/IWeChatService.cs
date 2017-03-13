@@ -11,7 +11,8 @@ namespace WebWeChat.Im.Service.Interface
     /// 从而在微信实例销毁的时候服务也能一起销毁
     /// 如果是全局的服务（即多个实例共享的）请不要继承该接口
     /// </summary>
-    public interface IWeChatService
+    public interface IWeChatService : IDisposable
     {
+        IWeChatContext Context { get; }
     }
 }

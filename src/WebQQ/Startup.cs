@@ -27,12 +27,5 @@ namespace WebQQ
 
             return builder.Build();
         }
-
-
-
-        public static void ConfigureServices(IServiceCollection services)
-        {
-            services.AddSingleton(p => BuildConfig());
-        }
     }
 }

@@ -10,10 +10,11 @@ namespace WebQQ.Im.Service.Impl
 {
     public class QQConsoleLogger : SimpleConsoleLogger, IQQService
     {
-        public IQQContext Context { get; set; }
+        public IQQContext Context { get; }
 
-        public QQConsoleLogger(LogLevel minLevel = LogLevel.Information) : base("WebQQ", minLevel)
+        public QQConsoleLogger(IQQContext context, LogLevel minLevel = LogLevel.Information) : base("WebQQ", minLevel)
         {
+            Context = context;
         }
         
         protected override string GetMessage(string message, Exception exception)

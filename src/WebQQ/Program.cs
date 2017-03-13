@@ -84,13 +84,10 @@ namespace WebQQ
 #if NETCORE
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
 #endif
-
-            // 获取二维码
-            var qq = new WebQQClient(new QQConsoleLogger(LogLevel.Debug), Listener);
-            qq.Login().Wait();
-            qq.BeginPoll();
-
-
+            
+            var client = new WebQQClient(m => new QQConsoleLogger(m, LogLevel.Debug), Listener);
+            client.Login().Wait();
+            client.BeginPoll();
             Console.Read();
         }
     }

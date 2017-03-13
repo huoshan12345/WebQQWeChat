@@ -7,11 +7,10 @@ using WebWeChat.Im.Service.Interface;
 
 namespace WebWeChat.Im.Service.Impl
 {
-    public class WeChatActionFactory : ActionFactory, IWeChatActionFactory, IWeChatService
+    public class WeChatActionFactory : ActionFactory, IWeChatActionFactory
     {
-        public IWeChatContext Context { get; }
+        public IWeChatContext Context { get;}
 
-        
         public WeChatActionFactory(IWeChatContext context)
         {
             Context = context;
@@ -28,6 +27,10 @@ namespace WebWeChat.Im.Service.Impl
                 parameters = newArgs;
             }
             return base.CreateAction<T>(parameters);
+        }
+
+        public void Dispose()
+        {
         }
     }
 }

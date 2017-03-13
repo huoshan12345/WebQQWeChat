@@ -7,7 +7,7 @@ using WebQQ.Im.Core;
 
 namespace WebQQ.Im.Service.Interface
 {
-    public interface IQQActionFactory : IActionFactory
+    public interface IQQActionFactory : IActionFactory, IQQService
     {
     }
 }

@@ -12,7 +12,7 @@ namespace WebWeChat
 {
     public class Startup
     {
-        private static IConfigurationRoot BuildConfig()
+        public static IConfigurationRoot BuildConfig()
         {
             var builder = new ConfigurationBuilder()
                 .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
@@ -22,19 +22,6 @@ namespace WebWeChat
                 builder.AddUserSecrets<Startup>();
             }
             return builder.Build();
-        }
-
-        public static void ConfigureServices(IServiceCollection services)
-        {
-            services.AddSingleton(p => BuildConfig());
-        }
-
-        public static void Configure(IServiceProvider provider)
-        {
-        }
-
-        public static void Dispose()
-        {
         }
     }
 }

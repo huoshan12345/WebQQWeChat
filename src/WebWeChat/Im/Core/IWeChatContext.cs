@@ -9,8 +9,6 @@ namespace WebWeChat.Im.Core
 {
     public interface IWeChatContext
     {
-        void FireNotify(WeChatNotifyEvent notifyEvent);
-
         Task FireNotifyAsync(WeChatNotifyEvent notifyEvent);
 
         T GetSerivce<T>();

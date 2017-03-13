@@ -6,5 +6,5 @@ using WebWeChat.Im.Core;
 
 namespace WebWeChat.Im.Event
 {
-    public delegate void WeChatNotifyEventListener(IWebWeChatClient sender, WeChatNotifyEvent e);
+    public delegate Task WeChatNotifyEventListener(IWebWeChatClient sender, WeChatNotifyEvent e);
 }

@@ -1,16 +1,13 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net461;netcoreapp1.1</TargetFrameworks>
-    <AssemblyName>WebWeChat</AssemblyName>
-    <OutputType>Exe</OutputType>
-    <PackageId>WebWeChat</PackageId>
+    <TargetFrameworks>netstandard1.6;net461</TargetFrameworks>
     <UserSecretsId>aspnet-WebWeChat-20161027025319</UserSecretsId>
-    <RuntimeFrameworkVersion Condition=" '$(TargetFramework)' == 'netcoreapp1.1' ">1.0.4</RuntimeFrameworkVersion>
-    <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
-    <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
-    <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="verify.png" />
+  </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\HttpAction\HttpAction.csproj" />
@@ -36,20 +33,20 @@
     <PlatformTarget>anycpu</PlatformTarget>
   </PropertyGroup>
 
-  <PropertyGroup Condition=" '$(TargetFramework)' == 'netcoreapp1.1' ">
+  <PropertyGroup Condition=" '$(TargetFramework)' == 'netstandard1.6' ">
     <DefineConstants>$(DefineConstants);NETCORE</DefineConstants>
     <DebugType>portable</DebugType>
   </PropertyGroup>
 
-  <ItemGroup Condition=" '$(TargetFramework)' == 'netcoreapp1.1' ">
-    <PackageReference Include="CoreCompat.System.Drawing" Version="1.0.0-*" />
-    <PackageReference Include="runtime.linux-x64.CoreCompat.System.Drawing" Version="1.0.0-*" />
-    <PackageReference Include="runtime.osx.10.10-x64.CoreCompat.System.Drawing" Version="1.0.1-*" />
-    <PackageReference Include="System.Collections.NonGeneric" Version="4.3.0" />
+  <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard1.6' ">
+    <PackageReference Include="CoreCompat.System.Drawing" Version="1.0.0-beta006" />
+    <PackageReference Include="runtime.linux-x64.CoreCompat.System.Drawing" Version="1.0.0-beta009" />
+    <PackageReference Include="runtime.osx.10.10-x64.CoreCompat.System.Drawing" Version="1.0.1-beta004" />
     <PackageReference Include="System.ComponentModel.Primitives" Version="4.3.0" />
-    <PackageReference Include="System.Text.Encoding.CodePages" Version="4.3.0" />
     <PackageReference Include="System.Xml.XDocument" Version="4.3.0" />
-    <PackageReference Include="System.Reflection.TypeExtensions" Version="4.3.0" />
+    <PackageReference Include="System.Diagnostics.Process" Version="4.3.0" />
+    <PackageReference Include="System.Text.Encoding.CodePages" Version="4.3.0" />
+    <PackageReference Include="System.Net.Requests" Version="4.3.0" />
   </ItemGroup>
 
 </Project>

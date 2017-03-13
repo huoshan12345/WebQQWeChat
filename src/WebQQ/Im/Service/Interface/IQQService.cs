@@ -10,7 +10,7 @@ namespace WebQQ.Im.Service.Interface
     /// </summary>
     public interface IQQService : IDisposable
     {
-        IQQContext Context { get; set; }
+        IQQContext Context { get; }
     }
 
 }

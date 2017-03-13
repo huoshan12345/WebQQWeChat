@@ -7,11 +7,7 @@ using WebWeChat.Im.Core;
 
 namespace WebWeChat.Im.Service.Interface
 {
-    public interface IWeChatActionFactory : IActionFactory
+    public interface IWeChatActionFactory : IActionFactory, IWeChatService
     {
-        /// <summary>
-        /// 对象上下文
-        /// </summary>
-        IWeChatContext Context { get; }
     }
 }

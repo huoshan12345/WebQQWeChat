@@ -15,10 +15,14 @@ namespace WebWeChat.Im.Module.Impl
             Context = context;
         }
 
-        protected IWeChatContext Context { get; set; }
+        public IWeChatContext Context { get; }
         protected ILogger Logger => Context.GetSerivce<ILogger>();
         protected IConfigurationRoot Config => Context.GetSerivce<IConfigurationRoot>();
         protected SessionModule Session => Context.GetModule<SessionModule>();
         protected StoreModule Store => Context.GetModule<StoreModule>();
+
+        public virtual void Dispose()
+        {
+        }
     }
 }

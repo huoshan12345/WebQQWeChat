@@ -10,9 +10,15 @@ using System.Reflection;
 
 namespace WebQQ.Im.Service.Impl
 {
-    public class QQActionFactory : ActionFactory, IQQActionFactory, IQQService
+    public class QQActionFactory : ActionFactory, IQQActionFactory
     {
-        public IQQContext Context { get; set; }
+        public QQActionFactory(IQQContext context)
+        {
+            Context = context;
+        }
+
+        public IQQContext Context { get;}
+        
 
         public override IAction CreateAction<T>(params object[] parameters)
         {
