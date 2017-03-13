@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using HttpAction.Event;
 using HttpAction.Service;
@@ -11,11 +12,42 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using WebQQ.Im.Service.Impl;
 using System.Reflection;
+using AutoMapper;
+using FclEx.Logger;
+using Microsoft.Extensions.Configuration;
+using WebQQ.Im.Bean;
+using WebQQ.Im.Bean.Discussion;
+using WebQQ.Im.Bean.Friend;
+using WebQQ.Im.Bean.Group;
 
 namespace WebQQ.Im
 {
     public class WebQQClient : IQQClient
     {
+        static WebQQClient()
+        {
+            Mapper.Initialize(x =>
+            {
+                x.CreateMap<SelfInfo, QQUser>();
+                x.CreateMap<GroupInfo, QQGroup>();
+                x.CreateMap<GroupMemberCard, GroupMember>();
+                x.CreateMap<GroupMemberInfo, GroupMember>();
+                x.CreateMap<UserStatus, GroupMember>();
+                x.CreateMap<UserVipInfo, GroupMember>();
+                x.CreateMap<FriendMarkName, QQFriend>();
+                x.CreateMap<FriendBaseInfo, QQFriend>();
+                x.CreateMap<UserVipInfo, QQFriend>();
+                x.CreateMap<FriendOnlineInfo, QQFriend>();
+                x.CreateMap<FriendInfo, QQFriend>();
+                x.CreateMap<DiscussionMemberStatus, DiscussionMember>();
+            });
+
+            CommonServices.AddSingleton<ILogger, EmptyLogger>();
+            CommonServices.AddSingleton<IConfigurationRoot>(p => Startup.BuildConfig());
+        }
+
+        public static IServiceCollection CommonServices { get; } = new ServiceCollection();
+
         private readonly QQNotifyEventListener _notifyListener;
         private readonly IServiceCollection _services;
         private readonly IServiceProvider _serviceProvider;
@@ -24,10 +56,24 @@ namespace WebQQ.Im
         /// <summary>
         /// 构造方法，初始化模块和服务
         /// </summary>
-        public WebQQClient(QQNotifyEventListener notifyListener = null)
+        public WebQQClient(ILogger logger = null, QQNotifyEventListener notifyListener = null) : this(m =>
+        {
+            if (logger != null) m.AddSingleton(logger);
+            if (notifyListener != null) m.AddSingleton(notifyListener);
+        })
+        {
+        }
+
+        /// <summary>
+        /// 构造方法，初始化模块和服务
+        /// </summary>
+        public WebQQClient(Action<IServiceCollection> configureServices = null)
         {
             _services = new ServiceCollection();
-            Startup.ConfigureServices(_services);
+            foreach (var service in CommonServices)
+            {
+                _services.Add(service);
+            }
 
             _services.AddSingleton<IQQContext>(this);
 
@@ -37,22 +83,32 @@ namespace WebQQ.Im
             _services.AddSingleton<SessionModule>();
 
             // 服务
-            _services.AddSingleton<IHttpService, QQHttp>();
-            _services.AddSingleton<ILogger>(new QQLogger(this, LogLevel.Debug));
+            _services.AddSingleton<IHttpService, HttpService>();
             _services.AddSingleton<IQQActionFactory, QQActionFactory>();
 
-            _serviceProvider = _services.BuildServiceProvider();
-            Startup.Configure(_serviceProvider);
+            configureServices?.Invoke(_services);
+            InitContext();
 
-            _notifyListener = notifyListener;
+            _serviceProvider = _services.BuildServiceProvider();
+
+            _notifyListener = GetSerivce<QQNotifyEventListener>();
             _logger = GetSerivce<ILogger>();
         }
-        
+
+        private void InitContext()
+        {
+            foreach (var service in _services.Where(m => typeof(IQQService).IsAssignableFrom(m.ServiceType)))
+            {
+                var obj = (IQQService)service.ImplementationInstance;
+                obj.Context = this;
+            }
+        }
+
         public T GetSerivce<T>()
         {
-            return _serviceProvider.GetRequiredService<T>();
+            return _serviceProvider.GetService<T>();
         }
-        
+
         public T GetModule<T>() where T : IQQModule
         {
             return _serviceProvider.GetRequiredService<T>();
@@ -61,34 +117,31 @@ namespace WebQQ.Im
         /// <summary>
         /// 销毁所有模块和服务
         /// </summary>
-        /// 
         public void Dispose()
         {
-            try
+            foreach (var service in _services.Where(m => m != null && typeof(IQQService).IsAssignableFrom(m.ServiceType)))
             {
-                foreach (var service in _services)
+                try
                 {
-                    var serviceType = service.ServiceType;
-                    if (typeof(IDisposable).IsAssignableFrom(serviceType) &&
-                        (typeof(IQQModule).IsAssignableFrom(serviceType)
-                        || typeof(IQQService).IsAssignableFrom(serviceType)))
-                    {
-                        var obj = (IDisposable)service.ImplementationInstance;
-                        obj.Dispose();
-                    }
+                    var obj = (IQQService)service.ImplementationInstance;
+                    if (obj != _logger) obj.Dispose();
+                }
+                catch (Exception e)
+                {
+                    _logger.LogError($"销毁所有模块和服务失败: {e}");
                 }
             }
-            catch (Exception e)
-            {
-                _logger.LogError($"销毁所有模块和服务失败: {e}");
-            }
+            (_logger as IQQService)?.Dispose(); // 最后释放logger
         }
 
-        public void FireNotify(QQNotifyEvent notifyEvent)
+        public async Task FireNotifyAsync(QQNotifyEvent notifyEvent)
         {
             try
             {
-                _notifyListener?.Invoke(this, notifyEvent);
+                if (_notifyListener != null)
+                {
+                    await _notifyListener(this, notifyEvent);
+                }
             }
             catch (Exception ex)
             {
@@ -96,19 +149,16 @@ namespace WebQQ.Im
             }
         }
 
-        public Task FireNotifyAsync(QQNotifyEvent notifyEvent)
-        {
-            return Task.Run(() => FireNotify(notifyEvent));
-        }
-
         public Task<ActionEvent> Login(ActionEventListener listener = null)
         {
-           return GetModule<ILoginModule>().Login(listener);
+            return GetModule<ILoginModule>().Login(listener);
         }
 
         public void BeginPoll()
         {
             GetModule<ILoginModule>().BeginPoll();
         }
+
+        public IQQContext Context => this;
     }
 }

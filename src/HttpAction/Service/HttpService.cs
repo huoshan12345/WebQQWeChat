@@ -16,11 +16,19 @@ namespace HttpAction.Service
         protected HttpClient _httpClient;
         private static readonly string[] _notAddHeaderNames = { HttpConstants.ContentType, HttpConstants.Cookie };
 
-        public HttpService(IWebProxy proxy = null)
+        public HttpService() : this((IWebProxy)null)
+        {
+        }
+
+        public HttpService(IWebProxy proxy)
         {
             _cookieContainer = new CookieContainer();
             _httpClient = CreateHttpClient(_cookieContainer, proxy);
         }
+
+        public HttpService(Uri uri) : this(new HttpWebProxy(uri)) { }
+
+        public HttpService(string url) : this(new Uri(url)) { }
 
         public HttpService(HttpClientHandler handler)
         {

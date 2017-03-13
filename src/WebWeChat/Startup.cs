@@ -10,7 +10,7 @@ using WebWeChat.Im.Module;
 
 namespace WebWeChat
 {
-    public static class Startup
+    public class Startup
     {
         private static IConfigurationRoot BuildConfig()
         {
@@ -19,7 +19,7 @@ namespace WebWeChat
 
             if (builder.GetFileProvider().GetFileInfo("project.json")?.Exists == true)
             {
-                builder.AddUserSecrets();
+                builder.AddUserSecrets<Startup>();
             }
             return builder.Build();
         }

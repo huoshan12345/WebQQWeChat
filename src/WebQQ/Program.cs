@@ -11,9 +11,12 @@ using WebQQ.Im.Bean.Content;
 using WebQQ.Im.Event;
 using WebQQ.Im.Module.Impl;
 using System.Reflection;
+using System.Threading.Tasks;
 using HttpAction.Event;
+using Microsoft.Extensions.DependencyInjection;
 using WebQQ.Im.Bean.Friend;
 using WebQQ.Im.Bean.Group;
+using WebQQ.Im.Service.Impl;
 
 namespace WebQQ
 {
@@ -22,7 +25,9 @@ namespace WebQQ
     /// </summary>
     public class Program
     {
+
         private static Process _process = null;
+
         private static readonly QQNotifyEventListener Listener = (client, notifyEvent) =>
         {
             var logger = client.GetSerivce<ILogger>();
@@ -43,7 +48,6 @@ namespace WebQQ
 #endif
                         break;
                     }
-
 
                 case QQNotifyEventType.QRCodeSuccess:
                     _process?.Kill();
@@ -71,6 +75,8 @@ namespace WebQQ
                     logger.LogInformation(notifyEvent.Type.GetFullDescription());
                     break;
             }
+
+            return Task.CompletedTask;
         };
 
         public static void Main(string[] args)
@@ -78,8 +84,9 @@ namespace WebQQ
 #if NETCORE
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
 #endif
+
             // 获取二维码
-            var qq = new WebQQClient(Listener);
+            var qq = new WebQQClient(new QQConsoleLogger(LogLevel.Debug), Listener);
             qq.Login().Wait();
             qq.BeginPoll();
 

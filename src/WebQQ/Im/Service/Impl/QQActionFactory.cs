@@ -12,12 +12,7 @@ namespace WebQQ.Im.Service.Impl
 {
     public class QQActionFactory : ActionFactory, IQQActionFactory, IQQService
     {
-        public IQQContext Context { get; }
-
-        public QQActionFactory(IQQContext context)
-        {
-            Context = context;
-        }
+        public IQQContext Context { get; set; }
 
         public override IAction CreateAction<T>(params object[] parameters)
         {
@@ -32,5 +27,7 @@ namespace WebQQ.Im.Service.Impl
             }
             return base.CreateAction<T>(parameters);
         }
+
+        public void Dispose() { }
     }
 }

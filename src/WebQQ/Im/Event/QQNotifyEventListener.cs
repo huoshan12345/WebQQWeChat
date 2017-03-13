@@ -1,8 +1,9 @@
-﻿using WebQQ.Im.Core;
+﻿using System.Threading.Tasks;
+using WebQQ.Im.Core;
 
 namespace WebQQ.Im.Event
 {
-    public delegate void QQNotifyEventListener(IQQClient sender, QQNotifyEvent e);
+    public delegate Task QQNotifyEventListener(IQQClient sender, QQNotifyEvent e);
 
     public interface IQQNotifyEventHandler
     {

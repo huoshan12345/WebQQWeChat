@@ -9,9 +9,5 @@ namespace WebQQ.Im.Service.Interface
 {
     public interface IQQActionFactory : IActionFactory
     {
-        /// <summary>
-        /// 对象上下文
-        /// </summary>
-        IQQContext Context { get; }
     }
 }

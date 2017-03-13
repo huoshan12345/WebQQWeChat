@@ -13,7 +13,7 @@ namespace WebQQ.Im.Module.Impl
     /// </summary>
     public abstract class QQModule : IQQModule
     {
-        protected IQQContext Context { get; set; }
+        public IQQContext Context { get; set; }
         protected ILogger Logger => Context.GetSerivce<ILogger>();
         protected IConfigurationRoot Config => Context.GetSerivce<IConfigurationRoot>();
         protected SessionModule Session => Context.GetModule<SessionModule>();

@@ -14,8 +14,6 @@ namespace WebQQ.Im.Core
         // 获取服务，该服务既可以是全局共享的，也可以是qq实例特有的，所以不要求T继承IQQService
         T GetSerivce<T>();
 
-        void FireNotify(QQNotifyEvent notifyEvent);
-
         Task FireNotifyAsync(QQNotifyEvent notifyEvent);
     }
 }
