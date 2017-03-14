@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using FclEx.Extensions;
-using FclEx.Extesions;
 using HttpAction.Core;
 using HttpAction.Event;
 using Newtonsoft.Json.Linq;

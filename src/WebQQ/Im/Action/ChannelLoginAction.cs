@@ -5,7 +5,6 @@ using WebQQ.Im.Bean;
 using WebQQ.Im.Core;
 using WebQQ.Im.Module.Impl;
 using FclEx.Extensions;
-using FclEx.Extesions;
 
 namespace WebQQ.Im.Action
 {

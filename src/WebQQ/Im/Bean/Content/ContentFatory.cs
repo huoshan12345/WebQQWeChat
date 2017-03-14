@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using FclEx.Extesions;
+using FclEx.Extensions;
 using Newtonsoft.Json.Linq;
 using WebQQ.Util;
 
