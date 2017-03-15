@@ -47,6 +47,16 @@ namespace HttpAction.Action
             return NotifyActionEventAsync(ActionEventType.EvtOK, target);
         }
 
+        protected Task<ActionEvent> NotifyErrorEventAsync(Exception ex)
+        {
+            return NotifyActionEventAsync(ActionEvent.CreateEvent(ActionEventType.EvtError, ex));
+        }
+
+        protected Task<ActionEvent> NotifyErrorEventAsync(string msg)
+        {
+            return NotifyActionEventAsync(ActionEvent.CreateEvent(ActionEventType.EvtError, new Exception(msg)));
+        }
+
         public abstract HttpRequestItem BuildRequest();
 
         public abstract Task<ActionEvent> HandleResponse(HttpResponseItem response);
