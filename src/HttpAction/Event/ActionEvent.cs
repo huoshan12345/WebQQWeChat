@@ -4,6 +4,10 @@ using FclEx.Helpers;
 
 namespace HttpAction.Event
 {
+    /// <summary>
+    /// 用来表示一个action的执行结果
+    /// 由于有地方需要引用传递，所以不可改为值类型。
+    /// </summary>
     public class ActionEvent
     {
         public ActionEventType Type { get; set; }
@@ -17,7 +21,12 @@ namespace HttpAction.Event
 
         public static ActionEvent CreateEvent(ActionEventType type, object target)
         {
-            return target == null ? EmptyEvents[type] : new ActionEvent(type, target);
+            return target == null ? _emptyEvents[type] : new ActionEvent(type, target);
+        }
+
+        public static ActionEvent CreateOkEvent(object target)
+        {
+            return CreateEvent(ActionEventType.EvtOK, target);
         }
 
         public override string ToString()
@@ -25,7 +34,7 @@ namespace HttpAction.Event
             return $"{Type.GetFullDescription()}, target={Target ?? ""}]";
         }
 
-        private static readonly IReadOnlyDictionary<ActionEventType, ActionEvent> EmptyEvents;
+        private static readonly IReadOnlyDictionary<ActionEventType, ActionEvent> _emptyEvents;
 
         static ActionEvent()
         {
@@ -34,10 +43,10 @@ namespace HttpAction.Event
             {
                 dic[@enum] = new ActionEvent(@enum, null);
             }
-            EmptyEvents = dic;
+            _emptyEvents = dic;
         }
 
-        public static ActionEvent EmptyOkEvent => EmptyEvents[ActionEventType.EvtOK];
-        public static ActionEvent EmptyRepeatEvent => EmptyEvents[ActionEventType.EvtRepeat];
+        public static ActionEvent EmptyOkEvent => _emptyEvents[ActionEventType.EvtOK];
+        public static ActionEvent EmptyRepeatEvent => _emptyEvents[ActionEventType.EvtRepeat];
     }
 }

@@ -4,6 +4,7 @@ using FclEx.Extensions;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using WebWeChat.Im.Bean;
+using WebWeChat.Im.Event;
 
 namespace WebWeChat.Util
 {
@@ -30,6 +31,11 @@ namespace WebWeChat.Util
         public static bool IsGroup(this ContactMember member)
         {
             return member.UserName.StartsWith("@@");
+        }
+
+        public static T Get<T>(this WeChatNotifyEvent e)
+        {
+            return (T)e.Target;
         }
     }
 }

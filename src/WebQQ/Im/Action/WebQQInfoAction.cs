@@ -18,7 +18,7 @@ namespace WebQQ.Im.Action
     /// </summary>
     public abstract class WebQQInfoAction : WebQQAction
     {
-        private static readonly ConcurrentDictionary<Type, string> UrlApiDic = new ConcurrentDictionary<Type, string>();
+        private static readonly ConcurrentDictionary<Type, string> _urlApiDic = new ConcurrentDictionary<Type, string>();
 
         protected WebQQInfoAction(IQQContext context, ActionEventListener listener = null)
             : base(context, listener) { }
@@ -26,7 +26,7 @@ namespace WebQQ.Im.Action
         public override HttpRequestItem BuildRequest()
         {
             var actionType = this.GetType();
-            var url = UrlApiDic.GetOrAdd(actionType, key =>
+            var url = _urlApiDic.GetOrAdd(actionType, key =>
             {
                 var actionName = actionType.Name.Replace("Action", "");
                 return typeof(ApiUrls).GetField(actionName).GetValue(null).ToString();
@@ -44,7 +44,7 @@ namespace WebQQ.Im.Action
             if (json["retcode"].ToString() == "0")
             {
                 HandleResult(json);
-                return NotifyActionEventAsync(ActionEventType.EvtOK);
+                return NotifyOkActionEventAsync();
             }
             else
             {

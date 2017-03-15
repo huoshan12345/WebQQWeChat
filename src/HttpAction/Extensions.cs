@@ -75,5 +75,22 @@ namespace HttpAction
             } while (endCondition == null || endCondition(result));
             return result;
         }
+
+        public static T Get<T>(this ActionEvent e)
+        {
+            return (T)e.Target;
+        }
+
+        public static T GetOrDefault<T>(this ActionEvent e, T defaultValue = default(T))
+        {
+            return e.Target is T ? (T)e.Target : defaultValue;
+        }
+
+        public static T GetOrDefaultWhenOk<T>(this ActionEvent e, T defaultValue = default(T))
+        {
+            return (e.IsOk() && e.Target is T) ? (T)e.Target : defaultValue;
+        }
+
+        public static bool IsOk(this ActionEvent e) => e.Type == ActionEventType.EvtOK;
     }
 }
