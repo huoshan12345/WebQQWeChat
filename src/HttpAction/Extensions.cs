@@ -72,13 +72,18 @@ namespace HttpAction
             do
             {
                 result = await actor.ExecuteAsyncAuto();
-            } while (endCondition == null || endCondition(result));
+            } while (endCondition == null || !endCondition(result));
             return result;
         }
 
         public static T Get<T>(this ActionEvent e)
         {
             return (T)e.Target;
+        }
+
+        public static T GetOrDefaultWhen<T>(this ActionEvent e, ActionEventType eventType, T defaultValue = default(T))
+        {
+            return (e.Type == eventType && e.Target is T) ? (T)e.Target : defaultValue;
         }
 
         public static T GetOrDefault<T>(this ActionEvent e, T defaultValue = default(T))

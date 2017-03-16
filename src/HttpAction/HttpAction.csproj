@@ -13,7 +13,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="FclEx" Version="0.2.2" />
+    <PackageReference Include="FclEx" Version="0.2.3-*" />
   </ItemGroup>
 
 </Project>

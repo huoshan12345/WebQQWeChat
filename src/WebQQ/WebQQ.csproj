@@ -7,8 +7,8 @@
 
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="5.2.0" />
-    <PackageReference Include="FclEx.Component" Version="0.2.2" />
-    <PackageReference Include="FclEx.Json" Version="0.2.2" />
+    <PackageReference Include="FclEx.Component" Version="0.2.3-*" />
+    <PackageReference Include="FclEx.Json" Version="0.2.3-*" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="1.1.1" />
     <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="1.1.1" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="1.1.0" />
