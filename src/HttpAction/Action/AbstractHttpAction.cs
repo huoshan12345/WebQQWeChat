@@ -47,6 +47,11 @@ namespace HttpAction.Action
             return NotifyActionEventAsync(ActionEventType.EvtOK, target);
         }
 
+        protected Task<ActionEvent> NotifyOkEventAsync(object target = null)
+        {
+            return NotifyActionEventAsync(ActionEventType.EvtOK, target);
+        }
+
         protected Task<ActionEvent> NotifyErrorEventAsync(Exception ex)
         {
             return NotifyActionEventAsync(ActionEvent.CreateEvent(ActionEventType.EvtError, ex));
