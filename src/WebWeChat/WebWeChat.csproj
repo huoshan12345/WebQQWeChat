@@ -3,14 +3,11 @@
   <PropertyGroup>
     <TargetFrameworks>netstandard1.6;net461</TargetFrameworks>
     <UserSecretsId>aspnet-WebWeChat-20161027025319</UserSecretsId>
+    <Version>1.0.0-beta1</Version>
   </PropertyGroup>
 
   <ItemGroup>
     <None Remove="verify.png" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\HttpAction\HttpAction.csproj" />
   </ItemGroup>
 
   <ItemGroup>
@@ -20,6 +17,7 @@
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="1.1.0" />
     <PackageReference Include="FclEx.Component" Version="0.2.3-*" />
     <PackageReference Include="FclEx.Json" Version="0.2.3-*" />
+    <PackageReference Include="HttpAction" Version="0.1.3-beta1" />
   </ItemGroup>
 
   <ItemGroup Condition=" '$(TargetFramework)' == 'net461' ">
