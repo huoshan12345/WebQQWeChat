@@ -81,6 +81,20 @@ namespace HttpAction
             return (T)e.Target;
         }
 
+        public static bool TryGet<T>(this ActionEvent e, out T result)
+        {
+            if (e.Target is T)
+            {
+                result = (T)e.Target;
+                return true;
+            }
+            else
+            {
+                result = default(T);
+                return false;
+            }
+        }
+
         public static T GetOrDefaultWhen<T>(this ActionEvent e, ActionEventType eventType, T defaultValue = default(T))
         {
             return (e.Type == eventType && e.Target is T) ? (T)e.Target : defaultValue;
