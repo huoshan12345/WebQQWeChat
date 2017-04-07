@@ -25,7 +25,7 @@ namespace WebWeChat.Im.Action
         {
         }
 
-        public override HttpRequestItem BuildRequest()
+        protected override HttpRequestItem BuildRequest()
         {
             var req = new HttpRequestItem(HttpMethodType.Post, ApiUrls.CheckQRCode);
             req.AddQueryValue("loginicon", "true");
@@ -36,7 +36,7 @@ namespace WebWeChat.Im.Action
             return req;
         }
 
-        public override Task<ActionEvent> HandleResponse(HttpResponseItem responseItem)
+        protected override Task<ActionEvent> HandleResponse(HttpResponseItem responseItem)
         {
             var str = responseItem.ResponseString;
             var match = _regCode.Match(str);

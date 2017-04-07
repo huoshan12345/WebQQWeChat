@@ -24,7 +24,6 @@ namespace WebQQ.Im.Action
         protected SessionModule Session => _context.GetModule<SessionModule>();
         protected StoreModule Store => _context.GetModule<StoreModule>();
         protected long Timestamp => DateTime.Now.ToTimestampMilli();
-        protected string ActionName => GetType().GetDescription();
 
         protected WebQQAction(IQQContext context, ActionEventListener listener = null)
             : base(context.GetSerivce<IHttpService>())
@@ -33,7 +32,7 @@ namespace WebQQ.Im.Action
             OnActionEvent += listener;
         }
 
-        public override Task<ActionEvent> HandleExceptionAsync(Exception ex)
+        protected override Task<ActionEvent> HandleExceptionAsync(Exception ex)
         {
             var exception = ex as QQException ?? new QQException(ex);
             return base.HandleExceptionAsync(exception);

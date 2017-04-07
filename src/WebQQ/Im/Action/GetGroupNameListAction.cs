@@ -18,7 +18,7 @@ namespace WebQQ.Im.Action
         {
         }
 
-        public override HttpRequestItem BuildRequest()
+        protected override HttpRequestItem BuildRequest()
         {
             var req = HttpRequestItem.CreateFormRequest(ApiUrls.GetGroupNameList);
             var json = new JObject
@@ -31,7 +31,7 @@ namespace WebQQ.Im.Action
             return req;
         }
 
-        public override Task<ActionEvent> HandleResponse(HttpResponseItem response)
+        protected override Task<ActionEvent> HandleResponse(HttpResponseItem response)
         {
             /*
                 {

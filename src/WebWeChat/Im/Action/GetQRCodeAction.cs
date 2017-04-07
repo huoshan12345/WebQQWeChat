@@ -17,7 +17,7 @@ namespace WebWeChat.Im.Action
         {
         }
 
-        public override HttpRequestItem BuildRequest()
+        protected override HttpRequestItem BuildRequest()
         {
             var req =  new HttpRequestItem(HttpMethodType.Post, string.Format(ApiUrls.GetQRCode, Session.Uuid));
             req.AddQueryValue("t", "webwx");
@@ -26,7 +26,7 @@ namespace WebWeChat.Im.Action
             return req;
         }
 
-        public override Task<ActionEvent> HandleResponse(HttpResponseItem responseItem)
+        protected override Task<ActionEvent> HandleResponse(HttpResponseItem responseItem)
         {
             return NotifyActionEventAsync(ActionEventType.EvtOK, Image.FromStream(responseItem.ResponseStream));
         }

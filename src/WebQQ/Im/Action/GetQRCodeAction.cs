@@ -13,7 +13,7 @@ namespace WebQQ.Im.Action
 
         public GetQRCodeAction(IQQContext context, ActionEventListener listener = null) : base(context, listener) { }
 
-        public override HttpRequestItem BuildRequest()
+        protected override HttpRequestItem BuildRequest()
         {
             var req = new HttpRequestItem(HttpMethodType.Get, ApiUrls.GetQRCode);
             req.AddQueryValue("appid", AppId);
@@ -27,7 +27,7 @@ namespace WebQQ.Im.Action
             return req;
         }
 
-        public override Task<ActionEvent> HandleResponse(HttpResponseItem response)
+        protected override Task<ActionEvent> HandleResponse(HttpResponseItem response)
         {
             return NotifyActionEventAsync(ActionEventType.EvtOK, Image.FromStream(response.ResponseStream));
         }

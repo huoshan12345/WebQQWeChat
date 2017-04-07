@@ -14,7 +14,7 @@ namespace WebQQ.Im.Action
         {
         }
 
-        public override HttpRequestItem BuildRequest()
+        protected override HttpRequestItem BuildRequest()
         {
             HttpRequestItem req = null;
             // req.AddQueryValue("tuin", _friend.Uin);
@@ -23,7 +23,7 @@ namespace WebQQ.Im.Action
             return req;
         }
 
-        public override Task<ActionEvent> HandleResponse(HttpResponseItem response)
+        protected override Task<ActionEvent> HandleResponse(HttpResponseItem response)
         {
             throw new NotImplementedException();
         }

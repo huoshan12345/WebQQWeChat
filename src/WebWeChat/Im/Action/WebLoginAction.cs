@@ -19,12 +19,12 @@ namespace WebWeChat.Im.Action
         {
         }
 
-        public override HttpRequestItem BuildRequest()
+        protected override HttpRequestItem BuildRequest()
         {
             return new HttpRequestItem(HttpMethodType.Get, Session.LoginUrl);
         }
 
-        public override Task<ActionEvent> HandleResponse(HttpResponseItem responseItem)
+        protected override Task<ActionEvent> HandleResponse(HttpResponseItem responseItem)
         {
             /*
                 <error>

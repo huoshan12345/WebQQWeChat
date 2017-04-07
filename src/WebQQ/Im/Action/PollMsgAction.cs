@@ -44,7 +44,7 @@ namespace WebQQ.Im.Action
             req.Referrer = "https://d1.web2.qq.com/cfproxy.html?v=20151105001&callback=1";
         }
 
-        public override Task<ActionEvent> HandleResponse(HttpResponseItem response)
+        protected override Task<ActionEvent> HandleResponse(HttpResponseItem response)
         {
             var json = response.ResponseString.ToJToken();
             var retcode = json["retcode"].ToInt();
@@ -55,7 +55,7 @@ namespace WebQQ.Im.Action
             throw new QQException(QQErrorCode.ResponseError, response.ResponseString);
         }
 
-        public override Task<ActionEvent> HandleExceptionAsync(Exception ex)
+        protected override Task<ActionEvent> HandleExceptionAsync(Exception ex)
         {
             if (Session.State == SessionState.Online && (ex as QQException)?.ErrorCode == QQErrorCode.Timeout)
             {
@@ -206,7 +206,7 @@ namespace WebQQ.Im.Action
             }); // 此处的GroupCode实际上是Group的gid
             msg.Contents = ContentFatory.ParseContents(resultValue["content"].ToJArray());
 
-            events.Add(QQNotifyEvent.CreateEvent(QQNotifyEventType.ChatMsg, msg));
+            events.Add(QQNotifyEvent.CreateEvent(QQNotifyEventType.GroupMsg, msg));
         }
     }
 }

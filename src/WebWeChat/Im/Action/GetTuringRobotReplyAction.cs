@@ -32,7 +32,7 @@ namespace WebWeChat.Im.Action
                 base.ExecuteAsync(token);
         }
 
-        public override HttpRequestItem BuildRequest()
+        protected override HttpRequestItem BuildRequest()
         {
             var req = HttpRequestItem.CreateJsonRequest(ApiUrls.TulingRobot);
             var obj = new
@@ -45,7 +45,7 @@ namespace WebWeChat.Im.Action
             return req;
         }
 
-        public override Task<ActionEvent> HandleResponse(HttpResponseItem response)
+        protected override Task<ActionEvent> HandleResponse(HttpResponseItem response)
         {
             var str = response.ResponseString;
             var json = str.ToJToken();
@@ -114,7 +114,7 @@ namespace WebWeChat.Im.Action
                     reply = json["text"].ToString();
                     break;
             }
-            return NotifyOkActionEventAsync(reply);
+            return NotifyOkEventAsync(reply);
         }
     }
 }

@@ -18,7 +18,7 @@ namespace WebQQ.Im.Action
         {
         }
 
-        public override HttpRequestItem BuildRequest()
+        protected override HttpRequestItem BuildRequest()
         {
             var req = HttpRequestItem.CreateGetRequest(ApiUrls.GetDiscussionList);
             req.AddQueryValue("clientid", Session.ClientId);
@@ -29,7 +29,7 @@ namespace WebQQ.Im.Action
             return req;
         }
 
-        public override Task<ActionEvent> HandleResponse(HttpResponseItem response)
+        protected override Task<ActionEvent> HandleResponse(HttpResponseItem response)
         {
             /*
                 {

@@ -17,7 +17,7 @@ namespace WebQQ.Im.Action
         {
         }
 
-        public override HttpRequestItem BuildRequest()
+        protected override HttpRequestItem BuildRequest()
         {
             var req = HttpRequestItem.CreateGetRequest(ApiUrls.GetVfwebqq);
             req.AddQueryValue("ptwebqq", Session.Ptwebqq);
@@ -28,7 +28,7 @@ namespace WebQQ.Im.Action
             return req;
         }
 
-        public override Task<ActionEvent> HandleResponse(HttpResponseItem response)
+        protected override Task<ActionEvent> HandleResponse(HttpResponseItem response)
         {
             var json = response.ResponseString.ToJToken();
             if (json["retcode"].ToString() == "0")

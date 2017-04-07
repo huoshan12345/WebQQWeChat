@@ -19,7 +19,7 @@ namespace WebQQ.Im.Action
         {
         }
 
-        public override HttpRequestItem BuildRequest()
+        protected override HttpRequestItem BuildRequest()
         {
             var req = HttpRequestItem.CreateGetRequest(ApiUrls.GetOnlineFriends);
             req.AddQueryValue("vfwebqq", Session.Vfwebqq);
@@ -30,7 +30,7 @@ namespace WebQQ.Im.Action
             return req;
         }
 
-        public override Task<ActionEvent> HandleResponse(HttpResponseItem response)
+        protected override Task<ActionEvent> HandleResponse(HttpResponseItem response)
         {
             /*
                 {

@@ -15,12 +15,12 @@ namespace WebQQ.Im.Action
         {
         }
 
-        public override HttpRequestItem BuildRequest()
+        protected override HttpRequestItem BuildRequest()
         {
             return HttpRequestItem.CreateGetRequest(Session.CheckSigUrl);
         }
 
-        public override Task<ActionEvent> HandleResponse(HttpResponseItem response)
+        protected override Task<ActionEvent> HandleResponse(HttpResponseItem response)
         {
             var ptwebqq = HttpService.GetCookie("ptwebqq", Session.CheckSigUrl).Value;
             Session.Ptwebqq = ptwebqq;

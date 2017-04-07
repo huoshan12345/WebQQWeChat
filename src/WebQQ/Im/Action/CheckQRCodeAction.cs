@@ -15,7 +15,7 @@ namespace WebQQ.Im.Action
 
         public CheckQRCodeAction(IQQContext context, ActionEventListener listener = null) : base(context, listener) { }
 
-        public override HttpRequestItem BuildRequest()
+        protected override HttpRequestItem BuildRequest()
         {
             var qrsig = HttpService.GetCookie("qrsig", ApiUrls.CheckQRCode).Value;
             var req = new HttpRequestItem(HttpMethodType.Get, ApiUrls.CheckQRCode);
@@ -43,7 +43,7 @@ namespace WebQQ.Im.Action
             return req;
         }
 
-        public override Task<ActionEvent> HandleResponse(HttpResponseItem response)
+        protected override Task<ActionEvent> HandleResponse(HttpResponseItem response)
         {
             var str = response.ResponseString;
             var m = _reg.Match(str);

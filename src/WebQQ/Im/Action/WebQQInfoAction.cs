@@ -23,7 +23,7 @@ namespace WebQQ.Im.Action
         protected WebQQInfoAction(IQQContext context, ActionEventListener listener = null)
             : base(context, listener) { }
 
-        public override HttpRequestItem BuildRequest()
+        protected override HttpRequestItem BuildRequest()
         {
             var actionType = this.GetType();
             var url = _urlApiDic.GetOrAdd(actionType, key =>
@@ -38,13 +38,13 @@ namespace WebQQ.Im.Action
 
         protected virtual void ModifyRequest(HttpRequestItem req) { }
 
-        public override Task<ActionEvent> HandleResponse(HttpResponseItem response)
+        protected override Task<ActionEvent> HandleResponse(HttpResponseItem response)
         {
             var json = response.ResponseString.ToJToken();
             if (json["retcode"].ToString() == "0")
             {
                 HandleResult(json);
-                return NotifyOkActionEventAsync();
+                return NotifyOkEventAsync();
             }
             else
             {

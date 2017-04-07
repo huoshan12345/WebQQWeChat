@@ -29,7 +29,7 @@ namespace WebWeChat.Im.Action
         {
         }
 
-        public override HttpRequestItem BuildRequest()
+        protected override HttpRequestItem BuildRequest()
         {
             var url = Session.SyncUrl;
             if (Session.SyncUrl == null)
@@ -66,7 +66,7 @@ namespace WebWeChat.Im.Action
             }
         }
 
-        public override Task<ActionEvent> HandleResponse(HttpResponseItem responseItem)
+        protected override Task<ActionEvent> HandleResponse(HttpResponseItem responseItem)
         {
             var str = responseItem.ResponseString;
             var match = _reg.Match(str);
@@ -108,7 +108,7 @@ namespace WebWeChat.Im.Action
             throw WeChatException.CreateException(WeChatErrorCode.ResponseError);
         }
 
-        public override Task<ActionEvent> HandleExceptionAsync(Exception ex)
+        protected override Task<ActionEvent> HandleExceptionAsync(Exception ex)
         {
             // SyncUrl为空说明正在测试host
             if (Session.SyncUrl == null)

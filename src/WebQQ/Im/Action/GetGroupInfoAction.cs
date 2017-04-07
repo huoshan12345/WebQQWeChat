@@ -22,7 +22,7 @@ namespace WebQQ.Im.Action
             _group = group;
         }
 
-        public override HttpRequestItem BuildRequest()
+        protected override HttpRequestItem BuildRequest()
         {
             var req = HttpRequestItem.CreateGetRequest(ApiUrls.GetGroupInfo);
             req.AddQueryValue("gcode", _group.Code);
@@ -32,7 +32,7 @@ namespace WebQQ.Im.Action
             return req;
         }
 
-        public override Task<ActionEvent> HandleResponse(HttpResponseItem response)
+        protected override Task<ActionEvent> HandleResponse(HttpResponseItem response)
         {
 
             /*

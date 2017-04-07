@@ -21,7 +21,7 @@ namespace WebWeChat.Im.Action
         {
         }
 
-        public override HttpRequestItem BuildRequest()
+        protected override HttpRequestItem BuildRequest()
         {
             var url = string.Format(ApiUrls.WebwxInit, Session.BaseUrl, Session.PassTicket, Session.Skey, Timestamp);
             var req = new HttpRequestItem(HttpMethodType.Post, url);
@@ -41,7 +41,7 @@ namespace WebWeChat.Im.Action
             return req;
         }
 
-        public override Task<ActionEvent> HandleResponse(HttpResponseItem responseItem)
+        protected override Task<ActionEvent> HandleResponse(HttpResponseItem responseItem)
         {
             /*
                 {

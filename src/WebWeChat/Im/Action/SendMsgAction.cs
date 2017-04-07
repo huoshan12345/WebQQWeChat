@@ -23,7 +23,7 @@ namespace WebWeChat.Im.Action
             _msg = msg;
         }
 
-        public override HttpRequestItem BuildRequest()
+        protected override HttpRequestItem BuildRequest()
         {
             var url = string.Format(ApiUrls.SendMsg, Session.BaseUrl);
             var obj = new
@@ -39,7 +39,7 @@ namespace WebWeChat.Im.Action
             return req;
         }
 
-        public override Task<ActionEvent> HandleResponse(HttpResponseItem response)
+        protected override Task<ActionEvent> HandleResponse(HttpResponseItem response)
         {
             var json = response.ResponseString.ToJToken();
             if (json["BaseResponse"]["Ret"].ToString() == "0")

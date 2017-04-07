@@ -22,9 +22,7 @@ namespace WebWeChat.Im.Action
         protected SessionModule Session => _context.GetModule<SessionModule>();
         protected StoreModule Store => _context.GetModule<StoreModule>();
         protected IConfigurationRoot Config => _context.GetSerivce<IConfigurationRoot>();
-
         protected long Timestamp => DateTime.Now.ToTimestampMilli();
-        protected string ActionName => GetType().GetDescription();
 
         protected WebWeChatAction(IWeChatContext context, ActionEventListener listener = null) :
             base(context.GetSerivce<IHttpService>())
@@ -33,7 +31,7 @@ namespace WebWeChat.Im.Action
             OnActionEvent += listener;
         }
 
-        public override Task<ActionEvent> HandleExceptionAsync(Exception ex)
+        protected override Task<ActionEvent> HandleExceptionAsync(Exception ex)
         {
             var exception = ex as WeChatException ?? new WeChatException(ex);
             return base.HandleExceptionAsync(exception);
