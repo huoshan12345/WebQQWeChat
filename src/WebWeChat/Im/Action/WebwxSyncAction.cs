@@ -55,7 +55,7 @@ namespace WebWeChat.Im.Action
                 {
                     m.FromUser = Store.ContactMemberDic.GetOrDefault(m.FromUserName);
                 });
-                return NotifyActionEventAsync(ActionEventType.EvtOK, newMsgs);
+                return NotifyOkEventAsync(newMsgs);
             }
             throw WeChatException.CreateException(WeChatErrorCode.ResponseError);
 

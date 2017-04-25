@@ -37,7 +37,7 @@ namespace WebWeChat.Im.Action
             if (match.Success && match.Groups.Count > 2 && match.Groups[1].Value == "200")
             {
                 Session.Uuid = match.Groups[2].Value;
-                return NotifyActionEventAsync(ActionEventType.EvtOK);
+                return NotifyOkEventAsync();
             }
             return NotifyErrorEventAsync(WeChatErrorCode.ResponseError);
         }

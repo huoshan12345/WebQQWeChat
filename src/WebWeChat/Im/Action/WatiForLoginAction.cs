@@ -64,7 +64,7 @@ namespace WebWeChat.Im.Action
                     case WatiForLoginResult.QRCodeInvalid:
                         break;
                 }
-                return NotifyActionEventAsync(ActionEventType.EvtOK, result);
+                return NotifyOkEventAsync(result);
             }
             throw WeChatException.CreateException(WeChatErrorCode.ResponseError);
         }

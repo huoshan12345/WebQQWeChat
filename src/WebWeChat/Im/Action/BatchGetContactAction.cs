@@ -53,7 +53,7 @@ namespace WebWeChat.Im.Action
                     {
                         Store.ContactMemberDic[item.UserName] = item;
                     }
-                    return NotifyActionEventAsync(ActionEventType.EvtOK);
+                    return NotifyOkEventAsync();
                 }
                 else
                 {

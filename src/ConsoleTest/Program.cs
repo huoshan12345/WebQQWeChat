@@ -5,6 +5,7 @@ using System.Drawing.Imaging;
 using System.Text;
 using System.Threading.Tasks;
 using FclEx.Extensions;
+using HttpAction;
 using HttpAction.Event;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -118,7 +119,7 @@ namespace ConsoleTest
                         if (msg.FromUserName == userName && msg.MsgType == MessageType.Text && !msg.Content.IsNullOrEmpty())
                         {
                             var reply = await client.GetRobotReply(WebWeChat.Im.RobotType.Tuling, msg.Content);
-                            if (reply.Type == ActionEventType.EvtOK)
+                            if (reply.IsOk())
                             {
                                 var text = (string)reply.Target;
                                 text = $"{text}  --来自机器人回复";
@@ -142,7 +143,7 @@ namespace ConsoleTest
         private static async Task TestQQ()
         {
             var client = new WebQQClient(m => new QQConsoleLogger(m, LogLevel.Debug), _qqListener);
-            if ((await client.Login()).Type == ActionEventType.EvtOK)
+            if ((await client.Login()).IsOk())
             {
                 client.BeginPoll();
             }
@@ -151,7 +152,7 @@ namespace ConsoleTest
         private static async Task TestWeChat()
         {
             var client = new WebWeChatClient(m => new WeChatConsoleLogger(m, LogLevel.Debug), _weChatListener);
-            if ((await client.Login()).Type == ActionEventType.EvtOK)
+            if ((await client.Login()).IsOk())
             {
                 client.BeginSyncCheck();
             }

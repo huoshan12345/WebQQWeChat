@@ -46,7 +46,7 @@ namespace WebWeChat.Im.Action
 
             Session.State = SessionState.Online;
 
-            return NotifyActionEventAsync(ActionEventType.EvtOK);
+            return NotifyOkEventAsync();
         }
     }
 }

@@ -93,11 +93,11 @@ namespace WebWeChat.Im.Action
                     case "1100":
                     case "1101": // 在手机上登出了微信
                         Session.State = SessionState.Offline;
-                        return NotifyActionEventAsync(ActionEventType.EvtOK, EnumHelper.ParseFromStrNum<SyncCheckResult>(retcode));
+                        return NotifyOkEventAsync(EnumHelper.ParseFromStrNum<SyncCheckResult>(retcode));
 
                     case "0":
                         var selector = match.Groups[2].Value;
-                        return NotifyActionEventAsync(ActionEventType.EvtOK, EnumHelper.ParseFromStrNum<SyncCheckResult>(selector,
+                        return NotifyOkEventAsync(EnumHelper.ParseFromStrNum<SyncCheckResult>(selector,
                             s =>
                             {
                                 Logger.LogWarning($"cannot convert {s} to enum type : {nameof(SyncCheckResult)}");

@@ -13,6 +13,7 @@ using WebWeChat.Im.Module.Impl;
 using FclEx.Extensions;
 using HttpAction.Event;
 using WebWeChat.Im.Service.Impl;
+using HttpAction;
 
 namespace WebWeChat
 {
@@ -59,7 +60,7 @@ namespace WebWeChat
                         if (msg.FromUserName == userName && msg.MsgType == MessageType.Text && !msg.Content.IsNullOrEmpty())
                         {
                             var reply = await client.GetRobotReply(RobotType.Tuling, msg.Content);
-                            if (reply.Type == ActionEventType.EvtOK)
+                            if (reply.IsOk())
                             {
                                 var text = (string) reply.Target;
                                 text = $"{text}  --来自机器人回复";
@@ -88,7 +89,7 @@ namespace WebWeChat
             var client = new WebWeChatClient(m => new WeChatConsoleLogger(m, LogLevel.Debug), _listener);
             client.Login((s, e) =>
             {
-                if (e.Type == ActionEventType.EvtOK)
+                if (e.IsOk())
                 {
                     // await client.GetContact(); // 登录过程中会获取一次联系人
                     client.BeginSyncCheck();

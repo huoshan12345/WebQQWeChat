@@ -108,7 +108,7 @@ namespace WebWeChat.Im.Action
                     Session.SyncKey = json["SyncKey"];
                     // Session.SyncKeyStr = Session.SyncKey["List"].ToArray().Select(m => $"{m["Key"]}_{m["Val"]}").JoinWith("|");
                     Session.UserToken = json["User"];
-                    return NotifyActionEventAsync(ActionEventType.EvtOK);
+                    return NotifyOkEventAsync();
                 }
                 else
                 {

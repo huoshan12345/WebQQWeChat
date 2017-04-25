@@ -93,11 +93,11 @@ namespace WebWeChat.Im.Action
 
                 var selfName = Session.UserToken["UserName"].ToString();
                 Session.User = Store.ContactMemberDic[selfName];
-                Store.ContactMemberDic.Remove(selfName);
+                // Store.ContactMemberDic.Remove(selfName);
 
                 Logger.LogInformation($"应有{Store.MemberCount}个联系人，读取到联系人{Store.ContactMemberDic.Count}个");
                 Logger.LogInformation($"共有{Store.GroupCount}个群|{Store.FriendCount}个好友|{Store.SpecialUserCount}个特殊账号|{Store.PublicUserCount}公众号或服务号");
-                return NotifyActionEventAsync(ActionEventType.EvtOK);
+                return NotifyOkEventAsync();
             }
             else
             {

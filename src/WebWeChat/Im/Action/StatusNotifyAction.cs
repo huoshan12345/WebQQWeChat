@@ -56,7 +56,7 @@ namespace WebWeChat.Im.Action
                 var json = JObject.Parse(str);
                 if (json["BaseResponse"]["Ret"].ToString() == "0")
                 {
-                    return NotifyActionEventAsync(ActionEventType.EvtOK);
+                    return NotifyOkEventAsync();
                 }
                 else
                 {

@@ -28,7 +28,7 @@ namespace WebWeChat.Im.Action
 
         protected override Task<ActionEvent> HandleResponse(HttpResponseItem responseItem)
         {
-            return NotifyActionEventAsync(ActionEventType.EvtOK, Image.FromStream(responseItem.ResponseStream));
+            return NotifyOkEventAsync(Image.FromStream(responseItem.ResponseStream));
         }
     }
 }
