@@ -29,7 +29,7 @@ namespace WebQQ.Im.Action
 
         protected override Task<ActionEvent> HandleResponse(HttpResponseItem response)
         {
-            return NotifyActionEventAsync(ActionEventType.EvtOK, Image.FromStream(response.ResponseStream));
+            return NotifyOkEventAsync(Image.FromStream(response.ResponseStream));
         }
     }
 }

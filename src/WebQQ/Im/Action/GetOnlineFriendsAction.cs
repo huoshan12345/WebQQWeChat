@@ -52,7 +52,7 @@ namespace WebQQ.Im.Action
                 {
                     Store.FriendDic.GetAndDo(info.Uin, friend => Mapper.Map(info, friend));
                 }
-                return NotifyActionEventAsync(ActionEventType.EvtOK);
+                return NotifyOkEventAsync();
             }
             else
             {

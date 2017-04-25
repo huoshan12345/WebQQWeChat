@@ -50,7 +50,7 @@ namespace WebQQ.Im.Action
                 var result = json["result"];
                 var list = result["dnamelist"].ToObject<List<QQDiscussion>>();
                 list.ForEach(Store.AddDiscussion);
-                return NotifyActionEventAsync(ActionEventType.EvtOK);
+                return NotifyOkEventAsync();
             }
             else
             {

@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Threading.Tasks;
 using AutoMapper;
 using FclEx.Extensions;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using WebQQ.Im.Core;
 using WebQQ.Im.Event;
 
 namespace WebQQ.Util
@@ -22,6 +24,11 @@ namespace WebQQ.Util
         public static T Get<T>(this QQNotifyEvent e)
         {
             return (T)e.Target;
+        }
+
+        public static Task FireNotifyAsync(this IQQContext context, QQNotifyEventType type, object target = null)
+        {
+            return context.FireNotifyAsync(QQNotifyEvent.CreateEvent(type, target));
         }
     }
 }

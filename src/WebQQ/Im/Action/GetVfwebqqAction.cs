@@ -35,7 +35,7 @@ namespace WebQQ.Im.Action
             {
                 var ret = json["result"];
                 Session.Vfwebqq = ret["vfwebqq"].ToString();
-                return NotifyActionEventAsync(ActionEventType.EvtOK);
+                return NotifyOkEventAsync();
             }
             else
             {

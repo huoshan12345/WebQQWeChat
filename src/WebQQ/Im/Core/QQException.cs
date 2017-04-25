@@ -3,6 +3,7 @@ using System.Collections.Concurrent;
 using System.IO;
 using System.Net;
 using System.Text;
+using System.Threading.Tasks;
 using FclEx.Extensions;
 using Newtonsoft.Json;
 
@@ -23,6 +24,7 @@ namespace WebQQ.Im.Core
             if (e is IOException) return QQErrorCode.IoError;
             if (e is ArgumentException) return QQErrorCode.ParameterError;
             if (e is JsonException) return QQErrorCode.JsonError;
+            if(e is TaskCanceledException te && !te.CancellationToken.IsCancellationRequested) return QQErrorCode.Timeout;
 
             var webEx = e as WebException;
             if (webEx != null)

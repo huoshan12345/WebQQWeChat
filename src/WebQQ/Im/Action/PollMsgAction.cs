@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using FclEx.Extensions;
 using HttpAction.Core;
 using HttpAction.Event;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Linq;
 using WebQQ.Im.Bean;
 using WebQQ.Im.Bean.Content;
@@ -32,6 +33,8 @@ namespace WebQQ.Im.Action
 
         protected override void ModifyRequest(HttpRequestItem req)
         {
+            Logger.LogDebug("Begin poll...");
+
             req.Method = HttpMethodType.Post;
             var json = new JObject
             {
@@ -57,7 +60,9 @@ namespace WebQQ.Im.Action
 
         protected override Task<ActionEvent> HandleExceptionAsync(Exception ex)
         {
-            if (Session.State == SessionState.Online && (ex as QQException)?.ErrorCode == QQErrorCode.Timeout)
+            if (Session.State == SessionState.Online 
+                && ex is TaskCanceledException te 
+                && !te.CancellationToken.IsCancellationRequested)
             {
                 return Task.FromResult(ActionEvent.EmptyRepeatEvent);
             }
@@ -103,7 +108,7 @@ namespace WebQQ.Im.Action
                 }
             }
 
-            return NotifyActionEventAsync(ActionEventType.EvtOK, notifyEvents);
+            return NotifyOkEventAsync(notifyEvents);
         }
 
         private void HandleMessage(JToken resultValue, List<QQNotifyEvent> events)

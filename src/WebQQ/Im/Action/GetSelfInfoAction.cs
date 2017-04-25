@@ -67,7 +67,7 @@ namespace WebQQ.Im.Action
             {
                 var info = json["result"].ToObject<SelfInfo>();
                 info.MapTo(Session.User);
-                return NotifyActionEventAsync(ActionEventType.EvtOK);
+                return NotifyOkEventAsync();
             }
             else
             {

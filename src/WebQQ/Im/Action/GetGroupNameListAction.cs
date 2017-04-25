@@ -86,7 +86,7 @@ namespace WebQQ.Im.Action
                     Store.GroupDic.GetAndDo(gid, group => group.MarkName = gMark["markname"].ToString());
                 }
 
-                return NotifyActionEventAsync(ActionEventType.EvtOK);
+                return NotifyOkEventAsync();
             }
             else
             {

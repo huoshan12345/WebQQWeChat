@@ -24,7 +24,7 @@ namespace WebQQ.Im.Action
         {
             var ptwebqq = HttpService.GetCookie("ptwebqq", Session.CheckSigUrl).Value;
             Session.Ptwebqq = ptwebqq;
-            return NotifyActionEventAsync(ActionEventType.EvtOK);
+            return NotifyOkEventAsync();
         }
     }
 }

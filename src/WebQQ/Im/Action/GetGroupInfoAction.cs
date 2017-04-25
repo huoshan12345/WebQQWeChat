@@ -126,7 +126,7 @@ namespace WebQQ.Im.Action
                 groupInfo.MapTo(_group);
                 _group.Members.ReplaceBy(members);
 
-                return NotifyActionEventAsync(ActionEventType.EvtOK);
+                return NotifyOkEventAsync();
             }
             else
             {
