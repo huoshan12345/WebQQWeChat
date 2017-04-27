@@ -4,7 +4,7 @@ using Domain.Entities.Base;
 using FclEx.Extensions;
 using Microsoft.EntityFrameworkCore;
 
-namespace WebManager.AppData
+namespace Application
 {
     public class SqliteDbContext : DbContext
     {
