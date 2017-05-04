@@ -10,10 +10,13 @@ namespace WebManager
 {
     public class Program
     {
+        public const string HomeUrl = "http://localhost:9000";
+
         public static void Main(string[] args)
         {
             var host = new WebHostBuilder()
                 .UseKestrel()
+                .UseUrls(HomeUrl)
                 .UseContentRoot(Directory.GetCurrentDirectory())
                 .UseIISIntegration()
                 .UseStartup<Startup>()

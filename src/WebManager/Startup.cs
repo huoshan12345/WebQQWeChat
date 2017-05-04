@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using WebManager.AppData;
 
 namespace WebManager
 {
@@ -21,6 +16,14 @@ namespace WebManager
                 .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
                 .AddEnvironmentVariables();
             Configuration = builder.Build();
+
+            if (env.IsDevelopment())
+            {
+                //注意：如果你的appsetting.json文件中有和secrets.json文件中相同节点（冲突）的配置项，那么就会被secrets.json中的设置项给覆盖掉，
+                //因为 builder.AddUserSecrets()晚于 AddJsonFile("appsettings.json")注册, 
+                //那么我们可以利用这个特性来在每个开发人员的机器上重新设置数据库连接字符串了。
+                builder.AddUserSecrets<Startup>();
+            }
         }
 
         public IConfigurationRoot Configuration { get; }
@@ -28,8 +31,7 @@ namespace WebManager
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddEntityFrameworkSqlite().AddDbContext<SqliteDbContext>();
-            EfCore.Startup<SqliteDbContext>.ConfigureServices(services);
+            Application.Startup.ConfigureServices(services);
 
             // Add framework services.
             services.AddMvc();
@@ -41,9 +43,9 @@ namespace WebManager
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
 
-            EfCore.Startup<SqliteDbContext>.Configure(app.ApplicationServices);
-
             app.UseMvc();
+
+            Application.Startup.Configure(app);
         }
     }
 }

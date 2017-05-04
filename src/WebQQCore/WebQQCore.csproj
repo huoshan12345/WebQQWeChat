@@ -2,14 +2,8 @@
 
   <PropertyGroup>
     <TargetFrameworks>net451;netcoreapp1.0</TargetFrameworks>
-    <AssemblyName>WebQQCore</AssemblyName>
-    <OutputType>Exe</OutputType>
-    <PackageId>WebQQCore</PackageId>
-    <RuntimeFrameworkVersion Condition=" '$(TargetFramework)' == 'netcoreapp1.0' ">1.0.4</RuntimeFrameworkVersion>
-    <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
-    <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
-    <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
-    <RootNamespace>iQQ.Net.WebQQCore</RootNamespace>
+    <OutputType>Library</OutputType>
+    <StartupObject />
   </PropertyGroup>
 
   <ItemGroup>
@@ -29,8 +23,6 @@
     <PackageReference Include="Jint" Version="2.10.3" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Runtime" />
-    <Reference Include="System" />
-    <Reference Include="Microsoft.CSharp" />
   </ItemGroup>
 
   <PropertyGroup Condition=" '$(TargetFramework)' == 'net451' ">

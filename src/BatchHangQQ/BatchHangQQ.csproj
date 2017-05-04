@@ -88,6 +88,9 @@
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
+    <Reference Include="WebQQCore">
+      <HintPath>..\WebQQCore\bin\Debug\net451\WebQQCore.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Extensions\ControlExtensions.cs" />
@@ -162,12 +165,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="icon.ico" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\WebQQCore\WebQQCore.csproj">
-      <Project>{3a04dac7-30e4-486e-98e6-f82f266f3b89}</Project>
-      <Name>WebQQCore</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
