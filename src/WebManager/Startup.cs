@@ -1,8 +1,16 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using System.Net;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Application;
+using Application.Models;
+using FclEx.Extensions;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace WebManager
 {
@@ -33,6 +41,43 @@ namespace WebManager
         {
             Application.Startup.ConfigureServices(services);
 
+            services.AddIdentity<AppUser, AppRole>(options =>
+            {
+                options.Password.RequireUppercase = false;
+                options.Password.RequireDigit = false;
+                options.Password.RequireNonAlphanumeric = false;
+                options.Password.RequireLowercase = true;
+                options.Password.RequiredLength = 10;
+                options.Cookies.ApplicationCookie.Events = new CookieAuthenticationEvents()
+                {
+                    OnRedirectToLogin = context =>
+                    {
+                        if (context.Request.Path.Value.StartsWith("/api"))
+                        {
+                            context.Response.Clear();
+                            context.Response.StatusCode = HttpStatusCode.Unauthorized.ToInt();
+                            return Task.CompletedTask;
+                        }
+                        context.Response.Redirect(context.RedirectUri);
+                        return Task.CompletedTask;
+                    }
+                };
+            })
+            .AddEntityFrameworkStores<AppDbContext>()
+            .AddDefaultTokenProviders();
+
+            //// Adds IdentityServer
+            services.AddIdentityServer(options =>
+                {
+                    // options.UserInteraction.LogoutUrl = "/api/Account/Logout/";
+                })
+                .AddTemporarySigningCredential()
+                .AddInMemoryApiResources(Config.GetApiResources())
+                .AddInMemoryClients(Config.GetClients())
+                .AddTestUsers(Config.GetTestUsers())
+                .AddAspNetIdentity<AppUser>();
+
+
             // Add framework services.
             services.AddMvc();
         }
@@ -40,12 +85,23 @@ namespace WebManager
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
+            Application.Startup.Configure(app);
+
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
+            
+            app.UseIdentity();
+            // 授权端
+            app.UseIdentityServer();
+
+            app.UseIdentityServerAuthentication(new IdentityServerAuthenticationOptions()
+            {
+                Authority = Program.HomeUrl,
+                ApiName = Config.Resource.Name,
+                RequireHttpsMetadata = false
+            });
 
             app.UseMvc();
-
-            Application.Startup.Configure(app);
         }
     }
 }

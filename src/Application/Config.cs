@@ -24,7 +24,7 @@ namespace Application
                 {
                     ClientId = "api-client",
                     ClientName = "Api Client",
-                    AllowedGrantTypes = GrantTypes.HybridAndClientCredentials,
+                    AllowedGrantTypes = GrantTypes.ResourceOwnerPasswordAndClientCredentials,
                     ClientSecrets =
                     {
                         new Secret("secret".Sha256())

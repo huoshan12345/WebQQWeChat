@@ -8,10 +8,11 @@ using Domain.Entities.Base;
 using FclEx.Extensions;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace Application
 {
-    public class AppDbContext : IdentityDbContext<AppUser>
+    public class AppDbContext : IdentityDbContext<AppUser, AppRole, string>
     {
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

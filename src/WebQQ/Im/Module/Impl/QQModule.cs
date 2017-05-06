@@ -9,7 +9,6 @@ namespace WebQQ.Im.Module.Impl
 {
     /// <summary>
     /// <para>基础模块</para>
-    /// <para>@author solosky</para>
     /// </summary>
     public abstract class QQModule : IQQModule
     {
@@ -21,8 +20,7 @@ namespace WebQQ.Im.Module.Impl
 
         protected QQModule(IQQContext context)
         {
-            if (context == null) throw new ArgumentNullException(nameof(context));
-            Context = context;
+            Context = context ?? throw new ArgumentNullException(nameof(context));
         }
     }
 }

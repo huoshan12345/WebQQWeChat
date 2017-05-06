@@ -14,6 +14,8 @@ namespace WebManager
 
         public static void Main(string[] args)
         {
+            Console.OutputEncoding = System.Text.Encoding.Unicode;
+
             var host = new WebHostBuilder()
                 .UseKestrel()
                 .UseUrls(HomeUrl)

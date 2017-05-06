@@ -17,8 +17,8 @@ namespace WebQQ.Im.Module.Impl
         private volatile SessionState _state; // 作为指令关键字，确保本条指令不会因编译器的优化而省略，且要求每次直接读值.
         public SessionState State
         {
-            get { return _state; }
-            set { _state = value; }
+            get => _state;
+            set => _state = value;
         }
         
         public QQUser User { get; set; } = new QQUser();
