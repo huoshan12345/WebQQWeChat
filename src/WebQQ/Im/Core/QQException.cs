@@ -71,6 +71,8 @@ namespace WebQQ.Im.Core
 
         public QQErrorCode ErrorCode { get; set; }
 
+        private readonly string _stackTrace;
+
         public static QQException CreateException(QQErrorCode errorCode)
         {
             return Exceptions.GetOrAdd(errorCode, key => new QQException(errorCode, ""));
@@ -87,17 +89,19 @@ namespace WebQQ.Im.Core
             ErrorCode = errorCode;
         }
 
-        public QQException(Exception e) : base(e.Message, e)
+        public QQException(Exception e) : base(e.Message)
         {
             ErrorCode = GetErrorCode(e);
+            _stackTrace = e.StackTrace;
         }
 
-        public QQException(QQErrorCode errorCode, Exception e) : base(e.Message, e)
+        public QQException(QQErrorCode errorCode, Exception e) : base(e.Message)
         {
             ErrorCode = errorCode;
+            _stackTrace = e.StackTrace;
         }
 
-        public override string StackTrace => base.StackTrace ?? InnerException?.StackTrace;
+        public override string StackTrace => base.StackTrace ?? _stackTrace;
 
         public override string Message => base.Message.RegexReplace(@"[\r\n]+", string.Empty);
 

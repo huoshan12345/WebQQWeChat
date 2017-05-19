@@ -71,15 +71,16 @@ namespace WebQQ.Im.Action
             {
                 case ActionEventType.EvtError:
                     {
-                        var ex = (QQException)target;
-                        Logger.LogError($"[Action={ActionName}, Result={typeName}, {ex}");
+                        var ex = (Exception)target;
+                        var msg = ex.ToString().TrimEnd();
+                        Logger.LogError($"[Action={ActionName}, Result={typeName}, {msg}]");
                         await _context.FireNotifyAsync(QQNotifyEvent.CreateEvent(QQNotifyEventType.Error, ex));
                         break;
                     }
                 case ActionEventType.EvtRetry:
                     {
-                        var ex = (QQException)target;
-                        Logger.LogWarning($"[Action={ActionName}, Result={typeName}, RetryTimes={RetryTimes}][{ex.ToSimpleString()}]");
+                        var ex = (Exception)target;
+                        Logger.LogWarning($"[Action={ActionName}, Result={typeName}, RetryTimes={RetryTimes}][{ex.Message}]");
                         break;
                     }
                 case ActionEventType.EvtCanceled:

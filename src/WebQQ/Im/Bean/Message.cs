@@ -4,7 +4,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using FclEx.Extensions;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using WebQQ.Im.Bean.Content;
+using WebQQ.Util;
 
 namespace WebQQ.Im.Bean
 {
@@ -42,6 +44,17 @@ namespace WebQQ.Im.Bean
         public string GetText()
         {
             return string.Join("", Contents.Select(m => m.GetText()).Where(m => !m.IsNullOrWhiteSpace()));
+        }
+
+        public string PackContentList()
+        {
+            // ["font",{"size":10,"color":"808080","style":[0,0,0],"name":"\u65B0\u5B8B\u4F53"}]
+            var json = new JArray();
+            foreach (var contentItem in Contents)
+            {
+                json.Add(contentItem.ToJson());
+            }
+            return json.ToJson();
         }
     }
 }

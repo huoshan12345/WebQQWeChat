@@ -37,5 +37,7 @@ namespace WebQQ.Util
             var session = qqClient.GetModule<SessionModule>();
             return session.State == SessionState.Online;
         }
+
+
     }
 }

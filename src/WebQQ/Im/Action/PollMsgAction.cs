@@ -11,6 +11,7 @@ using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Linq;
 using WebQQ.Im.Bean;
 using WebQQ.Im.Bean.Content;
+using WebQQ.Im.Bean.Discussion;
 using WebQQ.Im.Bean.Friend;
 using WebQQ.Im.Bean.Group;
 using WebQQ.Im.Core;

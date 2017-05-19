@@ -19,6 +19,7 @@ using WebQQ.Im.Bean;
 using WebQQ.Im.Bean.Discussion;
 using WebQQ.Im.Bean.Friend;
 using WebQQ.Im.Bean.Group;
+using WebQQ.Util;
 
 namespace WebQQ.Im
 {
@@ -93,6 +94,7 @@ namespace WebQQ.Im
 
             // 模块
             _services.AddSingleton<ILoginModule, LoginModule>();
+            _services.AddSingleton<IChatModule, ChatModule>();
             _services.AddSingleton<StoreModule>();
             _services.AddSingleton<SessionModule>();
 
@@ -163,5 +165,15 @@ namespace WebQQ.Im
         }
 
         public IQQContext Context => this;
+
+        public Task<ActionEvent> SendMsg(Message msg, ActionEventListener listener = null)
+        {
+            return GetModule<IChatModule>().SendMsg(msg, listener);
+        }
+
+        public Task<ActionEvent> GetRobotReply(RobotType robotType, string input, ActionEventListener listener = null)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

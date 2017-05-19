@@ -14,6 +14,7 @@ using System.Reflection;
 using System.Threading.Tasks;
 using HttpAction.Event;
 using Microsoft.Extensions.DependencyInjection;
+using WebQQ.Im.Bean.Discussion;
 using WebQQ.Im.Bean.Friend;
 using WebQQ.Im.Bean.Group;
 using WebQQ.Im.Service.Impl;
@@ -66,8 +67,8 @@ namespace WebQQ
                     }
                 case QQNotifyEventType.ChatMsg:
                     {
-                        var msg = (FriendMessage)notifyEvent.Target;
-                        logger.LogInformation($"[好友消息][{msg.Friend.ShowName}]{msg.GetText()}");
+                        var msg = (DiscussionMessage)notifyEvent.Target;
+                        logger.LogInformation($"[好友消息][{msg.Discussion.Name}]{msg.GetText()}");
                         break;
                     }
 
