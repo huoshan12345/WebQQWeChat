@@ -52,10 +52,10 @@ namespace WebWeChat.Im.Action
             return NotifyErrorEventAsync(WeChatException.CreateException(code, msg));
         }
 
-        public override async Task<ActionEvent> ExecuteAsync(CancellationToken token)
+        protected override async Task<ActionEvent> ExecuteInternalAsync(CancellationToken token)
         {
             Logger.LogTrace($"[Action={ActionName} Begin]");
-            var result = await base.ExecuteAsync(token).ConfigureAwait(false);
+            var result = await base.ExecuteInternalAsync(token).ConfigureAwait(false);
             Logger.LogTrace($"[Action={ActionName} End]");
             return result;
         }

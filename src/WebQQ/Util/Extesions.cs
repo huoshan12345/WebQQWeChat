@@ -6,6 +6,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using WebQQ.Im.Core;
 using WebQQ.Im.Event;
+using WebQQ.Im.Module.Impl;
 
 namespace WebQQ.Util
 {
@@ -29,6 +30,12 @@ namespace WebQQ.Util
         public static Task FireNotifyAsync(this IQQContext context, QQNotifyEventType type, object target = null)
         {
             return context.FireNotifyAsync(QQNotifyEvent.CreateEvent(type, target));
+        }
+
+        public static bool IsOnline(this IQQClient qqClient)
+        {
+            var session = qqClient.GetModule<SessionModule>();
+            return session.State == SessionState.Online;
         }
     }
 }

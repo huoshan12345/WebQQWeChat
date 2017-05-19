@@ -25,11 +25,11 @@ namespace WebWeChat.Im.Action
             _key = Config["TulingApiKey"];
         }
 
-        public override Task<ActionEvent> ExecuteAsync(CancellationToken token)
+        protected override Task<ActionEvent> ExecuteInternalAsync(CancellationToken token)
         {
             return _key.IsNullOrEmpty() ? 
                 NotifyErrorEventAsync(WeChatErrorCode.ParameterError, nameof(_key)) : 
-                base.ExecuteAsync(token);
+                base.ExecuteInternalAsync(token);
         }
 
         protected override HttpRequestItem BuildRequest()

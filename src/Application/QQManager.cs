@@ -12,11 +12,11 @@ namespace Application
 
         public List<IQQClient> GetQQList(string username)
         {
-            if(_clients.TryGetValue(username, out var list))
+            if (_clients.TryGetValue(username, out var list))
             {
                 return list;
             }
-            else return 
+            else return null;
         }
     }
 }
