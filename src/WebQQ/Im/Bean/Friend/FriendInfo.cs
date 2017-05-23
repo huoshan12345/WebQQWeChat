@@ -38,7 +38,10 @@ namespace WebQQ.Im.Bean.Friend
             set
             {
                 _birthday = value;
-                BirthdayDate = new DateTime(_birthday.Year, _birthday.Month, _birthday.Day);
+                if (_birthday.Year != 0 && _birthday.Month != 0 && _birthday.Day != 0)
+                {
+                    BirthdayDate = new DateTime(_birthday.Year, _birthday.Month, _birthday.Day);
+                }
             }
         }
         public DateTime BirthdayDate { get; set; }

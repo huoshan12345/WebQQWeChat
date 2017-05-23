@@ -32,7 +32,7 @@ namespace WebQQ.Util
             return context.FireNotifyAsync(QQNotifyEvent.CreateEvent(type, target));
         }
 
-        public static bool IsOnline(this IQQClient qqClient)
+        public static bool IsOnline(this IQQContext qqClient)
         {
             var session = qqClient.GetModule<SessionModule>();
             return session.State == SessionState.Online;

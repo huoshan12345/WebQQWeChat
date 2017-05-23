@@ -89,6 +89,11 @@ namespace WebQQ.Im.Core
             ErrorCode = errorCode;
         }
 
+        public QQException(QQErrorCode errorCode) : this(errorCode, errorCode.GetDescription())
+        {
+            ErrorCode = errorCode;
+        }
+
         public QQException(Exception e) : base(e.Message)
         {
             ErrorCode = GetErrorCode(e);

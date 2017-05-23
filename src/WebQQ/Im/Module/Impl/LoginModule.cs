@@ -11,6 +11,7 @@ using WebQQ.Im.Action;
 using WebQQ.Im.Core;
 using WebQQ.Im.Event;
 using WebQQ.Im.Module.Interface;
+using WebQQ.Util;
 
 namespace WebQQ.Im.Module.Impl
 {
@@ -23,9 +24,9 @@ namespace WebQQ.Im.Module.Impl
         {
             new PollMsgAction(Context, (sender, @event) => // 1.ЛёШЁЖўЮЌТы
             {
-                if (@event.IsOk())
+                if (@event.TryGet<List<QQNotifyEvent>>(out var notifyEvents))
                 {
-                    foreach (var notifyEvent in (List<QQNotifyEvent>)@event.Target)
+                    foreach (var notifyEvent in notifyEvents)
                     {
                         switch (notifyEvent.Type)
                         {
@@ -51,7 +52,7 @@ namespace WebQQ.Im.Module.Impl
                     }
                 }
                 return Task.CompletedTask;
-            }).ExecuteForeverAsync().Forget();
+            }).ExecuteForeverAsync(e => !Context.IsOnline()).Forget();
         }
 
         public LoginModule(IQQContext context) : base(context)

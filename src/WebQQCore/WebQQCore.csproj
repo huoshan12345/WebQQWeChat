@@ -4,6 +4,7 @@
     <TargetFrameworks>net451;netcoreapp1.0</TargetFrameworks>
     <OutputType>Library</OutputType>
     <StartupObject />
+    <RootNamespace>iQQ.Net.WebQQCore</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>

@@ -34,7 +34,7 @@ namespace WebQQ.Im.Action
 
         protected override void ModifyRequest(HttpRequestItem req)
         {
-            Logger.LogDebug("Begin poll...");
+            Logger.LogInformation("Begin poll...");
 
             req.Method = HttpMethodType.Post;
             var json = new JObject
@@ -55,22 +55,60 @@ namespace WebQQ.Im.Action
             switch (retcode)
             {
                 case 0: return HandlePollMsg(json["result"]);
+
+                case 102:
+                    // 接连正常，没有消息到达 {"retcode":102,"errmsg":""}
+                    // 继续进行下一个消息请求
+                    return NotifyOkEventAsync();
+
+                case 110:
+                case 109:
+                    {
+                        // 客户端主动退出
+                        var msg = $"**** 客户端主动退出 retcode: {retcode} ****";
+                        Logger.LogWarning(msg);
+                        Session.State = SessionState.Offline;
+                        return NotifyOkEventAsync(QQNotifyEvent.CreateEvent(QQNotifyEventType.NetError, msg));
+                    }
+
+
+                case 121:
+                case 120:
+                case 100:
+                    {
+                        // 客户端主动退出
+                        var msg = $"**** 服务器需求重新认证 retcode: {retcode} ****";
+                        Logger.LogWarning(msg);
+                        Session.State = SessionState.Offline;
+                        return NotifyOkEventAsync(QQNotifyEvent.CreateEvent(QQNotifyEventType.NetError, msg));
+                    }
+
+                case 103: // 此时需要登录Smart QQ，确认能收到消息后点击设置-退出登录，就会恢复正常了
+                    {
+                        // 客户端主动退出
+                        var msg = $"**** 需要登录Smart QQ retcode: {retcode} ****";
+                        Logger.LogWarning(msg);
+                        Session.State = SessionState.Offline;
+                        return NotifyOkEventAsync(QQNotifyEvent.CreateEvent(QQNotifyEventType.NetError, msg));
+                    }
             }
             throw new QQException(QQErrorCode.ResponseError, response.ResponseString);
         }
 
         protected override Task<ActionEvent> HandleExceptionAsync(Exception ex)
         {
-            if (Session.State == SessionState.Online 
-                && ex is TaskCanceledException te 
-                && !te.CancellationToken.IsCancellationRequested)
+            if (Session.State == SessionState.Online && ex is TaskCanceledException)
             {
                 return Task.FromResult(ActionEvent.EmptyRepeatEvent);
             }
-            else
+            else if (ex is QQException qqEx)
             {
-                return base.HandleExceptionAsync(ex);
+                if (qqEx.ErrorCode == QQErrorCode.InvalidLoginAuth)
+                {
+                    RetryTimes = MaxReTryTimes;
+                }
             }
+            return base.HandleExceptionAsync(ex);
         }
 
         private Task<ActionEvent> HandlePollMsg(JToken result)
