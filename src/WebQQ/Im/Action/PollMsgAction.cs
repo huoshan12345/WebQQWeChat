@@ -88,8 +88,9 @@ namespace WebQQ.Im.Action
                         // 客户端主动退出
                         var msg = $"**** 需要登录Smart QQ retcode: {retcode} ****";
                         Logger.LogWarning(msg);
-                        Session.State = SessionState.Offline;
-                        return NotifyOkEventAsync(QQNotifyEvent.CreateEvent(QQNotifyEventType.NetError, msg));
+                        // Session.State = SessionState.Offline;
+                        // return NotifyOkEventAsync(QQNotifyEvent.CreateEvent(QQNotifyEventType.NetError, msg));
+                        return NotifyOkEventAsync();
                     }
             }
             throw new QQException(QQErrorCode.ResponseError, response.ResponseString);

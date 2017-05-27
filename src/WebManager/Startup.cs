@@ -98,10 +98,10 @@ namespace WebManager
             {
                 Authority = Program.HomeUrl,
                 ApiName = Config.Resource.Name,
-                RequireHttpsMetadata = false
+                RequireHttpsMetadata = false,
             });
 
-            app.UseMvc();
+            app.UseMvcWithDefaultRoute();
         }
     }
 }

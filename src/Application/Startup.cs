@@ -2,6 +2,7 @@
 using System.Net;
 using System.Threading.Tasks;
 using Application.Models;
+using Application.Services;
 using FclEx.Extensions;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
@@ -23,6 +24,7 @@ namespace Application
             services.AddEntityFrameworkSqlite().AddDbContext<AppDbContext>();
             EfCore.Startup<AppDbContext>.ConfigureServices(services);
 
+            services.AddTransient<IQQService, QQService>();
 
             _configureServicesExcuted = true;
         }
