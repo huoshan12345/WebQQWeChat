@@ -9,8 +9,6 @@ using Newtonsoft.Json;
 
 namespace WebQQ.Im.Core
 {
-
-
     public class QQException : Exception
     {
         private static readonly ConcurrentDictionary<QQErrorCode, QQException> Exceptions
@@ -25,47 +23,7 @@ namespace WebQQ.Im.Core
             if (e is ArgumentException) return QQErrorCode.ParameterError;
             if (e is JsonException) return QQErrorCode.JsonError;
             if(e is TaskCanceledException te && !te.CancellationToken.IsCancellationRequested) return QQErrorCode.Timeout;
-
-            var webEx = e as WebException;
-            if (webEx != null)
-            {
-                switch (webEx.Status)
-                {
-                    case WebExceptionStatus.Success:
-                        break;
-
-                    case WebExceptionStatus.NameResolutionFailure:
-                        return QQErrorCode.ParameterError;
-
-                    case WebExceptionStatus.ConnectFailure:
-                    case WebExceptionStatus.ReceiveFailure:
-                    case WebExceptionStatus.SendFailure:
-                    case WebExceptionStatus.PipelineFailure:
-                        return QQErrorCode.IoError;
-
-                    case WebExceptionStatus.Timeout:
-                        return QQErrorCode.Timeout;
-                    case WebExceptionStatus.UnknownError:
-                        return QQErrorCode.UnknownError;
-
-                    case WebExceptionStatus.RequestCanceled:
-                    case WebExceptionStatus.ProtocolError:
-                    case WebExceptionStatus.ConnectionClosed:
-                    case WebExceptionStatus.TrustFailure:
-                    case WebExceptionStatus.SecureChannelFailure:
-                    case WebExceptionStatus.ServerProtocolViolation:
-                    case WebExceptionStatus.KeepAliveFailure:
-                    case WebExceptionStatus.Pending:
-                    case WebExceptionStatus.ProxyNameResolutionFailure:
-                    case WebExceptionStatus.MessageLengthLimitExceeded:
-                    case WebExceptionStatus.CacheEntryNotFound:
-                    case WebExceptionStatus.RequestProhibitedByCachePolicy:
-                    case WebExceptionStatus.RequestProhibitedByProxy:
-                    default:
-                        return QQErrorCode.IoError;
-                }
-            }
-
+            
             return QQErrorCode.UnknownError;
         }
 

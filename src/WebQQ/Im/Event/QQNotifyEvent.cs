@@ -87,6 +87,12 @@ namespace WebQQ.Im.Event
         /// </summary>
         [Description("错误")]
         Error,
+
+        /// <summary>
+        /// 轮询成功
+        /// </summary>
+        [Description("轮询成功")]
+        PollSuccess
     }
 
     public class QQNotifyEvent : EventArgs

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 using Application.Models;
+using Application.Models.QQModels;
 using WebQQ.Im.Core;
 using WebQQ.Im.Event;
 

@@ -29,7 +29,7 @@ namespace WebQQ.Im.Action
             var url = _urlApiDic.GetOrAdd(actionType, key =>
             {
                 var actionName = actionType.Name.Replace("Action", "");
-                return typeof(ApiUrls).GetField(actionName).GetValue(null).ToString();
+                return typeof(ApiUrls).GetTypeInfo().GetField(actionName).GetValue(null).ToString();
             });
             var req = HttpRequestItem.CreateGetRequest(url);
             ModifyRequest(req);

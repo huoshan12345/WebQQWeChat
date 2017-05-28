@@ -128,7 +128,7 @@ namespace WebWeChat.Im
         /// </summary>
         public void Dispose()
         {
-            foreach (var service in _services.Where(m => m != null && typeof(IWeChatService).IsAssignableFrom(m.ServiceType)))
+            foreach (var service in _services.Where(m => m != null && typeof(IWeChatService).GetTypeInfo().IsAssignableFrom(m.ServiceType)))
             {
                 try
                 {

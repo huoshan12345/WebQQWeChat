@@ -1,7 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
 using System.Threading.Tasks;
 using FclEx.Extensions;
 using HttpAction.Event;
@@ -28,9 +26,7 @@ namespace WebWeChat.Im.Module.Impl
                 .PushAction<GetQRCodeAction>(async (sender, @event) =>
                 {
                     if (!@event.IsOk()) return;
-
-                    var verify = (Image)@event.Target;
-                    await Context.FireNotifyAsync(WeChatNotifyEvent.CreateEvent(WeChatNotifyEventType.QRCodeReady, verify));
+                    await Context.FireNotifyAsync(WeChatNotifyEvent.CreateEvent(WeChatNotifyEventType.QRCodeReady, @event.Target));
                 })
                 .PushAction<WatiForLoginAction>(async (sender, @event) =>
                 {
@@ -57,7 +53,6 @@ namespace WebWeChat.Im.Module.Impl
                 .PushAction<GetContactAction>(async (sender, @event) =>
                 {
                     if (!@event.IsOk()) return;
-
                     await Context.FireNotifyAsync(WeChatNotifyEvent.CreateEvent(WeChatNotifyEventType.LoginSuccess));
                 })
                 .ExecuteAsync();

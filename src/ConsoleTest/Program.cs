@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Diagnostics;
-using System.Drawing;
-using System.Drawing.Imaging;
 using System.Text;
 using System.Threading.Tasks;
 using FclEx.Extensions;
@@ -19,6 +17,7 @@ using WebWeChat.Im;
 using WebWeChat.Im.Bean;
 using WebWeChat.Im.Event;
 using WebWeChat.Im.Service.Impl;
+using ImageSharp;
 
 namespace ConsoleTest
 {
@@ -40,9 +39,9 @@ namespace ConsoleTest
 
                 case QQNotifyEventType.QRCodeReady:
                     {
-                        var verify = (Image)notifyEvent.Target;
-                        const string path = "verify.png";
-                        verify.Save(path, ImageFormat.Png);
+                        var verify = (ImageSharp.Image<Rgba32>)notifyEvent.Target;
+                        const string path = "verify.jpg";
+                        verify.Save(path);
                         logger.LogInformation($"请扫描在项目根目录下{path}图片");
 #if NET
                         _process = Process.Start(path);
@@ -91,9 +90,9 @@ namespace ConsoleTest
 
                 case WeChatNotifyEventType.QRCodeReady:
                     {
-                        var verify = (Image)notifyEvent.Target;
-                        const string path = "verify.png";
-                        verify.Save(path, ImageFormat.Png);
+                        var verify = (ImageSharp.Image<Rgba32>)notifyEvent.Target;
+                        const string path = "verify.jpg";
+                        verify.Save(path);
                         logger.LogInformation($"请扫描在项目根目录下{path}图片");
 #if NET
                         _process = Process.Start(path);
@@ -160,9 +159,8 @@ namespace ConsoleTest
 
         public static void Main(string[] args)
         {
-#if NETCORE
-            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
-#endif
+            Console.OutputEncoding = Encoding.Unicode;
+
             Console.WriteLine("输入1测试qq，输入2测试微信");
             switch (Console.ReadLine())
             {

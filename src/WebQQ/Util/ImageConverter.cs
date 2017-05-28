@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.IO;
-using System.Text;
+using ImageSharp;
 using Newtonsoft.Json;
+using WebQQ.Util;
 
 namespace WebQQ.Util
 {
@@ -11,18 +9,18 @@ namespace WebQQ.Util
     {
         public override bool CanConvert(Type objectType)
         {
-            return objectType == typeof(Bitmap);
+            return objectType == typeof(ImageSharp.Image<Rgba32>);
         }
 
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
-            return ((string) reader.Value).Base64StringToBitmap();
+            return ((string) reader.Value).Base64StringToImage();
         }
 
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
         {
-            var bmp = (Bitmap)value;
-            writer.WriteValue(bmp.ToBase64String());
+            var bmp = (ImageSharp.Image<Rgba32>)value;
+            writer.WriteValue(bmp.ToRawBase64String());
         }
     }
 }

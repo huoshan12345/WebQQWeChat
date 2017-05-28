@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel;
-using System.Drawing;
 using System.Threading.Tasks;
 using HttpAction.Core;
 using HttpAction.Event;
@@ -28,7 +27,8 @@ namespace WebWeChat.Im.Action
 
         protected override Task<ActionEvent> HandleResponse(HttpResponseItem responseItem)
         {
-            return NotifyOkEventAsync(Image.FromStream(responseItem.ResponseStream));
+            // return NotifyOkEventAsync(Image.FromStream(responseItem.ResponseStream));
+            return NotifyOkEventAsync(ImageSharp.Image.Load(responseItem.ResponseStream));
         }
     }
 }

@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using WebQQ.Im.Core;
 
-namespace Application.Models
+namespace Application.Models.QQModels
 {
     public class QQClientModel
     {

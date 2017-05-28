@@ -124,7 +124,7 @@ namespace WebQQ.Im
         /// </summary>
         public void Dispose()
         {
-            foreach (var service in _services.Where(m => m != null && typeof(IQQService).IsAssignableFrom(m.ServiceType)))
+            foreach (var service in _services.Where(m => m != null && typeof(IQQService).GetTypeInfo().IsAssignableFrom(m.ServiceType)))
             {
                 try
                 {

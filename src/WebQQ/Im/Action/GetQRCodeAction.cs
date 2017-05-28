@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Drawing;
 using System.Threading.Tasks;
 using HttpAction.Core;
 using HttpAction.Event;
@@ -29,7 +28,9 @@ namespace WebQQ.Im.Action
 
         protected override Task<ActionEvent> HandleResponse(HttpResponseItem response)
         {
-            return NotifyOkEventAsync(Image.FromStream(response.ResponseStream));
+            // return NotifyOkEventAsync(Image.FromStream(response.ResponseStream));
+
+            return NotifyOkEventAsync(ImageSharp.Image.Load(response.ResponseStream));
         }
     }
 }

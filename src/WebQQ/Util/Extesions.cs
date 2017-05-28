@@ -1,10 +1,9 @@
 ﻿using System;
-using System.Drawing;
-using System.Drawing.Imaging;
 using System.IO;
 using System.Threading.Tasks;
 using AutoMapper;
 using FclEx.Extensions;
+using ImageSharp;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using WebQQ.Im.Core;
@@ -51,21 +50,23 @@ namespace WebQQ.Util
 
         public static string ToBase64String(this byte[] bytes) => Convert.ToBase64String(bytes);
 
-        public static string ToBase64String(this Bitmap bitmap)
+        
+        public static string ToRawBase64String(this Image<Rgba32> bitmap)
         {
             using (var m = new MemoryStream())
             {
-                bitmap.Save(m, ImageFormat.Jpeg);
+                bitmap.Save(m);
                 return m.ToArray().ToBase64String();
             }
         }
 
-        public static Bitmap Base64StringToBitmap(this string base64String)
+        public static Image<Rgba32> Base64StringToImage(this string base64String)
         {
             using (var m = new MemoryStream(Convert.FromBase64String(base64String)))
             {
-                return (Bitmap)Image.FromStream(m);
+                return ImageSharp.Image.Load(m);
             }
         }
+
     }
 }

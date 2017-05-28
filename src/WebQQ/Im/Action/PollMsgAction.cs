@@ -28,6 +28,8 @@ namespace WebQQ.Im.Action
     {
         private static readonly ConcurrentDictionary<string, MethodInfo> _methodDic = new ConcurrentDictionary<string, MethodInfo>();
 
+        private static readonly QQNotifyEvent _pollEvent = QQNotifyEvent.CreateEvent(QQNotifyEventType.PollSuccess);
+
         public PollMsgAction(IQQContext context, ActionEventListener listener = null) : base(context, listener)
         {
         }
@@ -114,9 +116,8 @@ namespace WebQQ.Im.Action
 
         private Task<ActionEvent> HandlePollMsg(JToken result)
         {
-            var array = result as JArray;
             var notifyEvents = new List<QQNotifyEvent>();
-            if (array != null)
+            if (result is JArray array)
             {
                 foreach (var item in array)
                 {
@@ -147,6 +148,7 @@ namespace WebQQ.Im.Action
                     }
                 }
             }
+            if(!notifyEvents.Any()) notifyEvents.Add(_pollEvent);
 
             return NotifyOkEventAsync(notifyEvents);
         }

@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Linq;
 using System.Threading.Tasks;
 using FclEx.Extensions;
@@ -67,11 +66,8 @@ namespace WebQQ.Im.Module.Impl
             var loginFutureResult = await new WebQQActionFuture(Context, listener)
              .PushAction<GetQRCodeAction>(async (sender, @event) => // 1.获取二维码
              {
-                 if (@event.IsOk())
-                 {
-                     var verify = (Image)@event.Target;
-                     await Context.FireNotifyAsync(QQNotifyEvent.CreateEvent(QQNotifyEventType.QRCodeReady, verify));
-                 }
+                 if (!@event.IsOk()) return;
+                 await Context.FireNotifyAsync(QQNotifyEvent.CreateEvent(QQNotifyEventType.QRCodeReady, @event.Target));
              })
              .PushAction<CheckQRCodeAction>(async (sender, @event) => // 2.获取二维码扫描状态
              {
@@ -103,7 +99,7 @@ namespace WebQQ.Im.Module.Impl
              {
                  if (!@event.IsOk()) return;
                  await Context.FireNotifyAsync(QQNotifyEvent.CreateEvent(QQNotifyEventType.LoginSuccess));
-             }).ExecuteAsync();
+             }).ExecuteAsyncAuto();
 
             if (!loginFutureResult.IsOk())
             {
@@ -112,7 +108,7 @@ namespace WebQQ.Im.Module.Impl
             else
             {
                 Session.State = SessionState.Online;
-                GetClientInfoAfterLogin(listener).Forget();
+                await GetClientInfoAfterLogin(listener);
             }
 
             return loginFutureResult;
@@ -150,7 +146,7 @@ namespace WebQQ.Im.Module.Impl
                 })
                 .PushAction<GetSelfInfoAction>()
                 .PushAction<GetOnlineFriendsAction>()
-                .ExecuteAsync();
+                .ExecuteAsyncAuto();
         }
     }
 }

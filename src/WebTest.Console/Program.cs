@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
-using System.Drawing.Imaging;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
@@ -23,7 +21,7 @@ namespace WebTest
 {
     public class Program
     {
-        private static readonly ILogger _logger = new SimpleConsoleLogger(nameof(Program));
+        private static readonly ILogger _logger = new SimpleConsoleLogger(nameof(Program), LogLevel.Trace);
 
         public static async Task TestWebQQ()
         {
@@ -45,12 +43,19 @@ namespace WebTest
                             Console.WriteLine($"消息数量为：{list.Count}");
                             foreach (var item in list)
                             {
-                                await NotifyEvent(_logger, item);
+                                try
+                                {
+                                    await NotifyEvent(_logger, item);
+                                }
+                                catch (Exception ex)
+                                {
+                                    Console.WriteLine(ex.Message);
+                                }
                             }
                         }
                         else
                         {
-                            Console.WriteLine(events.Target);
+                            Console.WriteLine(events.Target.CastTo<Exception>().Message);
                         }
                     }
                 }
@@ -71,9 +76,9 @@ namespace WebTest
 
                 case QQNotifyEventType.QRCodeReady:
                     {
-                        var verify = notifyEvent.Target.CastTo<string>().Base64StringToBitmap();
+                        var verify = notifyEvent.Target.CastTo<string>().Base64StringToImage();
                         const string path = "verify.png";
-                        verify.Save(path, ImageFormat.Jpeg);
+                        verify.Save(path);
                         logger.LogInformation($"请扫描在项目根目录下{path}图片");
                         break;
                     }
@@ -82,18 +87,10 @@ namespace WebTest
                     logger.LogWarning("二维码已失效");
                     break;
 
-                case QQNotifyEventType.GroupMsg:
-                    {
-                        var msg = (GroupMessage)notifyEvent.Target;
-                        logger.LogInformation($"[群消息][{msg.Group.ShowName}]{msg.GetText()}");
-                        break;
-                    }
                 case QQNotifyEventType.ChatMsg:
-                    {
-                        var msg = (FriendMessage)notifyEvent.Target;
-                        logger.LogInformation($"[好友消息][{msg.Friend.ShowName}]{msg.GetText()}");
-                        break;
-                    }
+                case QQNotifyEventType.GroupMsg:
+                    logger.LogInformation(notifyEvent.Target.CastTo<string>());
+                    break;
 
                 default:
                     logger.LogInformation(notifyEvent.Type.GetFullDescription());
@@ -103,11 +100,28 @@ namespace WebTest
             return Task.CompletedTask;
         }
 
+        public static void TestBase64()
+        {
+            var img = ImageSharp.Image.Load("verify.png");
+            var base64 = img.ToRawBase64String();
+
+            var json = new List<QQNotifyEvent>()
+            {
+                QQNotifyEvent.CreateEvent(QQNotifyEventType.QRCodeReady, base64)
+            }.ToJson();
+
+            var base642 = json.ToJToken().ToObject<List<QQNotifyEvent>>()[0].Target.CastTo<string>();
+            var img2 = base642.Base64StringToImage();
+            img2.Save("verify2.png");
+
+        }
+
 
         public static void Main(string[] args)
         {
             Console.OutputEncoding = Encoding.Unicode;
 
+            // TestBase64();
 
             while (true)
             {

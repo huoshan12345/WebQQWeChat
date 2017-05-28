@@ -12,7 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\src\WebQQ\WebQQ.csproj" />
+    <ProjectReference Include="..\WebQQ\WebQQ.csproj" />
   </ItemGroup>
 
 </Project>

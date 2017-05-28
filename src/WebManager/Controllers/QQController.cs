@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Application.Models;
+using Application.Models.QQModels;
 using Application.Services;
 using IdentityModel;
 using Microsoft.AspNetCore.Authorization;

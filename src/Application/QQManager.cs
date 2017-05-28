@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Drawing;
-using System.Drawing.Imaging;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Application.Models;
+using Application.Models.QQModels;
 using FclEx.Extensions;
 using HttpAction;
+using ImageSharp;
 using Microsoft.Extensions.Logging;
 using WebQQ.Im;
 using WebQQ.Im.Bean.Friend;
@@ -37,7 +37,7 @@ namespace Application
         public string LoginClient(string username)
         {
             var list = _clients.GetOrAdd(username, m => new List<QQClientModel>());
-            var model = list.FirstOrDefault(m=>m.Client.IsOffline());
+            var model = list.FirstOrDefault(m => m.Client.IsOffline());
             if (model == null)
             {
                 var client = new WebQQClient(m => new QQConsoleLogger(m, LogLevel.Debug), (c, e) =>
@@ -46,8 +46,21 @@ namespace Application
                     switch (e.Type)
                     {
                         case QQNotifyEventType.QRCodeReady:
-                            mList.TryAdd(QQNotifyEvent.CreateEvent(e.Type, e.Target.CastTo<Bitmap>().ToBase64String()));
+                            mList.TryAdd(QQNotifyEvent.CreateEvent(e.Type, e.Target.CastTo<Image<Rgba32>>().ToRawBase64String()));
                             break;
+
+                        case QQNotifyEventType.GroupMsg:
+                            {
+                                var msg = (GroupMessage)e.Target;
+                                mList.TryAdd(QQNotifyEvent.CreateEvent(e.Type, $"[群消息][{msg.Group.ShowName}]{msg.GetText()}"));
+                                break;
+                            }
+                        case QQNotifyEventType.ChatMsg:
+                            {
+                                var msg = (FriendMessage)e.Target;
+                                mList.TryAdd(QQNotifyEvent.CreateEvent(e.Type, $"[好友消息][{msg.Friend.ShowName}]{msg.GetText()}"));
+                                break;
+                            }
 
                         default:
                             mList.TryAdd(e);
@@ -58,6 +71,11 @@ namespace Application
                 model = new QQClientModel(client);
                 list.Add(model);
             }
+            else
+            {
+                _msgs[model.Client].Clear();
+            }
+
             model.Client.Login().ContinueWith(t =>
             {
                 if (t.IsCompleted && t.Result.IsOk()) model.Client.BeginPoll();
