@@ -7,6 +7,7 @@ namespace WebQQ.Im.Module.Impl
     {
         Offline,
         Online,
+        Logining,
     }
 
     /// <summary>

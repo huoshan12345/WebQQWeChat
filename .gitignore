@@ -190,3 +190,4 @@ ModelManifest.xml
 /.vs
 *.nupkg
 verify.png
+/src/WebClient

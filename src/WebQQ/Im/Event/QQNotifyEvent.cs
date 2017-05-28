@@ -4,6 +4,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.ComponentModel;
 using HttpAction.Event;
+using Newtonsoft.Json;
 
 namespace WebQQ.Im.Event
 {
@@ -96,6 +97,7 @@ namespace WebQQ.Im.Event
         public QQNotifyEventType Type { get; }
         public object Target { get; }
 
+        [JsonConstructor]
         private QQNotifyEvent(QQNotifyEventType type, object target = null)
         {
             Type = type;

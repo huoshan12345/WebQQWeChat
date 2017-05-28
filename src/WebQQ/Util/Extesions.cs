@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Drawing;
+using System.Drawing.Imaging;
+using System.IO;
 using System.Threading.Tasks;
 using AutoMapper;
 using FclEx.Extensions;
@@ -38,6 +41,31 @@ namespace WebQQ.Util
             return session.State == SessionState.Online;
         }
 
+        public static bool IsOffline(this IQQContext qqClient)
+        {
+            var session = qqClient.GetModule<SessionModule>();
+            return session.State == SessionState.Offline;
+        }
 
+        public static byte[] Base64StringToBytes(this string base64String) => Convert.FromBase64String(base64String);
+
+        public static string ToBase64String(this byte[] bytes) => Convert.ToBase64String(bytes);
+
+        public static string ToBase64String(this Bitmap bitmap)
+        {
+            using (var m = new MemoryStream())
+            {
+                bitmap.Save(m, ImageFormat.Jpeg);
+                return m.ToArray().ToBase64String();
+            }
+        }
+
+        public static Bitmap Base64StringToBitmap(this string base64String)
+        {
+            using (var m = new MemoryStream(Convert.FromBase64String(base64String)))
+            {
+                return (Bitmap)Image.FromStream(m);
+            }
+        }
     }
 }

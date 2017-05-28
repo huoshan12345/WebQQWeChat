@@ -11,6 +11,7 @@ using FclEx.Extensions;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using WebManager.Filters;
 
 namespace WebManager
 {
@@ -52,7 +53,7 @@ namespace WebManager
                 {
                     OnRedirectToLogin = context =>
                     {
-                        if (context.Request.Path.Value.StartsWith("/api"))
+                        if (context.Request.IsApiUrl())
                         {
                             context.Response.Clear();
                             context.Response.StatusCode = HttpStatusCode.Unauthorized.ToInt();
@@ -68,18 +69,31 @@ namespace WebManager
 
             //// Adds IdentityServer
             services.AddIdentityServer(options =>
+            {
+                // options.UserInteraction.LogoutUrl = "/api/Account/Logout/";
+                options.IssuerUri = Program.HomeUrl;
+            })
+            .AddTemporarySigningCredential()
+            .AddInMemoryApiResources(Config.GetApiResources())
+            .AddInMemoryClients(Config.GetClients())
+            .AddTestUsers(Config.GetTestUsers())
+            .AddAspNetIdentity<AppUser>()
+            //  Try moving the call to AddProfileService to the end of the AddIdentityServer
+            // The AddAspNetIdentity method registers its own IProfileService, which will overwrite any previous registration.
+            .AddProfileService<IdentityWithAdditionalClaimsProfileService>();
+
+
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("admin", policyAdmin =>
                 {
-                    // options.UserInteraction.LogoutUrl = "/api/Account/Logout/";
-                })
-                .AddTemporarySigningCredential()
-                .AddInMemoryApiResources(Config.GetApiResources())
-                .AddInMemoryClients(Config.GetClients())
-                .AddTestUsers(Config.GetTestUsers())
-                .AddAspNetIdentity<AppUser>();
+                    policyAdmin.RequireClaim("role", "admin");
+                });
+            });
 
 
             // Add framework services.
-            services.AddMvc();
+            services.AddMvc(options => options.Filters.Add(typeof(ValidateFilter)));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -89,7 +103,8 @@ namespace WebManager
 
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
-            
+
+
             app.UseIdentity();
             // 授权端
             app.UseIdentityServer();

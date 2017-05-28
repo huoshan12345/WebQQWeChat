@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using FclEx.Extensions;
 using HttpAction;
+using HttpAction.Action;
 using HttpAction.Event;
 using Microsoft.Extensions.Logging;
 using WebQQ.Im.Action;
@@ -59,48 +60,67 @@ namespace WebQQ.Im.Module.Impl
         {
         }
 
-        public Task<ActionEvent> Login(ActionEventListener listener)
+        public async Task<ActionEvent> Login(ActionEventListener listener)
+        {
+            Session.State = SessionState.Logining;
+
+            var loginFutureResult = await new WebQQActionFuture(Context, listener)
+             .PushAction<GetQRCodeAction>(async (sender, @event) => // 1.获取二维码
+             {
+                 if (@event.IsOk())
+                 {
+                     var verify = (Image)@event.Target;
+                     await Context.FireNotifyAsync(QQNotifyEvent.CreateEvent(QQNotifyEventType.QRCodeReady, verify));
+                 }
+             })
+             .PushAction<CheckQRCodeAction>(async (sender, @event) => // 2.获取二维码扫描状态
+             {
+                 if (!@event.IsOk()) return;
+
+                 var args = (CheckQRCodeArgs)@event.Target;
+                 switch (args.Status)
+                 {
+                     case QRCodeStatus.OK:
+                         Session.CheckSigUrl = args.Msg;
+                         await Context.FireNotifyAsync(QQNotifyEvent.CreateEvent(QQNotifyEventType.QRCodeSuccess));
+                         break;
+
+                     case QRCodeStatus.Valid:
+                     case QRCodeStatus.Auth:
+                         @event.Type = ActionEventType.EvtRepeat;
+                         await Task.Delay(3000);
+                         break;
+
+                     case QRCodeStatus.Invalid:
+                         await Context.FireNotifyAsync(QQNotifyEvent.CreateEvent(QQNotifyEventType.QRCodeInvalid, args.Msg));
+                         @event.Type = ActionEventType.EvtCanceled;
+                         break;
+                 }
+             })
+             .PushAction<CheckSigAction>()
+             .PushAction<GetVfwebqqAction>()
+             .PushAction<ChannelLoginAction>(async (sender, @event) =>
+             {
+                 if (!@event.IsOk()) return;
+                 await Context.FireNotifyAsync(QQNotifyEvent.CreateEvent(QQNotifyEventType.LoginSuccess));
+             }).ExecuteAsync();
+
+            if (!loginFutureResult.IsOk())
+            {
+                Session.State = SessionState.Offline;
+            }
+            else
+            {
+                Session.State = SessionState.Online;
+                GetClientInfoAfterLogin(listener).Forget();
+            }
+
+            return loginFutureResult;
+        }
+
+        private Task<ActionEvent> GetClientInfoAfterLogin(ActionEventListener listener)
         {
             return new WebQQActionFuture(Context, listener)
-                .PushAction<GetQRCodeAction>(async (sender, @event) => // 1.获取二维码
-                {
-                    if (@event.IsOk())
-                    {
-                        var verify = (Image)@event.Target;
-                        await Context.FireNotifyAsync(QQNotifyEvent.CreateEvent(QQNotifyEventType.QRCodeReady, verify));
-                    }
-                })
-                .PushAction<CheckQRCodeAction>(async (sender, @event) => // 2.获取二维码扫描状态
-                {
-                    if (!@event.IsOk()) return;
-
-                    var args = (CheckQRCodeArgs)@event.Target;
-                    switch (args.Status)
-                    {
-                        case QRCodeStatus.OK:
-                            Session.CheckSigUrl = args.Msg;
-                            await Context.FireNotifyAsync(QQNotifyEvent.CreateEvent(QQNotifyEventType.QRCodeSuccess));
-                            break;
-
-                        case QRCodeStatus.Valid:
-                        case QRCodeStatus.Auth:
-                            Logger.LogDebug($"二维码状态：{args.Status.GetDescription()}");
-                            @event.Type = ActionEventType.EvtRepeat;
-                            await Task.Delay(3000);
-                            break;
-
-                        case QRCodeStatus.Invalid:
-                            await Context.FireNotifyAsync(QQNotifyEvent.CreateEvent(QQNotifyEventType.QRCodeInvalid, args.Msg));
-                            break;
-                    }
-                })
-                .PushAction<CheckSigAction>()
-                .PushAction<GetVfwebqqAction>()
-                .PushAction<ChannelLoginAction>(async (sender, @event) =>
-                {
-                    if (!@event.IsOk()) return;
-                    await Context.FireNotifyAsync(QQNotifyEvent.CreateEvent(QQNotifyEventType.LoginSuccess));
-                })
                 .PushAction<GetFriendsAction>(async (sender, @event) =>
                 {
                     if (!@event.IsOk()) return;
@@ -133,5 +153,4 @@ namespace WebQQ.Im.Module.Impl
                 .ExecuteAsync();
         }
     }
-
 }

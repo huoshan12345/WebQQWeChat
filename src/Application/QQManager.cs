@@ -17,13 +17,14 @@ using WebQQ.Im.Core;
 using WebQQ.Im.Event;
 using WebQQ.Im.Module.Impl;
 using WebQQ.Im.Service.Impl;
+using WebQQ.Util;
 
 namespace Application
 {
     public class QQManager
     {
         private readonly ConcurrentDictionary<string, List<QQClientModel>> _clients = new ConcurrentDictionary<string, List<QQClientModel>>();
-        private readonly ConcurrentDictionary<IQQClient, List<QQNotifyEvent>> _msgs = new ConcurrentDictionary<IQQClient, List<QQNotifyEvent>>();
+        private readonly ConcurrentDictionary<IQQClient, BlockingCollection<QQNotifyEvent>> _msgs = new ConcurrentDictionary<IQQClient, BlockingCollection<QQNotifyEvent>>();
 
         private readonly IReadOnlyList<QQClientModel> _emptyQQList = new List<QQClientModel>();
         private readonly IReadOnlyList<QQNotifyEvent> _emptyMsgList = new List<QQNotifyEvent>();
@@ -35,20 +36,31 @@ namespace Application
 
         public string LoginClient(string username)
         {
-            var client = new WebQQClient(m => new QQConsoleLogger(m, LogLevel.Debug), (c, e) =>
-            {
-                var mList = _msgs.GetOrAdd(c, x => new List<QQNotifyEvent>());
-                mList.Add(e);
-                return Task.CompletedTask;
-            });
-
             var list = _clients.GetOrAdd(username, m => new List<QQClientModel>());
-            var model = new QQClientModel(client);
-            list.Add(model);
-
-            client.Login().ContinueWith(t =>
+            var model = list.FirstOrDefault(m=>m.Client.IsOffline());
+            if (model == null)
             {
-                if (t.IsCompleted && t.Result.IsOk()) client.BeginPoll();
+                var client = new WebQQClient(m => new QQConsoleLogger(m, LogLevel.Debug), (c, e) =>
+                {
+                    var mList = _msgs.GetOrAdd(c, x => new BlockingCollection<QQNotifyEvent>());
+                    switch (e.Type)
+                    {
+                        case QQNotifyEventType.QRCodeReady:
+                            mList.TryAdd(QQNotifyEvent.CreateEvent(e.Type, e.Target.CastTo<Bitmap>().ToBase64String()));
+                            break;
+
+                        default:
+                            mList.TryAdd(e);
+                            break;
+                    }
+                    return Task.CompletedTask;
+                });
+                model = new QQClientModel(client);
+                list.Add(model);
+            }
+            model.Client.Login().ContinueWith(t =>
+            {
+                if (t.IsCompleted && t.Result.IsOk()) model.Client.BeginPoll();
             });
 
             return model.Id.ToString();
@@ -56,16 +68,22 @@ namespace Application
 
         public IReadOnlyList<QQNotifyEvent> GetAndClearEvents(string username, string id)
         {
-            if (_clients.TryGetValue(username, out var list))
+            if (_clients.TryGetValue(username, out var qqList))
             {
-                var client = list.FirstOrDefault(m => m.Id.ToString() == id)?.Client;
+                var client = qqList.FirstOrDefault(m => m.Id.ToString() == id)?.Client;
                 if (client != null)
                 {
-                    if (_msgs.TryGetValue(client, out var msgList))
+                    var col = _msgs.GetOrAdd(client, x => new BlockingCollection<QQNotifyEvent>());
+                    var list = new List<QQNotifyEvent>();
+                    while (col.Count != 0 && col.TryTake(out var item, 1 * 1000))
                     {
-                        _msgs.Remove(client);
-                        return msgList;
+                        list.Add(item);
                     }
+                    if (list.Count == 0 && col.TryTake(out var temp, 60 * 1000))
+                    {
+                        list.Add(temp);
+                    }
+                    return list;
                 }
             }
             return _emptyMsgList;

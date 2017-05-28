@@ -34,7 +34,6 @@ namespace WebQQ.Im.Action
             Session.User.Uin = ret["uin"].ToLong();
             Session.User.Status = ret["status"].ToEnum(QQStatusType.Online);
             Session.SessionId = ret["psessionid"].ToString();
-            Session.State = SessionState.Online;
             Session.Index = ret["index"].ToInt();
             Session.Port = ret["port"].ToInt();
         }

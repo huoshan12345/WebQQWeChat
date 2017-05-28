@@ -7,5 +7,6 @@ namespace Application.Models
 {
     public class AppUser : IdentityUser
     {
+        public bool IsAdmin { get; set; }
     }
 }

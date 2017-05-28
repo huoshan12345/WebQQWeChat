@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Security.Claims;
 using System.Text;
+using IdentityModel;
 using IdentityServer4.Models;
 using IdentityServer4.Test;
 
@@ -9,7 +10,14 @@ namespace Application
 {
     public class Config
     {
-        public static ApiResource Resource { get; } = new ApiResource("ApiScope", "API");
+        public static ApiResource Resource { get; } = new ApiResource("ApiScope", "API")
+        {
+            // 会出现在ProfileDataRequestContext.RequestedClaimTypes
+            UserClaims = new HashSet<string>()
+            {
+                JwtClaimTypes.GivenName
+            }
+        };
 
         public static IEnumerable<ApiResource> GetApiResources()
         {
