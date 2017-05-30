@@ -42,7 +42,7 @@ namespace Application
             {
                 var client = new WebQQClient(m => new QQConsoleLogger(m, LogLevel.Debug), (c, e) =>
                 {
-                    var mList = _msgs.GetOrAdd(c, x => new BlockingCollection<QQNotifyEvent>());
+                    var mList = _msgs.GetOrAdd(c, x => new BlockingCollection<QQNotifyEvent>(new ConcurrentQueue<QQNotifyEvent>()));
                     switch (e.Type)
                     {
                         case QQNotifyEventType.QRCodeReady:
@@ -91,17 +91,20 @@ namespace Application
                 var client = qqList.FirstOrDefault(m => m.Id.ToString() == id)?.Client;
                 if (client != null)
                 {
-                    var col = _msgs.GetOrAdd(client, x => new BlockingCollection<QQNotifyEvent>());
-                    var list = new List<QQNotifyEvent>();
-                    while (col.Count != 0 && col.TryTake(out var item, 1 * 1000))
+                    if(_msgs.TryGetValue(client, out var col))
                     {
-                        list.Add(item);
+                        var list = new List<QQNotifyEvent>();
+                        while (col.Count != 0 && col.TryTake(out var item, 1 * 1000))
+                        {
+                            list.Add(item);
+                        }
+                        if (list.Count == 0 && col.TryTake(out var temp, 20 * 1000))
+                        {
+                            list.Add(temp);
+                        }
+                        return list;
                     }
-                    if (list.Count == 0 && col.TryTake(out var temp, 60 * 1000))
-                    {
-                        list.Add(temp);
-                    }
-                    return list;
+                    
                 }
             }
             return _emptyMsgList;

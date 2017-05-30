@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using FclEx.Extensions;
 using HttpAction.Action;
@@ -16,7 +18,7 @@ namespace WebTest.Actions
         private readonly string _token;
         private readonly string _qqId;
 
-        public GetQQEventsAction(string token, string qqId, IHttpService httpService,  ActionEventListener listener = null) : base(httpService, listener)
+        public GetQQEventsAction(string token, string qqId, IHttpService httpService, ActionEventListener listener = null) : base(httpService, listener)
         {
             _token = token;
             _qqId = qqId;
@@ -34,6 +36,14 @@ namespace WebTest.Actions
         {
             var result = response.ResponseString.ToJToken().ToObject<IReadOnlyList<QQNotifyEvent>>();
             return NotifyOkEventAsync(result);
+        }
+
+        protected override async Task<ActionEvent> ExecuteInternalAsync(CancellationToken token)
+        {
+            Debug.WriteLine($"[Action={ActionName} Begin]");
+            var result = await base.ExecuteInternalAsync(token).ConfigureAwait(false);
+            Debug.WriteLine($"[Action={ActionName} End]");
+            return result;
         }
     }
 }

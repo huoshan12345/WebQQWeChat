@@ -191,3 +191,5 @@ ModelManifest.xml
 *.nupkg
 verify.png
 /src/WebClient
+/src/ConsoleTest/verify.jpg
+/src/ConsoleTest/verify.jpg
