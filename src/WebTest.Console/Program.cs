@@ -6,16 +6,11 @@ using System.Threading.Tasks;
 using FclEx.Extensions;
 using FclEx.Logger;
 using HttpAction;
-using HttpAction.Action;
 using HttpAction.Service;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json.Linq;
-using WebQQ.Im.Bean.Friend;
-using WebQQ.Im.Bean.Group;
-using WebQQ.Im.Core;
-using WebQQ.Im.Event;
-using WebQQ.Util;
 using WebTest.Actions;
+using WebTest.Models;
+using WebTest.Models.QQModels;
 
 namespace WebTest
 {
@@ -34,13 +29,17 @@ namespace WebTest
                 if (loginResult.IsOk())
                 {
                     var id = loginResult.Get<string>();
-                    var action = new GetQQEventsAction(token, id, service);
+
+                    var sendMsgAction = new SendMsgAction(token, new QQMessageModel{QQId = id, Text = "Test", Type = QQMessageType.Group, UserName = "存储文件", }, service);
+                    await sendMsgAction.ExecuteAsyncAuto();
+
+                    var action = new PollAction(token, id, service);
                     while (true)
                     {
                         var events = await action.ExecuteAsyncAuto();
-                        if (events.TryGet<IReadOnlyList<QQNotifyEvent>>(out var list))
+                        if (events.TryGet<QQNotifyEventModel[]>(out var list))
                         {
-                            Console.WriteLine($"消息数量为：{list.Count}");
+                            Console.WriteLine($"消息数量为：{list.Length}");
                             foreach (var item in list)
                             {
                                 try
@@ -66,7 +65,7 @@ namespace WebTest
             }
         }
 
-        public static Task NotifyEvent(ILogger logger, QQNotifyEvent notifyEvent)
+        public static Task NotifyEvent(ILogger logger, QQNotifyEventModel notifyEvent)
         {
             switch (notifyEvent.Type)
             {
@@ -76,7 +75,7 @@ namespace WebTest
 
                 case QQNotifyEventType.QRCodeReady:
                     {
-                        var verify = notifyEvent.Target.CastTo<string>().Base64StringToImage();
+                        var verify = notifyEvent.Target.Base64StringToImage();
                         const string path = "verify.png";
                         verify.Save(path);
                         logger.LogInformation($"请扫描在项目根目录下{path}图片");
@@ -89,7 +88,7 @@ namespace WebTest
 
                 case QQNotifyEventType.ChatMsg:
                 case QQNotifyEventType.GroupMsg:
-                    logger.LogInformation(notifyEvent.Target.CastTo<string>());
+                    logger.LogInformation(notifyEvent.Target);
                     break;
 
                 default:
@@ -105,12 +104,12 @@ namespace WebTest
             var img = ImageSharp.Image.Load("verify.png");
             var base64 = img.ToRawBase64String();
 
-            var json = new List<QQNotifyEvent>()
+            var json = new List<QQNotifyEventModel>()
             {
-                QQNotifyEvent.CreateEvent(QQNotifyEventType.QRCodeReady, base64)
+                new QQNotifyEventModel(QQNotifyEventType.QRCodeReady, base64)
             }.ToJson();
 
-            var base642 = json.ToJToken().ToObject<List<QQNotifyEvent>>()[0].Target.CastTo<string>();
+            var base642 = json.ToJToken().ToObject<QQNotifyEventModel[]>()[0].Target;
             var img2 = base642.Base64StringToImage();
             img2.Save("verify2.png");
 

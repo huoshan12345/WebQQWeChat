@@ -148,7 +148,7 @@ namespace WebQQ.Im.Action
                     }
                 }
             }
-            if(!notifyEvents.Any()) notifyEvents.Add(_pollEvent);
+            if (!notifyEvents.Any()) notifyEvents.Add(_pollEvent);
 
             return NotifyOkEventAsync(notifyEvents);
         }
@@ -244,14 +244,22 @@ namespace WebQQ.Im.Action
                     "retcode": 0
                 }
              */
+            var needUpdateGroup = false;
 
             var msg = resultValue.ToObject<GroupMessage>();
             msg.Group = Store.GetOrAddGroupByGid(msg.GroupCode, u =>
             {
-                events.Add(QQNotifyEvent.CreateEvent(QQNotifyEventType.NeedUpdateGroups));
+                needUpdateGroup = true;
                 return new QQGroup { Gid = u };
             }); // 此处的GroupCode实际上是Group的gid
             msg.Contents = ContentFatory.ParseContents(resultValue["content"].ToJArray());
+            msg.User = msg.Group.Members.GetOrAdd(msg.SendUin, m =>
+            {
+                // needUpdateGroup = true;
+                return new GroupMember { Uin = msg.SendUin };
+            });
+
+            if(needUpdateGroup) events.Add(QQNotifyEvent.CreateEvent(QQNotifyEventType.NeedUpdateGroups, msg.Group));
 
             events.Add(QQNotifyEvent.CreateEvent(QQNotifyEventType.GroupMsg, msg));
         }

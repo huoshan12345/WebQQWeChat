@@ -13,6 +13,7 @@ namespace Application.Services
     {
         IReadOnlyList<QQClientModel> GetQQList(string username);
         string LoginClient(string username);
-        IReadOnlyList<QQNotifyEvent> GetAndClearEvents(string username, string id);
+        IReadOnlyList<QQNotifyEvent> Poll(string username, string id);
+        Task<DataResult> SendMsg(string username, string qqId, MessageModel message);
     }
 }

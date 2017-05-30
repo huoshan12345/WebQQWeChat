@@ -6,6 +6,9 @@ namespace WebQQ.Im.Bean.Group
     public class GroupMessage : Message
     {
         [JsonIgnore]
+        public GroupMember User { get; set; }
+
+        [JsonIgnore]
         public QQGroup Group { get; set; }
 
         public GroupMessage()
@@ -13,7 +16,7 @@ namespace WebQQ.Im.Bean.Group
             Type = MessageType.Group;
         }
 
-        public GroupMessage(QQGroup group, string text)
+        public GroupMessage(QQGroup group, string text) : this()
         {
             Group = group;
             Contents.Add(new TextItem(text));

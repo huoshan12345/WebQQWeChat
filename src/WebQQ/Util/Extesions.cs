@@ -45,28 +45,5 @@ namespace WebQQ.Util
             var session = qqClient.GetModule<SessionModule>();
             return session.State == SessionState.Offline;
         }
-
-        public static byte[] Base64StringToBytes(this string base64String) => Convert.FromBase64String(base64String);
-
-        public static string ToBase64String(this byte[] bytes) => Convert.ToBase64String(bytes);
-
-        
-        public static string ToRawBase64String(this Image<Rgba32> bitmap)
-        {
-            using (var m = new MemoryStream())
-            {
-                bitmap.Save(m);
-                return m.ToArray().ToBase64String();
-            }
-        }
-
-        public static Image<Rgba32> Base64StringToImage(this string base64String)
-        {
-            using (var m = new MemoryStream(Convert.FromBase64String(base64String)))
-            {
-                return ImageSharp.Image.Load(m);
-            }
-        }
-
     }
 }

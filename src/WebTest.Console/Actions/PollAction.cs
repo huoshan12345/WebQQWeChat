@@ -9,16 +9,17 @@ using HttpAction.Action;
 using HttpAction.Core;
 using HttpAction.Event;
 using HttpAction.Service;
-using WebQQ.Im.Event;
+using WebTest.Models;
+using WebTest.Models.QQModels;
 
 namespace WebTest.Actions
 {
-    public class GetQQEventsAction : AbstractHttpAction
+    public class PollAction : AbstractHttpAction
     {
         private readonly string _token;
         private readonly string _qqId;
 
-        public GetQQEventsAction(string token, string qqId, IHttpService httpService, ActionEventListener listener = null) : base(httpService, listener)
+        public PollAction(string token, string qqId, IHttpService httpService, ActionEventListener listener = null) : base(httpService, listener)
         {
             _token = token;
             _qqId = qqId;
@@ -26,15 +27,15 @@ namespace WebTest.Actions
 
         protected override HttpRequestItem BuildRequest()
         {
-            var req = HttpRequestItem.CreateGetRequest(ApiUrls.GetAndClearEvents);
+            var req = HttpRequestItem.CreateGetRequest(ApiUrls.Poll);
             req.AddHeader("Authorization", "Bearer " + _token);
-            req.AddQueryValue("id", _qqId);
+            req.AddQueryValue("qqId", _qqId);
             return req;
         }
 
         protected override Task<ActionEvent> HandleResponse(HttpResponseItem response)
         {
-            var result = response.ResponseString.ToJToken().ToObject<IReadOnlyList<QQNotifyEvent>>();
+            var result = response.ResponseString.ToJToken().ToObject<QQNotifyEventModel[]>();
             return NotifyOkEventAsync(result);
         }
 

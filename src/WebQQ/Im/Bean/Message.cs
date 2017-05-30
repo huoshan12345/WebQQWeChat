@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
 using FclEx.Extensions;
@@ -12,10 +13,26 @@ namespace WebQQ.Im.Bean
 {
     public enum MessageType
     {
-        Friend, 		    //好友消息
-        Group,		    // 群消息
-        Discussion,		//讨论组消息
-        Session         //临时会话消息
+        /// <summary>
+        /// 好友消息
+        /// </summary>
+        [Description("好友消息")]
+        Friend,
+        /// <summary>
+        /// 群消息
+        /// </summary>
+        [Description("群消息")]
+        Group,
+        /// <summary>
+        /// 讨论组消息
+        /// </summary>
+        [Description("讨论组消息")]
+        Discussion,
+        /// <summary>
+        /// 临时会话消息
+        /// </summary>
+        [Description("临时会话消息")]
+        Session         
     }
 
     public class Message

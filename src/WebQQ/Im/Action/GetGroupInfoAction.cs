@@ -130,7 +130,7 @@ namespace WebQQ.Im.Action
             }
             else
             {
-                throw new QQException(QQErrorCode.ResponseError, response.ResponseString);
+                throw new QQException(QQErrorCode.ResponseError);
             }
         }
     }

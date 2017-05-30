@@ -10,6 +10,7 @@ namespace WebTest
         public const string ApiUrl = HomeUrl + "/api";
         public const string GetTokenUrl = HomeUrl + "/connect/token";
         public const string LoginQQUrl = ApiUrl + "/QQ/LoginClient";
-        public const string GetAndClearEvents = ApiUrl + "/QQ/GetAndClearEvents";
+        public const string Poll = ApiUrl + "/QQ/Poll";
+        public const string SendMsg = ApiUrl + "/QQ/SendMsg";
     }
 }

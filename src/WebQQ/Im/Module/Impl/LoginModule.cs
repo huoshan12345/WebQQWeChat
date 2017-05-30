@@ -8,6 +8,7 @@ using HttpAction.Action;
 using HttpAction.Event;
 using Microsoft.Extensions.Logging;
 using WebQQ.Im.Action;
+using WebQQ.Im.Bean.Group;
 using WebQQ.Im.Core;
 using WebQQ.Im.Event;
 using WebQQ.Im.Module.Interface;
@@ -35,14 +36,25 @@ namespace WebQQ.Im.Module.Impl
                                 {
                                     if (@event.IsOk())
                                     {
-                                        new GetOnlineFriendsAction(Context).ExecuteAsyncAuto().Forget();
+                                        new GetOnlineFriendsAction(Context)
+                                        .ExecuteAsyncAuto().Forget();
                                     }
                                     return Task.CompletedTask;
                                 }).ExecuteAsyncAuto().Forget();
                                 break;
 
                             case QQNotifyEventType.NeedUpdateGroups:
-                                new GetGroupNameListAction(Context).ExecuteAsyncAuto().Forget();
+                                //new GetGroupNameListAction(Context, (s, e) =>
+                                //{
+                                //    if (e.IsOk())
+                                //    {
+                                //        Store.GroupDic.Values.ForEachAsync(m => new GetGroupInfoAction(Context, m)
+                                //        .ExecuteAsyncAuto()).Forget();
+                                //    }
+                                //    return Task.CompletedTask;
+                                //}).ExecuteAsyncAuto().Forget();
+
+                                new GetGroupInfoAction(Context,  notifyEvent.Target.CastTo<QQGroup>()).ExecuteAsyncAuto().Forget();
                                 break;
 
                             default:
@@ -126,23 +138,21 @@ namespace WebQQ.Im.Module.Impl
                     //await new GetFriendQQNumberAction(Context, obj).ExecuteAsyncAuto();
                     await new GetFriendInfoAction(Context, obj).ExecuteAsyncAuto();
                 })
-                .PushAction<GetGroupNameListAction>(async (sender, @event) =>
+                .PushAction<GetGroupNameListAction>((sender, @event) =>
                 {
-                    if (!@event.IsOk()) return;
-                    var group = Store.GroupDic.FirstOrDefault().Value;
-                    if (group != null)
+                    if (@event.IsOk())
                     {
-                        await new GetGroupInfoAction(Context, group).ExecuteAsyncAuto();
+                        Store.GroupDic.Values.ForEachAsync(m => new GetGroupInfoAction(Context, m).ExecuteAsyncAuto()).Forget();
                     }
+                    return Task.CompletedTask;
                 })
-                .PushAction<GetDiscussionListAction>(async (sender, @event) =>
+                .PushAction<GetDiscussionListAction>((sender, @event) =>
                 {
-                    if (!@event.IsOk()) return;
-                    var dis = Store.DiscussionDic.FirstOrDefault().Value;
-                    if (dis != null)
+                    if (@event.IsOk())
                     {
-                        await new GetDiscussionInfoAction(Context, dis).ExecuteAsyncAuto();
+                        Store.DiscussionDic.Values.ForEachAsync(m => new GetDiscussionInfoAction(Context, m).ExecuteAsyncAuto()).Forget();
                     }
+                    return Task.CompletedTask;
                 })
                 .PushAction<GetSelfInfoAction>()
                 .PushAction<GetOnlineFriendsAction>()

@@ -2,6 +2,7 @@
 using ImageSharp;
 using Newtonsoft.Json;
 using WebQQ.Util;
+using FclEx.Extensions;
 
 namespace WebQQ.Util
 {

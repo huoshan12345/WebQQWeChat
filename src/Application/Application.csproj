@@ -8,10 +8,10 @@
     <ProjectReference Include="..\Domain\Domain.csproj" />
     <ProjectReference Include="..\EfCore\EfCore.csproj" />
     <ProjectReference Include="..\WebQQ\WebQQ.csproj" />
-    <PackageReference Include="IdentityServer4" Version="1.5.1" />
+    <PackageReference Include="IdentityServer4" Version="1.5.2" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="1.1.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="1.1.1" />
-    <PackageReference Include="FclEx" Version="0.2.3-beta4" />
+    <PackageReference Include="FclEx" Version="0.2.3-beta5" />
     
   </ItemGroup>
 

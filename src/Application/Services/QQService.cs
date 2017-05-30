@@ -23,9 +23,14 @@ namespace Application.Services
             return _qqManager.LoginClient(username);
         }
 
-        public IReadOnlyList<QQNotifyEvent> GetAndClearEvents(string username, string id)
+        public IReadOnlyList<QQNotifyEvent> Poll(string username, string id)
         {
-            return _qqManager.GetAndClearEvents(username, id);
+            return _qqManager.Poll(username, id);
+        }
+
+        public Task<DataResult> SendMsg(string username, string qqId, MessageModel message)
+        {
+            return _qqManager.SendMsg(username, qqId, message);
         }
     }
 }

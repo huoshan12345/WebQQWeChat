@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using WebQQ.Im.Bean.Content;
 
 namespace WebQQ.Im.Bean.Friend
 {
@@ -11,5 +12,12 @@ namespace WebQQ.Im.Bean.Friend
 
         [JsonIgnore]
         public QQFriend Friend { get; set; }
+
+        public FriendMessage(QQFriend friend, string text) : this()
+        {
+            Friend = friend;
+            Contents.Add(new TextItem(text));
+            Contents.Add(new FontItem());
+        }
     }
 }

@@ -33,24 +33,28 @@ namespace WebManager.Controllers
         [HttpGet]
         public IReadOnlyList<QQClientModel> GetQQList()
         {
-            var username = HttpContext.User.Claims.First(m => m.Type == JwtClaimTypes.GivenName).Value;
-            return _qqService.GetQQList(username);
+            return _qqService.GetQQList(Username);
         }
 
         [Authorize]
         [HttpPost]
         public string LoginClient()
         {
-            var username = HttpContext.User.Claims.First(m => m.Type == JwtClaimTypes.GivenName).Value;
-            return _qqService.LoginClient(username);
+            return _qqService.LoginClient(Username);
         }
 
         [Authorize]
         [HttpGet]
-        public IReadOnlyList<QQNotifyEvent> GetAndClearEvents([FromQuery]string id)
+        public IReadOnlyList<QQNotifyEvent> Poll([FromQuery]string qqId)
         {
-            var username = HttpContext.User.Claims.First(m => m.Type == JwtClaimTypes.GivenName).Value;
-            return _qqService.GetAndClearEvents(username, id);
+            return _qqService.Poll(Username, qqId);
+        }
+
+        [Authorize]
+        [HttpPost]
+        public Task<DataResult> SendMsg(string qqId, MessageModel message)
+        {
+            return _qqService.SendMsg(Username, qqId, message);
         }
     }
 }
