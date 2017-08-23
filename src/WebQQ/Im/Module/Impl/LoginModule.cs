@@ -34,7 +34,7 @@ namespace WebQQ.Im.Module.Impl
                             case QQNotifyEventType.NeedUpdateFriends:
                                 new GetFriendsAction(Context, (a, e) =>
                                 {
-                                    if (@event.IsOk())
+                                    if (@event.IsOk)
                                     {
                                         new GetOnlineFriendsAction(Context)
                                         .ExecuteAsyncAuto().Forget();
@@ -46,7 +46,7 @@ namespace WebQQ.Im.Module.Impl
                             case QQNotifyEventType.NeedUpdateGroups:
                                 //new GetGroupNameListAction(Context, (s, e) =>
                                 //{
-                                //    if (e.IsOk())
+                                //    if (e.IsOk)
                                 //    {
                                 //        Store.GroupDic.Values.ForEachAsync(m => new GetGroupInfoAction(Context, m)
                                 //        .ExecuteAsyncAuto()).Forget();
@@ -78,12 +78,12 @@ namespace WebQQ.Im.Module.Impl
             var loginFutureResult = await new WebQQActionFuture(Context, listener)
              .PushAction<GetQRCodeAction>(async (sender, @event) => // 1.获取二维码
              {
-                 if (!@event.IsOk()) return;
+                 if (!@event.IsOk) return;
                  await Context.FireNotifyAsync(QQNotifyEvent.CreateEvent(QQNotifyEventType.QRCodeReady, @event.Target));
              })
              .PushAction<CheckQRCodeAction>(async (sender, @event) => // 2.获取二维码扫描状态
              {
-                 if (!@event.IsOk()) return;
+                 if (!@event.IsOk) return;
 
                  var args = (CheckQRCodeArgs)@event.Target;
                  switch (args.Status)
@@ -109,11 +109,11 @@ namespace WebQQ.Im.Module.Impl
              .PushAction<GetVfwebqqAction>()
              .PushAction<ChannelLoginAction>(async (sender, @event) =>
              {
-                 if (!@event.IsOk()) return;
+                 if (!@event.IsOk) return;
                  await Context.FireNotifyAsync(QQNotifyEvent.CreateEvent(QQNotifyEventType.LoginSuccess));
              }).ExecuteAsyncAuto();
 
-            if (!loginFutureResult.IsOk())
+            if (!loginFutureResult.IsOk)
             {
                 Session.State = SessionState.Offline;
             }
@@ -131,7 +131,7 @@ namespace WebQQ.Im.Module.Impl
             return new WebQQActionFuture(Context, listener)
                 .PushAction<GetFriendsAction>(async (sender, @event) =>
                 {
-                    if (!@event.IsOk()) return;
+                    if (!@event.IsOk) return;
                     var obj = Store.FriendDic.FirstOrDefault().Value;
                     if (obj == null) return;
                     await new GetFriendLongNickAction(Context, obj).ExecuteAsyncAuto();
@@ -140,7 +140,7 @@ namespace WebQQ.Im.Module.Impl
                 })
                 .PushAction<GetGroupNameListAction>((sender, @event) =>
                 {
-                    if (@event.IsOk())
+                    if (@event.IsOk)
                     {
                         Store.GroupDic.Values.ForEachAsync(m => new GetGroupInfoAction(Context, m).ExecuteAsyncAuto()).Forget();
                     }
@@ -148,7 +148,7 @@ namespace WebQQ.Im.Module.Impl
                 })
                 .PushAction<GetDiscussionListAction>((sender, @event) =>
                 {
-                    if (@event.IsOk())
+                    if (@event.IsOk)
                     {
                         Store.DiscussionDic.Values.ForEachAsync(m => new GetDiscussionInfoAction(Context, m).ExecuteAsyncAuto()).Forget();
                     }

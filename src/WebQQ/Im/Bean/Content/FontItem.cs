@@ -24,7 +24,7 @@ namespace WebQQ.Im.Bean.Content
 
         public object ToJson()
         {
-            return new JArray { Type.ToLowerString(), JObject.FromObject(this, Helpers.JsonCamelSerializer) };
+            return new JArray { Type.ToString().ToLower(), JObject.FromObject(this, Helpers.JsonCamelSerializer) };
         }
 
         public string GetText()

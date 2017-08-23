@@ -35,7 +35,7 @@ namespace WebWeChat.Im.Action
             var req = new HttpRequestItem(HttpMethodType.Post, url)
             {
                 ContentType = HttpConstants.JsonContentType,
-                RawData = JsonConvert.SerializeObject(obj)
+                StringData = obj.ToJson()
             };
             return req;
         }

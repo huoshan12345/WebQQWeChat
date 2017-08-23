@@ -25,12 +25,12 @@ namespace WebWeChat.Im.Module.Impl
                 .PushAction<GetUuidAction>()
                 .PushAction<GetQRCodeAction>(async (sender, @event) =>
                 {
-                    if (!@event.IsOk()) return;
+                    if (!@event.IsOk) return;
                     await Context.FireNotifyAsync(WeChatNotifyEvent.CreateEvent(WeChatNotifyEventType.QRCodeReady, @event.Target));
                 })
                 .PushAction<WatiForLoginAction>(async (sender, @event) =>
                 {
-                    if (!@event.IsOk()) return;
+                    if (!@event.IsOk) return;
 
                     var result = (WatiForLoginResult)@event.Target;
                     switch (result)
@@ -52,7 +52,7 @@ namespace WebWeChat.Im.Module.Impl
                 .PushAction<StatusNotifyAction>()
                 .PushAction<GetContactAction>(async (sender, @event) =>
                 {
-                    if (!@event.IsOk()) return;
+                    if (!@event.IsOk) return;
                     await Context.FireNotifyAsync(WeChatNotifyEvent.CreateEvent(WeChatNotifyEventType.LoginSuccess));
                 })
                 .ExecuteAsync();
@@ -65,7 +65,7 @@ namespace WebWeChat.Im.Module.Impl
             {
                 if (e.Type == ActionEventType.EvtRetry) return;
                 sync.ExecuteAsync().Forget();
-                if (e.IsOk())
+                if (e.IsOk)
                 {
                     var msgs = (IList<Message>)e.Target;
                     // if (msgs.Count == 0) await Task.Delay(5 * 1000);
@@ -84,7 +84,7 @@ namespace WebWeChat.Im.Module.Impl
                     Context.GetModule<SessionModule>().State = SessionState.Offline;
                     await Context.FireNotifyAsync(WeChatNotifyEvent.CreateEvent(WeChatNotifyEventType.Offline));
                 }
-                else if (@event.IsOk())
+                else if (@event.IsOk)
                 {
                     var result = (SyncCheckResult)@event.Target;
                     switch (result)

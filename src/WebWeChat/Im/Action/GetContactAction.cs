@@ -31,7 +31,7 @@ namespace WebWeChat.Im.Action
             var obj = new { Session.BaseRequest };
             var req = new HttpRequestItem(HttpMethodType.Post, url)
             {
-                RawData = obj.ToJson(),
+                StringData = obj.ToJson(),
                 ContentType = HttpConstants.JsonContentType
             };
             return req;

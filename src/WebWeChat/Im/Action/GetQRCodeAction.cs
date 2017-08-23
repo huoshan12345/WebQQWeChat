@@ -21,14 +21,14 @@ namespace WebWeChat.Im.Action
             var req =  new HttpRequestItem(HttpMethodType.Post, string.Format(ApiUrls.GetQRCode, Session.Uuid));
             req.AddQueryValue("t", "webwx");
             req.AddQueryValue("_", Session.Seq++);
-            req.ResultType = HttpResultType.Stream;
+            req.ResultType = HttpResultType.Byte;
             return req;
         }
 
         protected override Task<ActionEvent> HandleResponse(HttpResponseItem responseItem)
         {
             // return NotifyOkEventAsync(Image.FromStream(responseItem.ResponseStream));
-            return NotifyOkEventAsync(ImageSharp.Image.Load(responseItem.ResponseStream));
+            return NotifyOkEventAsync(ImageSharp.Image.Load(responseItem.ResponseBytes));
         }
     }
 }

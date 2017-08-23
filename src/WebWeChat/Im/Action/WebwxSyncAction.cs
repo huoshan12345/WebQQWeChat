@@ -35,7 +35,7 @@ namespace WebWeChat.Im.Action
             };
             var req = new HttpRequestItem(HttpMethodType.Post, url)
             {
-                RawData = obj.ToJson(),
+                StringData = obj.ToJson(),
                 ContentType = HttpConstants.JsonContentType,
                 Referrer = "https://wx.qq.com/?&lang=zh_CN"
             };

@@ -99,7 +99,7 @@ namespace WebQQ.Im.Action
             var retcode = json["retcode"]?.ToString();
             return retcode.IsNull() ?
                 NotifyOkEventAsync() :
-                NotifyErrorEventAsync(response.ResponseString);
+                NotifyErrorAsync(response.ResponseString);
         }
     }
 }

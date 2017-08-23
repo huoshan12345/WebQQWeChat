@@ -19,7 +19,7 @@ namespace WebQQ.Im.Action
             req.Method = HttpMethodType.Post;
             var json = new JObject
             {
-                {"status", QQStatusType.Online.ToLowerString()},
+                {"status", QQStatusType.Online.ToString().ToLower()},
                 {"ptwebqq", Session.Ptwebqq},
                 {"clientid", Session.ClientId},
                 {"psessionid", ""}

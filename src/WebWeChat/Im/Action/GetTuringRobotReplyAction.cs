@@ -41,7 +41,7 @@ namespace WebWeChat.Im.Action
                 info = _input,
                 userid = Session.User.UserName,
             };
-            req.RawData = obj.ToJson();
+            req.StringData = obj.ToJson();
             return req;
         }
 

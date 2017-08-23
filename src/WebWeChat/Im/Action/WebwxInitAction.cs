@@ -36,7 +36,7 @@ namespace WebWeChat.Im.Action
                     }
                 }             
             */
-            req.RawData = JsonConvert.SerializeObject(obj);
+            req.StringData = obj.ToJson();
             req.ContentType = HttpConstants.JsonContentType;
             return req;
         }

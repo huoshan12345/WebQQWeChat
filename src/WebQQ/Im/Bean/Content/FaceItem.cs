@@ -20,7 +20,7 @@ namespace WebQQ.Im.Bean.Content
 
         public object ToJson()
         {
-            return new JArray { Type.ToLowerString(), this };
+            return new JArray { Type.ToString().ToLower(), this };
         }
 
         public string GetText()

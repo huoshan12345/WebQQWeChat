@@ -45,7 +45,7 @@ namespace WebWeChat.Im.Action
             var req = new HttpRequestItem(HttpMethodType.Get, url)
             {
                 // 此处需要将key都变成小写，否则提交会失败
-                RawData = Session.BaseRequest.ToDictionary(pair => pair.Key.ToLower(), pair => pair.Value).ToQueryString(),
+                StringData = Session.BaseRequest.ToDictionary(pair => pair.Key.ToLower(), pair => pair.Value).ToQueryString(),
             };
             req.AddQueryValue("r", Timestamp);
             req.AddQueryValue("synckey", Session.SyncKeyStr);

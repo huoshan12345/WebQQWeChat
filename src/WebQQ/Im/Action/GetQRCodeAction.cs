@@ -22,7 +22,7 @@ namespace WebQQ.Im.Action
             req.AddQueryValue("d", "72");
             req.AddQueryValue("v", "4");
             req.AddQueryValue("t", new Random().NextDouble());
-            req.ResultType = HttpResultType.Stream;
+            req.ResultType = HttpResultType.Byte;
             return req;
         }
 
@@ -30,7 +30,7 @@ namespace WebQQ.Im.Action
         {
             // return NotifyOkEventAsync(Image.FromStream(response.ResponseStream));
 
-            return NotifyOkEventAsync(ImageSharp.Image.Load(response.ResponseStream));
+            return NotifyOkEventAsync(ImageSharp.Image.Load(response.ResponseBytes));
         }
     }
 }
