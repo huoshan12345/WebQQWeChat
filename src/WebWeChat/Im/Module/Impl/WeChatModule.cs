@@ -1,5 +1,4 @@
 ﻿using System;
-using HttpAction.Action;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using WebWeChat.Im.Core;
@@ -11,8 +10,7 @@ namespace WebWeChat.Im.Module.Impl
     {
         protected WeChatModule(IWeChatContext context)
         {
-            if (context == null) throw new ArgumentNullException(nameof(context));
-            Context = context;
+            Context = context ?? throw new ArgumentNullException(nameof(context));
         }
 
         public IWeChatContext Context { get; }

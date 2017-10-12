@@ -1,6 +1,4 @@
 ﻿using System;
-using HttpAction.Action;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using WebQQ.Im.Core;
 using WebQQ.Im.Module.Interface;

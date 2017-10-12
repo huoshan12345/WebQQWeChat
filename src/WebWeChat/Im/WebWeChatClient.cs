@@ -26,6 +26,8 @@ namespace WebWeChat.Im
         private readonly IServiceProvider _serviceProvider;
         private readonly ILogger _logger;
 
+
+        public ILogger Logger => _logger;
         public static IServiceCollection CommonServices { get; } = new ServiceCollection();
 
         static WebWeChatClient()

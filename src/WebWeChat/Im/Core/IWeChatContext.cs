@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 using WebWeChat.Im.Event;
 using WebWeChat.Im.Module;
 using WebWeChat.Im.Module.Interface;
@@ -14,5 +15,7 @@ namespace WebWeChat.Im.Core
         T GetSerivce<T>();
 
         T GetModule<T>() where T : IWeChatModule;
+
+        ILogger Logger { get; }
     }
 }

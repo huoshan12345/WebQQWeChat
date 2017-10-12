@@ -1,15 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using AutoMapper;
-using HttpAction.Action;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using WebQQ.Im.Bean;
-using WebQQ.Im.Bean.Discussion;
-using WebQQ.Im.Bean.Friend;
-using WebQQ.Im.Bean.Group;
+﻿using Microsoft.Extensions.Configuration;
 
 namespace WebQQ
 {

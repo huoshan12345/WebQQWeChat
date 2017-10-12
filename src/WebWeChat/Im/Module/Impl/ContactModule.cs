@@ -1,10 +1,11 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 using HttpAction.Event;
-using WebWeChat.Im.Action;
 using WebWeChat.Im.Core;
 using WebWeChat.Im.Module.Interface;
 using HttpAction;
+using HttpAction.Extensions;
+using WebWeChat.Im.Actions;
 
 namespace WebWeChat.Im.Module.Impl
 {

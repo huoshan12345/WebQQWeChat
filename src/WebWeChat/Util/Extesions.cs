@@ -1,16 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
 using FclEx.Extensions;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using WebWeChat.Im.Bean;
+using WebWeChat.Im.Core;
 using WebWeChat.Im.Event;
+using WebWeChat.Im.Module.Impl;
+using FclEx.Logger;
 
 namespace WebWeChat.Util
 {
     public static class Extesions
     {
-        private static readonly HashSet<string> SpecialUsers = new HashSet<string>()
+        private static readonly HashSet<string> _specialUsers = new HashSet<string>()
         {
             "newsapp", "fmessage", "filehelper", "weibo", "qqmail", "fmessage", "tmessage", "qmessage", "qqsync", "floatbottle",
             "lbsapp", "shakeapp", "medianote", "qqfriend", "readerapp", "blogapp", "facebookapp", "masssendapp", "meishiapp", "feedsapp",
@@ -20,7 +24,7 @@ namespace WebWeChat.Util
 
         public static bool IsSpecialUser(this ContactMember member)
         {
-            return SpecialUsers.Contains(member.UserName);
+            return _specialUsers.Contains(member.UserName);
         }
 
         public static bool IsPublicUsers(this ContactMember member)
@@ -37,5 +41,13 @@ namespace WebWeChat.Util
         {
             return (T)e.Target;
         }
+		
+        public static void Log(this IWebWeChatClient client, string msg, LogLevel level = LogLevel.Information)
+        {
+            var userName = client.Context?.GetModule<SessionModule>().User?.NickName;
+            var prefix = userName.IsNullOrEmpty() ? string.Empty : $"[{userName}]";
+            var str = $"{DateTime.Now:HH:mm:ss}> {prefix}{msg}";
+            client.Logger.Log(str, level);
+        }		
     }
 }

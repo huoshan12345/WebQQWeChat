@@ -1,7 +1,6 @@
-﻿using System;
-using System.Reflection;
-using HttpAction.Action;
-using WebWeChat.Im.Action;
+﻿using System.Reflection;
+using HttpAction.Actions;
+using WebWeChat.Im.Actions;
 using WebWeChat.Im.Core;
 using WebWeChat.Im.Service.Interface;
 

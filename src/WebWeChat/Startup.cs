@@ -1,12 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using HttpAction.Action;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using WebWeChat.Im.Module;
+﻿using Microsoft.Extensions.Configuration;
 
 namespace WebWeChat
 {

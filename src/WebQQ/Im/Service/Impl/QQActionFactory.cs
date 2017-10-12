@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using HttpAction.Action;
-using WebQQ.Im.Action;
-using WebQQ.Im.Core;
+﻿using WebQQ.Im.Core;
 using WebQQ.Im.Service.Interface;
 using System.Reflection;
+using HttpAction.Actions;
+using WebQQ.Im.Actions;
 
 namespace WebQQ.Im.Service.Impl
 {
