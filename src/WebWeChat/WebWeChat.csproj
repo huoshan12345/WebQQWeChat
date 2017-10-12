@@ -1,9 +1,11 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netstandard1.6;net461</TargetFrameworks>
+    <TargetFrameworks>netstandard2.0</TargetFrameworks>
     <UserSecretsId>WebWeChat-20161027025319</UserSecretsId>
-    <Version>1.0.0-beta2</Version>
+    <Version>2.0.0-beta1</Version>
+    <PreserveCompilationContext>false</PreserveCompilationContext>
+    <LangVersion>latest</LangVersion>
   </PropertyGroup>
 
   <ItemGroup>
@@ -11,35 +13,16 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="FclEx.Image" Version="0.2.5-beta1" />
-    <PackageReference Include="FclEx.Logger" Version="0.2.5" />
-    <PackageReference Include="FclEx.Mapper" Version="0.2.4" />
-    <PackageReference Include="Microsoft.Extensions.Configuration" Version="1.1.1" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="1.1.1" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="1.1.1" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="1.1.0" />
-    <PackageReference Include="FclEx.Json" Version="0.2.4" />
-    <PackageReference Include="HttpAction" Version="0.2.0-beta1" />
-  </ItemGroup>
-
-  <ItemGroup Condition=" '$(TargetFramework)' == 'net461' ">
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Xml" />
-  </ItemGroup>
-
-  <PropertyGroup Condition=" '$(TargetFramework)' == 'net461' ">
-    <DefineConstants>$(DefineConstants);NET</DefineConstants>
-    <PlatformTarget>anycpu</PlatformTarget>
-  </PropertyGroup>
-
-  <PropertyGroup Condition=" '$(TargetFramework)' == 'netstandard1.6' ">
-    <DefineConstants>$(DefineConstants);NETCORE</DefineConstants>
-    <DebugType>portable</DebugType>
-  </PropertyGroup>
-
-  <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard1.6' ">
-    <PackageReference Include="System.ComponentModel.Primitives" Version="4.3.0" />
-    <PackageReference Include="System.Xml.XDocument" Version="4.3.0" />
+    <PackageReference Include="FclEx" Version="0.3.1" />
+    <PackageReference Include="FclEx.Image" Version="0.3.0-beta1" />
+    <PackageReference Include="FclEx.Logger" Version="0.3.0" />
+    <PackageReference Include="FclEx.Mapper" Version="0.3.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="2.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="2.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="2.0.0" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="2.0.0" />
+    <PackageReference Include="FclEx.Json" Version="0.3.0" />
+    <PackageReference Include="HttpAction" Version="0.4.1" />
   </ItemGroup>
 
 </Project>

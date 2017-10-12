@@ -2,7 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using FclEx.Extensions;
-using HttpAction.Action;
+using HttpAction.Actions;
 using HttpAction.Event;
 using HttpAction.Service;
 using Microsoft.Extensions.Configuration;

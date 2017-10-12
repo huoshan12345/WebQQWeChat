@@ -1,31 +1,23 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netstandard1.6;net461</TargetFrameworks>
+    <TargetFrameworks>netstandard2.0</TargetFrameworks>
     <UserSecretsId>aspnet-WebQQ-20161027025319</UserSecretsId>
     <Version>1.0.0-beta3</Version>
+    <PreserveCompilationContext>false</PreserveCompilationContext>
+    <LangVersion>latest</LangVersion>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="FclEx" Version="0.2.6" />
-    <PackageReference Include="FclEx.Image" Version="0.2.5-beta1" />
-    <PackageReference Include="FclEx.Json" Version="0.2.4" />
-    <PackageReference Include="FclEx.Logger" Version="0.2.5" />
-    <PackageReference Include="FclEx.Mapper" Version="0.2.4" />
-    <PackageReference Include="HttpAction" Version="0.2.0-beta1" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="1.1.1" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="1.1.1" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="1.1.0" />
+    <PackageReference Include="FclEx" Version="0.3.1" />
+    <PackageReference Include="FclEx.Image" Version="0.3.0-beta1" />
+    <PackageReference Include="FclEx.Json" Version="0.3.0" />
+    <PackageReference Include="FclEx.Logger" Version="0.3.0" />
+    <PackageReference Include="FclEx.Mapper" Version="0.3.0" />
+    <PackageReference Include="HttpAction" Version="0.4.1" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="2.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="2.0.0" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="2.0.0" />
   </ItemGroup>
 
-  <PropertyGroup Condition=" '$(TargetFramework)' == 'net461' ">
-    <DefineConstants>$(DefineConstants);NET</DefineConstants>
-    <PlatformTarget>anycpu</PlatformTarget>
-  </PropertyGroup>
-
-  <PropertyGroup Condition=" '$(TargetFramework)' == 'netstandard1.6' ">
-    <DefineConstants>$(DefineConstants);NETCORE</DefineConstants>
-    <DebugType>portable</DebugType>
-  </PropertyGroup>
-  
 </Project>
