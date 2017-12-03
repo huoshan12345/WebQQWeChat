@@ -29,8 +29,6 @@ namespace ConsoleTest
     /// </summary>
     public class Program
     {
-        private static Process _process = null;
-
         private static readonly QQNotifyEventListener _qqListener = (client, notifyEvent) =>
         {
             var logger = client.GetSerivce<ILogger>();
@@ -44,21 +42,16 @@ namespace ConsoleTest
                     {
                         var verify = notifyEvent.Target.CastTo<Image<Rgba32>>();
                         verify.ConsoleWrite();
-                        //const string path = "verify.jpg";
-                        //verify.Save(path);
-                        logger.LogInformation("请扫描在项目根目录图片");
-#if NET
-                        _process = Process.Start(path);
-#endif
+                        const string path = "verify.jpg";
+                        verify.Save(path);
+                        logger.LogInformation("请扫描显示在控制台的二维码或者保存在项目根目录的二维码图片");
                         break;
                     }
 
                 case QQNotifyEventType.QRCodeSuccess:
-                    if (_process != null && !_process.HasExited) _process.Kill();
                     break;
 
                 case QQNotifyEventType.QRCodeInvalid:
-                    if (_process != null && !_process.HasExited) _process.Kill();
                     logger.LogWarning("二维码已失效");
                     break;
 
@@ -94,23 +87,19 @@ namespace ConsoleTest
 
                 case WeChatNotifyEventType.QRCodeReady:
                     {
-                        var verify = (ImageSharp.Image<Rgba32>)notifyEvent.Target;
-                        const string path = "verify.jpg";
+                        var verify = notifyEvent.Target.CastTo<Image<Rgba32>>();
+                        // verify.ConsoleWrite(); // 显示出来不正常，需要调整
+                        const string path = "verify.png";
                         verify.Save(path);
-                        logger.LogInformation($"请扫描在项目根目录下{path}图片");
-#if NET
-                        _process = Process.Start(path);
-#endif
+                        logger.LogInformation("请扫描保存在项目根目录的二维码图片");
                         break;
                     }
 
                 case WeChatNotifyEventType.QRCodeSuccess:
-                    if (_process != null && !_process.HasExited) _process.Kill();
                     logger.LogInformation("请在手机上点击确认以登录");
                     break;
 
                 case WeChatNotifyEventType.QRCodeInvalid:
-                    if (_process != null && !_process.HasExited) _process.Kill();
                     logger.LogWarning("二维码已失效");
                     break;
 

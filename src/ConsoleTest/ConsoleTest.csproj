@@ -7,11 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="verify.jpg" />
-    <None Remove="verify.png" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\WebQQ\WebQQ.csproj" />
     <ProjectReference Include="..\WebWeChat\WebWeChat.csproj" />
   </ItemGroup>
