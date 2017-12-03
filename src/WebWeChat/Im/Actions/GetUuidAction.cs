@@ -3,7 +3,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using HttpAction.Core;
 using HttpAction.Event;
-using HttpAction.Extensions;
+using HttpAction;
 using WebWeChat.Im.Core;
 
 namespace WebWeChat.Im.Actions

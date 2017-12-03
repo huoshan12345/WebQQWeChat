@@ -25,9 +25,9 @@ namespace WebQQ.Im.Module.Impl
         public QQUser User { get; set; } = new QQUser();
 
         public long ClientId { get; set; } = 53999199;
-        public string SessionId { get; set; }
-        public string Vfwebqq { get; set; }
-        public string Ptwebqq { get; set; }
+        public string SessionId { get; set; } = "";
+        public string Vfwebqq { get; set; } = "";
+        public string Ptwebqq { get; set; } = "";
 
         //public string LoginSig { get; set; }
         //public string CfaceKey { get; set; }

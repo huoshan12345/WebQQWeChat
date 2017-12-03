@@ -1,4 +1,5 @@
 ﻿using FclEx.Extensions;
+using HttpAction;
 using HttpAction.Core;
 using HttpAction.Event;
 using Newtonsoft.Json.Linq;
@@ -13,9 +14,10 @@ namespace WebQQ.Im.Actions
         {
         }
 
+        protected override EnumRequestType RequestType { get; } = EnumRequestType.Form;
+
         protected override void ModifyRequest(HttpRequestItem req)
         {
-            req.Method = HttpMethodType.Post;
             var json = new JObject
             {
                 {"status", QQStatusType.Online.ToString().ToLower()},
@@ -23,7 +25,7 @@ namespace WebQQ.Im.Actions
                 {"clientid", Session.ClientId},
                 {"psessionid", ""}
             };
-            req.AddQueryValue("r", json.ToSimpleString());
+            req.AddData("r", json.ToSimpleString());
             req.Referrer = ApiUrls.Referrer;
         }
 
@@ -35,6 +37,7 @@ namespace WebQQ.Im.Actions
             Session.SessionId = ret["psessionid"].ToString();
             Session.Index = ret["index"].ToInt();
             Session.Port = ret["port"].ToInt();
+            // Session.Vfwebqq = ret["vfwebqq"].ToString();
         }
     }
 }

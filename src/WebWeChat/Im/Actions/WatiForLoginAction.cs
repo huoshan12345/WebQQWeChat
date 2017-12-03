@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using FclEx.Helpers;
 using HttpAction.Core;
 using HttpAction.Event;
-using HttpAction.Extensions;
+using HttpAction;
 using WebWeChat.Im.Actions.ActionResult;
 using WebWeChat.Im.Core;
 

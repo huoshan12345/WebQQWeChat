@@ -8,7 +8,7 @@ namespace WebQQ.Im.Event
         /// <summary>
         /// 扫码成功
         /// </summary>
-        OK,
+        Ok,
 
         /// <summary>
         /// 二维码未失效

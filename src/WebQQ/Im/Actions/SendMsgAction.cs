@@ -2,6 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using FclEx.Extensions;
+using HttpAction;
 using HttpAction.Core;
 using HttpAction.Event;
 using Newtonsoft.Json.Linq;
@@ -22,6 +23,8 @@ namespace WebQQ.Im.Actions
         {
             _msg = msg;
         }
+
+        protected override EnumRequestType RequestType { get; } = EnumRequestType.Form;
 
         protected override HttpRequestItem BuildRequest()
         {
@@ -87,7 +90,7 @@ namespace WebQQ.Im.Actions
                 default: throw new ArgumentOutOfRangeException(nameof(_msg));
             }
             req.Referrer = "https://d1.web2.qq.com/cfproxy.html?v=20151105001&callback=1";
-            req.AddQueryValue("r", json.ToJson());
+            req.AddData("r", json.ToJson());
             return req;
         }
 

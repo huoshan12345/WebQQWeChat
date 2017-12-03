@@ -3,30 +3,29 @@ using AutoMapper;
 using FclEx.Extensions;
 using HttpAction.Core;
 using HttpAction.Event;
-using HttpAction.Extensions;
+using HttpAction;
+using Newtonsoft.Json.Linq;
 using WebQQ.Im.Bean.Friend;
 using WebQQ.Im.Core;
 
 namespace WebQQ.Im.Actions
 {
-    public class GetOnlineFriendsAction : WebQQAction
+    public class GetOnlineFriendsAction : WebQQInfoAction
     {
         public GetOnlineFriendsAction(IQQContext context, ActionEventListener listener = null) : base(context, listener)
         {
         }
 
-        protected override HttpRequestItem BuildRequest()
+        protected override void ModifyRequest(HttpRequestItem req)
         {
-            var req = HttpRequestItem.CreateGetRequest(ApiUrls.GetOnlineFriends);
-            req.AddQueryValue("vfwebqq", Session.Vfwebqq);
-            req.AddQueryValue("clientid", Session.ClientId);
-            req.AddQueryValue("psessionid", Session.SessionId);
-            req.AddQueryValue("t", Timestamp);
+            req.AddData("vfwebqq", Session.Vfwebqq);
+            req.AddData("clientid", Session.ClientId);
+            req.AddData("psessionid", Session.SessionId);
+            req.AddData("t", Timestamp);
             req.Referrer = ApiUrls.Referrer;
-            return req;
         }
 
-        protected override Task<ActionEvent> HandleResponse(HttpResponseItem response)
+        protected override void HandleResult(JToken json)
         {
             /*
                 {
@@ -40,19 +39,11 @@ namespace WebQQ.Im.Actions
                     "retcode": 0
                 }
             */
-            var json = response.ResponseString.ToJToken();
-            if (json["retcode"].ToString() == "0")
+
+            var result = json["result"].ToObject<FriendOnlineInfo[]>();
+            foreach (var info in result)
             {
-                var result = json["result"].ToObject<FriendOnlineInfo[]>();
-                foreach (var info in result)
-                {
-                    Store.FriendDic.GetAndDo(info.Uin, friend => Mapper.Map(info, friend));
-                }
-                return NotifyOkEventAsync();
-            }
-            else
-            {
-                throw new QQException(QQErrorCode.ResponseError, response.ResponseString);
+                Store.FriendDic.GetAndDo(info.Uin, friend => Mapper.Map(info, friend));
             }
         }
     }

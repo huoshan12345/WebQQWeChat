@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using FclEx.Extensions;
 using HttpAction.Event;
-using HttpAction.Extensions;
+using HttpAction;
 using WebQQ.Im.Actions;
 using WebQQ.Im.Bean.Group;
 using WebQQ.Im.Core;
@@ -52,7 +52,7 @@ namespace WebQQ.Im.Module.Impl
                                 //    return Task.CompletedTask;
                                 //}).ExecuteAsyncAuto().Forget();
 
-                                new GetGroupInfoAction(Context,  notifyEvent.Target.CastTo<QQGroup>()).ExecuteAsyncAuto().Forget();
+                                new GetGroupInfoAction(Context, notifyEvent.Target.CastTo<QQGroup>()).ExecuteAsyncAuto().Forget();
                                 break;
 
                             default:
@@ -77,7 +77,7 @@ namespace WebQQ.Im.Module.Impl
              .PushAction<GetQRCodeAction>(async (sender, @event) => // 1.获取二维码
              {
                  if (!@event.IsOk) return;
-                 await Context.FireNotifyAsync(QQNotifyEvent.CreateEvent(QQNotifyEventType.QRCodeReady, @event.Target));
+                 await Context.FireNotifyAsync(QQNotifyEventType.QRCodeReady, @event.Target);
              })
              .PushAction<CheckQRCodeAction>(async (sender, @event) => // 2.获取二维码扫描状态
              {
@@ -86,9 +86,9 @@ namespace WebQQ.Im.Module.Impl
                  var args = (CheckQRCodeArgs)@event.Target;
                  switch (args.Status)
                  {
-                     case QRCodeStatus.OK:
+                     case QRCodeStatus.Ok:
                          Session.CheckSigUrl = args.Msg;
-                         await Context.FireNotifyAsync(QQNotifyEvent.CreateEvent(QQNotifyEventType.QRCodeSuccess));
+                         await Context.FireNotifyAsync(QQNotifyEventType.QRCodeSuccess);
                          break;
 
                      case QRCodeStatus.Valid:

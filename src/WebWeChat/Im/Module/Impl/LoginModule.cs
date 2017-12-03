@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using FclEx.Extensions;
@@ -8,7 +7,6 @@ using WebWeChat.Im.Core;
 using WebWeChat.Im.Event;
 using WebWeChat.Im.Module.Interface;
 using HttpAction;
-using HttpAction.Extensions;
 using WebWeChat.Im.Actions;
 using WebWeChat.Im.Actions.ActionResult;
 

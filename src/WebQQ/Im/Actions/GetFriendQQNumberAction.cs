@@ -1,7 +1,7 @@
 ﻿using FclEx.Extensions;
 using HttpAction.Core;
 using HttpAction.Event;
-using HttpAction.Extensions;
+using HttpAction;
 using Newtonsoft.Json.Linq;
 using WebQQ.Im.Bean.Friend;
 using WebQQ.Im.Core;
@@ -20,10 +20,10 @@ namespace WebQQ.Im.Actions
 
         protected override void ModifyRequest(HttpRequestItem req)
         {
-            req.AddQueryValue("tuin", _friend.Uin);
-            req.AddQueryValue("type", 1);
-            req.AddQueryValue("vfwebqq", Session.Vfwebqq);
-            req.AddQueryValue("t", Timestamp);
+            req.AddData("tuin", _friend.Uin);
+            req.AddData("type", 1);
+            req.AddData("vfwebqq", Session.Vfwebqq);
+            req.AddData("t", Timestamp);
             req.Referrer = ApiUrls.ReferrerS;
         }
 

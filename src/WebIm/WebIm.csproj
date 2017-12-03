@@ -1,0 +1,27 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <LangVersion>latest</LangVersion>
+  </PropertyGroup>
+
+  <ItemGroup Condition="'$(Configuration)' == 'Release'">
+    <PackageReference Include="HttpAction" Version="0.5.2" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(Configuration)' == 'Debug'">
+    <ProjectReference Include="..\..\..\HttpAction\src\HttpAction\HttpAction.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="FclEx.Image" Version="0.3.0-beta1" />
+    <PackageReference Include="FclEx.Json" Version="0.3.4" />
+    <PackageReference Include="FclEx.Logger" Version="0.3.4" />
+    <PackageReference Include="FclEx.Mapper" Version="0.3.4" />
+    <!--<PackageReference Include="HttpAction" Version="0.5.2" />-->
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="2.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="2.0.0" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="2.0.0" />
+  </ItemGroup>
+
+</Project>

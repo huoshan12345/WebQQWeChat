@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.Threading.Tasks;
 using FclEx.Extensions;
+using HttpAction;
 using HttpAction.Core;
 using HttpAction.Event;
 using Microsoft.Extensions.Logging;
@@ -43,7 +44,7 @@ namespace WebQQ.Im.Actions
                 {"key", ""},
                 {"ptwebqq", Session.Ptwebqq}
             };
-            req.AddQueryValue("r", json.ToSimpleString());
+            req.AddData("r", json.ToSimpleString());
             req.Referrer = "https://d1.web2.qq.com/cfproxy.html?v=20151105001&callback=1";
         }
 

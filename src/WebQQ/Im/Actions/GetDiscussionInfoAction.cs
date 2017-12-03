@@ -3,7 +3,7 @@ using AutoMapper;
 using FclEx.Extensions;
 using HttpAction.Core;
 using HttpAction.Event;
-using HttpAction.Extensions;
+using HttpAction;
 using Newtonsoft.Json.Linq;
 using WebQQ.Im.Bean.Discussion;
 using WebQQ.Im.Core;
@@ -20,11 +20,11 @@ namespace WebQQ.Im.Actions
 
         protected override void ModifyRequest(HttpRequestItem req)
         {
-            req.AddQueryValue("clientid", Session.ClientId);
-            req.AddQueryValue("psessionid", Session.SessionId);
-            req.AddQueryValue("vfwebqq", Session.Vfwebqq);
-            req.AddQueryValue("t", Timestamp);
-            req.AddQueryValue("did", _discussion.Did);
+            req.AddData("clientid", Session.ClientId);
+            req.AddData("psessionid", Session.SessionId);
+            req.AddData("vfwebqq", Session.Vfwebqq);
+            req.AddData("t", Timestamp);
+            req.AddData("did", _discussion.Did);
             req.Referrer = ApiUrls.Referrer;
         }
 

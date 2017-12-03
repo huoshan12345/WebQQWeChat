@@ -2,7 +2,7 @@
 using FclEx.Extensions;
 using HttpAction.Core;
 using HttpAction.Event;
-using HttpAction.Extensions;
+using HttpAction;
 using WebQQ.Im.Core;
 
 namespace WebQQ.Im.Actions
@@ -13,15 +13,15 @@ namespace WebQQ.Im.Actions
         {
         }
 
-        protected override HttpRequestItem BuildRequest()
+        protected override EnumRequestType RequestType { get; } = EnumRequestType.Get;
+
+        protected override void ModifyRequest(HttpRequestItem req)
         {
-            var req = HttpRequestItem.CreateGetRequest(ApiUrls.GetVfwebqq);
-            req.AddQueryValue("ptwebqq", Session.Ptwebqq);
-            req.AddQueryValue("clientid", Session.ClientId);
-            req.AddQueryValue("psessionid", "");
-            req.AddQueryValue("t", Timestamp);
+            req.AddData("ptwebqq", Session.Ptwebqq);
+            req.AddData("clientid", Session.ClientId);
+            req.AddData("psessionid", "");
+            req.AddData("t", Timestamp);
             req.Referrer = ApiUrls.ReferrerS;
-            return req;
         }
 
         protected override Task<ActionEvent> HandleResponse(HttpResponseItem response)

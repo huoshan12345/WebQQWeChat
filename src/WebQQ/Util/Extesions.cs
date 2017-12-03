@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Drawing;
 using System.IO;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -14,21 +15,6 @@ namespace WebQQ.Util
 {
     public static class Extesions
     {
-        public static T MapTo<T>(this object obj)
-        {
-            return Mapper.Map<T>(obj);
-        }
-
-        public static void MapTo(this object source, object dest)
-        {
-            Mapper.Map(source, dest);
-        }
-
-        public static T Get<T>(this QQNotifyEvent e)
-        {
-            return (T)e.Target;
-        }
-
         public static Task FireNotifyAsync(this IQQContext context, QQNotifyEventType type, object target = null)
         {
             return context.FireNotifyAsync(QQNotifyEvent.CreateEvent(type, target));
@@ -46,4 +32,5 @@ namespace WebQQ.Util
             return session.State == SessionState.Offline;
         }
     }
+
 }

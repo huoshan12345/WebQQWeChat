@@ -2,22 +2,13 @@
 
   <PropertyGroup>
     <TargetFrameworks>netstandard2.0</TargetFrameworks>
-    <UserSecretsId>aspnet-WebQQ-20161027025319</UserSecretsId>
-    <Version>1.0.0-beta3</Version>
-    <PreserveCompilationContext>false</PreserveCompilationContext>
+    <UserSecretsId>WebQQ-20161027025319</UserSecretsId>
+    <Version>2.0.0-beta1</Version>
     <LangVersion>latest</LangVersion>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="FclEx" Version="0.3.1" />
-    <PackageReference Include="FclEx.Image" Version="0.3.0-beta1" />
-    <PackageReference Include="FclEx.Json" Version="0.3.0" />
-    <PackageReference Include="FclEx.Logger" Version="0.3.0" />
-    <PackageReference Include="FclEx.Mapper" Version="0.3.0" />
-    <PackageReference Include="HttpAction" Version="0.4.1" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="2.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="2.0.0" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="2.0.0" />
+    <ProjectReference Include="..\WebIm\WebIm.csproj" />
   </ItemGroup>
 
 </Project>

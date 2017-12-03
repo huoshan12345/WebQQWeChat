@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using HttpAction.Core;
 using HttpAction.Event;
-using HttpAction.Extensions;
+using HttpAction;
 using WebQQ.Im.Core;
 
 namespace WebQQ.Im.Actions
@@ -13,24 +13,22 @@ namespace WebQQ.Im.Actions
 
         public GetQRCodeAction(IQQContext context, ActionEventListener listener = null) : base(context, listener) { }
 
-        protected override HttpRequestItem BuildRequest()
+        protected override EnumRequestType RequestType { get; } = EnumRequestType.Get;
+
+        protected override void ModifyRequest(HttpRequestItem req)
         {
-            var req = new HttpRequestItem(HttpMethodType.Get, ApiUrls.GetQRCode);
-            req.AddQueryValue("appid", AppId);
-            req.AddQueryValue("e", "0");
-            req.AddQueryValue("l", "M");
-            req.AddQueryValue("s", "5");
-            req.AddQueryValue("d", "72");
-            req.AddQueryValue("v", "4");
-            req.AddQueryValue("t", new Random().NextDouble());
+            req.AddData("appid", AppId);
+            req.AddData("e", "0");
+            req.AddData("l", "M");
+            req.AddData("s", "5");
+            req.AddData("d", "72");
+            req.AddData("v", "4");
+            req.AddData("t", new Random().NextDouble());
             req.ResultType = HttpResultType.Byte;
-            return req;
         }
 
         protected override Task<ActionEvent> HandleResponse(HttpResponseItem response)
         {
-            // return NotifyOkEventAsync(Image.FromStream(response.ResponseStream));
-
             return NotifyOkEventAsync(ImageSharp.Image.Load(response.ResponseBytes));
         }
     }

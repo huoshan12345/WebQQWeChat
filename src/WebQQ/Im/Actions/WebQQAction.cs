@@ -1,8 +1,11 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Threading;
 using System.Threading.Tasks;
 using FclEx.Extensions;
+using HttpAction;
 using HttpAction.Actions;
+using HttpAction.Core;
 using HttpAction.Event;
 using HttpAction.Service;
 using Microsoft.Extensions.Configuration;
@@ -13,11 +16,14 @@ using WebQQ.Im.Module.Impl;
 
 namespace WebQQ.Im.Actions
 {
-    public abstract class WebQQAction : AbstractHttpAction
+    public abstract class WebQQAction : CommonHttpAction
     {
         // 为了防止通知层级混乱，其他action不应该直接操作Context，本action也只是在报告错误时用到了。
         // 其他通知应该先通知到调用action的模块，由模块决定是否需要进一步通知
         private readonly IQQContext _context;
+        private static readonly ConcurrentDictionary<Type, string> _urlApiDic = new ConcurrentDictionary<Type, string>();
+
+        protected override string Url => GetUrl(_urlApiDic, typeof(ApiUrls));
         protected ILogger Logger => _context.GetSerivce<ILogger>();
         protected IConfigurationRoot Config => _context.GetSerivce<IConfigurationRoot>();
         protected SessionModule Session => _context.GetModule<SessionModule>();
@@ -76,14 +82,20 @@ namespace WebQQ.Im.Actions
                         await _context.FireNotifyAsync(QQNotifyEvent.CreateEvent(QQNotifyEventType.Error, ex));
                         break;
                     }
+
                 case ActionEventType.EvtRetry:
                     {
                         var ex = (Exception)target;
                         Logger.LogWarning($"[Action={ActionName}, Result={typeName}, RetryTimes={RetryTimes}][{ex.Message}]");
                         break;
                     }
+
                 case ActionEventType.EvtCanceled:
                     Logger.LogWarning($"[Action={ActionName}, Result={typeName}, Target={target}]");
+                    break;
+
+                case ActionEventType.EvtOk:
+                    Logger.LogTrace($"[Action={ActionName}, Result={typeName}]");
                     break;
 
                 default:

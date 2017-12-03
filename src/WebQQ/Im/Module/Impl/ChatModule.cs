@@ -4,7 +4,6 @@ using System.Text;
 using System.Threading.Tasks;
 using HttpAction;
 using HttpAction.Event;
-using HttpAction.Extensions;
 using WebQQ.Im.Actions;
 using WebQQ.Im.Bean;
 using WebQQ.Im.Core;

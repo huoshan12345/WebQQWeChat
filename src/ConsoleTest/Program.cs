@@ -18,6 +18,9 @@ using WebWeChat.Im.Bean;
 using WebWeChat.Im.Event;
 using WebWeChat.Im.Service.Impl;
 using ImageSharp;
+using ImageSharp.Processing;
+using SixLabors.Primitives;
+using WebIm.Utils;
 
 namespace ConsoleTest
 {
@@ -39,10 +42,11 @@ namespace ConsoleTest
 
                 case QQNotifyEventType.QRCodeReady:
                     {
-                        var verify = (ImageSharp.Image<Rgba32>)notifyEvent.Target;
-                        const string path = "verify.jpg";
-                        verify.Save(path);
-                        logger.LogInformation($"请扫描在项目根目录下{path}图片");
+                        var verify = notifyEvent.Target.CastTo<Image<Rgba32>>();
+                        verify.ConsoleWrite();
+                        //const string path = "verify.jpg";
+                        //verify.Save(path);
+                        logger.LogInformation("请扫描在项目根目录图片");
 #if NET
                         _process = Process.Start(path);
 #endif

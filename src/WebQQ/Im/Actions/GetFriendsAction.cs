@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using AutoMapper;
 using FclEx.Extensions;
+using HttpAction;
 using HttpAction.Core;
 using HttpAction.Event;
 using Newtonsoft.Json.Linq;
@@ -12,27 +13,32 @@ using WebQQ.Util;
 
 namespace WebQQ.Im.Actions
 {
-    public class GetFriendsAction : WebQQAction
+    public class GetFriendsAction : WebQQInfoAction
     {
+        protected override EnumRequestType RequestType { get; } = EnumRequestType.Form; 
+
         public GetFriendsAction(IQQContext context, ActionEventListener listener = null) : base(context, listener)
         {
         }
 
-        protected override HttpRequestItem BuildRequest()
+        /*
+            {
+                "vfwebqq": "172b053b34ebc4445c89db2e59f0a946eaad7daa32140791d641f219161b91dbdf1f34ad463d0cce",
+                "hash": "0040000D006400BC"
+            }
+         */
+        protected override void ModifyRequest(HttpRequestItem req)
         {
             var json = new JObject
             {
-                {"h", "hello"},
                 {"vfwebqq", Session.Vfwebqq},
                 {"hash", QQEncryptor.Hash(Session.User.Uin, Session.Ptwebqq)}
             };
-            var req = HttpRequestItem.CreateFormRequest(ApiUrls.GetFriends);
-            req.AddQueryValue("r", json.ToSimpleString());
+            req.AddData("r", json.ToSimpleString());
             req.Referrer = ApiUrls.ReferrerS;
-            return req;
         }
 
-        protected override Task<ActionEvent> HandleResponse(HttpResponseItem response)
+        protected override void HandleResult(JToken json)
         {
             /*             
                 {
@@ -77,43 +83,34 @@ namespace WebQQ.Im.Actions
                     }
                 }             
              */
-            var json = response.ResponseString.ToJToken();
-            if (json["retcode"].ToString() == "0")
+
+            var result = json["result"];
+
+            var categories = result["categories"].ToObject<List<Category>>();
+            categories.ForEach(Store.AddCategory);
+
+            var friends = result["friends"].ToObject<List<QQFriend>>();
+            friends.ForEach(Store.AddFriend);
+
+            // 好友信息 face/flag/nick/uin
+            var infos = result["info"].ToObject<FriendBaseInfo[]>();
+            foreach (var info in infos)
             {
-                var result = json["result"];
-
-                var categories = result["categories"].ToObject<List<Category>>();
-                categories.ForEach(Store.AddCategory);
-
-                var friends = result["friends"].ToObject<List<QQFriend>>();
-                friends.ForEach(Store.AddFriend);
-
-                // 好友信息 face/flag/nick/uin
-                var infos = result["info"].ToObject<FriendBaseInfo[]>();
-                foreach (var info in infos)
-                {
-                    Store.FriendDic.GetAndDo(info.Uin, m => Mapper.Map(info, m));
-                }
-
-                // 好友备注 uin/markname/type
-                var marknames = result["marknames"].ToObject<FriendMarkName[]>();
-                foreach (var markname in marknames)
-                {
-                    Store.FriendDic.GetAndDo(markname.Uin, m => Mapper.Map(markname, m));
-                }
-
-                // vip信息
-                var mVipInfo = result["vipinfo"].ToObject<UserVipInfo[]>();
-                foreach (var vip in mVipInfo)
-                {
-                    Store.FriendDic.GetAndDo(vip.Uin, m => Mapper.Map(vip, m));
-                }
-
-                return NotifyOkEventAsync();
+                Store.FriendDic.GetAndDo(info.Uin, m => Mapper.Map(info, m));
             }
-            else
+
+            // 好友备注 uin/markname/type
+            var marknames = result["marknames"].ToObject<FriendMarkName[]>();
+            foreach (var markname in marknames)
             {
-                throw new QQException(QQErrorCode.ResponseError, response.ResponseString);
+                Store.FriendDic.GetAndDo(markname.Uin, m => Mapper.Map(markname, m));
+            }
+
+            // vip信息
+            var mVipInfo = result["vipinfo"].ToObject<UserVipInfo[]>();
+            foreach (var vip in mVipInfo)
+            {
+                Store.FriendDic.GetAndDo(vip.Uin, m => Mapper.Map(vip, m));
             }
         }
     }

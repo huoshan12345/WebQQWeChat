@@ -4,14 +4,15 @@ using AutoMapper;
 using FclEx.Extensions;
 using HttpAction.Core;
 using HttpAction.Event;
-using HttpAction.Extensions;
+using HttpAction;
+using Newtonsoft.Json.Linq;
 using WebQQ.Im.Bean;
 using WebQQ.Im.Bean.Group;
 using WebQQ.Im.Core;
 
 namespace WebQQ.Im.Actions
 {
-    public class GetGroupInfoAction : WebQQAction
+    public class GetGroupInfoAction : WebQQInfoAction
     {
         private readonly QQGroup _group;
 
@@ -20,19 +21,18 @@ namespace WebQQ.Im.Actions
             _group = group;
         }
 
-        protected override HttpRequestItem BuildRequest()
+        protected override EnumRequestType RequestType { get; } = EnumRequestType.Get;
+
+        protected override void ModifyRequest(HttpRequestItem req)
         {
-            var req = HttpRequestItem.CreateGetRequest(ApiUrls.GetGroupInfo);
-            req.AddQueryValue("gcode", _group.Code);
-            req.AddQueryValue("vfwebqq", Session.Vfwebqq);
-            req.AddQueryValue("t", Timestamp);
+            req.AddData("gcode", _group.Code);
+            req.AddData("vfwebqq", Session.Vfwebqq);
+            req.AddData("t", Timestamp);
             req.Referrer = ApiUrls.ReferrerS;
-            return req;
         }
 
-        protected override Task<ActionEvent> HandleResponse(HttpResponseItem response)
+        protected override void HandleResult(JToken json)
         {
-
             /*
                 {
                     "retcode": 0,
@@ -90,46 +90,36 @@ namespace WebQQ.Im.Actions
                     }
                 } 
             */
-            var json = response.ResponseString.ToJToken();
-            if (json["retcode"].ToString() == "0")
+            var result = json["result"];
+            var groupInfo = result["ginfo"].ToObject<GroupInfo>();
+            var members = result["ginfo"]["members"].ToObject<GroupMember[]>().Distinct(m => m.Uin).ToDictionary(m => m.Uin, m => m);
+
+            // 成员信息
+            result["minfo"].ToObject<GroupMemberInfo[]>().ForEach(m =>
             {
-                var result = json["result"];
-                var groupInfo = result["ginfo"].ToObject<GroupInfo>();
-                var members = result["ginfo"]["members"].ToObject<GroupMember[]>().Distinct(m => m.Uin).ToDictionary(m => m.Uin, m => m);
+                members.GetAndDo(m.Uin, member => Mapper.Map(m, member));
+            });
 
-                // 成员信息
-                result["minfo"].ToObject<GroupMemberInfo[]>().ForEach(m =>
-                {
-                    members.GetAndDo(m.Uin, member => Mapper.Map(m, member));
-                });
-
-                // 成员状态
-                result["stats"]?.ToObject<UserStatus[]>().ForEach(m =>
-                {
-                    members.GetAndDo(m.Uin, member => Mapper.Map(m, member));
-                });
-
-                // 成员名片
-                result["cards"]?.ToObject<GroupMemberCard[]>().ForEach(card =>
-                {
-                    members.GetAndDo(card.Uin, member => Mapper.Map(card, member));
-                });
-
-                // vip信息
-                result["vipinfo"]?.ToObject<UserVipInfo[]>().ForEach(m =>
-                {
-                    members.GetAndDo(m.Uin, member => Mapper.Map(m, member));
-                });
-
-                groupInfo.MapTo(_group);
-                _group.Members.ReplaceBy(members);
-
-                return NotifyOkEventAsync();
-            }
-            else
+            // 成员状态
+            result["stats"]?.ToObject<UserStatus[]>().ForEach(m =>
             {
-                throw new QQException(QQErrorCode.ResponseError);
-            }
+                members.GetAndDo(m.Uin, member => Mapper.Map(m, member));
+            });
+
+            // 成员名片
+            result["cards"]?.ToObject<GroupMemberCard[]>().ForEach(card =>
+            {
+                members.GetAndDo(card.Uin, member => Mapper.Map(card, member));
+            });
+
+            // vip信息
+            result["vipinfo"]?.ToObject<UserVipInfo[]>().ForEach(m =>
+            {
+                members.GetAndDo(m.Uin, member => Mapper.Map(m, member));
+            });
+
+            groupInfo.MapTo(_group);
+            _group.Members.ReplaceBy(members);
         }
     }
 }

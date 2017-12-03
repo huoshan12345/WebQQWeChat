@@ -7,7 +7,7 @@ using FclEx.Extensions;
 using FclEx.Helpers;
 using HttpAction.Core;
 using HttpAction.Event;
-using HttpAction.Extensions;
+using HttpAction;
 using Microsoft.Extensions.Logging;
 using WebWeChat.Im.Actions.ActionResult;
 using WebWeChat.Im.Core;

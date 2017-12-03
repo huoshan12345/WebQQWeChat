@@ -11,15 +11,15 @@ namespace WebQQ.Im.Actions
         {
         }
 
-        protected override HttpRequestItem BuildRequest()
-        {
-            return HttpRequestItem.CreateGetRequest(Session.CheckSigUrl);
-        }
+        protected override string Url => Session.CheckSigUrl;
+
+        protected override EnumRequestType RequestType { get; } = EnumRequestType.Get;
 
         protected override Task<ActionEvent> HandleResponse(HttpResponseItem response)
         {
-            var ptwebqq = HttpService.GetCookie("ptwebqq", Session.CheckSigUrl).Value;
-            Session.Ptwebqq = ptwebqq;
+            var ptwebqq = HttpService.GetCookie("ptwebqq", Session.CheckSigUrl);
+            ptwebqq.Expired = true;
+            //Session.Ptwebqq = ptwebqq;
             return NotifyOkEventAsync();
         }
     }

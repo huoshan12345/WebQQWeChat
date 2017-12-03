@@ -2,10 +2,8 @@
 using HttpAction.Event;
 using WebWeChat.Im.Bean;
 using WebWeChat.Im.Core;
-using WebWeChat.Im.Event;
 using WebWeChat.Im.Module.Interface;
 using HttpAction;
-using HttpAction.Extensions;
 using WebWeChat.Im.Actions;
 
 namespace WebWeChat.Im.Module.Impl

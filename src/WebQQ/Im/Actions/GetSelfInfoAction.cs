@@ -2,29 +2,27 @@
 using FclEx.Extensions;
 using HttpAction.Core;
 using HttpAction.Event;
-using HttpAction.Extensions;
+using HttpAction;
+using Newtonsoft.Json.Linq;
 using WebQQ.Im.Bean;
 using WebQQ.Im.Core;
 
 namespace WebQQ.Im.Actions
 {
-    public class GetSelfInfoAction : WebQQAction
+    public class GetSelfInfoAction : WebQQInfoAction
     {
         public GetSelfInfoAction(IQQContext context, ActionEventListener listener = null) : base(context, listener)
         {
         }
 
-        protected override HttpRequestItem BuildRequest()
+        protected override void ModifyRequest(HttpRequestItem req)
         {
-            var req = HttpRequestItem.CreateGetRequest(ApiUrls.GetSelfInfo);
-            req.AddQueryValue("t", Timestamp);
+            req.AddData("t", Timestamp);
             req.Referrer = ApiUrls.Referrer;
-            return req;
         }
 
-        protected override Task<ActionEvent> HandleResponse(HttpResponseItem response)
+        protected override void HandleResult(JToken json)
         {
-
             /*
                 {
                     retcode: 0, 
@@ -59,17 +57,9 @@ namespace WebQQ.Im.Actions
                     }
                 }             
              */
-            var json = response.ResponseString.ToJToken();
-            if (json["retcode"].ToString() == "0")
-            {
-                var info = json["result"].ToObject<SelfInfo>();
-                info.MapTo(Session.User);
-                return NotifyOkEventAsync();
-            }
-            else
-            {
-                throw new QQException(QQErrorCode.ResponseError, response.ResponseString);
-            }
+
+            var info = json["result"].ToObject<SelfInfo>();
+            info.MapTo(Session.User);
         }
     }
 }

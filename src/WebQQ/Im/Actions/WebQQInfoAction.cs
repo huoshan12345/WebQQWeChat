@@ -15,25 +15,10 @@ namespace WebQQ.Im.Actions
     /// </summary>
     public abstract class WebQQInfoAction : WebQQAction
     {
-        private static readonly ConcurrentDictionary<Type, string> _urlApiDic = new ConcurrentDictionary<Type, string>();
+        protected override EnumRequestType RequestType { get; } = EnumRequestType.Get;
 
         protected WebQQInfoAction(IQQContext context, ActionEventListener listener = null)
             : base(context, listener) { }
-
-        protected override HttpRequestItem BuildRequest()
-        {
-            var actionType = this.GetType();
-            var url = _urlApiDic.GetOrAdd(actionType, key =>
-            {
-                var actionName = actionType.Name.Replace("Action", "");
-                return typeof(ApiUrls).GetTypeInfo().GetField(actionName).GetValue(null).ToString();
-            });
-            var req = HttpRequestItem.CreateGetRequest(url);
-            ModifyRequest(req);
-            return req;
-        }
-
-        protected virtual void ModifyRequest(HttpRequestItem req) { }
 
         protected override Task<ActionEvent> HandleResponse(HttpResponseItem response)
         {
