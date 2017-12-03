@@ -31,8 +31,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebIm", "src\WebIm\WebIm.cs
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Ref", "Ref", "{080E8320-9166-4586-890E-53019C5453E3}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HttpAction", "..\HttpAction\src\HttpAction\HttpAction.csproj", "{9EE46504-8EFB-4853-8736-83A36F199641}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -63,10 +61,6 @@ Global
 		{04ED29E7-C594-4958-AB21-02B328BA3F1E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{04ED29E7-C594-4958-AB21-02B328BA3F1E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{04ED29E7-C594-4958-AB21-02B328BA3F1E}.Release|Any CPU.Build.0 = Release|Any CPU
-		{9EE46504-8EFB-4853-8736-83A36F199641}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{9EE46504-8EFB-4853-8736-83A36F199641}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{9EE46504-8EFB-4853-8736-83A36F199641}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{9EE46504-8EFB-4853-8736-83A36F199641}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -81,7 +75,6 @@ Global
 		{52740FB3-DC71-41EE-98C5-F3D738EE49F0} = {6D29E172-1BA1-45B5-883B-FAEE1D3430BF}
 		{04ED29E7-C594-4958-AB21-02B328BA3F1E} = {6D29E172-1BA1-45B5-883B-FAEE1D3430BF}
 		{080E8320-9166-4586-890E-53019C5453E3} = {B91D560B-915A-46C6-954B-9856942FF433}
-		{9EE46504-8EFB-4853-8736-83A36F199641} = {080E8320-9166-4586-890E-53019C5453E3}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {9AAD2102-3FEB-4727-A8F0-075DA28D2FF3}
