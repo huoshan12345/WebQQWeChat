@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Concurrent;
-using System.Reflection;
-using System.Threading.Tasks;
-using FclEx.Extensions;
-using HttpAction.Core;
-using HttpAction.Event;
+﻿using System.Threading.Tasks;
+using FclEx;
+using FclEx.Http.Core;
+using FclEx.Http.Event;
 using Newtonsoft.Json.Linq;
 using WebQQ.Im.Core;
 
@@ -15,12 +12,12 @@ namespace WebQQ.Im.Actions
     /// </summary>
     public abstract class WebQQInfoAction : WebQQAction
     {
-        protected override EnumRequestType RequestType { get; } = EnumRequestType.Get;
+        protected override HttpReqType ReqType { get; } = HttpReqType.Get;
 
         protected WebQQInfoAction(IQQContext context, ActionEventListener listener = null)
             : base(context, listener) { }
 
-        protected override Task<ActionEvent> HandleResponse(HttpResponseItem response)
+        protected override ValueTask<ActionEvent> HandleResponse(HttpRes response)
         {
             var json = response.ResponseString.ToJToken();
             if (json["retcode"].ToString() == "0")

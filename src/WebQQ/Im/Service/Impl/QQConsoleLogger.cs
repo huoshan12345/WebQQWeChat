@@ -2,9 +2,9 @@
 using FclEx.Extensions;
 using FclEx.Logger;
 using WebQQ.Im.Core;
-using WebQQ.Im.Module.Impl;
 using WebQQ.Im.Service.Interface;
 using Microsoft.Extensions.Logging;
+using WebQQ.Im.Modules.Impl;
 
 namespace WebQQ.Im.Service.Impl
 {

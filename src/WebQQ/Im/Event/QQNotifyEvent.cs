@@ -1,9 +1,7 @@
-﻿using FclEx.Extensions;
-using System;
+﻿using System;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
 using System.ComponentModel;
-using HttpAction.Event;
+using FclEx;
 using Newtonsoft.Json;
 
 namespace WebQQ.Im.Event
@@ -95,15 +93,11 @@ namespace WebQQ.Im.Event
         PollSuccess
     }
 
-    public class QQNotifyEvent : EventArgs
+    public struct QQNotifyEvent
     {
-        private static readonly ConcurrentDictionary<QQNotifyEventType, QQNotifyEvent> EmptyEvents
-            = new ConcurrentDictionary<QQNotifyEventType, QQNotifyEvent>();
-
         public QQNotifyEventType Type { get; }
         public object Target { get; }
 
-        [JsonConstructor]
         private QQNotifyEvent(QQNotifyEventType type, object target = null)
         {
             Type = type;
@@ -117,7 +111,7 @@ namespace WebQQ.Im.Event
 
         public static QQNotifyEvent CreateEvent(QQNotifyEventType type, object target = null)
         {
-            return target == null ? EmptyEvents.GetOrAdd(type, key => new QQNotifyEvent(key)) : new QQNotifyEvent(type, target);
+            return new QQNotifyEvent(type, target);
         }
     }
 }

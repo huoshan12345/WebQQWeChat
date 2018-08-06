@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using FclEx.Extensions;
 using HttpAction;
 using HttpAction.Core;
-using HttpAction.Event;
+using FclEx.Http.Event;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Linq;
 using WebQQ.Im.Bean;
@@ -15,7 +15,7 @@ using WebQQ.Im.Bean.Friend;
 using WebQQ.Im.Bean.Group;
 using WebQQ.Im.Core;
 using WebQQ.Im.Event;
-using WebQQ.Im.Module.Impl;
+using WebQQ.Im.Modules.Impl;
 
 namespace WebQQ.Im.Actions
 {

@@ -1,5 +1,5 @@
 ﻿using HttpAction.Core;
-using HttpAction.Event;
+using FclEx.Http.Event;
 using HttpAction;
 using Newtonsoft.Json.Linq;
 using WebQQ.Im.Bean.Friend;

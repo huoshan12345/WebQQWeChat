@@ -1,16 +1,12 @@
 ﻿using System;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.Linq;
-using FclEx.Extensions;
 using WebQQ.Im.Bean;
-using WebQQ.Im.Bean.Content;
 using WebQQ.Im.Bean.Discussion;
 using WebQQ.Im.Bean.Friend;
 using WebQQ.Im.Bean.Group;
 using WebQQ.Im.Core;
 
-namespace WebQQ.Im.Module.Impl
+namespace WebQQ.Im.Modules.Impl
 {
 
     /// <summary>

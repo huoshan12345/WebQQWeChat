@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
-using HttpAction.Event;
+﻿using System.Threading.Tasks;
+using FclEx.Http.Event;
 using WebQQ.Im.Bean;
 using WebQQ.Util;
 
-namespace WebQQ.Im.Module.Interface
+namespace WebQQ.Im.Modules.Interface
 {
     public interface IChatModule : IQQModule
     {

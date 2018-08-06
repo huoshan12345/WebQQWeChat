@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using FclEx.Extensions;
 using HttpAction.Core;
-using HttpAction.Event;
+using FclEx.Http.Event;
 using HttpAction;
 using Newtonsoft.Json.Linq;
 using WebQQ.Im.Bean.Discussion;

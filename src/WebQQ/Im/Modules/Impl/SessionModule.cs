@@ -1,7 +1,7 @@
 ﻿using WebQQ.Im.Bean;
 using WebQQ.Im.Core;
 
-namespace WebQQ.Im.Module.Impl
+namespace WebQQ.Im.Modules.Impl
 {
     public enum SessionState
     {

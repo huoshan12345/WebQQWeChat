@@ -1,18 +1,17 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using FclEx.Extensions;
-using HttpAction.Event;
-using HttpAction;
+using FclEx;
+using FclEx.Http;
+using FclEx.Http.Event;
 using WebQQ.Im.Actions;
 using WebQQ.Im.Bean.Group;
 using WebQQ.Im.Core;
 using WebQQ.Im.Event;
-using WebQQ.Im.Module.Interface;
+using WebQQ.Im.Modules.Interface;
 using WebQQ.Util;
 
-namespace WebQQ.Im.Module.Impl
+namespace WebQQ.Im.Modules.Impl
 {
     /// <summary>
     /// <para>登录模块，处理登录和退出</para>
@@ -35,7 +34,7 @@ namespace WebQQ.Im.Module.Impl
                                     if (@event.IsOk)
                                     {
                                         new GetOnlineFriendsAction(Context)
-                                        .ExecuteAsyncAuto().Forget();
+                                        .ExecuteAutoAsync().Forget();
                                     }
                                     return Task.CompletedTask;
                                 }).ExecuteAsyncAuto().Forget();

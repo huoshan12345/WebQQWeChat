@@ -1,9 +1,9 @@
 ﻿using System;
 using Microsoft.Extensions.Logging;
 using WebQQ.Im.Core;
-using WebQQ.Im.Module.Interface;
+using WebQQ.Im.Modules.Interface;
 
-namespace WebQQ.Im.Module.Impl
+namespace WebQQ.Im.Modules.Impl
 {
     /// <summary>
     /// <para>基础模块</para>
@@ -11,14 +11,18 @@ namespace WebQQ.Im.Module.Impl
     public abstract class QQModule : IQQModule
     {
         public IQQContext Context { get; set; }
-        protected ILogger Logger => Context.GetSerivce<ILogger>();
-        // protected IConfigurationRoot Config => Context.GetSerivce<IConfigurationRoot>();
-        protected SessionModule Session => Context.GetModule<SessionModule>();
-        protected StoreModule Store => Context.GetModule<StoreModule>();
-
+        protected ILogger Logger => Context.Logger;
         protected QQModule(IQQContext context)
         {
             Context = context ?? throw new ArgumentNullException(nameof(context));
+        }
+
+        public virtual void Init()
+        {
+        }
+
+        public virtual void Dispose()
+        {
         }
     }
 }

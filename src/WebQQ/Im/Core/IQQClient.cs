@@ -1,5 +1,5 @@
 ﻿using System;
-using WebQQ.Im.Module.Interface;
+using WebQQ.Im.Modules.Interface;
 
 namespace WebQQ.Im.Core
 {

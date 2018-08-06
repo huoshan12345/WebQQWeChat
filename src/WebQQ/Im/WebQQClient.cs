@@ -5,8 +5,6 @@ using HttpAction.Event;
 using HttpAction.Service;
 using WebQQ.Im.Core;
 using WebQQ.Im.Event;
-using WebQQ.Im.Module.Impl;
-using WebQQ.Im.Module.Interface;
 using WebQQ.Im.Service.Interface;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -19,6 +17,8 @@ using WebQQ.Im.Bean;
 using WebQQ.Im.Bean.Discussion;
 using WebQQ.Im.Bean.Friend;
 using WebQQ.Im.Bean.Group;
+using WebQQ.Im.Modules.Impl;
+using WebQQ.Im.Modules.Interface;
 using WebQQ.Util;
 
 namespace WebQQ.Im

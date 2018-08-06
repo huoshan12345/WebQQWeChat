@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using HttpAction.Event;
+﻿using System.Threading.Tasks;
+using FclEx.Http.Event;
 
-namespace WebQQ.Im.Module.Interface
+namespace WebQQ.Im.Modules.Interface
 {
     public interface ILoginModule : IQQModule
     {

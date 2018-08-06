@@ -9,7 +9,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using WebQQ.Im.Core;
 using WebQQ.Im.Event;
-using WebQQ.Im.Module.Impl;
+using WebQQ.Im.Modules.Impl;
 
 namespace WebQQ.Util
 {

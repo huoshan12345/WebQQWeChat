@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
 using FclEx.Extensions;
 using HttpAction.Core;
-using HttpAction.Event;
+using FclEx.Http.Event;
 using HttpAction;
 using WebQQ.Im.Core;
 
