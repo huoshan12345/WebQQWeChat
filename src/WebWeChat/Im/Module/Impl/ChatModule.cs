@@ -14,14 +14,14 @@ namespace WebWeChat.Im.Module.Impl
         {
         }
 
-        public Task<ActionEvent> SendMsg(MessageSent msg, ActionEventListener listener = null)
+        public ValueTask<ActionEvent> SendMsg(MessageSent msg, ActionEventListener listener = null)
         {
-            return new SendMsgAction(Context, msg, listener).ExecuteAsyncAuto();
+            return new SendMsgAction(Context, msg, listener).ExecuteAutoAsync();
         }
 
-        public Task<ActionEvent> GetRobotReply(RobotType robotType, string input, ActionEventListener listener = null)
+        public ValueTask<ActionEvent> GetRobotReply(RobotType robotType, string input, ActionEventListener listener = null)
         {
-            return new GetTuringRobotReplyAction(Context, input).ExecuteAsyncAuto();
+            return new GetTuringRobotReplyAction(Context, input).ExecuteAutoAsync();
         }
     }
 }

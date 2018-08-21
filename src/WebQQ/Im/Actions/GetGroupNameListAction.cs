@@ -13,13 +13,13 @@ namespace WebQQ.Im.Actions
 {
     public class GetGroupNameListAction : WebQQInfoAction
     {
-        protected override EnumRequestType RequestType { get; } = EnumRequestType.Form;
+        protected override HttpReqType ReqType { get; } = HttpReqType.Form;
 
         public GetGroupNameListAction(IQQContext context, ActionEventListener listener = null) : base(context, listener)
         {
         }
 
-        protected override void ModifyRequest(HttpRequestItem req)
+        protected override void ModifyRequest(HttpReq req)
         {
             var json = new JObject
             {

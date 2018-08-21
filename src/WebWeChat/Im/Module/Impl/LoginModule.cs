@@ -18,7 +18,7 @@ namespace WebWeChat.Im.Module.Impl
         {
         }
 
-        public Task<ActionEvent> Login(ActionEventListener listener = null)
+        public ValueTask<ActionEvent> Login(ActionEventListener listener = null)
         {
             return new WebWeChatActionFuture(Context, listener)
                 .PushAction<GetUuidAction>()
@@ -101,11 +101,11 @@ namespace WebWeChat.Im.Module.Impl
                         case SyncCheckResult.Nothing:
                             break;
                     }
-                    (result == SyncCheckResult.Nothing ? sender : wxSync).ExecuteAsyncAuto().Forget();
+                    (result == SyncCheckResult.Nothing ? sender : wxSync).ExecuteAutoAsync().Forget();
                 }
             };
 
-            sync.ExecuteAsyncAuto().Forget();
+            sync.ExecuteAutoAsync().Forget();
         }
     }
 }

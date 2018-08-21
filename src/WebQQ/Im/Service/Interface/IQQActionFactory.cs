@@ -1,4 +1,4 @@
-﻿using HttpAction.Actions;
+﻿using FclEx.Http.Actions;
 
 namespace WebQQ.Im.Service.Interface
 {

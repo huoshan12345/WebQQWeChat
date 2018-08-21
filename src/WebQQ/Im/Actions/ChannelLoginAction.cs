@@ -1,6 +1,6 @@
-﻿using FclEx.Extensions;
-using HttpAction;
-using HttpAction.Core;
+﻿using FclEx;
+using FclEx.Http;
+using FclEx.Http.Core;
 using FclEx.Http.Event;
 using Newtonsoft.Json.Linq;
 using WebQQ.Im.Bean;
@@ -14,9 +14,9 @@ namespace WebQQ.Im.Actions
         {
         }
 
-        protected override EnumRequestType RequestType { get; } = EnumRequestType.Form;
+        protected override HttpReqType ReqType { get; } = HttpReqType.Form;
 
-        protected override void ModifyRequest(HttpRequestItem req)
+        protected override void ModifyRequest(HttpReq req)
         {
             var json = new JObject
             {

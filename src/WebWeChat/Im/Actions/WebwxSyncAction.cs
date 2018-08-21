@@ -21,7 +21,7 @@ namespace WebWeChat.Im.Actions
         {
         }
 
-        protected override HttpRequestItem BuildRequest()
+        protected override HttpReq BuildRequest()
         {
             var url = string.Format(ApiUrls.WebwxSync, Session.BaseUrl, Session.Sid, Session.Skey, Session.PassTicket);
             // var url = string.Format(ApiUrls.WebwxSync, Session.BaseUrl);
@@ -31,7 +31,7 @@ namespace WebWeChat.Im.Actions
                 Session.SyncKey,
                 rr = ~Timestamp // 注意是按位取反
             };
-            var req = new HttpRequestItem(HttpMethodType.Post, url)
+            var req = new HttpReq(HttpMethodType.Post, url)
             {
                 StringData = obj.ToJson(),
                 ContentType = HttpConstants.JsonContentType,
@@ -40,7 +40,7 @@ namespace WebWeChat.Im.Actions
             return req;
         }
 
-        protected override Task<ActionEvent> HandleResponse(HttpResponseItem response)
+        protected override ValueTask<ActionEvent> HandleResponse(HttpRes response)
         {
             var str = response.ResponseString;
             var json = JObject.Parse(str);

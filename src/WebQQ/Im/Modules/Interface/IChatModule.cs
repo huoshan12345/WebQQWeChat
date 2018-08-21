@@ -7,8 +7,8 @@ namespace WebQQ.Im.Modules.Interface
 {
     public interface IChatModule : IQQModule
     {
-        Task<ActionEvent> SendMsg(Message msg, ActionEventListener listener = null);
+        ValueTask<ActionEvent> SendMsg(Message msg, ActionEventListener listener = null);
 
-        Task<ActionEvent> GetRobotReply(RobotType robotType, string input, ActionEventListener listener = null);
+        ValueTask<ActionEvent> GetRobotReply(RobotType robotType, string input, ActionEventListener listener = null);
     }
 }

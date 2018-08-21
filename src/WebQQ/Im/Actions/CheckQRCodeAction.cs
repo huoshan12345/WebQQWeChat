@@ -1,7 +1,7 @@
 ﻿using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using HttpAction;
-using HttpAction.Core;
+using FclEx.Http;
+using FclEx.Http.Core;
 using FclEx.Http.Event;
 using WebQQ.Im.Core;
 using WebQQ.Im.Event;
@@ -16,9 +16,9 @@ namespace WebQQ.Im.Actions
 
         public CheckQRCodeAction(IQQContext context, ActionEventListener listener = null) : base(context, listener) { }
 
-        protected override EnumRequestType RequestType { get; } = EnumRequestType.Get;
+        protected override HttpReqType ReqType { get; } = HttpReqType.Get;
 
-        protected override void ModifyRequest(HttpRequestItem req)
+        protected override void ModifyRequest(HttpReq req)
         {
             var qrsig = HttpService.GetCookie("qrsig", ApiUrls.CheckQRCode).Value;
             req.AddData("ptqrtoken", QQEncryptor.GetPtqrtoken(qrsig));
@@ -44,7 +44,7 @@ namespace WebQQ.Im.Actions
             req.AddData("pt_randsalt", "0");
         }
 
-        protected override Task<ActionEvent> HandleResponse(HttpResponseItem response)
+        protected override ValueTask<ActionEvent> HandleResponse(HttpRes response)
         {
             var str = response.ResponseString;
             var m = _reg.Match(str);

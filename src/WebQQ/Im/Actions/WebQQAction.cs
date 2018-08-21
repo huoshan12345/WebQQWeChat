@@ -19,7 +19,8 @@ namespace WebQQ.Im.Actions
         // 为了防止通知层级混乱，其他action不应该直接操作Context，本action也只是在报告错误时用到了。
         // 其他通知应该先通知到调用action的模块，由模块决定是否需要进一步通知
         private readonly IQQContext _context;
-        private static readonly ConcurrentDictionary<Type, string> _urlApiDic = new ConcurrentDictionary<Type, string>();
+        private static readonly ConcurrentDictionary<Type, string> _urlApiDic 
+            = new ConcurrentDictionary<Type, string>();
 
         protected override string Url => GetUrl(_urlApiDic, typeof(ApiUrls));
         protected ILogger Logger => _context.Logger;

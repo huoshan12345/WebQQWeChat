@@ -17,16 +17,16 @@ namespace WebWeChat.Im.Actions
         {
         }
 
-        protected override HttpRequestItem BuildRequest()
+        protected override HttpReq BuildRequest()
         {
-            var req =  new HttpRequestItem(HttpMethodType.Post, string.Format(ApiUrls.GetQRCode, Session.Uuid));
+            var req =  new HttpReq(HttpMethodType.Post, string.Format(ApiUrls.GetQRCode, Session.Uuid));
             req.AddData("t", "webwx");
             req.AddData("_", (Session.Seq++).ToString());
             req.ResultType = HttpResultType.Byte;
             return req;
         }
 
-        protected override Task<ActionEvent> HandleResponse(HttpResponseItem responseItem)
+        protected override ValueTask<ActionEvent> HandleResponse(HttpRes responseItem)
         {
             // return NotifyOkEventAsync(Image.FromStream(responseItem.ResponseStream));
             return NotifyOkEventAsync(ImageSharp.Image.Load(responseItem.ResponseBytes));

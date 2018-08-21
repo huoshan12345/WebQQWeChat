@@ -15,7 +15,7 @@ namespace WebQQ.Im.Actions
         {
         }
 
-        protected override void ModifyRequest(HttpRequestItem req)
+        protected override void ModifyRequest(HttpReq req)
         {
             req.AddData("t", Timestamp);
             req.Referrer = ApiUrls.Referrer;

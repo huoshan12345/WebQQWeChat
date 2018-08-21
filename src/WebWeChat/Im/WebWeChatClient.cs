@@ -88,7 +88,7 @@ namespace WebWeChat.Im
         {
         }
 
-        public Task<ActionEvent> Login(ActionEventListener listener = null)
+        public ValueTask<ActionEvent> Login(ActionEventListener listener = null)
         {
             return GetModule<ILoginModule>().Login(listener);
         }
@@ -145,22 +145,22 @@ namespace WebWeChat.Im
             (_logger as IWeChatService)?.Dispose(); // 最后释放logger
         }
 
-        public Task<ActionEvent> GetContact(ActionEventListener listener = null)
+        public ValueTask<ActionEvent> GetContact(ActionEventListener listener = null)
         {
             return GetModule<IContactModule>().GetContact(listener);
         }
 
-        public Task<ActionEvent> GetGroupMember(ActionEventListener listener = null)
+        public ValueTask<ActionEvent> GetGroupMember(ActionEventListener listener = null)
         {
             return GetModule<IContactModule>().GetGroupMember(listener);
         }
 
-        public Task<ActionEvent> SendMsg(MessageSent msg, ActionEventListener listener = null)
+        public ValueTask<ActionEvent> SendMsg(MessageSent msg, ActionEventListener listener = null)
         {
             return GetModule<IChatModule>().SendMsg(msg, listener);
         }
 
-        public Task<ActionEvent> GetRobotReply(RobotType robotType, string input, ActionEventListener listener = null)
+        public ValueTask<ActionEvent> GetRobotReply(RobotType robotType, string input, ActionEventListener listener = null)
         {
             return GetModule<IChatModule>().GetRobotReply(robotType, input, listener);
         }

@@ -9,7 +9,7 @@ namespace WebWeChat.Im.Module.Impl
 {
     public class ContactModule : WeChatModule, IContactModule
     {
-        public Task<ActionEvent> GetContact(ActionEventListener listener = null)
+        public ValueTask<ActionEvent> GetContact(ActionEventListener listener = null)
         {
             // 如果直接new一个Action并执行的话也可以，但是不能自动重试
             return new WebWeChatActionFuture(Context, listener)
@@ -17,7 +17,7 @@ namespace WebWeChat.Im.Module.Impl
                 .ExecuteAsync();
         }
 
-        public Task<ActionEvent> GetGroupMember(ActionEventListener listener = null)
+        public ValueTask<ActionEvent> GetGroupMember(ActionEventListener listener = null)
         {
             return new WebWeChatActionFuture(Context, listener)
                .PushAction<BatchGetContactAction>()

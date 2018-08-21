@@ -24,11 +24,11 @@ namespace WebQQ.Im.Actions
             _msg = msg;
         }
 
-        protected override EnumRequestType RequestType { get; } = EnumRequestType.Form;
+        protected override HttpReqType ReqType { get; } = HttpReqType.Form;
 
-        protected override HttpRequestItem BuildRequest()
+        protected override HttpReq BuildRequest()
         {
-            HttpRequestItem req = null;
+            HttpReq req = null;
             var json = new JObject()
             {
                 ["content"] = _msg.PackContentList(),
@@ -53,7 +53,7 @@ namespace WebQQ.Im.Actions
                        }                 
                     */
                     json.Add("to", fMsg.Friend.Uin);
-                    req = HttpRequestItem.CreateFormRequest(ApiUrls.SendFriendMsg);
+                    req = HttpReq.CreateFormRequest(ApiUrls.SendFriendMsg);
                     break;
 
                 case GroupMessage gMsg:
@@ -67,7 +67,7 @@ namespace WebQQ.Im.Actions
                             "psessionid": "8368046764001d636f6e6e7365727665725f77656271714031302e3133332e34312e383400001ad00000066b026e040015808a206d0000000a406172314338344a69526d0000002859185d94e66218548d1ecb1a12513c86126b3afb97a3c2955b1070324790733ddb059ab166de6857"
                         }               
                     */
-                    req = HttpRequestItem.CreateFormRequest(ApiUrls.SendGroupMsg);
+                    req = HttpReq.CreateFormRequest(ApiUrls.SendGroupMsg);
                     json.Add("group_uin", gMsg.Group.Gid);
                     break;
 
@@ -83,7 +83,7 @@ namespace WebQQ.Im.Actions
                         }                     
                      */
 
-                    req = HttpRequestItem.CreateFormRequest(ApiUrls.SendDiscussionMsg);
+                    req = HttpReq.CreateFormRequest(ApiUrls.SendDiscussionMsg);
                     json.Add("did", dMsg.Discussion.Did);
                     break;
 
@@ -94,7 +94,7 @@ namespace WebQQ.Im.Actions
             return req;
         }
 
-        protected override Task<ActionEvent> HandleResponse(HttpResponseItem response)
+        protected override ValueTask<ActionEvent> HandleResponse(HttpRes response)
         {
             var json = response.ResponseString.ToJToken();
             var retcode = json["retcode"]?.ToString();

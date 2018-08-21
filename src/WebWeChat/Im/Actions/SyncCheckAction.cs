@@ -29,7 +29,7 @@ namespace WebWeChat.Im.Actions
         {
         }
 
-        protected override HttpRequestItem BuildRequest()
+        protected override HttpReq BuildRequest()
         {
             var url = Session.SyncUrl;
             if (Session.SyncUrl == null)
@@ -42,7 +42,7 @@ namespace WebWeChat.Im.Actions
             {
                 Logger.LogInformation("Begin SyncCheck...");
             }
-            var req = new HttpRequestItem(HttpMethodType.Get, url)
+            var req = new HttpReq(HttpMethodType.Get, url)
             {
                 // 此处需要将key都变成小写，否则提交会失败
                 StringData = Session.BaseRequest.ToDictionary(pair => pair.Key.ToLower(), pair => pair.Value).ToQueryString(),
@@ -54,7 +54,7 @@ namespace WebWeChat.Im.Actions
             return req;
         }
 
-        private Task<ActionEvent> TestNextHost()
+        private ValueTask<ActionEvent> TestNextHost()
         {
             if (++_hostIndex < ApiUrls.SyncHosts.Length)
             {
@@ -66,7 +66,7 @@ namespace WebWeChat.Im.Actions
             }
         }
 
-        protected override Task<ActionEvent> HandleResponse(HttpResponseItem responseItem)
+        protected override ValueTask<ActionEvent> HandleResponse(HttpRes responseItem)
         {
             var str = responseItem.ResponseString;
             var match = _reg.Match(str);
@@ -108,7 +108,7 @@ namespace WebWeChat.Im.Actions
             throw WeChatException.CreateException(WeChatErrorCode.ResponseError);
         }
 
-        protected override Task<ActionEvent> HandleExceptionAsync(Exception ex)
+        protected override ValueTask<ActionEvent> HandleExceptionAsync(Exception ex)
         {
             // SyncUrl为空说明正在测试host
             if (Session.SyncUrl == null)

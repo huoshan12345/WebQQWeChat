@@ -22,7 +22,7 @@ namespace WebWeChat.Im.Actions
         {
         }
 
-        protected override HttpRequestItem BuildRequest()
+        protected override HttpReq BuildRequest()
         {
             var url = string.Format(ApiUrls.BatchGetContact, Session.BaseUrl, Session.PassTicket, Timestamp);
             var obj = new
@@ -31,7 +31,7 @@ namespace WebWeChat.Im.Actions
                 Count = Store.GroupCount,
                 List = Store.Groups.Select(m => new { m.UserName, EncryChatRoomId = "" })
             };
-            var req = new HttpRequestItem(HttpMethodType.Post, url)
+            var req = new HttpReq(HttpMethodType.Post, url)
             {
                 ContentType = HttpConstants.JsonContentType,
                 StringData = obj.ToJson()
@@ -39,7 +39,7 @@ namespace WebWeChat.Im.Actions
             return req;
         }
 
-        protected override Task<ActionEvent> HandleResponse(HttpResponseItem responseItem)
+        protected override ValueTask<ActionEvent> HandleResponse(HttpRes responseItem)
         {
             var str = responseItem.ResponseString;
             if (!str.IsNullOrEmpty())

@@ -18,7 +18,7 @@ namespace WebQQ.Im.Actions
             _friend = friend;
         }
 
-        protected override void ModifyRequest(HttpRequestItem req)
+        protected override void ModifyRequest(HttpReq req)
         {
             req.AddData("tuin", _friend.Uin);
             req.AddData("type", 1);

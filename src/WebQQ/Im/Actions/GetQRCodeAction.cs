@@ -13,9 +13,9 @@ namespace WebQQ.Im.Actions
 
         public GetQRCodeAction(IQQContext context, ActionEventListener listener = null) : base(context, listener) { }
 
-        protected override EnumRequestType RequestType { get; } = EnumRequestType.Get;
+        protected override HttpReqType ReqType { get; } = HttpReqType.Get;
 
-        protected override void ModifyRequest(HttpRequestItem req)
+        protected override void ModifyRequest(HttpReq req)
         {
             req.AddData("appid", AppId);
             req.AddData("e", "0");
@@ -27,7 +27,7 @@ namespace WebQQ.Im.Actions
             req.ResultType = HttpResultType.Byte;
         }
 
-        protected override Task<ActionEvent> HandleResponse(HttpResponseItem response)
+        protected override ValueTask<ActionEvent> HandleResponse(HttpRes response)
         {
             return NotifyOkEventAsync(ImageSharp.Image.Load(response.ResponseBytes));
         }

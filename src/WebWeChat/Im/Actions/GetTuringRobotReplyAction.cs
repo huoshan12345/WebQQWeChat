@@ -21,16 +21,16 @@ namespace WebWeChat.Im.Actions
             _key = Config["TulingApiKey"];
         }
 
-        protected override Task<ActionEvent> ExecuteInternalAsync(CancellationToken token)
+        protected override ValueTask<ActionEvent> ExecuteInternalAsync(CancellationToken token)
         {
             return _key.IsNullOrEmpty() ? 
                 NotifyErrorEventAsync(WeChatErrorCode.ParameterError, nameof(_key)) : 
                 base.ExecuteInternalAsync(token);
         }
 
-        protected override HttpRequestItem BuildRequest()
+        protected override HttpReq BuildRequest()
         {
-            var req = HttpRequestItem.CreateJsonRequest(ApiUrls.TulingRobot);
+            var req = HttpReq.CreateJsonRequest(ApiUrls.TulingRobot);
             var obj = new
             {
                 key = _key,
@@ -41,7 +41,7 @@ namespace WebWeChat.Im.Actions
             return req;
         }
 
-        protected override Task<ActionEvent> HandleResponse(HttpResponseItem response)
+        protected override ValueTask<ActionEvent> HandleResponse(HttpRes response)
         {
             var str = response.ResponseString;
             var json = str.ToJToken();

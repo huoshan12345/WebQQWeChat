@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using FclEx.Http;
 using FclEx.Http.Event;
 using WebQQ.Im.Actions;
 using WebQQ.Im.Bean;
@@ -9,21 +10,21 @@ using WebQQ.Util;
 
 namespace WebQQ.Im.Modules.Impl
 {
-    public class ChatModule : QQModule, IChatModule
+    internal class ChatModule : QQModule, IChatModule
     {
         public ChatModule(IQQContext context) : base(context)
         {
         }
 
-        public Task<ActionEvent> SendMsg(Message msg, ActionEventListener listener = null)
+        public ValueTask<ActionEvent> SendMsg(Message msg, ActionEventListener listener = null)
         {
-            return new SendMsgAction(Context, msg, listener).ExecuteAsyncAuto();
+            return new SendMsgAction(Context, msg, listener).ExecuteAutoAsync();
         }
 
-        public Task<ActionEvent> GetRobotReply(RobotType robotType, string input, ActionEventListener listener = null)
+        public ValueTask<ActionEvent> GetRobotReply(RobotType robotType, string input, ActionEventListener listener = null)
         {
             throw new NotImplementedException();
-            // return new GetTuringRobotReplyAction(Context, input).ExecuteAsyncAuto();
+            // return new GetTuringRobotReplyAction(Context, input).ExecuteAutoAsync();
         }
     }
 }

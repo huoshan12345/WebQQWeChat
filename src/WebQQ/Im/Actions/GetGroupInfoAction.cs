@@ -21,9 +21,9 @@ namespace WebQQ.Im.Actions
             _group = group;
         }
 
-        protected override EnumRequestType RequestType { get; } = EnumRequestType.Get;
+        protected override HttpReqType ReqType { get; } = HttpReqType.Get;
 
-        protected override void ModifyRequest(HttpRequestItem req)
+        protected override void ModifyRequest(HttpReq req)
         {
             req.AddData("gcode", _group.Code);
             req.AddData("vfwebqq", Session.Vfwebqq);

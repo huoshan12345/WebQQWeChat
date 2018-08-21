@@ -18,7 +18,7 @@ namespace WebQQ.Im.Actions
             _discussion = discussion;
         }
 
-        protected override void ModifyRequest(HttpRequestItem req)
+        protected override void ModifyRequest(HttpReq req)
         {
             req.AddData("clientid", Session.ClientId);
             req.AddData("psessionid", Session.SessionId);

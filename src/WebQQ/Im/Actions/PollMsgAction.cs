@@ -32,7 +32,7 @@ namespace WebQQ.Im.Actions
         {
         }
 
-        protected override void ModifyRequest(HttpRequestItem req)
+        protected override void ModifyRequest(HttpReq req)
         {
             Logger.LogInformation("Begin poll...");
 
@@ -48,7 +48,7 @@ namespace WebQQ.Im.Actions
             req.Referrer = "https://d1.web2.qq.com/cfproxy.html?v=20151105001&callback=1";
         }
 
-        protected override Task<ActionEvent> HandleResponse(HttpResponseItem response)
+        protected override ValueTask<ActionEvent> HandleResponse(HttpRes response)
         {
             var json = response.ResponseString.ToJToken();
             var retcode = json["retcode"].ToInt();
@@ -96,7 +96,7 @@ namespace WebQQ.Im.Actions
             throw new QQException(QQErrorCode.ResponseError, response.ResponseString);
         }
 
-        protected override Task<ActionEvent> HandleExceptionAsync(Exception ex)
+        protected override ValueTask<ActionEvent> HandleExceptionAsync(Exception ex)
         {
             if (Session.State == SessionState.Online && ex is TaskCanceledException)
             {
@@ -112,7 +112,7 @@ namespace WebQQ.Im.Actions
             return base.HandleExceptionAsync(ex);
         }
 
-        private Task<ActionEvent> HandlePollMsg(JToken result)
+        private ValueTask<ActionEvent> HandlePollMsg(JToken result)
         {
             var notifyEvents = new List<QQNotifyEvent>();
             if (result is JArray array)

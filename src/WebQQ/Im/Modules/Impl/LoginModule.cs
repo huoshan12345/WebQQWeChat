@@ -16,7 +16,7 @@ namespace WebQQ.Im.Modules.Impl
     /// <summary>
     /// <para>登录模块，处理登录和退出</para>
     /// </summary>
-    public class LoginModule : QQModule, ILoginModule
+    internal class LoginModule : QQModule, ILoginModule
     {
         public void BeginPoll()
         {
@@ -37,7 +37,7 @@ namespace WebQQ.Im.Modules.Impl
                                         .ExecuteAutoAsync().Forget();
                                     }
                                     return Task.CompletedTask;
-                                }).ExecuteAsyncAuto().Forget();
+                                }).ExecuteAutoAsync().Forget();
                                 break;
 
                             case QQNotifyEventType.NeedUpdateGroups:
@@ -46,12 +46,12 @@ namespace WebQQ.Im.Modules.Impl
                                 //    if (e.IsOk)
                                 //    {
                                 //        Store.GroupDic.Values.ForEachAsync(m => new GetGroupInfoAction(Context, m)
-                                //        .ExecuteAsyncAuto()).Forget();
+                                //        .ExecuteAutoAsync()).Forget();
                                 //    }
                                 //    return Task.CompletedTask;
-                                //}).ExecuteAsyncAuto().Forget();
+                                //}).ExecuteAutoAsync().Forget();
 
-                                new GetGroupInfoAction(Context, notifyEvent.Target.CastTo<QQGroup>()).ExecuteAsyncAuto().Forget();
+                                new GetGroupInfoAction(Context, notifyEvent.Target.CastTo<QQGroup>()).ExecuteAutoAsync().Forget();
                                 break;
 
                             default:
@@ -68,7 +68,7 @@ namespace WebQQ.Im.Modules.Impl
         {
         }
 
-        public async Task<ActionEvent> Login(ActionEventListener listener)
+        public async ValueTask<ActionEvent> Login(ActionEventListener listener)
         {
             Session.State = SessionState.Logining;
 
@@ -108,7 +108,7 @@ namespace WebQQ.Im.Modules.Impl
              {
                  if (!@event.IsOk) return;
                  await Context.FireNotifyAsync(QQNotifyEvent.CreateEvent(QQNotifyEventType.LoginSuccess));
-             }).ExecuteAsyncAuto();
+             }).ExecuteAutoAsync();
 
             if (!loginFutureResult.IsOk)
             {
@@ -123,7 +123,7 @@ namespace WebQQ.Im.Modules.Impl
             return loginFutureResult;
         }
 
-        private Task<ActionEvent> GetClientInfoAfterLogin(ActionEventListener listener)
+        private ValueTask<ActionEvent> GetClientInfoAfterLogin(ActionEventListener listener)
         {
             return new WebQQActionFuture(Context, listener)
                 .PushAction<GetFriendsAction>(async (sender, @event) =>
@@ -131,15 +131,15 @@ namespace WebQQ.Im.Modules.Impl
                     if (!@event.IsOk) return;
                     var obj = Store.FriendDic.FirstOrDefault().Value;
                     if (obj == null) return;
-                    await new GetFriendLongNickAction(Context, obj).ExecuteAsyncAuto();
-                    //await new GetFriendQQNumberAction(Context, obj).ExecuteAsyncAuto();
-                    await new GetFriendInfoAction(Context, obj).ExecuteAsyncAuto();
+                    await new GetFriendLongNickAction(Context, obj).ExecuteAutoAsync();
+                    //await new GetFriendQQNumberAction(Context, obj).ExecuteAutoAsync();
+                    await new GetFriendInfoAction(Context, obj).ExecuteAutoAsync();
                 })
                 .PushAction<GetGroupNameListAction>((sender, @event) =>
                 {
                     if (@event.IsOk)
                     {
-                        Store.GroupDic.Values.ForEachAsync(m => new GetGroupInfoAction(Context, m).ExecuteAsyncAuto()).Forget();
+                        Store.GroupDic.Values.ForEachAsync(m => new GetGroupInfoAction(Context, m).ExecuteAutoAsync()).Forget();
                     }
                     return Task.CompletedTask;
                 })
@@ -147,13 +147,13 @@ namespace WebQQ.Im.Modules.Impl
                 {
                     if (@event.IsOk)
                     {
-                        Store.DiscussionDic.Values.ForEachAsync(m => new GetDiscussionInfoAction(Context, m).ExecuteAsyncAuto()).Forget();
+                        Store.DiscussionDic.Values.ForEachAsync(m => new GetDiscussionInfoAction(Context, m).ExecuteAutoAsync()).Forget();
                     }
                     return Task.CompletedTask;
                 })
                 .PushAction<GetSelfInfoAction>()
                 .PushAction<GetOnlineFriendsAction>()
-                .ExecuteAsyncAuto();
+                .ExecuteAutoAsync();
         }
     }
 }

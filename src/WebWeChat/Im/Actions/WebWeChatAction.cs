@@ -1,7 +1,11 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
+using FclEx;
 using FclEx.Extensions;
+using FclEx.Http.Actions;
+using FclEx.Http.Event;
+using FclEx.Http.Services;
 using HttpAction.Actions;
 using HttpAction.Event;
 using HttpAction.Service;
@@ -31,28 +35,28 @@ namespace WebWeChat.Im.Actions
             OnActionEvent += listener;
         }
 
-        protected override Task<ActionEvent> HandleExceptionAsync(Exception ex)
+        protected override ValueTask<ActionEvent> HandleExceptionAsync(Exception ex)
         {
             var exception = ex as WeChatException ?? new WeChatException(ex);
             return base.HandleExceptionAsync(exception);
         }
 
-        protected Task<ActionEvent> NotifyErrorEventAsync(WeChatException ex)
+        protected ValueTask<ActionEvent> NotifyErrorEventAsync(WeChatException ex)
         {
             return NotifyActionEventAsync(ActionEventType.EvtError, ex);
         }
 
-        protected Task<ActionEvent> NotifyErrorEventAsync(WeChatErrorCode code)
+        protected ValueTask<ActionEvent> NotifyErrorEventAsync(WeChatErrorCode code)
         {
             return NotifyErrorEventAsync(WeChatException.CreateException(code));
         }
 
-        protected Task<ActionEvent> NotifyErrorEventAsync(WeChatErrorCode code, string msg)
+        protected ValueTask<ActionEvent> NotifyErrorEventAsync(WeChatErrorCode code, string msg)
         {
             return NotifyErrorEventAsync(WeChatException.CreateException(code, msg));
         }
 
-        protected override async Task<ActionEvent> ExecuteInternalAsync(CancellationToken token)
+        protected override async ValueTask<ActionEvent> ExecuteInternalAsync(CancellationToken token)
         {
             Logger.LogTrace($"[Action={ActionName} Begin]");
             var result = await base.ExecuteInternalAsync(token).ConfigureAwait(false);
@@ -60,7 +64,7 @@ namespace WebWeChat.Im.Actions
             return result;
         }
 
-        protected override async Task<ActionEvent> NotifyActionEventAsync(ActionEvent actionEvent)
+        protected override async ValueTask<ActionEvent> NotifyActionEventAsync(ActionEvent actionEvent)
         {
             var type = actionEvent.Type;
             var typeName = type.GetDescription();

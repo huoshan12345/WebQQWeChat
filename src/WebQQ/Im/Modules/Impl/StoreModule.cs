@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Concurrent;
+using FclEx;
 using WebQQ.Im.Bean;
 using WebQQ.Im.Bean.Discussion;
 using WebQQ.Im.Bean.Friend;

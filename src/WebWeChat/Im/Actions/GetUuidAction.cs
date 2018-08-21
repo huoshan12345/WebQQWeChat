@@ -21,9 +21,9 @@ namespace WebWeChat.Im.Actions
             Session.Seq = Timestamp;
         }
 
-        protected override HttpRequestItem BuildRequest()
+        protected override HttpReq BuildRequest()
         {
-            var req = new HttpRequestItem(HttpMethodType.Post, ApiUrls.GetUuid);
+            var req = new HttpReq(HttpMethodType.Post, ApiUrls.GetUuid);
             req.AddQueryValue("appid", ApiUrls.Appid);
             req.AddQueryValue("fun", "new");
             req.AddQueryValue("lang", "zh_CN");
@@ -31,7 +31,7 @@ namespace WebWeChat.Im.Actions
             return req;
         }
 
-        protected override Task<ActionEvent> HandleResponse(HttpResponseItem responseItem)
+        protected override ValueTask<ActionEvent> HandleResponse(HttpRes responseItem)
         {
             var str = responseItem.ResponseString;
             var match = _reg.Match(str);

@@ -1,12 +1,11 @@
 ﻿using System.Threading.Tasks;
+using FclEx.Utils;
 using WebQQ.Im.Core;
 
 namespace WebQQ.Im.Event
 {
-    public delegate Task QQNotifyEventListener(IQQClient sender, QQNotifyEvent e);
-
     public interface IQQNotifyEventHandler
     {
-        event QQNotifyEventListener QQNotifyEvent;
+        event AsyncEventHandler<IQQClient, QQNotifyEvent> OnQQNotifyEvent;
     }
 }

@@ -1,18 +1,18 @@
 ﻿using System;
-using System.Linq;
 using System.Threading.Tasks;
-using HttpAction.Event;
-using HttpAction.Service;
 using WebQQ.Im.Core;
 using WebQQ.Im.Event;
 using WebQQ.Im.Service.Interface;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using WebQQ.Im.Service.Impl;
-using System.Reflection;
 using AutoMapper;
-using FclEx.Logger;
-using Microsoft.Extensions.Configuration;
+using FclEx;
+using FclEx.Http.Event;
+using FclEx.Http.Services;
+using FclEx.Log;
+using WebIm.Im.Core;
+using WebIm.Utils;
 using WebQQ.Im.Bean;
 using WebQQ.Im.Bean.Discussion;
 using WebQQ.Im.Bean.Friend;
@@ -20,6 +20,7 @@ using WebQQ.Im.Bean.Group;
 using WebQQ.Im.Modules.Impl;
 using WebQQ.Im.Modules.Interface;
 using WebQQ.Util;
+using QQListener = FclEx.Utils.AsyncEventHandler<WebQQ.Im.Core.IQQClient, WebQQ.Im.Event.QQNotifyEvent>;
 
 namespace WebQQ.Im
 {
@@ -44,23 +45,21 @@ namespace WebQQ.Im
             });
 
             CommonServices.AddSingleton<ILogger, EmptyLogger>();
-            CommonServices.AddSingleton<IConfigurationRoot>(p => Startup.BuildConfig());
         }
 
         public static IServiceCollection CommonServices { get; } = new ServiceCollection();
 
-        private readonly QQNotifyEventListener _notifyListener;
         private readonly IServiceCollection _services;
         private readonly IServiceProvider _serviceProvider;
-        private readonly ILogger _logger;
+        private volatile bool _isInited;
 
         /// <summary>
         /// 构造方法，初始化模块和服务
         /// </summary>
-        public WebQQClient(ILogger logger = null, QQNotifyEventListener notifyListener = null) : this(m =>
+        public WebQQClient(ILogger logger = null, QQListener notifyListener = null) : this(m =>
         {
-            if (logger != null) m.AddSingleton(logger);
-            if (notifyListener != null) m.AddSingleton(notifyListener);
+            m.AddSingletonIfNotNull(logger)
+                .AddSingletonIfNotNull(notifyListener);
         })
         {
         }
@@ -68,13 +67,10 @@ namespace WebQQ.Im
         /// <summary>
         /// 构造方法，初始化模块和服务
         /// </summary>
-        public WebQQClient(Func<IQQContext, ILogger> loggerFunc, QQNotifyEventListener notifyListener) : this(m =>
+        public WebQQClient(Func<IQQContext, ILogger> func, QQListener notifyListener) : this(m =>
          {
-             if (loggerFunc != null)
-             {
-                 m.AddSingleton<ILogger>(p => loggerFunc(p.GetRequiredService<IQQContext>()));
-             }
-             if (notifyListener != null) m.AddSingleton(notifyListener);
+             m.AddSingletonIf(p => func(p.GetRequiredService<IQQContext>()), func.IsNotNull())
+                 .AddSingletonIfNotNull(notifyListener);
          })
         {
         }
@@ -89,7 +85,6 @@ namespace WebQQ.Im
             {
                 _services.Add(service);
             }
-
             _services.AddSingleton<IQQContext>(this);
 
             // 模块
@@ -99,62 +94,77 @@ namespace WebQQ.Im
             _services.AddSingleton<SessionModule>();
 
             // 服务
-            _services.AddSingleton<IHttpService, HttpService>();
+            _services.AddSingleton<IHttpService, LightHttpService>();
             _services.AddSingleton<IQQActionFactory, QQActionFactory>();
-
             configureServices?.Invoke(_services);
+
             _serviceProvider = _services.BuildServiceProvider();
+            OnQQNotifyEvent += _serviceProvider.GetService<QQListener>();
+            Logger = _serviceProvider.GetRequiredService<ILogger>();
+            Http = _serviceProvider.GetRequiredService<IHttpService>();
 
-            _notifyListener = GetSerivce<QQNotifyEventListener>();
-            _logger = GetSerivce<ILogger>();
+            Init();
         }
 
-        public T GetSerivce<T>()
-        {
-            return _serviceProvider.GetService<T>();
-        }
-
-        public T GetModule<T>() where T : IQQModule
+        public T GetModule<T>() where T : IImModule
         {
             return _serviceProvider.GetRequiredService<T>();
         }
+
+        public ILogger Logger { get; }
+        public IHttpService Http { get; }
 
         /// <summary>
         /// 销毁所有模块和服务
         /// </summary>
         public void Dispose()
         {
-            foreach (var service in _services.Where(m => m != null && typeof(IQQService).GetTypeInfo().IsAssignableFrom(m.ServiceType)))
+            foreach (var service in _services)
             {
                 try
                 {
-                    var obj = (IQQService)service.ImplementationInstance;
-                    if (obj != _logger) obj.Dispose();
+                    if (service.ImplementationInstance is IDisposable disposable)
+                        if (!Equals(disposable, Logger)) disposable.Dispose();
                 }
                 catch (Exception e)
                 {
-                    _logger.LogError($"销毁所有模块和服务失败: {e}");
+                    Logger.LogError($"销毁模块和服务失败: {e}");
                 }
             }
-            (_logger as IQQService)?.Dispose(); // 最后释放logger
+            (Logger as IDisposable)?.Dispose(); // 最后释放logger
+        }
+
+        public void Init()
+        {
+            if (_isInited) return;
+            foreach (var service in _services)
+            {
+                try
+                {
+                    if (service.ImplementationInstance is IImModule module && module != this)
+                        module.Init();
+                }
+                catch (Exception e)
+                {
+                    Logger.LogError($"初始化模块和服务失败: {e}");
+                }
+            }
+            _isInited = true;
         }
 
         public async Task FireNotifyAsync(QQNotifyEvent notifyEvent)
         {
             try
             {
-                if (_notifyListener != null)
-                {
-                    await _notifyListener(this, notifyEvent);
-                }
+                await OnQQNotifyEvent.InvokeAsync(this, notifyEvent);
             }
             catch (Exception ex)
             {
-                _logger.LogError($"FireNotify Error!! {ex}", ex);
+                Logger.LogError($"FireNotify Error!! {ex}", ex);
             }
         }
 
-        public Task<ActionEvent> Login(ActionEventListener listener = null)
+        public ValueTask<ActionEvent> Login(ActionEventListener listener = null)
         {
             return GetModule<ILoginModule>().Login(listener);
         }
@@ -166,14 +176,16 @@ namespace WebQQ.Im
 
         public IQQContext Context => this;
 
-        public Task<ActionEvent> SendMsg(Message msg, ActionEventListener listener = null)
+        public ValueTask<ActionEvent> SendMsg(Message msg, ActionEventListener listener = null)
         {
             return GetModule<IChatModule>().SendMsg(msg, listener);
         }
 
-        public Task<ActionEvent> GetRobotReply(RobotType robotType, string input, ActionEventListener listener = null)
+        public ValueTask<ActionEvent> GetRobotReply(RobotType robotType, string input, ActionEventListener listener = null)
         {
             throw new NotImplementedException();
         }
+
+        public event QQListener OnQQNotifyEvent = (sender, @event) => Task.CompletedTask;
     }
 }

@@ -15,7 +15,7 @@ namespace WebQQ.Im.Actions
 {
     public class GetFriendsAction : WebQQInfoAction
     {
-        protected override EnumRequestType RequestType { get; } = EnumRequestType.Form; 
+        protected override HttpReqType ReqType { get; } = HttpReqType.Form; 
 
         public GetFriendsAction(IQQContext context, ActionEventListener listener = null) : base(context, listener)
         {
@@ -27,7 +27,7 @@ namespace WebQQ.Im.Actions
                 "hash": "0040000D006400BC"
             }
          */
-        protected override void ModifyRequest(HttpRequestItem req)
+        protected override void ModifyRequest(HttpReq req)
         {
             var json = new JObject
             {

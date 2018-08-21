@@ -10,8 +10,8 @@ namespace WebWeChat.Im.Module.Interface
 {
     public interface IChatModule : IWeChatModule
     {
-        Task<ActionEvent> SendMsg(MessageSent msg, ActionEventListener listener = null);
+        ValueTask<ActionEvent> SendMsg(MessageSent msg, ActionEventListener listener = null);
 
-        Task<ActionEvent> GetRobotReply(RobotType robotType, string input, ActionEventListener listener = null);
+        ValueTask<ActionEvent> GetRobotReply(RobotType robotType, string input, ActionEventListener listener = null);
     }
 }

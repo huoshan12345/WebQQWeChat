@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.Text;
 using System.Threading.Tasks;
+using FclEx;
 using FclEx.Extensions;
 using HttpAction;
 using HttpAction.Event;
@@ -19,6 +20,8 @@ using WebWeChat.Im.Event;
 using WebWeChat.Im.Service.Impl;
 using ImageSharp;
 using ImageSharp.Processing;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.PixelFormats;
 using SixLabors.Primitives;
 using WebIm.Utils;
 
@@ -31,7 +34,7 @@ namespace ConsoleTest
     {
         private static readonly QQNotifyEventListener _qqListener = (client, notifyEvent) =>
         {
-            var logger = client.GetSerivce<ILogger>();
+            var logger = client.Logger;
             switch (notifyEvent.Type)
             {
                 case QQNotifyEventType.LoginSuccess:

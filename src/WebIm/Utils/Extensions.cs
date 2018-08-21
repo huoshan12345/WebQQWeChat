@@ -1,7 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using ImageSharp;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.PixelFormats;
 
 namespace WebIm.Utils
 {
@@ -22,7 +21,7 @@ namespace WebIm.Utils
             {
                 for (var y = 0; y < h; y += complexity)
                 {
-                    var clr = img.GetPixelReference(x, y);
+                    var clr = img[x, y];
                     Console.ForegroundColor = GetNearestConsoleColor(clr);
                     Console.Write("█");
                 }

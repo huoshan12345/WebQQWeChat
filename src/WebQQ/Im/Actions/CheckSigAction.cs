@@ -13,9 +13,9 @@ namespace WebQQ.Im.Actions
 
         protected override string Url => Session.CheckSigUrl;
 
-        protected override EnumRequestType RequestType { get; } = EnumRequestType.Get;
+        protected override HttpReqType ReqType { get; } = HttpReqType.Get;
 
-        protected override Task<ActionEvent> HandleResponse(HttpResponseItem response)
+        protected override ValueTask<ActionEvent> HandleResponse(HttpRes response)
         {
             var ptwebqq = HttpService.GetCookie("ptwebqq", Session.CheckSigUrl);
             ptwebqq.Expired = true;

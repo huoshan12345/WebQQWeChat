@@ -13,9 +13,9 @@ namespace WebQQ.Im.Actions
         {
         }
 
-        protected override EnumRequestType RequestType { get; } = EnumRequestType.Get;
+        protected override HttpReqType ReqType { get; } = HttpReqType.Get;
 
-        protected override void ModifyRequest(HttpRequestItem req)
+        protected override void ModifyRequest(HttpReq req)
         {
             req.AddData("ptwebqq", Session.Ptwebqq);
             req.AddData("clientid", Session.ClientId);
@@ -24,7 +24,7 @@ namespace WebQQ.Im.Actions
             req.Referrer = ApiUrls.ReferrerS;
         }
 
-        protected override Task<ActionEvent> HandleResponse(HttpResponseItem response)
+        protected override ValueTask<ActionEvent> HandleResponse(HttpRes response)
         {
             var json = response.ResponseString.ToJToken();
             if (json["retcode"].ToString() == "0")

@@ -6,7 +6,7 @@ using WebQQ.Im.Modules.Interface;
 namespace WebQQ.Im.Modules.Impl
 {
     /// <summary>
-    /// <para>基础模块</para>
+    /// 基础模块
     /// </summary>
     public abstract class QQModule : IQQModule
     {
